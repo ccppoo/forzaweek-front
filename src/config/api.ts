@@ -1,0 +1,1 @@
+export const globalSocketURL = 'wss://127.0.0.1:8443/global'
