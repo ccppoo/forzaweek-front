@@ -32,9 +32,57 @@ export default function Home() {
 
   return (
     <Container sx={{ height: '120vh' }}>
-      <FullSizeCenteredFlexBox sx={{}}>
-        <PostCard />
-      </FullSizeCenteredFlexBox>
+      <FlexBox sx={{ flexDirection: 'column', justifyContent: 'center', paddingY: 5, rowGap: 2 }}>
+        {/*  뉴스/공지  */}
+        <FlexBox sx={{ flexDirection: 'column' }}>
+          <FlexBox>
+            <Typography variant="h4">NEWS, Announcments</Typography>
+          </FlexBox>
+          <FlexBox sx={{ maxHeight: 300, height: 200, width: '100%', border: '1px black solid' }}>
+            <Image
+              src={image.series_33}
+              sx={{
+                width: 'auto',
+                height: '100%',
+              }}
+            />
+            <Typography>GT Racers Rush Through Mexico’s Roads in Apex AllStars.</Typography>
+          </FlexBox>
+        </FlexBox>
+
+        {/* 주간 이벤트 */}
+        <FlexBox sx={{ flexDirection: 'column' }}>
+          <FlexBox>
+            <Typography variant="h4">Week Festa</Typography>
+          </FlexBox>
+          <FlexBox sx={{ maxHeight: 300, height: 200, width: '100%', border: '1px black solid' }}>
+            <Image
+              src={image.series_33}
+              sx={{
+                width: 'auto',
+                height: '100%',
+              }}
+            />
+            <Typography>GT Racers Rush Through Mexico’s Roads in Apex AllStars.</Typography>
+          </FlexBox>
+        </FlexBox>
+        {/* 튜닝, 데칼, 이벤트 맵, 사진, 기록, 가이드 */}
+        <FlexBox sx={{ flexDirection: 'column' }}>
+          <FlexBox>
+            <Typography variant="h4">Tunings</Typography>
+          </FlexBox>
+          <FlexBox sx={{ maxHeight: 300, height: 200, width: '100%', border: '1px black solid' }}>
+            <Image
+              src={image.series_33}
+              sx={{
+                width: 'auto',
+                height: '100%',
+              }}
+            />
+            <Typography>GT Racers Rush Through Mexico’s Roads in Apex AllStars.</Typography>
+          </FlexBox>
+        </FlexBox>
+      </FlexBox>
     </Container>
   );
 }
