@@ -21,8 +21,8 @@ function App() {
       <HotKeys />
       <SW />
       <BrowserRouter>
-        <DevHeader />
-        {/* <Header /> */}
+        {/* <DevHeader /> */}
+        <Header />
         <Sidebar />
         <Pages />
       </BrowserRouter>

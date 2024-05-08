@@ -26,29 +26,59 @@ import MainFullBanner from '@/components/MainFullBanner';
 import PostCard from '@/components/PostCard';
 import { FlexBox, FullSizeCenteredFlexBox } from '@/components/styled';
 
-import CardPreviews from './CardPreviews';
-import Cars from './Cars';
-import ShortCutMenu from './ShortCutMenu';
 import { Image } from './styled';
 
-const sections = ['NEWS', 'Week Festa', 'Tunings'];
+function CardPreview() {
+  const TITLE = 'GT Racers Rush Through Mexico’s Roads in Apex AllStars';
+  const BODY = 'GT Racers Rush Through Mexico’s Roads in Apex AllStars';
 
-export default function Home() {
-  const navigate = useNavigate();
+  const W = 360;
+  const H = 270;
 
   return (
-    <>
-      <MainFullBanner />
-      <Container sx={{ height: '120vh' }}>
-        <ShortCutMenu />
-        <FlexBox sx={{ flexDirection: 'column', justifyContent: 'center', paddingY: 3, rowGap: 2 }}>
-          {/*  뉴스/공지  */}
-          <CardPreviews sectionTitle="NEWS / Announcements" />
-          <CardPreviews sectionTitle="Week Festa" />
-          {/* 자동차 */}
-          <Cars />
+    <FlexBox
+      sx={{
+        minWidth: W,
+        width: W,
+        minHeight: H,
+        height: H,
+        border: '1px black solid',
+        borderRadius: 1,
+      }}
+    >
+      <FlexBox sx={{ flexDirection: 'column' }}>
+        <FlexBox sx={{ padding: 1 }}>
+          <Image
+            src={image.series_33}
+            sx={{
+              // width: '100%',
+              objectFit: 'contain',
+            }}
+          />
         </FlexBox>
-      </Container>
-    </>
+
+        <FlexBox sx={{ flexDirection: 'column', rowGap: 1, paddingX: 1 }}>
+          <Typography>{TITLE}</Typography>
+          {/* <Typography>{BODY}</Typography> */}
+        </FlexBox>
+      </FlexBox>
+    </FlexBox>
+  );
+}
+
+export default function CardPreviews({ sectionTitle }: { sectionTitle: string }) {
+  return (
+    <FlexBox sx={{ flexDirection: 'column' }}>
+      {/* Title */}
+      <FlexBox sx={{ paddingBottom: 2 }}>
+        <Typography variant="h4">{sectionTitle}</Typography>
+      </FlexBox>
+      {/* Cards */}
+      <FlexBox sx={{ flexDirection: 'row', columnGap: 2, flexWrap: 'nowrap' }}>
+        <CardPreview />
+        <CardPreview />
+        <CardPreview />
+      </FlexBox>
+    </FlexBox>
   );
 }

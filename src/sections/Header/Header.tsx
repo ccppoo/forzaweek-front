@@ -1,27 +1,34 @@
 import * as React from 'react';
 
+import DarkModeIcon from '@mui/icons-material/DarkMode';
 import DarkModeOutlinedIcon from '@mui/icons-material/DarkModeOutlined';
 import GitHubIcon from '@mui/icons-material/GitHub';
 import ThemeIcon from '@mui/icons-material/InvertColors';
+import LanguageOutlinedIcon from '@mui/icons-material/LanguageOutlined';
 import LightModeOutlinedIcon from '@mui/icons-material/LightModeOutlined';
 import MenuIcon from '@mui/icons-material/Menu';
 import SearchIcon from '@mui/icons-material/Search';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
+import ButtonBase from '@mui/material/ButtonBase';
 import Container from '@mui/material/Container';
 import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
-import InputBase from '@mui/material/InputBase';
-import Slide from '@mui/material/Slide';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
 import Toolbar from '@mui/material/Toolbar';
 import Tooltip from '@mui/material/Tooltip';
+import Typography from '@mui/material/Typography';
 import { alpha, styled } from '@mui/material/styles';
 import useScrollTrigger from '@mui/material/useScrollTrigger';
 
+import * as image from '@/image';
 import { FlexBox } from '@/components/styled';
+import { Image } from '@/components/styled';
 import { repository, title } from '@/config';
 import useHotKeysDialog from '@/store/hotkeys';
+import useLangaugeOption, { langLocale } from '@/store/language';
 import useNotifications from '@/store/notifications';
 import useSidebar from '@/store/sidebar';
 import useTheme from '@/store/theme';
@@ -29,82 +36,79 @@ import useTheme from '@/store/theme';
 import { HotKeysButton } from './styled';
 import { getRandomJoke } from './utils';
 
-interface Props {
-  /**
-   * Injected by the documentation to work in an iframe.
-   * You won't need it on your project.
-   */
-  window?: () => Window;
-  children: React.ReactElement;
+const LanguageOptions = [
+  { option: 'Korean', locale: '한국어' },
+  { option: 'English', locale: 'English' },
+];
+
+const NavigationButtonList = [
+  {
+    name: 'Forza Horizon 5',
+    image: image.logo.fh5,
+  },
+  {
+    name: 'Forza Horizon 4',
+    image: image.logo.fh4,
+  },
+  {
+    name: 'Forza Motorsport 2023',
+    image: image.logo.fm2023black,
+  },
+];
+
+function NavigationButton({ size, image, name }: { size: number; image: string; name: string }) {
+  return (
+    <FlexBox
+      component={ButtonBase}
+      sx={{
+        columnGap: 1,
+        borderRadius: 1,
+      }}
+    >
+      <FlexBox
+        sx={{
+          alignItems: 'center',
+          columnGap: 0.5,
+          padding: 0.5,
+          borderRadius: 1,
+          '&:hover, &.Mui-focusVisible': {
+            backgroundColor: '#d4d0c7',
+            borderColor: '#a8a6a2',
+            boxShadow: 'none',
+          },
+        }}
+      >
+        <Image src={image} sx={{ width: size, height: size }} />
+        <Typography variant="body1">{name}</Typography>
+      </FlexBox>
+    </FlexBox>
+  );
 }
-
-const Search = styled('div')(({ theme }) => ({
-  position: 'relative',
-  borderRadius: theme.shape.borderRadius,
-  backgroundColor: alpha(theme.palette.common.black, 0.15),
-  '&:hover': {
-    backgroundColor: alpha(theme.palette.common.black, 0.25),
-  },
-  marginLeft: 0,
-  width: '100%',
-  [theme.breakpoints.up('sm')]: {
-    marginLeft: theme.spacing(1),
-    width: 'auto',
-  },
-}));
-
-const SearchIconWrapper = styled('div')(({ theme }) => ({
-  padding: theme.spacing(0, 2),
-  height: '100%',
-  position: 'absolute',
-  pointerEvents: 'none',
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-}));
-
-const StyledInputBase = styled(InputBase)(({ theme }) => ({
-  color: 'inherit',
-  width: '100%',
-  height: '100%',
-  '& .MuiInputBase-input': {
-    padding: theme.spacing(1, 1, 1, 0),
-    // vertical padding + font size from searchIcon
-    paddingLeft: `calc(1em + ${theme.spacing(4)})`,
-    transition: theme.transitions.create('width'),
-    [theme.breakpoints.up('sm')]: {
-      width: '12ch',
-      '&:focus': {
-        width: '20ch',
-      },
-    },
-  },
-}));
 
 function Header() {
   const [, sidebarActions] = useSidebar();
   const [theme, themeActions] = useTheme();
   const [, notificationsActions] = useNotifications();
   const [, hotKeysDialogActions] = useHotKeysDialog();
+  const [currentLanguage, changeLanguage] = useLangaugeOption();
 
-  function HideOnScroll(props: Props) {
-    const { children, window } = props;
-    // Note that you normally won't need to set the window ref as useScrollTrigger
-    // will default to window.
-    // This is only being set here because the demo is in an iframe.
-    const trigger = useScrollTrigger({
-      target: window ? window() : undefined,
-    });
+  const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
+  const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
 
-    return (
-      <Slide appear={false} direction="down" in={!trigger}>
-        {React.cloneElement(children, {
-          elevation: trigger ? 4 : 1,
-          top: 64,
-        })}
-      </Slide>
-    );
-  }
+  const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorElNav(event.currentTarget);
+  };
+  const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorElUser(event.currentTarget);
+  };
+
+  const handleCloseNavMenu = () => {
+    setAnchorElNav(null);
+  };
+
+  const handleCloseUserMenu = () => {
+    setAnchorElUser(null);
+  };
 
   function showNotification() {
     notificationsActions.push({
@@ -122,40 +126,100 @@ function Header() {
   }
 
   const isLightMode = theme == 'light';
+  const naviButtonSize = 35;
 
   return (
-    // <Box sx={{ flexGrow: 1, position : 'sticky', top : 0}} data-pw={`theme-${theme}`}>
     <Box sx={{ width: '100%', position: 'sticky' }} data-pw={`theme-${theme}`}>
       <AppBar color="transparent" elevation={1} position="sticky" sx={{ top: 0, paddingX: 0 }}>
-        <Toolbar sx={{ padding: 0 }}>
-          <Container sx={{ display: 'flex', justifyContent: 'space-between' }}>
+        <Toolbar variant="dense" sx={{ justifyContent: 'space-between' }}>
+          <FlexBox sx={{ columnGap: 1 }}>
+            {/* title/logo */}
             <FlexBox sx={{ alignItems: 'center' }}>
               <Button onClick={showNotification} color="info">
                 {title}
               </Button>
             </FlexBox>
-            <Search>
-              <SearchIconWrapper>
-                <SearchIcon />
-              </SearchIconWrapper>
-              <StyledInputBase placeholder="Search…" inputProps={{ 'aria-label': 'search' }} />
-            </Search>
-            <FlexBox>
-              <Button variant="contained">로그인 / 회원가입</Button>
-              <Divider orientation="vertical" flexItem />
+
+            {/* game series select */}
+            <FlexBox sx={{ columnGap: 0.5 }}>
+              {NavigationButtonList.map((vals) => (
+                <NavigationButton
+                  name={vals.name}
+                  size={naviButtonSize}
+                  image={vals.image}
+                  key={`navi-logo-${vals.name}`}
+                />
+              ))}
+            </FlexBox>
+          </FlexBox>
+
+          {/* lang/dark-light mode / login */}
+          <FlexBox sx={{ alignItems: 'center', columnGap: 1 }}>
+            <Box sx={{ flexGrow: 0 }}>
+              <Tooltip title="Change Language">
+                <FlexBox sx={{ columnGap: 1 }} component={ButtonBase} onClick={handleOpenUserMenu}>
+                  <LanguageOutlinedIcon style={{ fontSize: '24px' }} />
+                  <Typography>{langLocale[currentLanguage]}</Typography>
+                </FlexBox>
+              </Tooltip>
+              <Menu
+                sx={{ mt: '30px' }}
+                id="menu-appbar"
+                anchorEl={anchorElUser}
+                anchorOrigin={{
+                  vertical: 'top',
+                  horizontal: 'right',
+                }}
+                keepMounted
+                transformOrigin={{
+                  vertical: 'top',
+                  horizontal: 'right',
+                }}
+                open={Boolean(anchorElUser)}
+                onClose={handleCloseUserMenu}
+              >
+                {LanguageOptions.map(({ option, locale }) => (
+                  <MenuItem
+                    key={option}
+                    onClick={() => {
+                      handleCloseUserMenu();
+                      changeLanguage.setLanguageTo(option);
+                    }}
+                    selected={currentLanguage === option}
+                  >
+                    <Typography textAlign="center">{locale}</Typography>
+                  </MenuItem>
+                ))}
+              </Menu>
+            </Box>
+
+            <FlexBox
+              sx={{
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+            >
               <Tooltip title={isLightMode ? '다크모드' : '라이트모드'} arrow>
                 <IconButton
-                  color="info"
-                  edge="end"
-                  size="large"
+                  color="default"
+                  size="medium"
                   onClick={themeActions.toggle}
                   data-pw="theme-toggle"
                 >
-                  {isLightMode ? <DarkModeOutlinedIcon /> : <LightModeOutlinedIcon />}
+                  {isLightMode ? (
+                    <LightModeOutlinedIcon style={{ fontSize: '24px' }} />
+                  ) : (
+                    <DarkModeIcon style={{ fontSize: '24px' }} />
+                  )}
                 </IconButton>
               </Tooltip>
             </FlexBox>
-          </Container>
+            <FlexBox>
+              <Button variant="contained" size="small" sx={{ height: 28 }}>
+                로그인
+              </Button>
+            </FlexBox>
+          </FlexBox>
         </Toolbar>
       </AppBar>
     </Box>
