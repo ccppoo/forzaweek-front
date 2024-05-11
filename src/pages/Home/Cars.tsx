@@ -135,7 +135,7 @@ function ManufacturerFilterCharacter({ char }: { char: string }) {
   const FIRST_CHAR = char.toLocaleLowerCase();
 
   return (
-    <FlexBox sx={{ width: '100%' }}>
+    <FlexBox sx={{ width: '100%', paddingY: 0.2 }}>
       <FlexBox sx={{ justifyContent: 'center', alignItems: 'center', width: 40 }}>
         <Typography variant="h5">{char.toUpperCase()}</Typography>
       </FlexBox>
@@ -261,7 +261,10 @@ function Car() {
       }}
     >
       <FlexBox sx={{ maxWidth: W, height: '100%', justifyContent: 'center', alignItems: 'center' }}>
-        <Image src={image.car.hyundaiElantra} sx={{ width: 'auto', height: '100%' }} />
+        <Image
+          src={image.car.hyundaiElantra}
+          sx={{ width: 'auto', height: '100%', paddingRight: 0.5, paddingY: 0.5 }}
+        />
       </FlexBox>
       <FlexBox sx={{ flexDirection: 'column' }}>
         <FlexBox>
