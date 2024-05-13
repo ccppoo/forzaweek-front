@@ -173,17 +173,26 @@ function ManufacturerFilterCharacter({ char }: { char: string }) {
 function CarFilterDivisionSummary() {
   const [options] = useCarSearchFilters();
 
+  const optionName = 'division';
   const tooManyOptions = options.division.length > 4;
+  const optionZeroSelected = options.division.length == 0;
   const optionsAllSelected = options.division.length == searchOptionMaxLength.division;
+  const optionsSelected = options.division.length;
   const divisionSelected = options.division.slice(0, tooManyOptions ? 4 : options.division.length);
 
   const summarizedSelection = `and ${options.division.length - 4} more selected`;
 
   return (
     <FlexBox sx={{ justifyContent: 'flex-start', alignItems: 'center', columnGap: 1 }}>
-      {optionsAllSelected ? (
+      {optionZeroSelected ? (
         <FlexBox>
-          <Typography>All Option selected</Typography>
+          <Typography>No option selected!</Typography>
+        </FlexBox>
+      ) : optionsAllSelected ? (
+        <FlexBox>
+          <Typography>
+            Every Option selected (total {optionsSelected} {optionName}s)
+          </Typography>
         </FlexBox>
       ) : (
         <>
@@ -225,7 +234,7 @@ function CarFilterDivision() {
   const divisionSelected = options.division.slice(0, tooManyOptions ? 4 : options.division.length);
 
   return (
-    <Accordion defaultExpanded>
+    <Accordion defaultExpanded disableGutters>
       <AccordionSummary
         expandIcon={<ArrowDownwardIcon />}
         aria-controls="panel1-content"
@@ -236,7 +245,8 @@ function CarFilterDivision() {
         </Typography>
         <CarFilterDivisionSummary />
       </AccordionSummary>
-      <AccordionDetails>
+      <Divider />
+      <AccordionDetails sx={{ paddingTop: 0.5, paddingBottom: 1 }}>
         <FlexBox
           sx={{
             flexDirection: 'column',
