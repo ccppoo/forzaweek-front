@@ -1,4 +1,6 @@
 // Tuning
+import { useNavigate } from 'react-router-dom';
+
 import { SvgIconComponent } from '@mui/icons-material';
 import BuildIcon from '@mui/icons-material/Build';
 // Deco
@@ -15,23 +17,33 @@ import { FlexBox } from '@/components/styled';
 const MenuItems = [
   {
     name: 'Cars',
+    path: '/car',
     icon: DirectionsCarFilledOutlinedIcon,
   },
   {
     name: 'Tuning',
+    path: '/tuning',
+
     icon: BuildIcon,
   },
   {
-    name: 'Deco',
+    name: 'Decals',
+    path: '/decal',
     icon: ColorLensOutlinedIcon,
   },
   {
     name: 'Tracks',
+    path: '/track',
+
     icon: RouteIcon,
   },
 ];
 
-function MenuButton({ name, Icon }: { name: string; Icon: SvgIconComponent }) {
+function MenuButton({ name, path, Icon }: { name: string; path: string; Icon: SvgIconComponent }) {
+  const navigate = useNavigate();
+
+  const goto = () => navigate(path);
+
   return (
     <FlexBox
       sx={{
@@ -47,12 +59,12 @@ function MenuButton({ name, Icon }: { name: string; Icon: SvgIconComponent }) {
         },
       }}
       component={ButtonBase}
+      onClick={() => goto()}
     >
       <FlexBox
         sx={{
           flexDirection: 'column',
           alignItems: 'center',
-
           padding: 1,
         }}
       >
@@ -66,8 +78,8 @@ function MenuButton({ name, Icon }: { name: string; Icon: SvgIconComponent }) {
 export default function ShortCutMenu() {
   return (
     <FlexBox sx={{ width: '100%', justifyContent: 'center', paddingTop: 1, columnGap: 1 }}>
-      {MenuItems.map(({ name, icon }) => (
-        <MenuButton name={name} Icon={icon} />
+      {MenuItems.map(({ name, path, icon }) => (
+        <MenuButton name={name} path={path} Icon={icon} />
       ))}
     </FlexBox>
   );

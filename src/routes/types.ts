@@ -6,6 +6,10 @@ import type { SvgIconProps } from '@mui/material/SvgIcon';
 enum Pages {
   Home,
   DEV,
+  Cars,
+  Decals,
+  Tracks,
+  Tunings,
   NotFound,
 }
 
