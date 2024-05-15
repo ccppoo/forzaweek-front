@@ -2,19 +2,42 @@ import { useCallback, useMemo } from 'react';
 import { atom, useRecoilState } from 'recoil';
 
 // import type { Actions } from './types';
-import { DIVISIONS } from './values';
+import {
+  BOOST,
+  COUNTRY,
+  DIVISIONS,
+  MANUFACTURER,
+  PRODUCTION_YEAR,
+  PRODUCTION_YEARs,
+  RARITY,
+} from './values';
 
-type CarSearchOption = 'division';
-// type CarSearchOption = 'division' | 'rarity' | 'productionYear' | 'country' | 'boost' | 'manufacturer'
+type CarSearchOption =
+  | 'division'
+  | 'productionYear'
+  | 'manufacturer'
+  | 'rarity'
+  | 'country'
+  | 'boost';
 
 type CarSearchOptions = Record<CarSearchOption, string[]>;
 
 const carSearchOptionDefault: CarSearchOptions = {
   division: [...DIVISIONS],
+  productionYear: [...PRODUCTION_YEARs],
+  manufacturer: [...MANUFACTURER],
+  boost: [...BOOST],
+  country: [...COUNTRY],
+  rarity: [...RARITY],
 };
 
 export const searchOptionMaxLength = {
   division: DIVISIONS.length,
+  productionYear: PRODUCTION_YEARs.length,
+  manufacturer: MANUFACTURER.length,
+  boost: BOOST.length,
+  country: COUNTRY.length,
+  rarity: RARITY.length,
 };
 
 const carSearchOptionState = atom<CarSearchOptions>({
@@ -27,12 +50,6 @@ type Actions = {
   selectAllSingleOption: (option: CarSearchOption) => void;
   unselectAllSingleOption: (option: CarSearchOption) => void;
   selectAllEveryOption: () => void;
-};
-
-type FILTER_VALUES = Record<CarSearchOption, string[]>;
-
-const filterValues: FILTER_VALUES = {
-  division: DIVISIONS,
 };
 
 function useCarSearchFilters(): [CarSearchOptions, Actions] {
@@ -58,7 +75,7 @@ function useCarSearchFilters(): [CarSearchOptions, Actions] {
     setCarSearchOptions((curVal) => {
       return {
         ...curVal,
-        [option]: [...filterValues[option]].toSorted(),
+        [option]: [...carSearchOptionDefault[option]].toSorted(),
       };
     });
   };

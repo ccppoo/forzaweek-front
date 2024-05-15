@@ -24,8 +24,8 @@ import { height } from '@mui/system';
 import * as image from '@/image';
 import { FlexBox, FullSizeCenteredFlexBox } from '@/components/styled';
 
-import CardPreviews from './CardPreviews';
 import CarSearch from './CarsSreach';
+import NewCars from './NewCars';
 import { Image } from './styled';
 
 export const ImageSrc = styled('span')({
@@ -177,9 +177,8 @@ export default function Cars() {
 
   return (
     <Container sx={{ height: '120vh' }}>
-      <FlexBox sx={{ flexDirection: 'column', rowGap: 1 }}>
-        <CardPreviews sectionTitle="new aravial" />
-
+      <FlexBox sx={{ flexDirection: 'column', rowGap: 2, paddingTop: 1 }}>
+        {/* <NewCars /> */}
         <CarSearch />
       </FlexBox>
     </Container>

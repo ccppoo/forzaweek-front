@@ -26,10 +26,8 @@ import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Unstable_Grid2';
 
-import * as image from '@/image';
-import MainFullBanner from '@/components/MainFullBanner';
-import PostCard from '@/components/PostCard';
-import { FlexBox, FullSizeCenteredFlexBox } from '@/components/styled';
+import { FlexBox } from '@/components/styled';
+import { carInfoWithImage } from '@/data/cars';
 
 import CarPreviewCard from './CarPreviewCard';
 import {
@@ -41,11 +39,12 @@ import {
   CarFilterRarity,
 } from './filter';
 import { Image } from './styled';
+import { CarInfo, FH5_info } from './types';
 import { BOOST, COUNTRY, DIVISIONS, MANUFACTURER, PRODUCTION_YEARs, RARITY } from './values';
 
 function CarFilters() {
   return (
-    <FlexBox sx={{ flexDirection: 'column', paddingBottom: 2, rowGap: 0 }}>
+    <FlexBox sx={{ flexDirection: 'column', paddingBottom: 1, rowGap: 0 }}>
       <CarFilterDivision divisions={DIVISIONS} />
       <CarFilterProductionYear productionYears={PRODUCTION_YEARs} />
       <CarFilterRarity rarity={RARITY} />
@@ -56,32 +55,47 @@ function CarFilters() {
   );
 }
 
+function CarFilterSummary() {
+  // shows total cars after applying filters
+
+  const numberOfCars = 120;
+
+  return (
+    <FlexBox sx={{ paddingBottom: 1, width: '100%', height: 45, alignItems: 'center' }}>
+      <FlexBox
+        sx={{ paddingX: '16px', width: '100%', height: '100%', alignItems: 'center' }}
+        component={Paper}
+      >
+        <Typography>Search Result : total {numberOfCars} cars</Typography>
+      </FlexBox>
+    </FlexBox>
+  );
+}
+
 export default function CarSearch() {
   return (
     <FlexBox sx={{ flexDirection: 'column' }}>
       {/* Filter Options */}
       <CarFilters />
       {/* Sort Options */}
-
+      <CarFilterSummary />
       {/* Cards */}
-      <FlexBox
+      <Grid
+        container
         sx={{
-          justifyContent: 'space-around',
-          flexDirection: 'row',
-          columnGap: 2,
-          rowGap: 1,
-          flexWrap: 'wrap',
+          justifyContent: 'space-between',
         }}
+        columnSpacing={{ xs: 1, md: 1 }}
+        rowSpacing={{ xs: 1, md: 1 }}
       >
-        <CarPreviewCard />
-        <CarPreviewCard />
-        <CarPreviewCard />
-        <CarPreviewCard />
-        <CarPreviewCard />
+        {carInfoWithImage.map(({ image, info }: { image: string; info: CarInfo }) => {
+          return <CarPreviewCard carInfo={info} image={image} key={info.name} />;
+        })}
+
         {/* <CardPreview />
         <CardPreview />
         <CardPreview /> */}
-      </FlexBox>
+      </Grid>
     </FlexBox>
   );
 }

@@ -1,0 +1,73 @@
+[
+  {
+    "manufacture": "Hyundai",
+    "year": 2021,
+    "country": "Korea",
+    "name": "IONIQ 6",
+    "drive_train": "AWD",
+    "body_style": "sedan",
+    "door": 4,
+    "engine": "EV",
+    "FH5": {
+      "division": "super saloons",
+      "PI": 686
+    }
+  },
+  {
+    "manufacture": "Hyundai",
+    "year": 2019,
+    "country": "Korea",
+    "name": "Veloster N",
+    "drive_train": "FWD",
+    "body_style": "hatchback",
+    "door": 2,
+    "engine": "ICE",
+    "FH5": {
+      "division": "super hot hatch",
+      "PI": 645
+    }
+  },
+  {
+    "manufacture": "Hyundai",
+    "year": 2020,
+    "country": "Korea",
+    "name": "i30 N",
+    "drive_train": "FWD",
+    "body_style": "hatchback",
+    "door": 4,
+    "engine": "ICE",
+    "FH5": {
+      "division": "super hot hatch",
+      "PI": 670
+    }
+  },
+  {
+    "body_style": "SUV",
+    "division": "RV",
+    "door": 4,
+    "engine": "ICE",
+    "manufacture": "Hyundai",
+    "year": 2022,
+    "country": "Korea",
+    "name": "Kona N",
+    "drive_train": "FWD",
+    "FH5": {
+      "PI": 684,
+      "division": "sports utility heroes"
+    }
+  },
+  {
+    "manufacture": "Hyundai",
+    "year": 2021,
+    "country": "Korea",
+    "name": "#98 Bryan Herta Autosport Elantra N",
+    "drive_train": "FWD",
+    "body_style": "sedan",
+    "door": 4,
+    "engine": "ICE",
+    "FH5": {
+      "PI": 800,
+      "division": "track toys"
+    }
+  }
+]
