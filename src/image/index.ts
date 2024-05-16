@@ -10,6 +10,16 @@ import lexus14RC from './car/FM23_Lexus_14_RC_F_GT3.webp';
 import Alfa_155 from './car/HOR_XB1_Alfa_155.webp';
 import velostar from './car/HOR_XB1_Hyundai_Veloster_19.webp';
 import bmwm8 from './car/MOT_XB1_BMW_1_M8.webp';
+import elantra_back1 from './decal/elantra_back.jpg';
+import elantra_back2 from './decal/elantra_back_left.jpg';
+import elantra_back3 from './decal/elantra_back_top.jpg';
+import elantra_back4 from './decal/elantra_back_top_left.jpg';
+import elantra_back5 from './decal/elantra_back_top_right.jpg';
+import elantra_front1 from './decal/elantra_front.jpg';
+import elantra_front2 from './decal/elantra_front_top_left.jpg';
+import elantra_front3 from './decal/elantra_front_top_right.jpg';
+import elantra_left from './decal/elantra_left.jpg';
+import elantra_right from './decal/elantra_right.jpg';
 import ford_focus_2001 from './ford_Focus2001.jpg';
 import ford_focus_2017 from './ford_focus2017.jpg';
 import honda_civic from './honda_civic.jpg';
@@ -29,6 +39,19 @@ const logo = {
 
 const poster = {
   series33: series_33,
+};
+
+const decal = {
+  elantra_back1: elantra_back1,
+  elantra_back2: elantra_back2,
+  elantra_back3: elantra_back3,
+  elantra_back4: elantra_back4,
+  elantra_back5: elantra_back5,
+  elantra_front1: elantra_front1,
+  elantra_front2: elantra_front2,
+  elantra_front3: elantra_front3,
+  elantra_left: elantra_left,
+  elantra_right: elantra_right,
 };
 
 const car = {
@@ -51,6 +74,7 @@ export {
   logo,
   poster,
   car,
+  decal,
   honda_civic,
   ford_focus_2001,
   ford_focus_2017,
