@@ -46,7 +46,6 @@ export default function Home() {
           <CardPreviews sectionTitle="NEWS / Announcements" />
           <CardPreviews sectionTitle="Week Festa" />
           {/* 자동차 */}
-          <Cars />
         </FlexBox>
       </Container>
     </>

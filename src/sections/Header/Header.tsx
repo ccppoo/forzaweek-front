@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import DarkModeIcon from '@mui/icons-material/DarkMode';
 import DarkModeOutlinedIcon from '@mui/icons-material/DarkModeOutlined';
@@ -33,6 +34,7 @@ import useNotifications from '@/store/notifications';
 import useSidebar from '@/store/sidebar';
 import useTheme from '@/store/theme';
 
+import MenuNavigation from './MenuNavigation';
 import { HotKeysButton } from './styled';
 import { getRandomJoke } from './utils';
 
@@ -127,14 +129,18 @@ function Header() {
 
   const isLightMode = theme == 'light';
   const naviButtonSize = 35;
+  const MainTitleWidth = 100;
 
   return (
     <Box sx={{ width: '100%', position: 'sticky' }} data-pw={`theme-${theme}`}>
       <AppBar color="transparent" elevation={1} position="sticky" sx={{ top: 0, paddingX: 0 }}>
-        <Toolbar variant="dense" sx={{ justifyContent: 'space-between' }}>
+        <Toolbar
+          variant="dense"
+          sx={{ justifyContent: 'space-between', borderBottom: '1px black solid' }}
+        >
           <FlexBox sx={{ columnGap: 1 }}>
             {/* title/logo */}
-            <FlexBox sx={{ alignItems: 'center' }}>
+            <FlexBox sx={{ alignItems: 'center', width: MainTitleWidth }}>
               <Button onClick={showNotification} color="info">
                 {title}
               </Button>
@@ -221,6 +227,7 @@ function Header() {
             </FlexBox>
           </FlexBox>
         </Toolbar>
+        <MenuNavigation leftPadding={MainTitleWidth} />
       </AppBar>
     </Box>
   );

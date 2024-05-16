@@ -35,7 +35,6 @@ const routes: Routes = {
     title: 'Tunings',
     icon: HomeIcon,
   },
-
   [Pages.DEV]: {
     component: asyncComponentLoader(() => import('@/pages/Dev')),
     path: '/dev',
