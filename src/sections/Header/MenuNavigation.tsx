@@ -56,7 +56,7 @@ export default function MenuNavigation({ leftPadding }: { leftPadding: number })
       {Object.entries(routes)
         .filter(([key, item]) => item.title)
         .map(([key, item]) => (
-          <NavigationButton name={item.title!} path={item.path!} />
+          <NavigationButton name={item.title!} path={item.devUrl! || item.path!} />
         ))}
     </Toolbar>
   );
