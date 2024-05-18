@@ -27,11 +27,19 @@ import { Image } from './styled';
 
 function ImageListTemp() {
   return (
-    <>
+    <FlexBox
+      sx={{
+        width: '100%',
+        height: '100%',
+        flexDirection: 'width',
+        paddingY: 1,
+      }}
+    >
+      {/* 큰 사진 */}
       <FlexBox
         sx={{
-          width: '100%',
-          height: '80%',
+          width: '70%',
+          height: '100%',
           justifyContent: 'center',
           alignItems: 'center',
         }}
@@ -45,28 +53,20 @@ function ImageListTemp() {
           <Image src={image.decal.elantra_front2} sx={{ objectFit: 'contain' }} />
         </FlexBox>
       </FlexBox>
+      {/* 작은 사진 목록 */}
       <FlexBox
         sx={{
-          width: '100%',
-          height: '20%',
-          paddingTop: 0.2,
+          width: '30%',
+          height: '100%',
+          padding: 1,
+          backgroundColor: '#cfcccc',
           flexDirection: 'row',
           justifyContent: 'space-around',
         }}
       >
         <FlexBox
           sx={{
-            width: '8%',
-            height: '100%',
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}
-        >
-          <ArrowBackIosIcon />
-        </FlexBox>
-        <FlexBox
-          sx={{
-            width: '84%',
+            width: '100%',
             height: '100%',
             justifyContent: 'center',
             alignItems: 'center',
@@ -98,19 +98,8 @@ function ImageListTemp() {
             <Image src={image.decal.elantra_front1} sx={{ objectFit: 'contain' }} />
           </FlexBox>
         </FlexBox>
-
-        <FlexBox
-          sx={{
-            width: '8%',
-            height: '100%',
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}
-        >
-          <ArrowForwardIosIcon />
-        </FlexBox>
       </FlexBox>
-    </>
+    </FlexBox>
   );
 }
 
@@ -162,85 +151,42 @@ function TrackInfoSummary() {
   );
 }
 
-function TrackTitle() {
-  const name = 'Arch of Mulegé Circuit';
-  const road_type = 'road';
-  const track_type = 'circuit';
-  const laps = 3;
-  const description = 'design of Hyundai elantra, its my style';
-  const maker = 'DecalMaster';
-  const share_code = '123 123 123';
-  const height = 75;
-  return (
-    <FlexBox sx={{ width: '100%', columnGap: 1, height: height, paddingLeft: 1, paddingTop: 1 }}>
-      <FlexBox sx={{ aspectRatio: '1/1' }}>
-        <Image src={image.track_icon.road_track} sx={{ objectFit: 'contain' }} />
-      </FlexBox>
-      <FlexBox sx={{ flexDirection: 'column', justifyContent: 'center' }}>
-        <Typography variant="h5">{name}</Typography>
-        <FlexBox sx={{ columnGap: 2 }}>
-          <Typography variant="h6">{road_type}</Typography>
-          <Typography variant="h6">{track_type}</Typography>
-          <Typography variant="h6">{laps} laps</Typography>
-        </FlexBox>
-      </FlexBox>
-    </FlexBox>
-  );
-}
-
-function TrackPreview() {
-  return (
-    <FlexBox
-      sx={{
-        maxWidth: '100%',
-        height: '100%',
-        justifyContent: 'start',
-      }}
-    >
-      <Image src={image.track.molehach} sx={{ objectFit: 'contain' }} />
-    </FlexBox>
-  );
-}
-
-function TrackStory() {
-  return (
-    <FlexBox sx={{ flexDirection: 'column' }}>
-      <Typography variant="h6">story</Typography>
-      <Typography variant="body2">run track !!</Typography>
-    </FlexBox>
-  );
-}
-
-function TrackTags() {
-  return;
-}
-
 export default function Tracks() {
   const navigate = useNavigate();
 
-  const WIDTH = '80%';
-  const HEIGHT = 100;
+  const WIDTH = '100%';
+  const HEIGHT = '100%';
   const name = 'Arch of Mulegé Circuit';
   const road_type = 'road';
   const track_type = 'circuit';
+  const laps = 3;
   const description = 'design of Hyundai elantra, its my style';
   const maker = 'DecalMaster';
   const share_code = '123 123 123';
-  const laps = 3;
 
   return (
-    <Container sx={{ height: '100vh' }}>
-      <FullSizeCenteredFlexBox sx={{}}>
+    <Container sx={{ height: '100vh', marginBottom: 20 }}>
+      <FullSizeCenteredFlexBox
+        sx={{
+          height: '100%',
+        }}
+      >
         <FlexBox
           sx={{
             width: WIDTH,
             maxWidth: 1200,
-            height: HEIGHT,
-            justifyContent: 'space-between',
+            height: '100%',
+            flexDirection: 'column',
+            paddingTop: 2,
+            marginTop: 2,
+            paddingX: 2,
+            rowGap: 3,
           }}
           component={Paper}
         >
-          <FlexBox sx={{ columnGap: 1 }}>
+          {/* 제목 */}
+          <FlexBox sx={{ width: '100%', height: 50 }}>
+            {/* 트랙 아이콘 */}
             <FlexBox
               sx={{
                 aspectRatio: '1/1',
@@ -256,18 +202,78 @@ export default function Tracks() {
                 }}
               />
             </FlexBox>
-            <FlexBox sx={{ flexDirection: 'column' }}>
-              <Typography variant="h5">{name}</Typography>
-              <FlexBox sx={{ columnGap: 1 }}>
-                <Typography variant="h6">{road_type}</Typography>
-                <Typography variant="h6">{track_type}</Typography>
-                <Typography variant="h6">{laps} laps</Typography>
+            <FlexBox sx={{ alignItems: 'center', paddingX: 1 }}>
+              <Typography variant="h4">{name}</Typography>
+            </FlexBox>
+          </FlexBox>
+          {/* 제목 밑에 사진이랑 특징 */}
+          <FlexBox sx={{ width: '100%', height: '100%' }}>
+            <FlexBox sx={{ paddingTop: 1 }}>
+              {/* 트랙 사진 */}
+              <FlexBox>
+                <Image src={image.track.molehach} sx={{ objectFit: 'contain' }} />
+              </FlexBox>
+              {/* 트랙 특징 설명 */}
+              <FlexBox
+                sx={{
+                  height: '100%',
+                  flexDirection: 'column',
+                  paddingLeft: 2,
+                }}
+              >
+                <FlexBox sx={{ flexDirection: 'column' }}>
+                  <FlexBox sx={{ alignItems: 'center', columnGap: 1 }}>
+                    <Typography variant="h6">Road Type : </Typography>
+                    <Typography variant="h6">{road_type}</Typography>
+                  </FlexBox>
+                  <FlexBox sx={{ alignItems: 'center', columnGap: 1 }}>
+                    <Typography variant="h6">Track Type : </Typography>
+                    <Typography variant="h6">{track_type}</Typography>
+                    <Typography>laps: {laps}</Typography>
+                  </FlexBox>
+                </FlexBox>
+                <FlexBox>
+                  <Typography>{description}</Typography>
+                </FlexBox>
               </FlexBox>
             </FlexBox>
           </FlexBox>
-          <TrackPreview />
+          {/* 트랙 사진들 */}
+          <FlexBox sx={{ width: '100%', flexDirection: 'column' }}>
+            <FlexBox>
+              <Typography variant="h5">Track picture</Typography>
+            </FlexBox>
+
+            {/* 트랙 스샷 */}
+            <FlexBox sx={{ width: '100%', height: '100%' }}>
+              <ImageListTemp />
+            </FlexBox>
+          </FlexBox>
         </FlexBox>
       </FullSizeCenteredFlexBox>
     </Container>
   );
+}
+
+{
+  /* <FlexBox
+          sx={{
+            width: '8%',
+            height: '100%',
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}
+        >
+          <ArrowBackIosIcon />
+        </FlexBox>
+        <FlexBox
+          sx={{
+            width: '8%',
+            height: '100%',
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}
+        >
+          <ArrowForwardIosIcon />
+        </FlexBox> */
 }

@@ -24,9 +24,16 @@ const routes: Routes = {
     icon: HomeIcon,
   },
   [Pages.Tracks]: {
-    component: asyncComponentLoader(() => import('@/pages/Tracks')),
+    component: asyncComponentLoader(() => import('@/pages/Tracks/Tracks')),
     path: '/track',
     title: 'Tracks',
+    icon: HomeIcon,
+  },
+  [Pages.TrackDetail]: {
+    component: asyncComponentLoader(() => import('@/pages/Tracks/TrackDetail')),
+    path: '/track/:trackID',
+    title: 'Track detail',
+    devUrl: '/track/1',
     icon: HomeIcon,
   },
   [Pages.Tunings]: {

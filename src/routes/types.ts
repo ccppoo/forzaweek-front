@@ -9,6 +9,7 @@ enum Pages {
   Cars,
   Decals,
   Tracks,
+  TrackDetail,
   Tunings,
   NotFound,
 }
