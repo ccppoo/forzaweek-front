@@ -28,6 +28,7 @@ import fh5 from './logo/fh5.png';
 import fm2023black from './logo/fm2023-black.png';
 import fm2023 from './logo/fm2023.png';
 import series_33 from './poster/massive_Series_33_Apex_Allstars_series.webp';
+import { mulege } from './track/mulege';
 import track_lecerbohio from './track/track_1.jpg';
 import track_molehach from './track/track_2.jpg';
 import crosscounrty_sprint from './track_icon/crosscountry_sprint.png';
@@ -49,6 +50,7 @@ const track_icon = {
 const track = {
   lecerbohio: track_lecerbohio,
   molehach: track_molehach,
+  mulege: mulege,
 };
 
 const logo = {
