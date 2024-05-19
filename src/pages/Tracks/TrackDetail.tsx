@@ -67,6 +67,50 @@ function TitlePart() {
   );
 }
 
+function Pagination() {
+  return (
+    <FlexBox sx={{ width: '100%', height: 50 }}>
+      <FlexBox
+        sx={{
+          width: '20%',
+          height: '100%',
+          justifyContent: 'end',
+          alignItems: 'center',
+        }}
+      >
+        <ArrowBackIosIcon />
+      </FlexBox>
+      <FlexBox sx={{ width: '60%', justifyContent: 'space-around', alignItems: 'center' }}>
+        {[1, 2, 3, 4, 5, 6].map((page) => {
+          return (
+            <FlexBox
+              sx={{
+                width: 40,
+                height: 25,
+                alignItems: 'center',
+                justifyContent: 'center',
+                border: '1px black solid',
+              }}
+            >
+              <Typography>{page}</Typography>
+            </FlexBox>
+          );
+        })}
+      </FlexBox>
+      <FlexBox
+        sx={{
+          width: '20%',
+          height: '100%',
+          justifyContent: 'start',
+          alignItems: 'center',
+        }}
+      >
+        <ArrowForwardIosIcon />
+      </FlexBox>
+    </FlexBox>
+  );
+}
+
 function BreifData() {
   const WIDTH = '100%';
   const HEIGHT = '100%';
@@ -107,7 +151,7 @@ function BreifData() {
             </FlexBox>
             <FlexBox sx={{ flexDirection: 'column', columnGap: 1 }}>
               <FlexBox sx={{ alignItems: 'center', columnGap: 1 }}>
-                <Typography variant="h6">Track Type : </Typography>
+                <Typography variant="h6">Tags : </Typography>
                 <Typography variant="h6">{track_type}</Typography>
               </FlexBox>
             </FlexBox>
@@ -272,8 +316,8 @@ function RelatedTuning() {
 
   const share_code = '123 123 123';
   return (
-    <Grid xs={6} sx={{ display: 'flex', flexDirection: 'column', height: 120 }}>
-      <Paper sx={{ display: 'flex', width: '100%', height: '100%', padding: 1 }} elevation={4}>
+    <Grid xs={6} sx={{ display: 'flex', flexDirection: 'column', height: 120, padding: 1 }}>
+      <Paper sx={{ display: 'flex', width: '100%', height: '100%' }} elevation={4}>
         <Grid container sx={{ width: '100%' }}>
           {/* 차 사진 */}
           <Grid xs={5} sx={{ height: '100%' }}>
@@ -348,9 +392,30 @@ function RelatedTunings() {
         {/* 선택된 클래스에 있는 튜닝들 */}
         <Grid container>
           <RelatedTuning />
+          <RelatedTuning />
+          <RelatedTuning />
+          <RelatedTuning />
+          <RelatedTuning />
+          <RelatedTuning />
+          <RelatedTuning />
+          <RelatedTuning />
         </Grid>
       </FlexBox>
+      {/* Pagination */}
+      <Pagination />
     </FlexBox>
+  );
+}
+function RelatedVideo() {
+  return (
+    <Grid
+      xs={4}
+      sx={{ padding: 1, display: 'flex', justifyContent: 'center', alignItems: 'center' }}
+    >
+      <FlexBox
+        sx={{ width: '100%', maxWidth: 320, aspectRatio: '16/9', border: '1px black solid' }}
+      ></FlexBox>
+    </Grid>
   );
 }
 
@@ -371,9 +436,16 @@ function RelatedVideos() {
 
         {/* 선택된 클래스에 있는 튜닝들 */}
         <Grid container>
-          <RelatedTuning />
+          <RelatedVideo />
+          <RelatedVideo />
+          <RelatedVideo />
+          <RelatedVideo />
+          <RelatedVideo />
+          <RelatedVideo />
         </Grid>
       </FlexBox>
+      {/* Pagination */}
+      <Pagination />
     </FlexBox>
   );
 }
@@ -388,10 +460,11 @@ export default function Tracks() {
   const track_type = 'circuit';
 
   return (
-    <Container sx={{ height: '130vh', marginBottom: 20 }}>
+    <Container sx={{ height: '130vh' }}>
       <FullSizeCenteredFlexBox
         sx={{
           height: '100%',
+          marginTop: 50,
         }}
       >
         <FlexBox
