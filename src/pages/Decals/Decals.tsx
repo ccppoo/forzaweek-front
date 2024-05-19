@@ -43,84 +43,73 @@ const carinfo = {
 export default function Decals() {
   const navigate = useNavigate();
 
-  const WIDTH = 1000;
-  const HEIGHT = 450;
+  const WIDTH = '100%';
+  const HEIGHT = 500;
+  const name = carinfo.name;
+  const manufacturer = carinfo.manufacture;
+  const year = carinfo.year;
+  const description = 'design of Hyundai elantra, its my style';
+  const maker = 'DecalMaster';
+  const share_code = '123 123 123';
 
   return (
     <Container sx={{ height: '100vh' }}>
       <FullSizeCenteredFlexBox sx={{}}>
-        <FlexBox sx={{ width: WIDTH, height: HEIGHT }} component={Paper}>
+        <FlexBox
+          sx={{ width: WIDTH, maxWidth: 1200, height: HEIGHT, flexDirection: 'column' }}
+          component={Paper}
+        >
+          <FlexBox sx={{ width: '100%', height: '40px' }}>s</FlexBox>
           {/* 자동차 사진/이름 */}
-          <FlexBox sx={{ width: '30%', height: '100%', padding: 1 }}>
-            <Paper sx={{ display: 'flex' }} elevation={3}>
-              <FlexBox sx={{ flexDirection: 'column' }}>
-                {/* 자동차 사진 */}
-                <FlexBox>
-                  <Image src={image.car.hyundaiElantra} sx={{ objectFit: 'contain' }} />
-                </FlexBox>
-                {/* 자동차 이름, 간단 설명 + 제작자 / 공유 코드 */}
-                <FlexBox
-                  sx={{ height: '100%', flexDirection: 'column', justifyContent: 'space-between' }}
-                >
-                  <FlexBox sx={{ flexDirection: 'column' }}>
-                    <Typography>자동차 이름</Typography>
-                    <Typography>제조사 / 연식</Typography>
+          <FlexBox sx={{ width: '100%', height: 'calc( 100% - 40px )' }}>
+            <FlexBox sx={{ width: '30%', height: '100%', padding: 1 }}>
+              <Paper sx={{ display: 'flex' }} elevation={3}>
+                <FlexBox sx={{ flexDirection: 'column', paddingX: 1 }}>
+                  {/* 자동차 사진 */}
+                  <FlexBox>
+                    <Image src={image.car.hyundaiElantra} sx={{ objectFit: 'contain' }} />
                   </FlexBox>
-                  <FlexBox sx={{ flexDirection: 'column' }}>
-                    <Typography>제작자</Typography>
-                    <Typography>공유 코드</Typography>
+                  {/* 자동차 이름, 간단 설명 + 제작자 / 공유 코드 */}
+                  <FlexBox
+                    sx={{
+                      height: '100%',
+                      flexDirection: 'column',
+                      justifyContent: 'space-between',
+                    }}
+                  >
+                    <FlexBox sx={{ flexDirection: 'column' }}>
+                      <Typography variant="h6">{name}</Typography>
+                      <Typography>
+                        {manufacturer} {year}
+                      </Typography>
+                    </FlexBox>
+                    <FlexBox>
+                      <Typography>{description}</Typography>
+                    </FlexBox>
+                    <FlexBox sx={{ flexDirection: 'column' }}>
+                      <Typography variant="h6">{maker}</Typography>
+                      <Typography variant="h6">{share_code}</Typography>
+                    </FlexBox>
                   </FlexBox>
                 </FlexBox>
-              </FlexBox>
-            </Paper>
-          </FlexBox>
-
-          {/* 데칼 상하좌우 사진 갤러리 */}
-          <FlexBox
-            sx={{
-              width: '70%',
-              height: '100%',
-              flexDirection: 'column',
-            }}
-          >
-            <FlexBox
-              sx={{ width: '100%', height: '80%', justifyContent: 'center', alignItems: 'center' }}
-            >
-              <FlexBox
-                sx={{
-                  maxWidth: '100%',
-                  height: '100%',
-                }}
-              >
-                <Image src={image.decal.elantra_front2} sx={{ objectFit: 'contain' }} />
-              </FlexBox>
+              </Paper>
             </FlexBox>
+
+            {/* 데칼 상하좌우 사진 갤러리 */}
             <FlexBox
               sx={{
-                width: '100%',
-                height: '20%',
-                paddingTop: 0.2,
-                flexDirection: 'row',
-                justifyContent: 'space-around',
+                width: '70%',
+                height: '100%',
+                flexDirection: 'column',
+                paddingY: 1,
               }}
             >
               <FlexBox
                 sx={{
-                  width: '8%',
-                  height: '100%',
+                  width: '100%',
+                  height: '80%',
                   justifyContent: 'center',
                   alignItems: 'center',
-                }}
-              >
-                <ArrowBackIosIcon />
-              </FlexBox>
-              <FlexBox
-                sx={{
-                  width: '84%',
-                  height: '100%',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  columnGap: 1,
                 }}
               >
                 <FlexBox
@@ -131,33 +120,71 @@ export default function Decals() {
                 >
                   <Image src={image.decal.elantra_front2} sx={{ objectFit: 'contain' }} />
                 </FlexBox>
-                <FlexBox
-                  sx={{
-                    maxWidth: '100%',
-                    height: '100%',
-                  }}
-                >
-                  <Image src={image.decal.elantra_back3} sx={{ objectFit: 'contain' }} />
-                </FlexBox>
-                <FlexBox
-                  sx={{
-                    maxWidth: '100%',
-                    height: '100%',
-                  }}
-                >
-                  <Image src={image.decal.elantra_front1} sx={{ objectFit: 'contain' }} />
-                </FlexBox>
               </FlexBox>
-
               <FlexBox
                 sx={{
-                  width: '8%',
-                  height: '100%',
-                  justifyContent: 'center',
-                  alignItems: 'center',
+                  width: '100%',
+                  height: '20%',
+                  paddingTop: 0.2,
+                  flexDirection: 'row',
+                  justifyContent: 'space-around',
                 }}
               >
-                <ArrowForwardIosIcon />
+                <FlexBox
+                  sx={{
+                    width: '8%',
+                    height: '100%',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}
+                >
+                  <ArrowBackIosIcon />
+                </FlexBox>
+                <FlexBox
+                  sx={{
+                    width: '84%',
+                    height: '100%',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    columnGap: 1,
+                  }}
+                >
+                  <FlexBox
+                    sx={{
+                      maxWidth: '100%',
+                      height: '100%',
+                    }}
+                  >
+                    <Image src={image.decal.elantra_front2} sx={{ objectFit: 'contain' }} />
+                  </FlexBox>
+                  <FlexBox
+                    sx={{
+                      maxWidth: '100%',
+                      height: '100%',
+                    }}
+                  >
+                    <Image src={image.decal.elantra_back3} sx={{ objectFit: 'contain' }} />
+                  </FlexBox>
+                  <FlexBox
+                    sx={{
+                      maxWidth: '100%',
+                      height: '100%',
+                    }}
+                  >
+                    <Image src={image.decal.elantra_front1} sx={{ objectFit: 'contain' }} />
+                  </FlexBox>
+                </FlexBox>
+
+                <FlexBox
+                  sx={{
+                    width: '8%',
+                    height: '100%',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}
+                >
+                  <ArrowForwardIosIcon />
+                </FlexBox>
               </FlexBox>
             </FlexBox>
           </FlexBox>
