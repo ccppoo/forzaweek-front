@@ -7,10 +7,13 @@ enum Pages {
   Home,
   DEV,
   Cars,
+  CarDetail,
   Decals,
+  DecalDetail,
   Tracks,
   TrackDetail,
   Tunings,
+  TuningDetail,
   NotFound,
 }
 

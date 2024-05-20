@@ -12,15 +12,29 @@ const routes: Routes = {
     icon: HomeIcon,
   },
   [Pages.Cars]: {
-    component: asyncComponentLoader(() => import('@/pages/Cars')),
+    component: asyncComponentLoader(() => import('@/pages/Cars/Cars')),
     path: '/car',
     title: 'Cars',
     icon: HomeIcon,
   },
+  [Pages.CarDetail]: {
+    component: asyncComponentLoader(() => import('@/pages/Cars/CarDetail')),
+    path: '/car/:carID',
+    devUrl: '/car/1',
+    title: 'car detail',
+    icon: HomeIcon,
+  },
   [Pages.Decals]: {
-    component: asyncComponentLoader(() => import('@/pages/Decals')),
+    component: asyncComponentLoader(() => import('@/pages/Decals/Decals')),
     path: '/decal',
     title: 'Decals',
+    icon: HomeIcon,
+  },
+  [Pages.DecalDetail]: {
+    component: asyncComponentLoader(() => import('@/pages/Decals/DecalDetail')),
+    path: '/decal/:decalID',
+    title: 'decal detail',
+    devUrl: '/decal/1',
     icon: HomeIcon,
   },
   [Pages.Tracks]: {
@@ -37,9 +51,16 @@ const routes: Routes = {
     icon: HomeIcon,
   },
   [Pages.Tunings]: {
-    component: asyncComponentLoader(() => import('@/pages/Tunings')),
+    component: asyncComponentLoader(() => import('@/pages/Tunings/Tunings')),
     path: '/tuning',
     title: 'Tunings',
+    icon: HomeIcon,
+  },
+  [Pages.TuningDetail]: {
+    component: asyncComponentLoader(() => import('@/pages/Tunings/TuningDetail')),
+    path: '/tuning/:tuningID',
+    devUrl: '/tuning/1',
+    title: 'tuning detail',
     icon: HomeIcon,
   },
   [Pages.DEV]: {
