@@ -27,6 +27,7 @@ import fh4 from './logo/fh4.png';
 import fh5 from './logo/fh5.png';
 import fm2023black from './logo/fm2023-black.png';
 import fm2023 from './logo/fm2023.png';
+import manufacturer from './manufacturer';
 import series_33 from './poster/massive_Series_33_Apex_Allstars_series.webp';
 import { mulege } from './track/mulege';
 import track_lecerbohio from './track/track_1.jpg';
@@ -95,6 +96,7 @@ const car = {
 };
 
 export {
+  manufacturer,
   track,
   track_icon,
   logo,
