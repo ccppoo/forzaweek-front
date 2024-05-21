@@ -3,8 +3,11 @@ import { useNavigate } from 'react-router-dom';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import ChatBubbleOutlineOutlinedIcon from '@mui/icons-material/ChatBubbleOutlineOutlined';
+import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlined';
+import FavoriteOutlinedIcon from '@mui/icons-material/FavoriteOutlined';
 import ForwardIcon from '@mui/icons-material/Forward';
 import ForwardOutlinedIcon from '@mui/icons-material/ForwardOutlined';
+import ModeCommentOutlinedIcon from '@mui/icons-material/ModeCommentOutlined';
 import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -22,6 +25,9 @@ import { height } from '@mui/system';
 
 import * as image from '@/image';
 import { FlexBox, FullSizeCenteredFlexBox } from '@/components/styled';
+import { decalsWithImage } from '@/data/decals';
+import type { DecalData } from '@/data/decals';
+import { decals as decalImages } from '@/image/decal';
 
 import { Image } from './styled';
 
@@ -40,11 +46,258 @@ const carinfo = {
   },
 };
 
+function DecalItemRow({ decal }: { decal: DecalData }) {
+  const WIDTH = '100%';
+  const HEIGHT = 200;
+  const share_code3 = [
+    decal.share_code.substring(0, 3),
+    decal.share_code.substring(3, 6),
+    decal.share_code.substring(6, 9),
+  ];
+
+  return (
+    <Paper sx={{ width: WIDTH, maxWidth: 1200, height: HEIGHT, display: 'flex' }}>
+      <FlexBox sx={{ aspectRatio: '16/9', height: '100%' }}>
+        <Image
+          src={decal.frontImage}
+          sx={{
+            objectFit: 'contain',
+            borderTopLeftRadius: 4,
+            borderBottomLeftRadius: 4,
+          }}
+        />
+      </FlexBox>
+      <FlexBox
+        sx={{ flexDirection: 'column', width: '100%', paddingX: 1, paddingY: 0.5, rowGap: 1 }}
+      >
+        <FlexBox sx={{ height: '20%' }}>
+          <Typography variant="h4">hyundai elantra deco!!</Typography>
+        </FlexBox>
+        <FlexBox sx={{ height: '60%', columnGap: 1, rowGap: 1, flexWrap: 'wrap' }}>
+          {decal.tags.map((tag) => (
+            <Chip label={tag} key={`decal-tag-${decal.share_code}-${tag}`} />
+          ))}
+        </FlexBox>
+        <FlexBox sx={{ height: '20%', width: '100%', justifyContent: 'space-between' }}>
+          <FlexBox>
+            <FlexBox
+              sx={{
+                width: '100%',
+                alignItems: 'center',
+                justifyContent: 'center',
+                columnGap: 1,
+                paddingX: 1,
+                borderRadius: 4,
+                backgroundColor: '#d1d1d1',
+              }}
+            >
+              {share_code3.map((code_peice) => {
+                return (
+                  <Typography variant="h6" key={`decal-row-share-code-piece-${code_peice}`}>
+                    {code_peice}
+                  </Typography>
+                );
+              })}
+            </FlexBox>
+          </FlexBox>
+          <FlexBox>
+            <IconButton sx={{ borderRadius: 4 }}>
+              <ModeCommentOutlinedIcon fontSize="small" />
+              <FlexBox
+                sx={{
+                  width: 30,
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  paddingLeft: 0.5,
+                }}
+              >
+                <Typography>{decal.fav.count}</Typography>
+              </FlexBox>
+            </IconButton>
+            <IconButton sx={{ borderRadius: 4 }}>
+              {decal.fav.checked ? (
+                <FavoriteOutlinedIcon fontSize="small" />
+              ) : (
+                <FavoriteBorderOutlinedIcon fontSize="small" />
+              )}
+              <FlexBox
+                sx={{
+                  width: 30,
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  paddingLeft: 0.5,
+                }}
+              >
+                <Typography>{decal.fav.count}</Typography>
+              </FlexBox>
+            </IconButton>
+          </FlexBox>
+        </FlexBox>
+      </FlexBox>
+    </Paper>
+  );
+}
+
+function DecalItemCell({ decal }: { decal: DecalData }) {
+  const carName = '#98 Bryan Herta Autosport Elantra N';
+
+  const WIDTH = '33%';
+  const HEIGHT = 400;
+  const share_code3 = [
+    decal.share_code.substring(0, 3),
+    decal.share_code.substring(3, 6),
+    decal.share_code.substring(6, 9),
+  ];
+
+  return (
+    <Grid xs={4}>
+      <Paper
+        sx={{
+          // width: '100%',
+          height: HEIGHT,
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'start',
+        }}
+      >
+        {/* 자동차 제조사/이름 */}
+        <FlexBox sx={{ paddingX: 1, paddingY: 0.2, alignItems: 'center', columnGap: 1 }}>
+          <Image src={image.manufacturer.hyundai} sx={{ width: 25, height: 25 }} />
+          <Typography>{carName}</Typography>
+        </FlexBox>
+        {/* 사진 */}
+        <FlexBox sx={{ aspectRatio: '16/9' }}>
+          <Image
+            src={decal.frontImage}
+            sx={{
+              objectFit: 'contain',
+              borderTopLeftRadius: 4,
+              borderBottomLeftRadius: 4,
+            }}
+          />
+        </FlexBox>
+        {/* 본문 */}
+        <FlexBox
+          sx={{
+            flexDirection: 'column',
+            width: '100%',
+            height: '100%',
+            paddingX: 1,
+            paddingY: 0.5,
+            rowGap: 2,
+            justifyContent: 'space-between',
+          }}
+        >
+          <FlexBox sx={{ flexDirection: 'column' }}>
+            {/* 차 이름 */}
+
+            <FlexBox
+              sx={{
+                height: '100%',
+                flexWrap: 'wrap',
+                columnGap: 0.2,
+                rowGap: 0.5,
+                justifyContent: 'start',
+                alignItems: 'flex-start',
+              }}
+            >
+              {decal.tags.map((tag) => (
+                <Chip label={tag} key={`decal-tag-${decal.share_code}-${tag}`} />
+              ))}
+            </FlexBox>
+          </FlexBox>
+          {/* 공유코드 + 댓글 + 좋아요 */}
+          <FlexBox sx={{ height: '20%', width: '100%', justifyContent: 'space-between' }}>
+            <FlexBox
+              sx={{
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}
+            >
+              <FlexBox
+                sx={{
+                  width: '100%',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  columnGap: 1,
+                  paddingX: 1,
+                  borderRadius: 4,
+                  backgroundColor: '#d1d1d1',
+                }}
+              >
+                {share_code3.map((code_peice) => {
+                  return (
+                    <Typography variant="h6" key={`decal-row-share-code-piece-${code_peice}`}>
+                      {code_peice}
+                    </Typography>
+                  );
+                })}
+              </FlexBox>
+            </FlexBox>
+            <FlexBox>
+              <IconButton sx={{ borderRadius: 4 }}>
+                <ModeCommentOutlinedIcon fontSize="small" />
+                <FlexBox
+                  sx={{
+                    width: 30,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    paddingLeft: 0.5,
+                  }}
+                >
+                  <Typography>{decal.fav.count}</Typography>
+                </FlexBox>
+              </IconButton>
+              <IconButton sx={{ borderRadius: 4 }}>
+                {decal.fav.checked ? (
+                  <FavoriteOutlinedIcon fontSize="small" />
+                ) : (
+                  <FavoriteBorderOutlinedIcon fontSize="small" />
+                )}
+                <FlexBox
+                  sx={{
+                    width: 30,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    paddingLeft: 0.5,
+                  }}
+                >
+                  <Typography>{decal.fav.count}</Typography>
+                </FlexBox>
+              </IconButton>
+            </FlexBox>
+          </FlexBox>
+        </FlexBox>
+      </Paper>
+    </Grid>
+  );
+}
+
+function DecalCellListing() {
+  return (
+    <Grid container sx={{ width: '100%' }} spacing={2}>
+      {decalsWithImage.map((decal) => (
+        <DecalItemCell decal={decal} />
+      ))}
+    </Grid>
+  );
+}
+
+function DecalRowListing() {
+  return (
+    <FlexBox sx={{ flexDirection: 'column', width: '100%', rowGap: 2 }}>
+      {decalsWithImage.map((decal) => (
+        <DecalItemRow decal={decal} />
+      ))}
+    </FlexBox>
+  );
+}
+
 export default function Decals() {
   const navigate = useNavigate();
 
   const WIDTH = '100%';
-  const HEIGHT = 500;
+  const HEIGHT = 200;
   const name = carinfo.name;
   const manufacturer = carinfo.manufacture;
   const year = carinfo.year;
@@ -53,142 +306,9 @@ export default function Decals() {
   const share_code = '123 123 123';
 
   return (
-    <Container sx={{ height: '100vh' }}>
+    <Container sx={{ height: '120vh' }}>
       <FullSizeCenteredFlexBox sx={{}}>
-        <FlexBox
-          sx={{ width: WIDTH, maxWidth: 1200, height: HEIGHT, flexDirection: 'column' }}
-          component={Paper}
-        >
-          <FlexBox sx={{ width: '100%', height: '40px' }}>s</FlexBox>
-          {/* 자동차 사진/이름 */}
-          <FlexBox sx={{ width: '100%', height: 'calc( 100% - 40px )' }}>
-            <FlexBox sx={{ width: '30%', height: '100%', padding: 1 }}>
-              <Paper sx={{ display: 'flex' }} elevation={3}>
-                <FlexBox sx={{ flexDirection: 'column', paddingX: 1 }}>
-                  {/* 자동차 사진 */}
-                  <FlexBox>
-                    <Image src={image.car.hyundaiElantra} sx={{ objectFit: 'contain' }} />
-                  </FlexBox>
-                  {/* 자동차 이름, 간단 설명 + 제작자 / 공유 코드 */}
-                  <FlexBox
-                    sx={{
-                      height: '100%',
-                      flexDirection: 'column',
-                      justifyContent: 'space-between',
-                    }}
-                  >
-                    <FlexBox sx={{ flexDirection: 'column' }}>
-                      <Typography variant="h6">{name}</Typography>
-                      <Typography>
-                        {manufacturer} {year}
-                      </Typography>
-                    </FlexBox>
-                    <FlexBox>
-                      <Typography>{description}</Typography>
-                    </FlexBox>
-                    <FlexBox sx={{ flexDirection: 'column' }}>
-                      <Typography variant="h6">{maker}</Typography>
-                      <Typography variant="h6">{share_code}</Typography>
-                    </FlexBox>
-                  </FlexBox>
-                </FlexBox>
-              </Paper>
-            </FlexBox>
-
-            {/* 데칼 상하좌우 사진 갤러리 */}
-            <FlexBox
-              sx={{
-                width: '70%',
-                height: '100%',
-                flexDirection: 'column',
-                paddingY: 1,
-              }}
-            >
-              <FlexBox
-                sx={{
-                  width: '100%',
-                  height: '80%',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                }}
-              >
-                <FlexBox
-                  sx={{
-                    maxWidth: '100%',
-                    height: '100%',
-                  }}
-                >
-                  <Image src={image.decal.elantra_front2} sx={{ objectFit: 'contain' }} />
-                </FlexBox>
-              </FlexBox>
-              <FlexBox
-                sx={{
-                  width: '100%',
-                  height: '20%',
-                  paddingTop: 0.2,
-                  flexDirection: 'row',
-                  justifyContent: 'space-around',
-                }}
-              >
-                <FlexBox
-                  sx={{
-                    width: '8%',
-                    height: '100%',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                  }}
-                >
-                  <ArrowBackIosIcon />
-                </FlexBox>
-                <FlexBox
-                  sx={{
-                    width: '84%',
-                    height: '100%',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    columnGap: 1,
-                  }}
-                >
-                  <FlexBox
-                    sx={{
-                      maxWidth: '100%',
-                      height: '100%',
-                    }}
-                  >
-                    <Image src={image.decal.elantra_front2} sx={{ objectFit: 'contain' }} />
-                  </FlexBox>
-                  <FlexBox
-                    sx={{
-                      maxWidth: '100%',
-                      height: '100%',
-                    }}
-                  >
-                    <Image src={image.decal.elantra_back3} sx={{ objectFit: 'contain' }} />
-                  </FlexBox>
-                  <FlexBox
-                    sx={{
-                      maxWidth: '100%',
-                      height: '100%',
-                    }}
-                  >
-                    <Image src={image.decal.elantra_front1} sx={{ objectFit: 'contain' }} />
-                  </FlexBox>
-                </FlexBox>
-
-                <FlexBox
-                  sx={{
-                    width: '8%',
-                    height: '100%',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                  }}
-                >
-                  <ArrowForwardIosIcon />
-                </FlexBox>
-              </FlexBox>
-            </FlexBox>
-          </FlexBox>
-        </FlexBox>
+        <DecalCellListing />
       </FullSizeCenteredFlexBox>
     </Container>
   );

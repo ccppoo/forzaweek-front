@@ -5,6 +5,7 @@ import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import ChatBubbleOutlineOutlinedIcon from '@mui/icons-material/ChatBubbleOutlineOutlined';
 import ForwardIcon from '@mui/icons-material/Forward';
 import ForwardOutlinedIcon from '@mui/icons-material/ForwardOutlined';
+import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
 import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -23,27 +24,47 @@ import { height } from '@mui/system';
 import * as image from '@/image';
 import { PI_Card } from '@/components/PI';
 import { FlexBox, FullSizeCenteredFlexBox } from '@/components/styled';
+import { decalsWithImage } from '@/data/decals';
+import type { DecalData } from '@/data/decals';
+import { decals as decalImages } from '@/image/decal';
 
 import { Image } from './styled';
 
-const TRACK_IMAGES = [
-  image.track.mulege.mulege1,
-  image.track.mulege.mulege2,
-  image.track.mulege.mulege3,
-  image.track.mulege.mulege4,
-  image.track.mulege.mulege5,
-  image.track.mulege.mulege6,
-  image.track.mulege.mulege7,
-  image.track.mulege.mulege8,
-  image.track.mulege.mulege9,
-  image.track.mulege.mulege10,
-];
+const DECAL_IMAGES = decalImages.d140535376;
+
+function stringToColor(string: string) {
+  let hash = 0;
+  let i;
+
+  /* eslint-disable no-bitwise */
+  for (i = 0; i < string.length; i += 1) {
+    hash = string.charCodeAt(i) + ((hash << 5) - hash);
+  }
+
+  let color = '#';
+
+  for (i = 0; i < 3; i += 1) {
+    const value = (hash >> (i * 8)) & 0xff;
+    color += `00${value.toString(16)}`.slice(-2);
+  }
+  /* eslint-enable no-bitwise */
+
+  return color;
+}
+
+function stringAvatar(name: string) {
+  return {
+    sx: {
+      bgcolor: stringToColor(name),
+    },
+    children: `${name[0].toUpperCase()}`,
+  };
+}
 
 function TitlePart() {
-  const name = 'Arch of Mulegé Circuit';
-
+  const carName = '#98 Bryan Herta Autosport Elantra N';
   return (
-    <FlexBox sx={{ width: '100%', height: 50 }}>
+    <FlexBox sx={{ width: '100%', height: 50, columnGap: 1 }}>
       {/* 트랙 아이콘 */}
       <FlexBox
         sx={{
@@ -52,7 +73,7 @@ function TitlePart() {
         }}
       >
         <Image
-          src={image.track_icon.road_track}
+          src={image.manufacturer.hyundai}
           sx={{
             objectFit: 'contain',
             borderTopLeftRadius: 4,
@@ -61,7 +82,7 @@ function TitlePart() {
         />
       </FlexBox>
       <FlexBox sx={{ alignItems: 'center', paddingX: 1 }}>
-        <Typography variant="h4">{name}</Typography>
+        <Typography variant="h4">{carName}</Typography>
       </FlexBox>
     </FlexBox>
   );
@@ -111,49 +132,71 @@ function Pagination() {
   );
 }
 
-function BreifData() {
-  const WIDTH = '100%';
-  const HEIGHT = '100%';
-  const name = 'Arch of Mulegé Circuit';
-  const road_type = 'road';
-  const track_type = 'circuit';
-  const laps = 3;
-  const description = 'design of Hyundai elantra, its my style';
+function BaseCarInfo() {
+  const carInfo = {
+    manufacture: 'Hyundai',
+    year: 2021,
+    country: 'Korea',
+    name: '#98 Bryan Herta Autosport Elantra N',
+    drive_train: 'FWD',
+    body_style: 'sedan',
+    door: 4,
+    engine: 'ICE',
+    FH5: {
+      PI: 800,
+      division: 'track toys',
+    },
+  };
 
   return (
-    <FlexBox sx={{ width: '100%', height: '100%' }}>
-      <FlexBox sx={{ paddingTop: 1 }}>
-        {/* 트랙 사진 */}
-        <FlexBox sx={{ aspectRatio: '4/3' }}>
-          <Image src={image.track.molehach} sx={{ objectFit: 'contain' }} />
+    <FlexBox sx={{ width: '100%', height: '100%', border: '1px black solid' }}>
+      <FlexBox sx={{}}>
+        {/* 근본이 되는 차 */}
+        <FlexBox sx={{ aspectRatio: '16/9', height: 140 }}>
+          <Image src={image.car.hyundaiElantra} sx={{ objectFit: 'contain' }} />
         </FlexBox>
-        {/* 트랙 특징 설명 */}
-        <FlexBox
-          sx={{
-            height: '100%',
-            flexDirection: 'column',
-            paddingLeft: 2,
-          }}
-        >
-          <FlexBox sx={{ flexDirection: 'column' }}>
-            <Typography variant="h6">Description</Typography>
-            <Typography variant="body1">{description}</Typography>
+        <FlexBox sx={{ flexDirection: 'column', paddingLeft: 2 }}>
+          {/* 차 이름 */}
+          <FlexBox
+            sx={{
+              height: 40,
+              alignItems: 'center',
+            }}
+          >
+            <FlexBox
+              sx={{
+                aspectRatio: '1/1',
+                height: '100%',
+              }}
+            >
+              <Image
+                src={image.manufacturer.hyundai}
+                sx={{
+                  objectFit: 'contain',
+                  borderTopLeftRadius: 4,
+                  borderBottomLeftRadius: 4,
+                }}
+              />
+            </FlexBox>
+            <FlexBox sx={{ alignItems: 'center', paddingX: 1 }}>
+              <Typography variant="h5">{carInfo.name}</Typography>
+            </FlexBox>
+          </FlexBox>
+          {/* 국적, 생산 연도, 차 체형 */}
+          <FlexBox sx={{ columnGap: 1 }}>
+            <FlexBox sx={{ alignItems: 'center', columnGap: 1 }}>
+              <Typography variant="h6">Country : </Typography>
+              <Typography variant="h6">{carInfo.country}</Typography>
+            </FlexBox>
+            <FlexBox sx={{ alignItems: 'center', columnGap: 1 }}>
+              <Typography variant="h6">Year : </Typography>
+              <Typography variant="h6">{carInfo.year}</Typography>
+            </FlexBox>
           </FlexBox>
           <FlexBox sx={{ flexDirection: 'column' }}>
             <FlexBox sx={{ alignItems: 'center', columnGap: 1 }}>
-              <Typography variant="h6">Road Type : </Typography>
-              <Typography variant="h6">{road_type}</Typography>
-            </FlexBox>
-            <FlexBox sx={{ alignItems: 'center', columnGap: 1 }}>
-              <Typography variant="h6">Track Type : </Typography>
-              <Typography variant="h6">{track_type}</Typography>
-              <Typography>laps: {laps}</Typography>
-            </FlexBox>
-            <FlexBox sx={{ flexDirection: 'column', columnGap: 1 }}>
-              <FlexBox sx={{ alignItems: 'center', columnGap: 1 }}>
-                <Typography variant="h6">Tags : </Typography>
-                <Typography variant="h6">{track_type}</Typography>
-              </FlexBox>
+              <Typography variant="h6">body style : </Typography>
+              <Typography variant="h6">{carInfo.body_style}</Typography>
             </FlexBox>
           </FlexBox>
         </FlexBox>
@@ -162,7 +205,63 @@ function BreifData() {
   );
 }
 
-function ImageWithMap() {
+function DecalInfo({ decalData }: { decalData: DecalData }) {
+  const creator = decalData.creater
+    ? `[${decalData.club}] ${decalData.creater}`
+    : decalData.creater;
+
+  const share_code3 = [
+    decalData.share_code.substring(0, 3),
+    decalData.share_code.substring(3, 6),
+    decalData.share_code.substring(6, 9),
+  ];
+
+  return (
+    <FlexBox sx={{ flexDirection: 'column', width: '100%', rowGap: 2 }}>
+      {/* 제작자 */}
+      <FlexBox sx={{ alignItems: 'center', columnGap: 1 }}>
+        <Avatar {...stringAvatar(decalData.creater)} sx={{ width: 35, height: 35 }} />
+        <Typography variant="h5">{creator}</Typography>
+      </FlexBox>
+      {/* 태그 */}
+      <FlexBox sx={{ columnGap: 0.5 }}>
+        {decalData.tags.map((tag) => {
+          return <Chip label={tag} />;
+        })}
+      </FlexBox>
+      {/* 공유 코드 */}
+      <FlexBox
+        sx={{
+          justifyContent: 'start',
+          alignItems: 'center',
+        }}
+      >
+        <Typography>Share code : </Typography>
+        <FlexBox
+          sx={{
+            alignItems: 'center',
+            justifyContent: 'center',
+            columnGap: 1,
+            paddingX: 1,
+            borderRadius: 1,
+            marginLeft: 1,
+            backgroundColor: '#d1d1d1',
+          }}
+        >
+          {share_code3.map((code_peice) => {
+            return (
+              <Typography variant="h6" key={`decal-row-share-code-piece-${code_peice}`}>
+                {code_peice}
+              </Typography>
+            );
+          })}
+        </FlexBox>
+      </FlexBox>
+    </FlexBox>
+  );
+}
+
+function DecalImages({ decalData }: { decalData: DecalData }) {
   return (
     <FlexBox
       sx={{
@@ -170,47 +269,21 @@ function ImageWithMap() {
         height: '100%',
 
         flexDirection: 'column',
+        backgroundColor: '#cccccc',
       }}
     >
-      <FlexBox>
-        <Typography variant="h5">Track picture</Typography>
-      </FlexBox>
-
-      {/* 트랙 스샷 */}
+      {/* 선택된 큰 이미지 */}
       <FlexBox sx={{ width: '100%', flexDirection: 'column' }}>
         <FlexBox
           sx={{
             width: '100%',
             height: '100%',
-            maxHeight: 400,
-            paddingY: 1,
+            maxHeight: 500,
           }}
         >
-          {/* TODO: 트랙 경로 사진 */}
-          {/* <FlexBox
-            sx={{
-              minWidth: 400,
-              height: '100%',
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}
-          >
-            <FlexBox
-              sx={{
-                maxWidth: '100%',
-                height: '100%',
-                aspectRatio: '4/3',
-                flexShrink: 1,
-              }}
-            >
-              <Image src={image.track.molehach} sx={{ objectFit: 'contain' }} />
-            </FlexBox>
-          </FlexBox> */}
-          {/* 큰 사진(1개) */}
           <FlexBox
             sx={{
               width: '100%',
-              // height: '100%',
               justifyContent: 'center',
               alignItems: 'center',
             }}
@@ -221,7 +294,7 @@ function ImageWithMap() {
                 height: '100%',
               }}
             >
-              <Image src={image.track.mulege.mulege1} sx={{ objectFit: 'contain' }} />
+              <Image src={decalData.frontImage} sx={{ objectFit: 'contain' }} />
             </FlexBox>
           </FlexBox>
         </FlexBox>
@@ -231,7 +304,7 @@ function ImageWithMap() {
             height: '100%',
             paddingX: 1,
             paddingTop: 1,
-            backgroundColor: '#cfcccc',
+            backgroundColor: '#8c8c8c',
             flexDirection: 'row',
             // justifyContent: 'stretch',
           }}
@@ -265,7 +338,7 @@ function ImageWithMap() {
                 columnGap: 0.5,
               }}
             >
-              {TRACK_IMAGES.map((image) => {
+              {decalData.images.map((image) => {
                 return (
                   <FlexBox
                     sx={{
@@ -450,7 +523,7 @@ function RelatedVideos() {
   );
 }
 
-export default function Tracks() {
+export default function DecalDetail() {
   const navigate = useNavigate();
 
   const WIDTH = '100%';
@@ -458,40 +531,35 @@ export default function Tracks() {
   const name = 'Arch of Mulegé Circuit';
   const road_type = 'road';
   const track_type = 'circuit';
-
+  const decalData = decalsWithImage[3];
+  // DecalData;
   return (
-    <Container sx={{ height: '130vh' }}>
+    <Container sx={{ height: '110vh' }}>
       <FullSizeCenteredFlexBox
         sx={{
           height: '100%',
-          marginTop: 50,
         }}
       >
         <FlexBox
           sx={{
             width: WIDTH,
             maxWidth: 1200,
-            // height: '100%',
             flexDirection: 'column',
             paddingY: 2,
             marginTop: 20,
-
             paddingX: 2,
-            rowGap: 3,
+            rowGap: 2,
           }}
           component={Paper}
         >
           {/* 제목 */}
-          <TitlePart />
-          {/* 제목 밑에 사진이랑 특징 */}
-          <BreifData />
+          {/* <TitlePart /> */}
+          {/* 데칼 태그, 게시자, 공유 코드 */}
+          <DecalInfo decalData={decalData} />
           {/* 트랙 사진들 */}
-          <ImageWithMap />
-          {/* TODO: 관련 튜닝 */}
-          <RelatedTunings />
-          {/* TODO: 관련 영상 */}
-          <RelatedVideos />
-          {/* TODO: 관련 사진/움짤 */}
+          <DecalImages decalData={decalData} />
+          {/* 데칼에 사용된 차 간단 정보 */}
+          <BaseCarInfo />
         </FlexBox>
       </FullSizeCenteredFlexBox>
     </Container>
