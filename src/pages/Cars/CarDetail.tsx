@@ -544,7 +544,7 @@ function RelatedTunings() {
         {/* 선택된 클래스에 있는 튜닝들 */}
         <Grid container>
           {tunings
-            .filter((tuning) => tuning.PI >= 800 && tuning.PI < 900)
+            .filter((tuning) => tuning.PI > 900 && tuning.PI <= 998)
             .map((tuning) => {
               return (
                 <RelatedTuning tuning={tuning} key={`tuning-${tuning.PI}-${tuning.share_code}`} />

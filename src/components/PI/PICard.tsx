@@ -34,6 +34,8 @@ export function PI_Card({ pi_number, height }: { pi_number: number; height: numb
       </FlexBox>
       <FlexBox
         sx={{
+          border: '1px black solid',
+
           backgroundColor: 'white',
           borderTopRightRadius: 5,
           borderBottomRightRadius: 5,
