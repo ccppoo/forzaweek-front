@@ -1,3 +1,4 @@
+import { SetStateAction, useState } from 'react';
 import ReactApexChart from 'react-apexcharts';
 import { Controller, SubmitHandler, useForm, useWatch } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
@@ -10,6 +11,8 @@ import FavoriteOutlinedIcon from '@mui/icons-material/FavoriteOutlined';
 import ForwardIcon from '@mui/icons-material/Forward';
 import ForwardOutlinedIcon from '@mui/icons-material/ForwardOutlined';
 import ModeCommentOutlinedIcon from '@mui/icons-material/ModeCommentOutlined';
+import RefreshOutlinedIcon from '@mui/icons-material/RefreshOutlined';
+import Autocomplete from '@mui/material/Autocomplete';
 import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -19,10 +22,17 @@ import Checkbox from '@mui/material/Checkbox';
 import Chip from '@mui/material/Chip';
 import Container from '@mui/material/Container';
 import Divider from '@mui/material/Divider';
+import FormControl from '@mui/material/FormControl';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormGroup from '@mui/material/FormGroup';
 import IconButton from '@mui/material/IconButton';
+import InputLabel from '@mui/material/InputLabel';
+import ListSubheader from '@mui/material/ListSubheader';
+import MenuItem from '@mui/material/MenuItem';
+import OutlinedInput from '@mui/material/OutlinedInput';
 import Paper from '@mui/material/Paper';
+import Select, { SelectChangeEvent } from '@mui/material/Select';
+import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Unstable_Grid2';
 import { styled } from '@mui/material/styles';
@@ -33,12 +43,23 @@ import { ApexOptions } from 'apexcharts';
 import * as image from '@/image';
 import { PI_Card } from '@/components/PI';
 import { FlexBox, FullSizeCenteredFlexBox } from '@/components/styled';
+import { carInfoWithImage } from '@/data/cars';
 import { decalsWithImage } from '@/data/decals';
 import type { DecalData } from '@/data/decals';
 import { tunings } from '@/data/tunings';
 import type { Tuning } from '@/data/tunings';
+import { CarData, CarInfo } from '@/data/types';
 import { decals as decalImages } from '@/image/decal';
 import useTuningSearchFilters from '@/store/tuningSearchFilters';
+import {
+  BOOST,
+  COUNTRY,
+  DIVISIONS,
+  MANUFACTURER,
+  PRODUCTION_YEAR,
+  PRODUCTION_YEARs,
+  RARITY,
+} from '@/store/tuningSearchFilters/values';
 
 import { Image } from './styled';
 
@@ -430,8 +451,324 @@ function DecalRowListing() {
   );
 }
 
+function TuningCarSelectionCountryOption2({
+  optionName,
+  values,
+}: {
+  optionName: string;
+  values: string[];
+}) {
+  const [personName, setPersonName] = useState<string[]>([]);
+  const handleChange = (event: SelectChangeEvent<typeof personName>) => {
+    const {
+      target: { value },
+    } = event;
+    setPersonName(typeof value === 'string' ? value.split(',') : value);
+  };
+
+  const ITEM_HEIGHT = 48;
+  const ITEM_PADDING_TOP = 8;
+  const MenuProps = {
+    PaperProps: {
+      style: {
+        maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+        width: 250,
+      },
+    },
+  };
+
+  return (
+    <FlexBox sx={{ width: '100%', paddingX: 1 }}>
+      <FlexBox sx={{ width: 180, alignItems: 'center' }}>
+        <Typography variant="subtitle1">{optionName}</Typography>
+      </FlexBox>
+      <FormControl sx={{ m: 1, width: '100%' }} size="small">
+        {/* <InputLabel id="demo-multiple-chip-label">{optionName}</InputLabel> */}
+        <Select
+          labelId="demo-multiple-chip-label"
+          id="demo-multiple-chip"
+          inputProps={{ 'aria-label': 'Without label' }}
+          multiple
+          // displayEmpty
+          value={personName}
+          onChange={handleChange}
+          input={<OutlinedInput id="select-multiple-chip" />}
+          renderValue={(selected) => (
+            <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
+              {selected.map((value) => (
+                <Chip key={value} label={value} />
+              ))}
+            </Box>
+          )}
+          MenuProps={MenuProps}
+        >
+          {values.map((name) => (
+            <MenuItem
+              key={name}
+              value={name}
+              // style={getStyles(name, personName, theme)}
+            >
+              {name}
+            </MenuItem>
+          ))}
+        </Select>
+      </FormControl>
+      <FlexBox sx={{ aspectRatio: '1/1', alignItems: 'center', justifyContent: 'center' }}>
+        <IconButton size="small" sx={{ borderRadius: 2, width: 45, height: 45 }}>
+          <RefreshOutlinedIcon />
+        </IconButton>
+      </FlexBox>
+    </FlexBox>
+  );
+}
+
+function TuningCarSelectionCountryOption({
+  optionName,
+  values,
+  groupOptions,
+}: {
+  optionName: string;
+  values: string[];
+  groupOptions?: boolean;
+}) {
+  const [selections, setSelections] = useState<string[]>([]);
+
+  const handleChange = (event: any, newInputValue: string) => {
+    console.log(JSON.stringify(newInputValue));
+    // setSelections(newInputValue);
+  };
+
+  const ITEM_HEIGHT = 48;
+  const ITEM_PADDING_TOP = 8;
+  const MenuProps = {
+    PaperProps: {
+      style: {
+        maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+        width: 250,
+      },
+    },
+  };
+
+  return (
+    <FlexBox sx={{ width: '100%', paddingX: 1, paddingY: 0.3 }}>
+      <FlexBox sx={{ width: 180, alignItems: 'center' }}>
+        <Typography variant="subtitle1">{optionName}</Typography>
+      </FlexBox>
+      <FlexBox sx={{ width: '100%' }}>
+        <Autocomplete
+          multiple
+          id="tags-outlined"
+          size="small"
+          options={values}
+          groupBy={groupOptions ? (option) => option[0] : undefined}
+          getOptionLabel={(option) => option}
+          defaultValue={[]}
+          filterSelectedOptions
+          onChange={(event: any, newValue: string[]) => {
+            setSelections(newValue);
+          }}
+          renderInput={(params) => (
+            <TextField
+              {...params}
+              placeholder={selections.length == 0 ? optionName : undefined}
+              sx={{ 'aria-label': 'Without label' }}
+            />
+          )}
+          sx={{ width: '100%' }}
+        />
+      </FlexBox>
+    </FlexBox>
+  );
+}
+
+function TuningCarFinalSelect() {
+  const [carName, setCarName] = useState<string>(carinfo.name);
+  const ITEM_HEIGHT = 48;
+  const ITEM_PADDING_TOP = 8;
+  const MenuProps = {
+    PaperProps: {
+      style: {
+        maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+        width: 250,
+      },
+    },
+  };
+  const handleChange = (event: SelectChangeEvent) => {
+    setCarName(event.target.value);
+  };
+
+  const manufactureList = Array.from(new Set(carInfoWithImage.map(({ info }) => info.manufacture)));
+
+  const renderSelectGroup = (manufacturer: string) => {
+    const items = carInfoWithImage
+      .filter(({ info }) => info.manufacture == manufacturer)
+      .map((c: CarData) => {
+        return (
+          <MenuItem key={`car-final-select-${c.info.name}`} value={c.info.name}>
+            {c.info.name}
+          </MenuItem>
+        );
+      });
+    return [<ListSubheader>{manufacturer}</ListSubheader>, items];
+  };
+
+  // console.log(JSON.stringify(carName));
+
+  return (
+    <FlexBox sx={{ width: '40%', flexDirection: 'column' }}>
+      <FlexBox>
+        <FormControl sx={{ m: 1, width: '100%' }} size="small">
+          <Select
+            labelId="demo-multiple-chip-label"
+            id="demo-multiple-chip"
+            inputProps={{ 'aria-label': 'Without label' }}
+            value={carName}
+            onChange={handleChange}
+            input={<OutlinedInput id="select-multiple-chip" />}
+            renderValue={(selected) => (
+              <FlexBox>
+                <Typography>{selected}</Typography>
+              </FlexBox>
+            )}
+            MenuProps={MenuProps}
+          >
+            {manufactureList.map((p: string) => renderSelectGroup(p))}
+          </Select>
+        </FormControl>
+      </FlexBox>
+
+      <Image
+        src={image.car.hyundaiElantra}
+        sx={{
+          width: '100%',
+          objectFit: 'contain',
+        }}
+      />
+    </FlexBox>
+  );
+}
+
+function TuningCarSearchBar() {
+  // 직접 검색해서 찾을 수 있는 검색 바
+  const [selection, setSelection] = useState<CarData | null>(null);
+
+  return (
+    <FlexBox sx={{ width: '100%', paddingY: 0.4 }}>
+      <Autocomplete
+        id="tags-outlined"
+        size="small"
+        // options={carInfoWithImage.map(({ info }) => info.name)}
+        options={carInfoWithImage}
+        filterOptions={(options, state) => {
+          const displayOptions = options.filter((option) =>
+            option.info.name.toLowerCase().trim().includes(state.inputValue.toLowerCase().trim()),
+          );
+
+          return displayOptions;
+        }}
+        groupBy={(option: CarData) => option.info.manufacture}
+        getOptionLabel={(option: CarData) => option.info.name}
+        defaultValue={null}
+        filterSelectedOptions
+        onChange={(event: any, newValue: CarData | null) => {
+          setSelection(newValue || null);
+        }}
+        renderInput={(params) => (
+          <TextField
+            {...params}
+            placeholder={'search for car'}
+            sx={{ 'aria-label': 'Without label' }}
+          />
+        )}
+        sx={{ width: '100%' }}
+      />
+    </FlexBox>
+  );
+}
+
+function TuningCarRecentSearch() {
+  return (
+    <Paper
+      sx={{ display: 'flex', flexDirection: 'column', width: 160, height: '100%', paddingX: 0.5 }}
+    >
+      <FlexBox sx={{ width: '100%' }}>
+        <Image
+          src={image.car.hyundaiElantra}
+          sx={{
+            width: '100%',
+            objectFit: 'contain',
+          }}
+        />
+      </FlexBox>
+      <FlexBox>
+        <Typography variant="body1">{carinfo.name}</Typography>
+      </FlexBox>
+    </Paper>
+  );
+}
+
 function TuningCarSelection() {
-  return <FlexBox></FlexBox>;
+  const [personName, setPersonName] = useState<string[]>([]);
+  const handleChange = (event: SelectChangeEvent<typeof personName>) => {
+    const {
+      target: { value },
+    } = event;
+    setPersonName(
+      // On autofill we get a stringified value.
+      typeof value === 'string' ? value.split(',') : value,
+    );
+  };
+
+  const ITEM_HEIGHT = 48;
+  const ITEM_PADDING_TOP = 8;
+  const MenuProps = {
+    PaperProps: {
+      style: {
+        maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+        width: 250,
+      },
+    },
+  };
+  return (
+    <FlexBox sx={{ flexDirection: 'column', width: '100%' }}>
+      <FlexBox>
+        <Typography variant="h4">Choose car</Typography>
+      </FlexBox>
+      <FlexBox sx={{ flexDirection: 'column', paddingY: 1 }}>
+        <FlexBox>
+          <Typography variant="h5">Recent Search</Typography>
+        </FlexBox>
+        <FlexBox sx={{ width: '100%', columnGap: 0.5 }}>
+          <TuningCarRecentSearch />
+          <TuningCarRecentSearch />
+          <TuningCarRecentSearch />
+          <TuningCarRecentSearch />
+        </FlexBox>
+      </FlexBox>
+      {/* 검색 창 */}
+      <FlexBox sx={{}}>
+        <TuningCarSearchBar />
+      </FlexBox>
+      {/* 차 선택 */}
+      <FlexBox sx={{ border: '1px black solid' }}>
+        <FlexBox
+          sx={{ width: '60%', flexDirection: 'column', border: '1px black solid', paddingTop: 1 }}
+        >
+          <TuningCarSelectionCountryOption optionName="Country" values={COUNTRY} groupOptions />
+          <TuningCarSelectionCountryOption
+            optionName="Manufacturer"
+            values={MANUFACTURER}
+            groupOptions
+          />
+          <TuningCarSelectionCountryOption optionName="Division" values={DIVISIONS} groupOptions />
+          <TuningCarSelectionCountryOption optionName="ProductionYear" values={PRODUCTION_YEARs} />
+          <TuningCarSelectionCountryOption optionName="Rarity" values={RARITY} />
+          <TuningCarSelectionCountryOption optionName="Boost" values={BOOST} />
+        </FlexBox>
+        <TuningCarFinalSelect />
+      </FlexBox>
+    </FlexBox>
+  );
 }
 
 function TuningOptionPIClass() {
@@ -635,17 +972,23 @@ function TuningOptionFilter() {
   // 차 선택하고 나서 필터링하는 옵션
 
   return (
-    <FlexBox sx={{ width: '100%', height: 600, flexDirection: 'column' }}>
-      {/* 클래스 */}
-      <TuningOptionPIClass />
-      {/* 서스펜션 */}
-      <TuningOptionSuspension />
-      {/* 타이어 */}
-      <TuningOptionTier />
-      {/* 구동 방식 */}
-      <TuningOptionDrivingSystem />
-      {/* 태그 */}
-      <FlexBox></FlexBox>
+    <FlexBox sx={{ width: '100%', flexDirection: 'column', paddingY: 3 }}>
+      <FlexBox>
+        <Typography variant="h5">Choose Tuning Options</Typography>
+      </FlexBox>
+
+      <FlexBox sx={{ width: '100%', flexDirection: 'column' }} component={Paper}>
+        {/* 클래스 */}
+        <TuningOptionPIClass />
+        {/* 서스펜션 */}
+        <TuningOptionSuspension />
+        {/* 타이어 */}
+        <TuningOptionTier />
+        {/* 구동 방식 */}
+        <TuningOptionDrivingSystem />
+        {/* 태그 */}
+        <FlexBox></FlexBox>
+      </FlexBox>
     </FlexBox>
   );
 }
@@ -663,11 +1006,10 @@ export default function Tunings() {
   const share_code = '123 123 123';
 
   return (
-    <Container sx={{ height: '140vh', marginTop: 10 }}>
+    <Container sx={{ height: '140vh', paddingTop: 90 }}>
       <FullSizeCenteredFlexBox sx={{ flexDirection: 'column' }}>
         <TuningCarSelection />
         <TuningOptionFilter />
-
         <TuningCellListing />
       </FullSizeCenteredFlexBox>
     </Container>
