@@ -1,3 +1,4 @@
+import ReactApexChart from 'react-apexcharts';
 import { useNavigate } from 'react-router-dom';
 
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
@@ -5,6 +6,7 @@ import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import ChatBubbleOutlineOutlinedIcon from '@mui/icons-material/ChatBubbleOutlineOutlined';
 import ForwardIcon from '@mui/icons-material/Forward';
 import ForwardOutlinedIcon from '@mui/icons-material/ForwardOutlined';
+import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
 import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -18,32 +20,56 @@ import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Unstable_Grid2';
 import { styled } from '@mui/material/styles';
-import { height } from '@mui/system';
+import { height, width } from '@mui/system';
+
+import { ApexOptions } from 'apexcharts';
 
 import * as image from '@/image';
 import { PI_Card } from '@/components/PI';
 import { FlexBox, FullSizeCenteredFlexBox } from '@/components/styled';
+import { decalsWithImage } from '@/data/decals';
+import type { DecalData } from '@/data/decals';
+import { tunings } from '@/data/tunings';
+import type { Tuning } from '@/data/tunings';
+import { decals as decalImages } from '@/image/decal';
 
 import { Image } from './styled';
 
-const TRACK_IMAGES = [
-  image.track.mulege.mulege1,
-  image.track.mulege.mulege2,
-  image.track.mulege.mulege3,
-  image.track.mulege.mulege4,
-  image.track.mulege.mulege5,
-  image.track.mulege.mulege6,
-  image.track.mulege.mulege7,
-  image.track.mulege.mulege8,
-  image.track.mulege.mulege9,
-  image.track.mulege.mulege10,
-];
+const DECAL_IMAGES = decalImages.d140535376;
+
+function stringToColor(string: string) {
+  let hash = 0;
+  let i;
+
+  /* eslint-disable no-bitwise */
+  for (i = 0; i < string.length; i += 1) {
+    hash = string.charCodeAt(i) + ((hash << 5) - hash);
+  }
+
+  let color = '#';
+
+  for (i = 0; i < 3; i += 1) {
+    const value = (hash >> (i * 8)) & 0xff;
+    color += `00${value.toString(16)}`.slice(-2);
+  }
+  /* eslint-enable no-bitwise */
+
+  return color;
+}
+
+function stringAvatar(name: string) {
+  return {
+    sx: {
+      bgcolor: stringToColor(name),
+    },
+    children: `${name[0].toUpperCase()}`,
+  };
+}
 
 function TitlePart() {
-  const name = 'Arch of Mulegé Circuit';
-
+  const carName = '#98 Bryan Herta Autosport Elantra N';
   return (
-    <FlexBox sx={{ width: '100%', height: 50 }}>
+    <FlexBox sx={{ width: '100%', height: 50, columnGap: 1 }}>
       {/* 트랙 아이콘 */}
       <FlexBox
         sx={{
@@ -52,7 +78,7 @@ function TitlePart() {
         }}
       >
         <Image
-          src={image.track_icon.road_track}
+          src={image.manufacturer.hyundai}
           sx={{
             objectFit: 'contain',
             borderTopLeftRadius: 4,
@@ -61,7 +87,7 @@ function TitlePart() {
         />
       </FlexBox>
       <FlexBox sx={{ alignItems: 'center', paddingX: 1 }}>
-        <Typography variant="h4">{name}</Typography>
+        <Typography variant="h4">{carName}</Typography>
       </FlexBox>
     </FlexBox>
   );
@@ -111,194 +137,7 @@ function Pagination() {
   );
 }
 
-function BreifData() {
-  const WIDTH = '100%';
-  const HEIGHT = '100%';
-  const name = 'Arch of Mulegé Circuit';
-  const road_type = 'road';
-  const track_type = 'circuit';
-  const laps = 3;
-  const description = 'design of Hyundai elantra, its my style';
-
-  return (
-    <FlexBox sx={{ width: '100%', height: '100%' }}>
-      <FlexBox sx={{ paddingTop: 1 }}>
-        {/* 트랙 사진 */}
-        <FlexBox sx={{ aspectRatio: '4/3' }}>
-          <Image src={image.track.molehach} sx={{ objectFit: 'contain' }} />
-        </FlexBox>
-        {/* 트랙 특징 설명 */}
-        <FlexBox
-          sx={{
-            height: '100%',
-            flexDirection: 'column',
-            paddingLeft: 2,
-          }}
-        >
-          <FlexBox sx={{ flexDirection: 'column' }}>
-            <Typography variant="h6">Description</Typography>
-            <Typography variant="body1">{description}</Typography>
-          </FlexBox>
-          <FlexBox sx={{ flexDirection: 'column' }}>
-            <FlexBox sx={{ alignItems: 'center', columnGap: 1 }}>
-              <Typography variant="h6">Road Type : </Typography>
-              <Typography variant="h6">{road_type}</Typography>
-            </FlexBox>
-            <FlexBox sx={{ alignItems: 'center', columnGap: 1 }}>
-              <Typography variant="h6">Track Type : </Typography>
-              <Typography variant="h6">{track_type}</Typography>
-              <Typography>laps: {laps}</Typography>
-            </FlexBox>
-            <FlexBox sx={{ flexDirection: 'column', columnGap: 1 }}>
-              <FlexBox sx={{ alignItems: 'center', columnGap: 1 }}>
-                <Typography variant="h6">Tags : </Typography>
-                <Typography variant="h6">{track_type}</Typography>
-              </FlexBox>
-            </FlexBox>
-          </FlexBox>
-        </FlexBox>
-      </FlexBox>
-    </FlexBox>
-  );
-}
-
-function ImageWithMap() {
-  return (
-    <FlexBox
-      sx={{
-        width: '100%',
-        height: '100%',
-
-        flexDirection: 'column',
-      }}
-    >
-      <FlexBox>
-        <Typography variant="h5">Track picture</Typography>
-      </FlexBox>
-
-      {/* 트랙 스샷 */}
-      <FlexBox sx={{ width: '100%', flexDirection: 'column' }}>
-        <FlexBox
-          sx={{
-            width: '100%',
-            height: '100%',
-            maxHeight: 400,
-            paddingY: 1,
-          }}
-        >
-          {/* TODO: 트랙 경로 사진 */}
-          {/* <FlexBox
-            sx={{
-              minWidth: 400,
-              height: '100%',
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}
-          >
-            <FlexBox
-              sx={{
-                maxWidth: '100%',
-                height: '100%',
-                aspectRatio: '4/3',
-                flexShrink: 1,
-              }}
-            >
-              <Image src={image.track.molehach} sx={{ objectFit: 'contain' }} />
-            </FlexBox>
-          </FlexBox> */}
-          {/* 큰 사진(1개) */}
-          <FlexBox
-            sx={{
-              width: '100%',
-              // height: '100%',
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}
-          >
-            <FlexBox
-              sx={{
-                maxWidth: '100%',
-                height: '100%',
-              }}
-            >
-              <Image src={image.track.mulege.mulege1} sx={{ objectFit: 'contain' }} />
-            </FlexBox>
-          </FlexBox>
-        </FlexBox>
-        {/* 작은 사진 목록 */}
-        <FlexBox
-          sx={{
-            height: '100%',
-            paddingX: 1,
-            paddingTop: 1,
-            backgroundColor: '#cfcccc',
-            flexDirection: 'row',
-            // justifyContent: 'stretch',
-          }}
-        >
-          <FlexBox
-            sx={{
-              width: '100%',
-              height: 135,
-              justifyContent: 'center',
-              alignItems: 'center',
-              columnGap: 1,
-            }}
-          >
-            <FlexBox
-              sx={{
-                width: '5%',
-                height: '100%',
-                justifyContent: 'center',
-                alignItems: 'center',
-              }}
-            >
-              <ArrowBackIosIcon />
-            </FlexBox>
-            <FlexBox
-              sx={{
-                width: '90%',
-                height: '100%',
-                flexWrap: 'nowrap',
-                overflow: 'scroll',
-                paddingBottom: 1,
-                columnGap: 0.5,
-              }}
-            >
-              {TRACK_IMAGES.map((image) => {
-                return (
-                  <FlexBox
-                    sx={{
-                      width: '100%',
-                      aspectRatio: '16/9',
-                      height: 126,
-                    }}
-                    key={`track-preview-${image}`}
-                  >
-                    <Image src={image} sx={{ objectFit: 'contain' }} />
-                  </FlexBox>
-                );
-              })}
-            </FlexBox>
-
-            <FlexBox
-              sx={{
-                width: '5%',
-                height: '100%',
-                justifyContent: 'center',
-                alignItems: 'center',
-              }}
-            >
-              <ArrowForwardIosIcon />
-            </FlexBox>
-          </FlexBox>
-        </FlexBox>
-      </FlexBox>
-    </FlexBox>
-  );
-}
-
-function RelatedTuning() {
+function BaseCarInfo() {
   const carInfo = {
     manufacture: 'Hyundai',
     year: 2021,
@@ -314,35 +153,467 @@ function RelatedTuning() {
     },
   };
 
-  const share_code = '123 123 123';
   return (
-    <Grid xs={6} sx={{ display: 'flex', flexDirection: 'column', height: 120, padding: 1 }}>
-      <Paper sx={{ display: 'flex', width: '100%', height: '100%' }} elevation={4}>
-        <Grid container sx={{ width: '100%' }}>
-          {/* 차 사진 */}
-          <Grid xs={5} sx={{ height: '100%' }}>
-            <Image
-              src={image.car.hyundaiElantra}
+    <FlexBox sx={{ width: '100%', height: '100%', border: '1px black solid' }}>
+      <FlexBox sx={{}}>
+        {/* 근본이 되는 차 */}
+        <FlexBox sx={{ aspectRatio: '16/9', height: 140 }}>
+          <Image src={image.car.hyundaiElantra} sx={{ objectFit: 'contain' }} />
+        </FlexBox>
+        <FlexBox sx={{ flexDirection: 'column', paddingLeft: 2 }}>
+          {/* 차 이름 */}
+          <FlexBox
+            sx={{
+              height: 40,
+              alignItems: 'center',
+            }}
+          >
+            <FlexBox
               sx={{
-                objectFit: 'contain',
-                borderTopLeftRadius: 4,
-                borderBottomLeftRadius: 4,
+                aspectRatio: '1/1',
+                height: '100%',
               }}
+            >
+              <Image
+                src={image.manufacturer.hyundai}
+                sx={{
+                  objectFit: 'contain',
+                  borderTopLeftRadius: 4,
+                  borderBottomLeftRadius: 4,
+                }}
+              />
+            </FlexBox>
+            <FlexBox sx={{ alignItems: 'center', paddingX: 1 }}>
+              <Typography variant="h5">{carInfo.name}</Typography>
+            </FlexBox>
+          </FlexBox>
+          {/* 국적, 생산 연도, 차 체형 */}
+          <FlexBox sx={{ columnGap: 1 }}>
+            <FlexBox sx={{ alignItems: 'center', columnGap: 1 }}>
+              <Typography variant="h6">Country : </Typography>
+              <Typography variant="h6">{carInfo.country}</Typography>
+            </FlexBox>
+            <FlexBox sx={{ alignItems: 'center', columnGap: 1 }}>
+              <Typography variant="h6">Year : </Typography>
+              <Typography variant="h6">{carInfo.year}</Typography>
+            </FlexBox>
+          </FlexBox>
+          <FlexBox sx={{ flexDirection: 'column' }}>
+            <FlexBox sx={{ alignItems: 'center', columnGap: 1 }}>
+              <Typography variant="h6">body style : </Typography>
+              <Typography variant="h6">{carInfo.body_style}</Typography>
+            </FlexBox>
+          </FlexBox>
+        </FlexBox>
+      </FlexBox>
+    </FlexBox>
+  );
+}
+
+function TuningInfo({ tuning }: { tuning: Tuning }) {
+  const creator = tuning.creater.club
+    ? `[${tuning.creater.club}] ${tuning.creater.id}`
+    : tuning.creater.id;
+
+  const share_code3 = [
+    tuning.share_code.substring(0, 3),
+    tuning.share_code.substring(3, 6),
+    tuning.share_code.substring(6, 9),
+  ];
+
+  return (
+    <FlexBox sx={{ flexDirection: 'column', width: '100%', rowGap: 2 }}>
+      {/* 제작자 */}
+      <FlexBox sx={{ alignItems: 'center', columnGap: 1 }}>
+        <Avatar {...stringAvatar(tuning.creater.id)} sx={{ width: 35, height: 35 }} />
+        <Typography variant="h5">{creator}</Typography>
+      </FlexBox>
+      {/* 태그 */}
+      <FlexBox sx={{ columnGap: 0.5 }}>
+        {tuning.tags.map((tag) => {
+          return <Chip label={tag} />;
+        })}
+      </FlexBox>
+      {/* 공유 코드 */}
+      <FlexBox
+        sx={{
+          justifyContent: 'start',
+          alignItems: 'center',
+        }}
+      >
+        <Typography>Share code : </Typography>
+        <FlexBox
+          sx={{
+            alignItems: 'center',
+            justifyContent: 'center',
+            columnGap: 1,
+            paddingX: 1,
+            borderRadius: 1,
+            marginLeft: 1,
+            backgroundColor: '#d1d1d1',
+          }}
+        >
+          {share_code3.map((code_peice) => {
+            return (
+              <Typography variant="h6" key={`decal-row-share-code-piece-${code_peice}`}>
+                {code_peice}
+              </Typography>
+            );
+          })}
+        </FlexBox>
+      </FlexBox>
+    </FlexBox>
+  );
+}
+
+function TuningImages({ tuning }: { tuning: Tuning }) {
+  const options: ApexOptions = {
+    chart: {
+      type: 'radar',
+      toolbar: {
+        show: false,
+      },
+      events: {
+        // mounted: (chart) => {
+        //   chart.windowResizeHandler();
+        // },
+      },
+      redrawOnParentResize: true,
+    },
+    plotOptions: {
+      radar: {
+        size: 160,
+      },
+    },
+    tooltip: {
+      enabled: false,
+    },
+    yaxis: {
+      min: 0,
+      max: 10,
+      stepSize: 2,
+      tooltip: {
+        enabled: false,
+      },
+      labels: {
+        show: false,
+        formatter: (value) => {
+          return '';
+        },
+      },
+      axisTicks: {
+        show: false,
+      },
+      axisBorder: {
+        show: false,
+      },
+    },
+    dataLabels: {
+      enabled: true,
+    },
+    xaxis: {
+      categories: ['acceleration', 'speed', 'braking', 'offroad', 'launch', 'handling'],
+      labels: {
+        style: {
+          colors: '#050505',
+          fontWeight: 500,
+          fontSize: '18px',
+        },
+        offsetY: -2,
+      },
+    },
+
+    fill: {
+      opacity: 0.5,
+    },
+  };
+
+  const series = [
+    {
+      name: 'performance',
+      data: [
+        tuning.performance.acceleration,
+        tuning.performance.speed,
+        tuning.performance.braking,
+        tuning.performance.offroad,
+        tuning.performance.launch,
+        tuning.performance.handling,
+      ],
+    },
+  ];
+
+  return (
+    <FlexBox
+      sx={{
+        width: '100%',
+        height: 400,
+        // backgroundColor: '#e6ebf2',
+      }}
+    >
+      {/* 성능 육각형 레이더 그래프 */}
+      <FlexBox sx={{ height: 400, aspectRatio: '1/1', border: '1px black solid' }}>
+        <FlexBox sx={{ width: 0, position: 'static', paddingTop: 1, paddingLeft: 1 }}>
+          <PI_Card height={30} pi_number={tuning.PI} />
+        </FlexBox>
+        <ReactApexChart
+          series={series}
+          options={options}
+          width={500}
+          height={'100%'}
+          type="radar"
+          id={`tuning-detail-radar-chart-${tuning.share_code}`}
+        />
+      </FlexBox>
+      <FlexBox sx={{ width: '100%', flexDirection: 'column', rowGap: 0.5, paddingLeft: 1 }}>
+        <FlexBox sx={{ columnGap: 1 }}>
+          <FlexBox sx={{ width: 100, height: 40, alignItems: 'center' }}>
+            <Typography>최고속도</Typography>
+          </FlexBox>
+          <FlexBox sx={{ height: 40, alignItems: 'center' }}>
+            <Typography>{tuning.test_reading.maxspeed}km/h</Typography>
+          </FlexBox>
+        </FlexBox>
+        <FlexBox sx={{ columnGap: 1 }}>
+          <FlexBox sx={{ width: 100, height: 40, alignItems: 'center' }}>
+            <Typography>0-100km/h</Typography>
+          </FlexBox>
+          <FlexBox sx={{ height: 40, alignItems: 'center' }}>
+            <Typography>{tuning.test_reading.zero100}/초</Typography>
+          </FlexBox>
+        </FlexBox>
+        <FlexBox sx={{ columnGap: 1 }}>
+          <FlexBox sx={{ width: 100, height: 40, alignItems: 'center' }}>
+            <Typography>출력</Typography>
+          </FlexBox>
+          <FlexBox sx={{ height: 40, alignItems: 'center' }}>
+            <Typography>{tuning.test_reading.output}ps</Typography>
+          </FlexBox>
+        </FlexBox>
+        <FlexBox sx={{ columnGap: 1 }}>
+          <FlexBox sx={{ width: 100, height: 40, alignItems: 'center' }}>
+            <Typography>토크</Typography>
+          </FlexBox>
+          <FlexBox sx={{ height: 40, alignItems: 'center' }}>
+            <Typography>{tuning.test_reading.tork}kg.m</Typography>
+          </FlexBox>
+        </FlexBox>
+        <FlexBox sx={{ columnGap: 1 }}>
+          <FlexBox sx={{ width: 100, height: 40, alignItems: 'center' }}>
+            <Typography>중량</Typography>
+          </FlexBox>
+          <FlexBox sx={{ height: 40, alignItems: 'center' }}>
+            <Typography>{tuning.test_reading.weight}kg</Typography>
+          </FlexBox>
+        </FlexBox>
+        <FlexBox sx={{ columnGap: 1 }}>
+          <FlexBox sx={{ width: 100, height: 40, alignItems: 'center' }}>
+            <Typography>횡Gs</Typography>
+          </FlexBox>
+          <FlexBox sx={{ height: 40, alignItems: 'center' }}>
+            <Typography>{tuning.test_reading.skid_pad}</Typography>
+          </FlexBox>
+        </FlexBox>
+        <FlexBox sx={{ columnGap: 1 }}>
+          <FlexBox sx={{ width: 100, height: 40, alignItems: 'center' }}>
+            <Typography>서스펜션</Typography>
+          </FlexBox>
+          <FlexBox sx={{ height: 40, alignItems: 'center' }}>
+            <Typography>{tuning.suspension}</Typography>
+          </FlexBox>
+        </FlexBox>
+        <FlexBox sx={{ columnGap: 1 }}>
+          <FlexBox sx={{ width: 100, height: 40, alignItems: 'center' }}>
+            <Typography>타이어 재질</Typography>
+          </FlexBox>
+          <FlexBox sx={{ height: 40, alignItems: 'center' }}>
+            <Typography>{tuning.tier}</Typography>
+          </FlexBox>
+        </FlexBox>
+        <FlexBox sx={{ columnGap: 1 }}>
+          <FlexBox sx={{ width: 100, height: 40, alignItems: 'center' }}>
+            <Typography>구동방식</Typography>
+          </FlexBox>
+          <FlexBox sx={{ height: 40, alignItems: 'center' }}>
+            <Typography>{tuning.driving_system}</Typography>
+          </FlexBox>
+        </FlexBox>
+      </FlexBox>
+    </FlexBox>
+  );
+}
+
+function RelatedTuning({ tuning }: { tuning: Tuning }) {
+  const carInfo = {
+    manufacture: 'Hyundai',
+    year: 2021,
+    country: 'Korea',
+    name: '#98 Bryan Herta Autosport Elantra N',
+    drive_train: 'FWD',
+    body_style: 'sedan',
+    door: 4,
+    engine: 'ICE',
+    FH5: {
+      PI: 800,
+      division: 'track toys',
+    },
+  };
+
+  const share_code3 = [
+    tuning.share_code.substring(0, 3),
+    tuning.share_code.substring(3, 6),
+    tuning.share_code.substring(6, 9),
+  ];
+  const data = {
+    labels: ['Acceleration', 'Speed', 'braking', 'offroad', 'launch', 'handling'],
+    datasets: [
+      {
+        data: [
+          tuning.performance.acceleration,
+          tuning.performance.speed,
+          tuning.performance.braking,
+          tuning.performance.offroad,
+          tuning.performance.launch,
+          tuning.performance.handling,
+        ],
+        backgroundColor: 'rgba(255, 99, 132, 0.2)',
+        borderColor: 'rgba(255, 99, 132, 1)',
+        borderWidth: 1,
+      },
+    ],
+  };
+
+  const series = [
+    {
+      name: 'performance',
+      data: [
+        tuning.performance.acceleration,
+        tuning.performance.speed,
+        tuning.performance.braking,
+        tuning.performance.offroad,
+        tuning.performance.launch,
+        tuning.performance.handling,
+      ],
+    },
+  ];
+
+  const options: ApexOptions = {
+    chart: {
+      type: 'radar',
+      toolbar: {
+        show: false,
+      },
+      events: {
+        mounted: (chart) => {
+          chart.windowResizeHandler();
+        },
+      },
+      redrawOnParentResize: true,
+    },
+    tooltip: {
+      enabled: false,
+    },
+    yaxis: {
+      min: 0,
+      max: 10,
+      stepSize: 2,
+      tooltip: {
+        enabled: false,
+      },
+      labels: {
+        show: false,
+        formatter: (value) => {
+          return '';
+        },
+      },
+      axisTicks: {
+        show: false,
+      },
+      axisBorder: {
+        show: false,
+      },
+    },
+    dataLabels: {
+      enabled: true,
+    },
+    xaxis: {
+      categories: ['acceleration', 'speed', 'braking', 'offroad', 'launch', 'handling'],
+      labels: {
+        style: {
+          colors: '#050505',
+          fontWeight: 500,
+        },
+      },
+    },
+
+    fill: {
+      opacity: 0.5,
+    },
+  };
+
+  const tuningTitle = 'good tuning';
+  const creator = tuning.creater.club
+    ? `[${tuning.creater.club}] ${tuning.creater.id}`
+    : tuning.creater.id;
+  return (
+    <Grid xs={6} sx={{ display: 'flex', flexDirection: 'column', padding: 1 }}>
+      <Paper sx={{ display: 'flex', width: '100%', height: '100%' }} elevation={4}>
+        <FlexBox sx={{ width: 0, position: 'static', paddingTop: 1, paddingLeft: 1 }}>
+          <PI_Card pi_number={tuning.PI} height={30} />
+        </FlexBox>
+        <Grid container sx={{ width: '100%' }}>
+          {/* 성능 그래프 */}
+          <Grid xs={6} sx={{ aspectRatio: '1/1' }}>
+            <ReactApexChart
+              series={series}
+              options={options}
+              width={'100%'}
+              height={'100%'}
+              type="radar"
+              id={`radar-chart-${tuning.share_code}`}
             />
           </Grid>
-          {/* 차 이름/튜닝 태그, 공유 코드 */}
-          <Grid xs={7} sx={{ display: 'flex', flexDirection: 'column' }}>
+          {/* 튜닝 이름 */}
+          <Grid xs={6} sx={{ display: 'flex', flexDirection: 'column' }}>
             <FlexBox sx={{ width: '100%' }}>
-              <Typography>{carInfo.name}</Typography>
+              <Typography>{tuningTitle}</Typography>
             </FlexBox>
+
             <FlexBox>
-              <Typography>{carInfo.drive_train}</Typography>
+              <Typography>creator : {creator}</Typography>
             </FlexBox>
+
             <FlexBox>
               <Typography>tags : grip</Typography>
             </FlexBox>
+
             <FlexBox>
-              <Typography>Share code : {share_code}</Typography>
+              <Typography>suspension : {tuning.suspension}</Typography>
+            </FlexBox>
+            <FlexBox>
+              <Typography>tier : {tuning.tier}</Typography>
+            </FlexBox>
+            <FlexBox>
+              <Typography>driving system : {tuning.driving_system}</Typography>
+            </FlexBox>
+            <FlexBox>
+              <FlexBox
+                sx={{
+                  width: '100%',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  columnGap: 1,
+                  borderRadius: 4,
+                  backgroundColor: '#d1d1d1',
+                }}
+              >
+                {share_code3.map((code_peice) => {
+                  return (
+                    <Typography variant="h6" key={`share-code-piece-${code_peice}`}>
+                      {code_peice}
+                    </Typography>
+                  );
+                })}
+              </FlexBox>
             </FlexBox>
           </Grid>
         </Grid>
@@ -372,7 +643,7 @@ function RelatedTunings() {
       }}
     >
       <FlexBox>
-        <Typography variant="h5">Tunings</Typography>
+        <Typography variant="h3">Tunings</Typography>
       </FlexBox>
       <FlexBox sx={{ width: '100%', flexDirection: 'column', rowGap: 1 }}>
         {/* Tuning class */}
@@ -386,19 +657,19 @@ function RelatedTunings() {
           }}
         >
           {Object.values(TUNING_NUM).map((val) => {
-            return <PI_Card pi_number={val} height={40} />;
+            return <PI_Card pi_number={val} height={40} key={`pi-card-val-${val}`} />;
           })}
         </FlexBox>
+
         {/* 선택된 클래스에 있는 튜닝들 */}
         <Grid container>
-          <RelatedTuning />
-          <RelatedTuning />
-          <RelatedTuning />
-          <RelatedTuning />
-          <RelatedTuning />
-          <RelatedTuning />
-          <RelatedTuning />
-          <RelatedTuning />
+          {tunings
+            .filter((tuning) => tuning.PI > 900 && tuning.PI <= 998)
+            .map((tuning) => {
+              return (
+                <RelatedTuning tuning={tuning} key={`tuning-${tuning.PI}-${tuning.share_code}`} />
+              );
+            })}
         </Grid>
       </FlexBox>
       {/* Pagination */}
@@ -450,7 +721,7 @@ function RelatedVideos() {
   );
 }
 
-export default function Tracks() {
+export default function TuningDetail() {
   const navigate = useNavigate();
 
   const WIDTH = '100%';
@@ -458,40 +729,39 @@ export default function Tracks() {
   const name = 'Arch of Mulegé Circuit';
   const road_type = 'road';
   const track_type = 'circuit';
-
+  const decalData = decalsWithImage[3];
+  // DecalData;
   return (
-    <Container sx={{ height: '130vh' }}>
+    <Container sx={{ height: '140vh', marginTop: 70 }}>
       <FullSizeCenteredFlexBox
         sx={{
           height: '100%',
-          marginTop: 50,
         }}
       >
         <FlexBox
           sx={{
             width: WIDTH,
             maxWidth: 1200,
-            // height: '100%',
             flexDirection: 'column',
             paddingY: 2,
             marginTop: 20,
-
             paddingX: 2,
-            rowGap: 3,
+            rowGap: 2,
           }}
           component={Paper}
         >
           {/* 제목 */}
-          <TitlePart />
-          {/* 제목 밑에 사진이랑 특징 */}
-          <BreifData />
+          {/* <TitlePart /> */}
+          {/* 튜닝 태그, 게시자, 공유 코드 */}
+          <TuningInfo tuning={tunings[0]} />
           {/* 트랙 사진들 */}
-          <ImageWithMap />
-          {/* TODO: 관련 튜닝 */}
-          <RelatedTunings />
-          {/* TODO: 관련 영상 */}
+          <TuningImages tuning={tunings[0]} />
+          {/* 데칼에 사용된 차 간단 정보 */}
+          <BaseCarInfo />
+          {/* 관련 영상 */}
           <RelatedVideos />
-          {/* TODO: 관련 사진/움짤 */}
+          {/* 관련 다른 튜닝들 */}
+          <RelatedTunings />
         </FlexBox>
       </FullSizeCenteredFlexBox>
     </Container>
