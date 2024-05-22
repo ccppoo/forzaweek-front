@@ -3,8 +3,11 @@ import { useNavigate } from 'react-router-dom';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import ChatBubbleOutlineOutlinedIcon from '@mui/icons-material/ChatBubbleOutlineOutlined';
+import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlined';
+import FavoriteOutlinedIcon from '@mui/icons-material/FavoriteOutlined';
 import ForwardIcon from '@mui/icons-material/Forward';
 import ForwardOutlinedIcon from '@mui/icons-material/ForwardOutlined';
+import ModeCommentOutlinedIcon from '@mui/icons-material/ModeCommentOutlined';
 import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
 import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
@@ -370,115 +373,157 @@ function DecalImages({ decalData }: { decalData: DecalData }) {
     </FlexBox>
   );
 }
+function DecalItemCell({ decal }: { decal: DecalData }) {
+  const carName = '#98 Bryan Herta Autosport Elantra N';
 
-function RelatedTuning() {
-  const carInfo = {
-    manufacture: 'Hyundai',
-    year: 2021,
-    country: 'Korea',
-    name: '#98 Bryan Herta Autosport Elantra N',
-    drive_train: 'FWD',
-    body_style: 'sedan',
-    door: 4,
-    engine: 'ICE',
-    FH5: {
-      PI: 800,
-      division: 'track toys',
-    },
-  };
+  const WIDTH = '33%';
+  const HEIGHT = 400;
+  const share_code3 = [
+    decal.share_code.substring(0, 3),
+    decal.share_code.substring(3, 6),
+    decal.share_code.substring(6, 9),
+  ];
 
-  const share_code = '123 123 123';
   return (
-    <Grid xs={6} sx={{ display: 'flex', flexDirection: 'column', height: 120, padding: 1 }}>
-      <Paper sx={{ display: 'flex', width: '100%', height: '100%' }} elevation={4}>
-        <Grid container sx={{ width: '100%' }}>
-          {/* 차 사진 */}
-          <Grid xs={5} sx={{ height: '100%' }}>
-            <Image
-              src={image.car.hyundaiElantra}
+    <Grid xs={4}>
+      <Paper
+        sx={{
+          // width: '100%',
+          height: HEIGHT,
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'start',
+        }}
+      >
+        {/* 자동차 제조사/이름 */}
+        <FlexBox sx={{ paddingX: 1, paddingY: 0.2, alignItems: 'center', columnGap: 1 }}>
+          <Image src={image.manufacturer.hyundai} sx={{ width: 25, height: 25 }} />
+          <Typography>{carName}</Typography>
+        </FlexBox>
+        {/* 사진 */}
+        <FlexBox sx={{ aspectRatio: '16/9' }}>
+          <Image
+            src={decal.frontImage}
+            sx={{
+              objectFit: 'contain',
+              borderTopLeftRadius: 4,
+              borderBottomLeftRadius: 4,
+            }}
+          />
+        </FlexBox>
+        {/* 본문 */}
+        <FlexBox
+          sx={{
+            flexDirection: 'column',
+            width: '100%',
+            height: '100%',
+            paddingX: 1,
+            paddingY: 0.5,
+            rowGap: 2,
+            justifyContent: 'space-between',
+          }}
+        >
+          <FlexBox sx={{ flexDirection: 'column' }}>
+            {/* 차 이름 */}
+
+            <FlexBox
               sx={{
-                objectFit: 'contain',
-                borderTopLeftRadius: 4,
-                borderBottomLeftRadius: 4,
+                height: '100%',
+                flexWrap: 'wrap',
+                columnGap: 0.2,
+                rowGap: 0.5,
+                justifyContent: 'start',
+                alignItems: 'flex-start',
               }}
-            />
-          </Grid>
-          {/* 차 이름/튜닝 태그, 공유 코드 */}
-          <Grid xs={7} sx={{ display: 'flex', flexDirection: 'column' }}>
-            <FlexBox sx={{ width: '100%' }}>
-              <Typography>{carInfo.name}</Typography>
+            >
+              {decal.tags.map((tag) => (
+                <Chip label={tag} key={`decal-tag-${decal.share_code}-${tag}`} />
+              ))}
+            </FlexBox>
+          </FlexBox>
+          {/* 공유코드 + 댓글 + 좋아요 */}
+          <FlexBox sx={{ height: '20%', width: '100%', justifyContent: 'space-between' }}>
+            <FlexBox
+              sx={{
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}
+            >
+              <FlexBox
+                sx={{
+                  width: '100%',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  columnGap: 1,
+                  paddingX: 1,
+                  borderRadius: 4,
+                  backgroundColor: '#d1d1d1',
+                }}
+              >
+                {share_code3.map((code_peice) => {
+                  return (
+                    <Typography variant="h6" key={`decal-row-share-code-piece-${code_peice}`}>
+                      {code_peice}
+                    </Typography>
+                  );
+                })}
+              </FlexBox>
             </FlexBox>
             <FlexBox>
-              <Typography>{carInfo.drive_train}</Typography>
+              <IconButton sx={{ borderRadius: 4 }}>
+                <ModeCommentOutlinedIcon fontSize="small" />
+                <FlexBox
+                  sx={{
+                    width: 30,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    paddingLeft: 0.5,
+                  }}
+                >
+                  <Typography>{decal.fav.count}</Typography>
+                </FlexBox>
+              </IconButton>
+              <IconButton sx={{ borderRadius: 4 }}>
+                {decal.fav.checked ? (
+                  <FavoriteOutlinedIcon fontSize="small" />
+                ) : (
+                  <FavoriteBorderOutlinedIcon fontSize="small" />
+                )}
+                <FlexBox
+                  sx={{
+                    width: 30,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    paddingLeft: 0.5,
+                  }}
+                >
+                  <Typography>{decal.fav.count}</Typography>
+                </FlexBox>
+              </IconButton>
             </FlexBox>
-            <FlexBox>
-              <Typography>tags : grip</Typography>
-            </FlexBox>
-            <FlexBox>
-              <Typography>Share code : {share_code}</Typography>
-            </FlexBox>
-          </Grid>
-        </Grid>
+          </FlexBox>
+        </FlexBox>
       </Paper>
     </Grid>
   );
 }
 
-function RelatedTunings() {
-  const TUNING_CLASSES = ['D', 'C', 'B', 'A', 'S1', 'S2', 'X'];
-  const TUNING_NUM = {
-    D: 500,
-    C: 600,
-    B: 700,
-    A: 800,
-    S1: 900,
-    S2: 998,
-    X: 999,
-  };
-
+function DecalCellListing() {
   return (
-    <FlexBox
-      sx={{
-        width: '100%',
-        height: '100%',
-        flexDirection: 'column',
-      }}
-    >
+    <FlexBox sx={{ width: '100%', flexDirection: 'column' }}>
       <FlexBox>
-        <Typography variant="h5">Tunings</Typography>
+        <Typography variant="h5">Other Decals</Typography>
       </FlexBox>
-      <FlexBox sx={{ width: '100%', flexDirection: 'column', rowGap: 1 }}>
-        {/* Tuning class */}
-        <FlexBox
-          sx={{
-            height: 60,
-            backgroundColor: '#cfcccc',
-            justifyContent: 'center',
-            alignItems: 'center',
-            columnGap: 5,
-          }}
-        >
-          {Object.values(TUNING_NUM).map((val) => {
-            return <PI_Card pi_number={val} height={40} />;
-          })}
-        </FlexBox>
-        {/* 선택된 클래스에 있는 튜닝들 */}
-        <Grid container>
-          <RelatedTuning />
-          <RelatedTuning />
-          <RelatedTuning />
-          <RelatedTuning />
-          <RelatedTuning />
-          <RelatedTuning />
-          <RelatedTuning />
-          <RelatedTuning />
-        </Grid>
-      </FlexBox>
-      {/* Pagination */}
+      <Grid container sx={{ width: '100%' }} spacing={2}>
+        {decalsWithImage.map((decal) => (
+          <DecalItemCell decal={decal} />
+        ))}
+      </Grid>
       <Pagination />
     </FlexBox>
   );
 }
+
 function RelatedVideo() {
   return (
     <Grid
@@ -534,7 +579,7 @@ export default function DecalDetail() {
   const decalData = decalsWithImage[3];
   // DecalData;
   return (
-    <Container sx={{ height: '110vh' }}>
+    <Container sx={{ height: '130vh', marginTop: 40 }}>
       <FullSizeCenteredFlexBox
         sx={{
           height: '100%',
@@ -560,6 +605,8 @@ export default function DecalDetail() {
           <DecalImages decalData={decalData} />
           {/* 데칼에 사용된 차 간단 정보 */}
           <BaseCarInfo />
+          {/* 다른 데칼 */}
+          <DecalCellListing />
         </FlexBox>
       </FullSizeCenteredFlexBox>
     </Container>
