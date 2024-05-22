@@ -1,5 +1,7 @@
 import chevrolet_logo from './Chevrolet-Logo.jpg';
 import chevrolet_corvette_2020 from './Chevrolet_Corvette2020.jpg';
+import chevrolet_corvette_eray from './car/FH5_Chevrolet_Corvette_E-Ray_2024.webp';
+import ford_mustang_gt_2024 from './car/FH5_Ford_Mustang_GT_2024.webp';
 import elantra from './car/FH5_Hyundai_98_Elantra_N.webp';
 import ioniq6 from './car/FH5_Hyundai_IONIQ_6.webp';
 import konaN from './car/FH5_Hyundai_Kona_N.webp';
@@ -8,6 +10,8 @@ import cadillac3ats from './car/FM23_Cadillac_3_ATS-VR.webp';
 import chevroletC8R from './car/FM23_Chevrolet_3_Corvette_C8R.webp';
 import lexus14RC from './car/FM23_Lexus_14_RC_F_GT3.webp';
 import Alfa_155 from './car/HOR_XB1_Alfa_155.webp';
+import chevrolet_corvette from './car/HOR_XB1_Chevy_Corvette_20.webp';
+import ford_rs_festa_2017 from './car/HOR_XB1_Ford_M-Sport.webp';
 import velostar from './car/HOR_XB1_Hyundai_Veloster_19.webp';
 import bmwm8 from './car/MOT_XB1_BMW_1_M8.webp';
 import elantra_back1 from './decal/elantra_back.jpg';
@@ -93,6 +97,10 @@ const car = {
   chevroletC8R: chevroletC8R,
   cadillac3ats: cadillac3ats,
   bmwm8: bmwm8,
+  chevrolet_corvette_eray: chevrolet_corvette_eray,
+  chevrolet_corvette: chevrolet_corvette,
+  ford_mustang_gt_2024: ford_mustang_gt_2024,
+  ford_rs_festa_2017: ford_rs_festa_2017,
 };
 
 export {

@@ -69,5 +69,61 @@
       "PI": 800,
       "division": "track toys"
     }
+  },
+  {
+    "manufacture": "Ford",
+    "year": 2017,
+    "country": "USA",
+    "name": "M-Sport Fiesta RS",
+    "drive_train": "AWD",
+    "body_style": "hatchback",
+    "door": 2,
+    "engine": "ICE",
+    "FH5": {
+      "PI": 808,
+      "division": "rally monsters"
+    }
+  },
+  {
+    "manufacture": "Ford",
+    "year": 2024,
+    "country": "USA",
+    "name": "Mustang GT",
+    "drive_train": "FWD",
+    "body_style": "cupe",
+    "door": 2,
+    "engine": "ICE",
+    "FH5": {
+      "PI": 739,
+      "division": "mordern muscle"
+    }
+  },
+  {
+    "manufacture": "Chevrolet",
+    "year": 2024,
+    "country": "USA",
+    "name": "Corvette E-Ray",
+    "drive_train": "AWD",
+    "body_style": "coupe",
+    "door": 2,
+    "engine": "hybrid",
+    "FH5": {
+      "PI": 834,
+      "division": "mordern supercars"
+    }
+  },
+  {
+    "manufacture": "Chevrolet",
+    "year": 2020,
+    "country": "USA",
+    "name": "Corvette Stingray Coupe",
+    "drive_train": "RWD",
+    "body_style": "coupe",
+    "door": 2,
+    "engine": "ICE",
+    "FH5": {
+      "PI": 806,
+      "division": "mordern supercars"
+    }
   }
 ]
