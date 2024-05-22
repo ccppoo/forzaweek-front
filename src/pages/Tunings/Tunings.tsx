@@ -526,10 +526,12 @@ function TuningCarSelectionCountryOption({
   optionName,
   values,
   groupOptions,
+  limitTags,
 }: {
   optionName: string;
   values: string[];
   groupOptions?: boolean;
+  limitTags?: number;
 }) {
   const [selections, setSelections] = useState<string[]>([]);
 
@@ -557,6 +559,7 @@ function TuningCarSelectionCountryOption({
       <FlexBox sx={{ width: '100%' }}>
         <Autocomplete
           multiple
+          limitTags={limitTags ? limitTags : undefined}
           id="tags-outlined"
           size="small"
           options={values}
@@ -736,7 +739,7 @@ function TuningCarSelection() {
       </FlexBox>
       <FlexBox sx={{ flexDirection: 'column', paddingY: 1 }}>
         <FlexBox>
-          <Typography variant="h5">Recent Search</Typography>
+          <Typography variant="h5">Recent</Typography>
         </FlexBox>
         <FlexBox sx={{ width: '100%', columnGap: 0.5 }}>
           <TuningCarRecentSearch />
@@ -759,11 +762,21 @@ function TuningCarSelection() {
             optionName="Manufacturer"
             values={MANUFACTURER}
             groupOptions
+            limitTags={3}
           />
-          <TuningCarSelectionCountryOption optionName="Division" values={DIVISIONS} groupOptions />
-          <TuningCarSelectionCountryOption optionName="ProductionYear" values={PRODUCTION_YEARs} />
-          <TuningCarSelectionCountryOption optionName="Rarity" values={RARITY} />
-          <TuningCarSelectionCountryOption optionName="Boost" values={BOOST} />
+          <TuningCarSelectionCountryOption
+            optionName="Division"
+            values={DIVISIONS}
+            groupOptions
+            limitTags={4}
+          />
+          <TuningCarSelectionCountryOption
+            optionName="Production Year"
+            values={PRODUCTION_YEARs}
+            limitTags={4}
+          />
+          <TuningCarSelectionCountryOption optionName="Rarity" values={RARITY} limitTags={4} />
+          <TuningCarSelectionCountryOption optionName="Boost" values={BOOST} limitTags={3} />
         </FlexBox>
         <TuningCarFinalSelect />
       </FlexBox>

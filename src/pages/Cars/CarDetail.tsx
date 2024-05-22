@@ -391,6 +391,11 @@ function RelatedTuning({ tuning }: { tuning: Tuning }) {
     tooltip: {
       enabled: false,
     },
+    plotOptions: {
+      radar: {
+        size: 80,
+      },
+    },
     yaxis: {
       min: 0,
       max: 10,
@@ -419,8 +424,10 @@ function RelatedTuning({ tuning }: { tuning: Tuning }) {
       labels: {
         style: {
           colors: '#050505',
-          fontWeight: 500,
+          fontWeight: 600,
+          fontSize: '10px',
         },
+        offsetY: -1,
       },
     },
 

@@ -643,7 +643,7 @@ function RelatedTunings() {
       }}
     >
       <FlexBox>
-        <Typography variant="h3">Tunings</Typography>
+        <Typography variant="h4">Other Tunings</Typography>
       </FlexBox>
       <FlexBox sx={{ width: '100%', flexDirection: 'column', rowGap: 1 }}>
         {/* Tuning class */}
