@@ -1,39 +1,14 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 
-import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
-import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
-import ChatBubbleOutlineOutlinedIcon from '@mui/icons-material/ChatBubbleOutlineOutlined';
-import ForwardIcon from '@mui/icons-material/Forward';
-import ForwardOutlinedIcon from '@mui/icons-material/ForwardOutlined';
-import IosShareOutlinedIcon from '@mui/icons-material/IosShareOutlined';
-import ShareOutlinedIcon from '@mui/icons-material/ShareOutlined';
-import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
-import Accordion from '@mui/material/Accordion';
-import AccordionDetails from '@mui/material/AccordionDetails';
-import AccordionSummary from '@mui/material/AccordionSummary';
-import Avatar from '@mui/material/Avatar';
-import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
-import ButtonBase from '@mui/material/ButtonBase';
-import ButtonGroup from '@mui/material/ButtonGroup';
-import Chip from '@mui/material/Chip';
-import Container from '@mui/material/Container';
-import Divider from '@mui/material/Divider';
-import IconButton from '@mui/material/IconButton';
 import Paper from '@mui/material/Paper';
-import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Unstable_Grid2';
 
 import * as image from '@/image';
-import { CarInfo } from '@/api/car/car';
 import { FlexBox, FullSizeCenteredFlexBox } from '@/components/styled';
+import { CarInfo } from '@/types/car';
 
-import carInfo from './car_data.json';
 import { Image } from './styled';
-
-// import { CarInfo, FH5_info } from './types';
 
 function CarPreviewInfo({ carInfo }: { carInfo: CarInfo }) {
   const MANUFACTURER = carInfo.manufacture;

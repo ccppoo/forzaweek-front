@@ -35,8 +35,12 @@ export async function getCarData(): Promise<CarInfo[]> {
       const { id: carID, ...res } = car;
       // 자동차 FH5 스탯 가져오기
       // console.log(`carID : ${carID}`);
-      const fh5 = await db.carFH5.where('id').equals(carID!).first();
-      const images = await db.carImage.where('id').equals(carID!).first();
+      const [fh5, images] = await Promise.all([
+        await db.carFH5.where('id').equals(carID!).first(),
+        await db.carImage.where('id').equals(carID!).first(),
+      ]);
+      // const fh5 = await db.carFH5.where('id').equals(carID!).first();
+      // const images = await db.carImage.where('id').equals(carID!).first();
 
       // console.log(`fh5 : ${JSON.stringify(fh5)}`);
       const { id, ...resFH5 } = fh5!;
