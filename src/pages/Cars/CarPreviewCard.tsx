@@ -27,21 +27,23 @@ import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Unstable_Grid2';
 
 import * as image from '@/image';
+import { CarInfo } from '@/api/car/car';
 import { FlexBox, FullSizeCenteredFlexBox } from '@/components/styled';
 
 import carInfo from './car_data.json';
 import { Image } from './styled';
-import { CarInfo, FH5_info } from './types';
+
+// import { CarInfo, FH5_info } from './types';
 
 function CarPreviewInfo({ carInfo }: { carInfo: CarInfo }) {
   const MANUFACTURER = carInfo.manufacture;
   const COUNRTY = carInfo.country;
   const YEAR = carInfo.year;
-  const DRIVE_TRAIN = carInfo.drive_train;
-  const BODY_STYLE = carInfo.body_style;
+  const DRIVE_TRAIN = carInfo.driveTrain;
+  const BODY_STYLE = carInfo.bodyStyle;
   // 인게임 스탯
-  const PI = carInfo.FH5.PI;
-  const DIVISION = carInfo.FH5.division;
+  const PI = carInfo.fh5.PI;
+  const DIVISION = carInfo.fh5.division;
 
   return (
     <>
@@ -89,7 +91,7 @@ function CarPreviewInfo({ carInfo }: { carInfo: CarInfo }) {
   );
 }
 
-export default function CarPreviewCard({ carInfo, image }: { carInfo: CarInfo; image: string }) {
+export default function CarPreviewCard({ carInfo }: { carInfo: CarInfo }) {
   // 자동차 사진 + 이름, 클래스, 기본적인거 추가
 
   const W = 250;
@@ -134,7 +136,7 @@ export default function CarPreviewCard({ carInfo, image }: { carInfo: CarInfo; i
             md={6}
           >
             <Image
-              src={image}
+              src={carInfo.image.main}
               sx={{
                 width: '100%',
                 objectFit: 'contain',
