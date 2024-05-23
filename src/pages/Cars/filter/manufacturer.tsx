@@ -58,7 +58,7 @@ function ManufacturerFilterCharacter({
         {manufacturer
           .filter((value) => value.toLocaleLowerCase().startsWith(FIRST_CHAR))
           .map((name) => (
-            <ManufacturerCell name={name} />
+            <ManufacturerCell name={name} key={`manufacturer-select-item-${name}`} />
           ))}
       </FlexBox>
     </FlexBox>
@@ -173,7 +173,11 @@ export default function CarFilterManufacturer({ manufacturers }: { manufacturers
           </FlexBox>
           <FlexBox sx={{ columnGap: 1, rowGap: 1.2, flexWrap: 'wrap', paddingX: 1 }}>
             {manu_characters.map((value) => (
-              <ManufacturerFilterCharacter char={value} manufacturer={manufacturers} />
+              <ManufacturerFilterCharacter
+                char={value}
+                manufacturer={manufacturers}
+                key={`car-filter-manufacturer-${value}`}
+              />
             ))}
           </FlexBox>
         </FlexBox>

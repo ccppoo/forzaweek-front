@@ -16,8 +16,6 @@ function NavigationButton({ name, path }: { name: string; path: string }) {
   };
   const isCurrentPath = location.pathname == path;
 
-  console.log(`location : ${location.pathname} ${location.pathname == path}`);
-
   return (
     <FlexBox
       sx={{
