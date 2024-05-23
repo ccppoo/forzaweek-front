@@ -12,7 +12,7 @@ import {
   RARITY,
 } from './values';
 
-type CarSearchOption =
+export type CarSearchOption =
   | 'division'
   | 'productionYear'
   | 'manufacturer'
@@ -23,12 +23,12 @@ type CarSearchOption =
 type CarSearchOptions = Record<CarSearchOption, string[]>;
 
 const carSearchOptionDefault: CarSearchOptions = {
-  division: [...DIVISIONS],
-  productionYear: [...PRODUCTION_YEARs],
-  manufacturer: [...MANUFACTURER],
-  boost: [...BOOST],
-  country: [...COUNTRY],
-  rarity: [...RARITY],
+  division: [],
+  productionYear: [],
+  manufacturer: [],
+  boost: [],
+  country: [],
+  rarity: [],
 };
 
 export const searchOptionMaxLength = {
@@ -46,61 +46,22 @@ const carSearchOptionState = atom<CarSearchOptions>({
 });
 
 type Actions = {
-  toggleOption: (name: string, option: CarSearchOption) => void;
-  selectAllSingleOption: (option: CarSearchOption) => void;
-  unselectAllSingleOption: (option: CarSearchOption) => void;
-  selectAllEveryOption: () => void;
+  setOption: (name: string[], option: CarSearchOption) => void;
 };
 
 function useCarSearchFilters(): [CarSearchOptions, Actions] {
   const [carSearchOptions, setCarSearchOptions] = useRecoilState(carSearchOptionState);
 
-  const toggleOption = (name: string, option: CarSearchOption) => {
+  const setOption = (name: string[], option: CarSearchOption) => {
     setCarSearchOptions((curVal) => {
-      if (curVal[option].includes(name)) {
-        return {
-          ...curVal,
-          [option]: [...curVal[option]].filter((item) => item != name).toSorted(),
-        };
-      }
       return {
         ...curVal,
-        [option]: [...curVal[option], name].toSorted(),
+        [option]: [...name].toSorted(),
       };
     });
   };
 
-  const selectAllSingleOption = (option: CarSearchOption) => {
-    // use when selecting all option in single section e.g) division, country, manufacturer
-    setCarSearchOptions((curVal) => {
-      return {
-        ...curVal,
-        [option]: [...carSearchOptionDefault[option]].toSorted(),
-      };
-    });
-  };
-
-  const unselectAllSingleOption = (option: CarSearchOption) => {
-    // use when clearing all option in single section e.g) division, country, manufacturer
-    setCarSearchOptions((curVal) => {
-      return {
-        ...curVal,
-        [option]: [],
-      };
-    });
-  };
-
-  const selectAllEveryOption = () => {
-    // use when selecting all option in every car search option
-    // sets to default value
-
-    setCarSearchOptions(carSearchOptionDefault);
-  };
-
-  return [
-    carSearchOptions,
-    { toggleOption, selectAllSingleOption, selectAllEveryOption, unselectAllSingleOption },
-  ];
+  return [carSearchOptions, { setOption }];
 }
 
 export default useCarSearchFilters;
