@@ -3,7 +3,7 @@ import * as image from '@/image';
 import carInfo from './car_data.json';
 import { CarData, CarInfo } from './types';
 
-const imageMatch: Record<string, string> = {
+export const imageMatch: Record<string, string> = {
   'IONIQ 6': image.car.hyundaiioniq6,
   'Veloster N': image.car.hyundaivelostar,
   'i30 N': image.car.hyundaii30n,
