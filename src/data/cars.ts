@@ -1,7 +1,32 @@
 import * as image from '@/image';
 
 import carInfo from './car_data.json';
+import manyCars from './cars.json';
 import { CarData, CarInfo } from './types';
+
+const a = {
+  name: 'Abarth 131',
+  model: 'Fiat 131',
+  year: 1980,
+  country: 'Italy',
+  driveTrain: 'AWD',
+  engine: 'ICE',
+  door: 4,
+  manufacture: 'Abarth',
+  bodyStyle: 'sedan',
+  FH5: {
+    PI: 510,
+    rarity: 'Common',
+    value: 250000,
+    boost: '',
+    speed: 4.3,
+    handling: 4.1,
+    acceleration: 4.1,
+    launch: 3.9,
+    braking: 3.2,
+    offroad: 5.9,
+  },
+};
 
 export const imageMatch: Record<string, string> = {
   'IONIQ 6': image.car.hyundaiioniq6,

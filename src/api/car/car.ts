@@ -25,19 +25,6 @@ interface GetCarsInterface {
   engine: string | undefined;
 }
 
-const a = {
-  name: 'Corvette E-Ray',
-  year: 2024,
-  country: 'USA',
-  driveTrain: 'AWD',
-  door: 2,
-  engine: 'hybrid',
-  manufacture: 'Chevrolet',
-  bodyStyle: 'coupe',
-  fh5: { division: 'mordern supercars', PI: 834 },
-  image: { main: '/src/image/car/FH5_Chevrolet_Corvette_E-Ray_2024.webp', images: [] },
-};
-
 export async function getCars({ queryKey }: { queryKey: [API_NAME] }): Promise<CarInfo[]> {
   const [_] = queryKey;
 
