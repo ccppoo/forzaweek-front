@@ -17,12 +17,15 @@ import { carInfoWithImage } from '@/data/cars';
 import { CarData, CarInfo } from '@/data/types';
 import { db } from '@/db';
 import { getCarData } from '@/db/index';
+import useCarSearchFilters, { CarSearchOption } from '@/store/carSearchFilters';
 
 import CarPreviewCard from './CarPreviewCard';
 import TuningCarSelection from './CarSearchFilter';
 import { Image } from './styled';
 
 export default function CarSearch() {
+  const [_, searchResults] = useCarSearchFilters();
+
   const { data: queryData } = useQuery({
     queryKey: ['get car'],
     queryFn: getCars,
@@ -43,8 +46,8 @@ export default function CarSearch() {
           columnSpacing={{ xs: 1, md: 1 }}
           rowSpacing={{ xs: 1, md: 1 }}
         >
-          {queryData ? (
-            queryData.map((carInfo) => {
+          {searchResults ? (
+            searchResults.map((carInfo) => {
               return <CarPreviewCard carInfo={carInfo} key={carInfo.name} />;
             })
           ) : (

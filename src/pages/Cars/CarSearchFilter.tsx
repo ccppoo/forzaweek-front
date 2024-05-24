@@ -19,7 +19,15 @@ import { getCarData } from '@/db/index';
 import useCarSearchFilters, { CarSearchOption } from '@/store/carSearchFilters';
 
 import { Image } from './styled';
-import { BOOST, COUNTRY, DIVISIONS, MANUFACTURER, PRODUCTION_YEARs, RARITY } from './values';
+import {
+  BOOST,
+  COUNTRY,
+  DIVISIONS,
+  MANUFACTURER,
+  PRODUCTION_YEAR,
+  PRODUCTION_YEARs,
+  RARITY,
+} from './values';
 
 const carinfo = {
   manufacture: 'Hyundai',
@@ -57,7 +65,7 @@ function TuningCarRecentSearch() {
   );
 }
 
-function TuningCarSelectionCountryOption({
+function AutocompleteCarSearchOption({
   optionName,
   values,
   groupOptions,
@@ -68,7 +76,7 @@ function TuningCarSelectionCountryOption({
   groupOptions?: boolean;
   limitTags?: number;
 }) {
-  const [options, { setOption }] = useCarSearchFilters();
+  const [options, _, { setOption }] = useCarSearchFilters();
   const setSearchOption = (name: string[]) => setOption(name, optionName);
   const selectedOptions = options[optionName];
 
@@ -118,9 +126,12 @@ function TuningCarSelectionCountryOption({
   );
 }
 
-function TuningCarSearchBar() {
+function AutocompleteCarSearchBar() {
   // 직접 검색해서 찾을 수 있는 검색 바
   // TODO: Selection -> DB에서 자동차 ID로 저장 + 하나 선택했으면 Search Filter 업데이트하기
+
+  const [options, _, { setOption }] = useCarSearchFilters();
+
   const [selection, setSelection] = useState<CarData | null>(null);
 
   return (
@@ -197,7 +208,7 @@ export default function TuningCarSelection() {
       </FlexBox>
       {/* 검색 창 */}
       <FlexBox sx={{}}>
-        <TuningCarSearchBar />
+        <AutocompleteCarSearchBar />
       </FlexBox>
       {/* 차 선택 */}
       <FlexBox sx={{ border: '1px black solid', flexDirection: 'column' }}>
@@ -212,26 +223,26 @@ export default function TuningCarSelection() {
             paddingTop: 1,
           }}
         >
-          <TuningCarSelectionCountryOption optionName="country" values={COUNTRY} groupOptions />
-          <TuningCarSelectionCountryOption
+          <AutocompleteCarSearchOption optionName="country" values={COUNTRY} groupOptions />
+          <AutocompleteCarSearchOption
             optionName="manufacturer"
             values={MANUFACTURER}
             groupOptions
             limitTags={3}
           />
-          <TuningCarSelectionCountryOption
+          <AutocompleteCarSearchOption
             optionName="division"
             values={DIVISIONS}
             groupOptions
             limitTags={4}
           />
-          <TuningCarSelectionCountryOption
+          <AutocompleteCarSearchOption
             optionName="productionYear"
             values={PRODUCTION_YEARs}
             limitTags={4}
           />
-          <TuningCarSelectionCountryOption optionName="rarity" values={RARITY} limitTags={4} />
-          <TuningCarSelectionCountryOption optionName="boost" values={BOOST} limitTags={3} />
+          <AutocompleteCarSearchOption optionName="rarity" values={RARITY} limitTags={4} />
+          <AutocompleteCarSearchOption optionName="boost" values={BOOST} limitTags={3} />
         </FlexBox>
         {/* <TuningCarFinalSelect /> */}
       </FlexBox>
