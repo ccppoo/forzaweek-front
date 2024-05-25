@@ -3,6 +3,12 @@ export interface FH5_STAT {
   division: string;
   rarity: string;
   boost: string;
-  value: string;
+  value: number;
   PI: number;
+  speed: number;
+  handling: number;
+  acceleration: number;
+  launch: number;
+  braking: number;
+  offroad: number;
 }
