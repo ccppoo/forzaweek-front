@@ -20,7 +20,7 @@ export class ForzaWeekDB extends Dexie {
     super('frozaweekDB');
     this.version(1).stores({
       car: '++id,name, year, country,driveTrain,door,engine,manufacture,bodyStyle',
-      carFH5: '&id, division, PI',
+      carFH5: '&id, division,rarity,  boost, PI',
       carImage: '&id',
     });
   }
