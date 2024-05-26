@@ -76,7 +76,7 @@ function AutocompleteCarSearchOption({
   groupOptions?: boolean;
   limitTags?: number;
 }) {
-  const [options, _, { setOption }] = useCarSearchFilters();
+  const [options, _, __, { setOption }] = useCarSearchFilters();
   const setSearchOption = (name: string[]) => setOption(name, optionName);
   const selectedOptions = options[optionName];
 
@@ -130,7 +130,7 @@ function AutocompleteCarSearchBar() {
   // 직접 검색해서 찾을 수 있는 검색 바
   // TODO: Selection -> DB에서 자동차 ID로 저장 + 하나 선택했으면 Search Filter 업데이트하기
 
-  const [options, _, { setOption }] = useCarSearchFilters();
+  const [options, _, __, { setOption }] = useCarSearchFilters();
 
   const [selection, setSelection] = useState<CarData | null>(null);
 
@@ -169,17 +169,6 @@ function AutocompleteCarSearchBar() {
 }
 
 export default function TuningCarSelection() {
-  const [personName, setPersonName] = useState<string[]>([]);
-  const handleChange = (event: SelectChangeEvent<typeof personName>) => {
-    const {
-      target: { value },
-    } = event;
-    setPersonName(
-      // On autofill we get a stringified value.
-      typeof value === 'string' ? value.split(',') : value,
-    );
-  };
-
   const ITEM_HEIGHT = 48;
   const ITEM_PADDING_TOP = 8;
   const MenuProps = {

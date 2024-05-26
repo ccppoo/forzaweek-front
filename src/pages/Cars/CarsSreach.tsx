@@ -24,19 +24,26 @@ import TuningCarSelection from './CarSearchFilter';
 import { Image } from './styled';
 
 export default function CarSearch() {
-  const [_, searchResults] = useCarSearchFilters();
+  const [_, searchResults, isSearchOptionEmpty] = useCarSearchFilters();
 
-  const { data: queryData } = useQuery({
-    queryKey: ['get car'],
-    queryFn: getCars,
-    // staleTime: 10 * 1000,
-  });
+  const totalCars = 843;
+  totalCars;
 
-  if (queryData) {
+  const totalCarString = (num: number) => `Total ${num} cars`;
+  if (true) {
     return (
       <FlexBox sx={{ flexDirection: 'column' }}>
         {/* car search */}
         <TuningCarSelection />
+        <FlexBox sx={{ height: 30, alignItems: 'center' }}>
+          <Typography variant="h6">
+            {isSearchOptionEmpty
+              ? totalCarString(843)
+              : searchResults
+                ? totalCarString(searchResults.length)
+                : 'searching...'}
+          </Typography>
+        </FlexBox>
         {/* Cards */}
         <Grid
           container
