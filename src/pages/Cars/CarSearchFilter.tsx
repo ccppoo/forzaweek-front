@@ -15,7 +15,8 @@ import { FlexBox } from '@/components/styled';
 import { carInfoWithImage } from '@/data/cars';
 import { CarData, CarInfo } from '@/data/types';
 import { db } from '@/db';
-import { getCarData } from '@/db/index';
+import type { Car, CarImage, FH5_STAT } from '@/db/schema';
+// import { getCarData } from '@/db/index';
 import useCarSearchFilters, { CarSearchOption } from '@/store/carSearchFilters';
 
 import { Image } from './styled';
@@ -126,13 +127,17 @@ function AutocompleteCarSearchOption({
   );
 }
 
+async function getCarData(): Promise<Car[]> {
+  return await db.car.toArray();
+}
+
 function AutocompleteCarSearchBar() {
   // 직접 검색해서 찾을 수 있는 검색 바
   // TODO: Selection -> DB에서 자동차 ID로 저장 + 하나 선택했으면 Search Filter 업데이트하기
 
-  const [options, _, __, { setOption }] = useCarSearchFilters();
-
-  const [selection, setSelection] = useState<CarData | null>(null);
+  // const [options, _, __, { setOption }] = useCarSearchFilters();
+  const options = useLiveQuery(getCarData) || [];
+  const [selection, setSelection] = useState<Car | undefined>(undefined);
 
   return (
     <FlexBox sx={{ width: '100%', paddingY: 0.4 }}>
@@ -140,20 +145,20 @@ function AutocompleteCarSearchBar() {
         id="tags-outlined"
         size="small"
         // options={carInfoWithImage.map(({ info }) => info.name)}
-        options={carInfoWithImage}
+        options={options}
         filterOptions={(options, state) => {
           const displayOptions = options.filter((option) =>
-            option.info.name.toLowerCase().trim().includes(state.inputValue.toLowerCase().trim()),
+            option.name.toLowerCase().trim().includes(state.inputValue.toLowerCase().trim()),
           );
 
           return displayOptions;
         }}
-        groupBy={(option: CarData) => option.info.manufacture}
-        getOptionLabel={(option: CarData) => option.info.name}
+        groupBy={(option: Car) => option.manufacture}
+        getOptionLabel={(option: Car) => option.name}
         defaultValue={null}
         filterSelectedOptions
-        onChange={(event: any, newValue: CarData | null) => {
-          setSelection(newValue || null);
+        onChange={(event: any, newValue: Car | null) => {
+          setSelection(newValue || undefined);
         }}
         renderInput={(params) => (
           <TextField
