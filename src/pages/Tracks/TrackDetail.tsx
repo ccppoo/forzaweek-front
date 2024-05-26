@@ -14,6 +14,7 @@ import Grid from '@mui/material/Unstable_Grid2';
 import { styled } from '@mui/material/styles';
 
 import * as image from '@/image';
+import { ImageShowHorizontal } from '@/components/ImageList';
 import { PI_Card } from '@/components/PI';
 import { FlexBox, FullSizeCenteredFlexBox } from '@/components/styled';
 
@@ -479,7 +480,8 @@ export default function Tracks() {
           {/* 제목 밑에 사진이랑 특징 */}
           <BreifData />
           {/* 트랙 사진들 */}
-          <ImageWithMap />
+          <ImageShowHorizontal images={TRACK_IMAGES} />
+          {/* <ImageWithMap /> */}
           {/* TODO: 관련 튜닝 */}
           <RelatedTunings />
           {/* TODO: 관련 영상 */}

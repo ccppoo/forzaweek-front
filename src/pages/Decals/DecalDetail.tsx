@@ -17,6 +17,7 @@ import Grid from '@mui/material/Unstable_Grid2';
 import { styled } from '@mui/material/styles';
 
 import * as image from '@/image';
+import { ImageShowHorizontal } from '@/components/ImageList';
 import { FlexBox, FullSizeCenteredFlexBox } from '@/components/styled';
 import { decalsWithImage } from '@/data/decals';
 import type { DecalData } from '@/data/decals';
@@ -593,7 +594,8 @@ export default function DecalDetail() {
           {/* 데칼 태그, 게시자, 공유 코드 */}
           <DecalInfo decalData={decalData} />
           {/* 트랙 사진들 */}
-          <DecalImages decalData={decalData} />
+          {/* <DecalImages decalData={decalData} /> */}
+          <ImageShowHorizontal images={decalData.images} />
           {/* 데칼에 사용된 차 간단 정보 */}
           <BaseCarInfo />
           {/* 다른 데칼 */}

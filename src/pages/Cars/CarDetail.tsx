@@ -19,6 +19,7 @@ import { styled } from '@mui/material/styles';
 import { ApexOptions } from 'apexcharts';
 
 import * as image from '@/image';
+import { ImageShowHorizontal } from '@/components/ImageList';
 import { PI_Card } from '@/components/PI';
 import { FlexBox, FullSizeCenteredFlexBox } from '@/components/styled';
 import { decalsWithImage } from '@/data/decals';
@@ -28,7 +29,7 @@ import type { Tuning } from '@/data/tunings';
 
 import { Image } from './styled';
 
-const TRACK_IMAGES = [
+const CAR_IMAGES = [
   image.decal.elantra_front2,
   image.decal.elantra_front3,
   image.decal.elantra_front1,
@@ -174,142 +175,6 @@ function BreifData() {
           </FlexBox>
         </Grid>
       </Grid>
-    </FlexBox>
-  );
-}
-
-function ImageWithMap() {
-  return (
-    <FlexBox
-      sx={{
-        width: '100%',
-        height: '100%',
-
-        flexDirection: 'column',
-      }}
-    >
-      <FlexBox>
-        <Typography variant="h3">Car picture</Typography>
-      </FlexBox>
-
-      {/* 트랙 스샷 */}
-      <FlexBox sx={{ width: '100%', flexDirection: 'column' }}>
-        <FlexBox
-          sx={{
-            width: '100%',
-            height: '100%',
-            maxHeight: 400,
-            paddingY: 1,
-          }}
-        >
-          {/* TODO: 트랙 경로 사진 */}
-          {/* <FlexBox
-            sx={{
-              minWidth: 400,
-              height: '100%',
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}
-          >
-            <FlexBox
-              sx={{
-                maxWidth: '100%',
-                height: '100%',
-                aspectRatio: '4/3',
-                flexShrink: 1,
-              }}
-            >
-              <Image src={image.track.molehach} sx={{ objectFit: 'contain' }} />
-            </FlexBox>
-          </FlexBox> */}
-          {/* 큰 사진(1개) */}
-          <FlexBox
-            sx={{
-              width: '100%',
-              // height: '100%',
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}
-          >
-            <FlexBox
-              sx={{
-                maxWidth: '100%',
-                height: '100%',
-              }}
-            >
-              <Image src={image.decal.elantra_front2} sx={{ objectFit: 'contain' }} />
-            </FlexBox>
-          </FlexBox>
-        </FlexBox>
-        {/* 작은 사진 목록 */}
-        <FlexBox
-          sx={{
-            height: '100%',
-            paddingX: 1,
-            paddingTop: 1,
-            backgroundColor: '#cfcccc',
-            flexDirection: 'row',
-            // justifyContent: 'stretch',
-          }}
-        >
-          <FlexBox
-            sx={{
-              width: '100%',
-              height: 135,
-              justifyContent: 'center',
-              alignItems: 'center',
-              columnGap: 1,
-            }}
-          >
-            <FlexBox
-              sx={{
-                width: '5%',
-                height: '100%',
-                justifyContent: 'center',
-                alignItems: 'center',
-              }}
-            >
-              <ArrowBackIosIcon />
-            </FlexBox>
-            <FlexBox
-              sx={{
-                width: '90%',
-                height: '100%',
-                flexWrap: 'nowrap',
-                overflow: 'scroll',
-                paddingBottom: 1,
-                columnGap: 0.5,
-              }}
-            >
-              {TRACK_IMAGES.map((image) => {
-                return (
-                  <FlexBox
-                    sx={{
-                      width: '100%',
-                      aspectRatio: '16/9',
-                      height: 126,
-                    }}
-                    key={`track-preview-${image}`}
-                  >
-                    <Image src={image} sx={{ objectFit: 'contain' }} />
-                  </FlexBox>
-                );
-              })}
-            </FlexBox>
-
-            <FlexBox
-              sx={{
-                width: '5%',
-                height: '100%',
-                justifyContent: 'center',
-                alignItems: 'center',
-              }}
-            >
-              <ArrowForwardIosIcon />
-            </FlexBox>
-          </FlexBox>
-        </FlexBox>
-      </FlexBox>
     </FlexBox>
   );
 }
@@ -738,7 +603,7 @@ export default function Tracks() {
   const track_type = 'circuit';
 
   return (
-    <Container sx={{ height: '230vh' }}>
+    <Container sx={{ height: '230vh', paddingTop: 50 }}>
       <FullSizeCenteredFlexBox
         sx={{
           height: '100%',
@@ -764,7 +629,7 @@ export default function Tracks() {
           {/* 제목 밑에 사진이랑 특징 */}
           <BreifData />
           {/* 차 사진들 */}
-          <ImageWithMap />
+          <ImageShowHorizontal images={CAR_IMAGES} />
           {/* 데칼 사진들 */}
           <RelatedDecals />
           {/* TODO: 관련 튜닝 */}
