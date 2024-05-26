@@ -26,8 +26,7 @@ import { Image } from './styled';
 export default function CarSearch() {
   const [_, searchResults, isSearchOptionEmpty] = useCarSearchFilters();
 
-  const totalCars = 843;
-  totalCars;
+  const TOTAL_CARS = 843;
 
   const totalCarString = (num: number) => `Total ${num} cars`;
   if (true) {
@@ -38,7 +37,7 @@ export default function CarSearch() {
         <FlexBox sx={{ height: 30, alignItems: 'center' }}>
           <Typography variant="h6">
             {isSearchOptionEmpty
-              ? totalCarString(843)
+              ? totalCarString(TOTAL_CARS)
               : searchResults
                 ? totalCarString(searchResults.length)
                 : 'searching...'}

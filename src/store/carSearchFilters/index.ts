@@ -148,10 +148,12 @@ export async function getCarData({
     const allKeys = smallestArray.filter((k) => pks.map((ks) => ks.includes(k)).every((x) => x));
     // console.log(`allKeys : ${allKeys}`);
     searchResultKeys = [...allKeys];
+  } else {
+    searchResultKeys = await db.car.offset(0).primaryKeys();
   }
   if (div || boo || rar) {
     const fh5_query = [];
-    if (div) fh5_query.push(db.carFH5.where('divison').anyOfIgnoreCase(division).primaryKeys());
+    if (div) fh5_query.push(db.carFH5.where('division').anyOfIgnoreCase(division).primaryKeys());
     if (boo) fh5_query.push(db.carFH5.where('boost').anyOfIgnoreCase(boost).primaryKeys());
     if (rar) fh5_query.push(db.carFH5.where('rarity').anyOfIgnoreCase(rarity).primaryKeys());
 
