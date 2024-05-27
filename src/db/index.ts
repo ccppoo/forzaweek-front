@@ -2,7 +2,7 @@ import Dexie, { Table } from 'dexie';
 
 import type { CarImages, CarInfo, FH5_info } from '@/types/car';
 
-import { Car, CarImage, FH5_STAT } from './schema';
+import { Car, CarImage, FH5_STAT, Track } from './schema';
 
 /**
  * 1. ++	Auto-incremented primary key
@@ -15,6 +15,7 @@ export class ForzaWeekDB extends Dexie {
   car!: Table<Car>;
   carFH5!: Table<FH5_STAT>; // id -> car's ID
   carImage!: Table<CarImage>; // id -> car's ID
+  track!: Table<Track>;
 
   constructor() {
     super('frozaweekDB');
@@ -22,6 +23,7 @@ export class ForzaWeekDB extends Dexie {
       car: '++id,name, year, country,driveTrain,door,engine,manufacture,bodyStyle',
       carFH5: '&id,division,rarity,boost,PI',
       carImage: '&id',
+      track: '++id, name, trackType,courseType,ko,en',
     });
   }
 }
