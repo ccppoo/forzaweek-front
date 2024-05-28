@@ -11,7 +11,9 @@ import Meta from '@/components/Meta';
 import { FlexBox, FullSizeCenteredFlexBox } from '@/components/styled';
 import { imageMatch } from '@/data/cars';
 import carData from '@/data/cars.json';
+import trackData from '@/data/track.json';
 import { db } from '@/db';
+import { Track } from '@/db/schema';
 
 import { Image } from './styled';
 
@@ -32,7 +34,6 @@ export type FH5_info = {
 export type CarInfo = {
   manufacture: string;
   year: number;
-
   country: string;
   name: string;
   model: string;
@@ -41,6 +42,17 @@ export type CarInfo = {
   door: number;
   engine: string;
   FH5: FH5_info;
+};
+
+export type TrackInfo = {
+  name: string;
+  name_en: string;
+  ko_sound: string;
+  en_sound: string;
+  ko_trans: string;
+  en_trans: string;
+  trackType: string;
+  courseType: string;
 };
 
 function Dev() {
@@ -79,10 +91,23 @@ function Dev() {
         braking: cardata.FH5.braking,
         offroad: cardata.FH5.offroad,
       });
+
       await db.carImage.add({
         id: carID,
         main: imageMatch[cardata.name] || image.car.hyundaii30n,
         images: [],
+      });
+    });
+    trackData.forEach(async (trackata: TrackInfo) => {
+      const trackID = await db.track.add({
+        name: trackata.name,
+        name_en: trackata.name_en,
+        ko_sound: trackata.ko_sound,
+        en_sound: trackata.en_sound,
+        ko_trans: trackata.ko_trans,
+        en_trans: trackata.en_trans,
+        trackType: trackata.trackType,
+        courseType: trackata.courseType,
       });
     });
     setMSG('data inserted');
