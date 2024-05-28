@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { FixedSizeList, ListChildComponentProps } from 'react-window';
 
 import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlined';
 import FavoriteOutlinedIcon from '@mui/icons-material/FavoriteOutlined';
@@ -16,6 +17,9 @@ import FormControl from '@mui/material/FormControl';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormGroup from '@mui/material/FormGroup';
 import IconButton from '@mui/material/IconButton';
+import ListItem from '@mui/material/ListItem';
+import ListItemButton from '@mui/material/ListItemButton';
+import ListItemText from '@mui/material/ListItemText';
 import ListSubheader from '@mui/material/ListSubheader';
 import MenuItem from '@mui/material/MenuItem';
 import OutlinedInput from '@mui/material/OutlinedInput';
@@ -356,9 +360,46 @@ function TuningCarFinalSelect() {
     </FlexBox>
   );
 }
+
+function renderRow(props: ListChildComponentProps) {
+  const { index, style } = props;
+
+  return (
+    <>
+      <ListSubheader>{`I'm sticky ${2}`}</ListSubheader>
+
+      <ListItem style={style} key={index} component="div" disablePadding>
+        <ListItemButton>
+          <ListItemText primary={`Item ${index + 1}`} />
+        </ListItemButton>
+      </ListItem>
+    </>
+  );
+}
+
+function ManufactureList() {
+  return (
+    <Box sx={{ width: '40%', height: 400, maxWidth: 360, bgcolor: 'background.paper' }}>
+      <FixedSizeList height={400} width={2} itemSize={46} itemCount={200} overscanCount={5}>
+        {renderRow}
+      </FixedSizeList>
+    </Box>
+  );
+}
+
+function CarList() {
+  return (
+    <Box sx={{ width: '60%', height: 400, maxWidth: 360, bgcolor: 'background.paper' }}>
+      <FixedSizeList height={400} width={360} itemSize={46} itemCount={200} overscanCount={5}>
+        {renderRow}
+      </FixedSizeList>
+    </Box>
+  );
+}
 async function getCarData(): Promise<Car[]> {
   return await db.car.toArray();
 }
+
 function TuningCarSearchBar() {
   // 직접 검색해서 찾을 수 있는 검색 바
   const options = useLiveQuery(getCarData) || [];
@@ -399,7 +440,7 @@ function TuningCarSearchBar() {
   );
 }
 
-export default function TuningCarSelection() {
+export default function DecalCarSelection() {
   const [personName, setPersonName] = useState<string[]>([]);
   const handleChange = (event: SelectChangeEvent<typeof personName>) => {
     const {

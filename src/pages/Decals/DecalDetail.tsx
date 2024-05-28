@@ -17,6 +17,7 @@ import Grid from '@mui/material/Unstable_Grid2';
 import { styled } from '@mui/material/styles';
 
 import * as image from '@/image';
+import Comments, { Reply } from '@/components/Comment';
 import { ImageShowHorizontal } from '@/components/ImageList';
 import { FlexBox, FullSizeCenteredFlexBox } from '@/components/styled';
 import { decalsWithImage } from '@/data/decals';
@@ -571,11 +572,13 @@ export default function DecalDetail() {
   const decalData = decalsWithImage[3];
   // DecalData;
   return (
-    <Container sx={{ height: '130vh', marginTop: 40 }}>
+    <Container sx={{ paddingTop: 5 }}>
       <FullSizeCenteredFlexBox
-        sx={{
-          height: '100%',
-        }}
+        sx={
+          {
+            // height: '100%',
+          }
+        }
       >
         <FlexBox
           sx={{
@@ -583,7 +586,6 @@ export default function DecalDetail() {
             maxWidth: 1200,
             flexDirection: 'column',
             paddingY: 2,
-            marginTop: 20,
             paddingX: 2,
             rowGap: 2,
           }}
@@ -598,6 +600,8 @@ export default function DecalDetail() {
           <ImageShowHorizontal images={decalData.images} />
           {/* 데칼에 사용된 차 간단 정보 */}
           <BaseCarInfo />
+          {/* 댓글 */}
+          <Comments />
           {/* 다른 데칼 */}
           <DecalCellListing />
         </FlexBox>

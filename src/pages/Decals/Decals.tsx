@@ -20,6 +20,7 @@ import { decalsWithImage } from '@/data/decals';
 import type { DecalData } from '@/data/decals';
 import { decals as decalImages } from '@/image/decal';
 
+import DecalCarSelection from './DecalCarSearchFilter';
 import { Image } from './styled';
 
 const carinfo = {
@@ -287,18 +288,10 @@ function DecalRowListing() {
 export default function Decals() {
   const navigate = useNavigate();
 
-  const WIDTH = '100%';
-  const HEIGHT = 200;
-  const name = carinfo.name;
-  const manufacturer = carinfo.manufacture;
-  const year = carinfo.year;
-  const description = 'design of Hyundai elantra, its my style';
-  const maker = 'DecalMaster';
-  const share_code = '123 123 123';
-
   return (
-    <Container sx={{ height: '120vh' }}>
-      <FullSizeCenteredFlexBox sx={{}}>
+    <Container sx={{ paddingTop: 5 }}>
+      <FullSizeCenteredFlexBox sx={{ flexDirection: 'column' }}>
+        <DecalCarSelection />
         <DecalCellListing />
       </FullSizeCenteredFlexBox>
     </Container>
