@@ -1,0 +1,902 @@
+[
+  {
+    "name": "Horizon Mexico Circuit",
+    "name_en": "Horizon Mexico Circuit",
+    "ko_sound": "호라이즌 멕시코 서킷",
+    "en_sound": "Horizon Mexico Circuit",
+    "ko_trans": "",
+    "en_trans": "",
+    "trackType": "road racing",
+    "courseType": "circuit"
+  },
+  {
+    "name": "Bahía De Plano Circuit",
+    "name_en": "Bahia De Plano Circuit",
+    "ko_sound": "바이아 데 플라노 서킷",
+    "en_sound": "Bahia De Plano Circuit",
+    "ko_trans": "플라노 만 서킷",
+    "en_trans": "Plano Bay Circuit",
+    "trackType": "road racing",
+    "courseType": "circuit"
+  },
+  {
+    "name": "Dunas Blancas Sprint",
+    "name_en": "Dunas Blancas Sprint",
+    "ko_sound": "두나 블랑카스 질주",
+    "en_sound": "Dunas Blancas Sprint",
+    "ko_trans": "하얀 모래언덕 질주",
+    "en_trans": "White Dunes Sprint",
+    "trackType": "road racing",
+    "courseType": "sprint"
+  },
+  {
+    "name": "Emerald Circuit",
+    "name_en": "Emerald Circuit",
+    "ko_sound": "에메랄드 서킷",
+    "en_sound": "Emerald Circuit",
+    "ko_trans": "",
+    "en_trans": "",
+    "trackType": "road racing",
+    "courseType": "circuit"
+  },
+  {
+    "name": "Descansar Dorado Sprint",
+    "name_en": "Descansar Dorado Sprint",
+    "ko_sound": "데스칸사르 도라도 질주",
+    "en_sound": "Descansar Dorado Sprint",
+    "ko_trans": "황금 휴식 질주",
+    "en_trans": "Golden Rest Sprint",
+    "trackType": "road racing",
+    "courseType": "sprint"
+  },
+  {
+    "name": "Arch of Mulegé Circuit",
+    "name_en": "Arch of Mulege Circuit",
+    "ko_sound": "물레헤 아치 서킷",
+    "en_sound": "Arch of Mulege Circuit",
+    "ko_trans": "",
+    "en_trans": "",
+    "trackType": "road racing",
+    "courseType": "circuit"
+  },
+  {
+    "name": "Sierra Verde Sprint",
+    "name_en": "Sierra Verde Sprint",
+    "ko_sound": "시에라 베르데 질주",
+    "en_sound": "Sierra Verde Sprint",
+    "ko_trans": "초록 산맥 질주",
+    "en_trans": "Green Mountain Range Sprint",
+    "trackType": "road racing",
+    "courseType": "sprint"
+  },
+  {
+    "name": "Reservorio Sprint",
+    "name_en": "Reservorio Sprint",
+    "ko_sound": "레세르보리오 질주",
+    "en_sound": "Reservorio Sprint",
+    "ko_trans": "저수지 질주",
+    "en_trans": "Reservoir Sprint",
+    "trackType": "road racing",
+    "courseType": "sprint"
+  },
+  {
+    "name": "Llanuras Sprint",
+    "name_en": "Llanuras Sprint",
+    "ko_sound": "야누라스 질주",
+    "en_sound": "Llanuras Sprint",
+    "ko_trans": "평야 질주",
+    "en_trans": "Plains Sprint",
+    "trackType": "road racing",
+    "courseType": "sprint"
+  },
+  {
+    "name": "Gran Pantano Sprint",
+    "name_en": "Gran Pantano Sprint",
+    "ko_sound": "그란 판타노 질주",
+    "en_sound": "Gran Pantano Sprint",
+    "ko_trans": "큰 늪 질주",
+    "en_trans": "Great Swamp Sprint",
+    "trackType": "road racing",
+    "courseType": "sprint"
+  },
+  {
+    "name": "The Colossus",
+    "name_en": "The Colossus",
+    "ko_sound": "거대한 조각상",
+    "en_sound": "The Colossus",
+    "ko_trans": "",
+    "en_trans": "",
+    "trackType": "road racing",
+    "courseType": "colossus"
+  },
+  {
+    "name": "The Goliath",
+    "name_en": "The Goliath",
+    "ko_sound": "골리앗",
+    "en_sound": "The Goliath",
+    "ko_trans": "",
+    "en_trans": "",
+    "trackType": "road racing",
+    "courseType": "goliath"
+  },
+  {
+    "name": "Playa Azul Circuit",
+    "name_en": "Playa Azul Circuit",
+    "ko_sound": "플라야 아줄 서킷",
+    "en_sound": "Playa Azul Circuit",
+    "ko_trans": "푸른 해변 서킷",
+    "en_trans": "Blue Beach Circuit",
+    "trackType": "road racing",
+    "courseType": "circuit"
+  },
+  {
+    "name": "Los Jardines Circuit",
+    "name_en": "Los Jardines Circuit",
+    "ko_sound": "로스 하르디네스 서킷",
+    "en_sound": "Los Jardines Circuit",
+    "ko_trans": "정원 서킷",
+    "en_trans": "The Garden Circuit",
+    "trackType": "road racing",
+    "courseType": "circuit"
+  },
+  {
+    "name": "Riviera Sprint",
+    "name_en": "Riviera Sprint",
+    "ko_sound": "리비에라 질주",
+    "en_sound": "Riviera Sprint",
+    "ko_trans": "",
+    "en_trans": "",
+    "trackType": "road racing",
+    "courseType": "sprint"
+  },
+  {
+    "name": "Chihuahua Circuit",
+    "name_en": "Chihuahua Circuit",
+    "ko_sound": "치와와 서킷",
+    "en_sound": "Chihuahua Circuit",
+    "ko_trans": "",
+    "en_trans": "",
+    "trackType": "road racing",
+    "courseType": "circuit"
+  },
+  {
+    "name": "Tierra Próspera Circuit",
+    "name_en": "Tierra Prospera Circuit",
+    "ko_sound": "티에라 프로스페라 서킷",
+    "en_sound": "Tierra Prospera Circuit",
+    "ko_trans": "번영하는 땅 서킷",
+    "en_trans": "Prosperous Land Circuit",
+    "trackType": "road racing",
+    "courseType": "circuit"
+  },
+  {
+    "name": "Estadio Circuit",
+    "name_en": "Estadio Circuit",
+    "ko_sound": "에스타디오 서킷",
+    "en_sound": "Estadio Circuit",
+    "ko_trans": "경기장 서킷",
+    "en_trans": "Stadium Circuit",
+    "trackType": "road racing",
+    "courseType": "circuit"
+  },
+  {
+    "name": "Bola Ocho Circuit",
+    "name_en": "Bola Ocho Circuit",
+    "ko_sound": "볼라 오초 서킷",
+    "en_sound": "Bola Ocho Circuit",
+    "ko_trans": "8 공 서킷",
+    "en_trans": "Eight Ball Circuit",
+    "trackType": "road racing",
+    "courseType": "circuit"
+  },
+  {
+    "name": "Cathedral Circuit",
+    "name_en": "Cathedral Circuit",
+    "ko_sound": "대성당 서킷",
+    "en_sound": "Cathedral Circuit",
+    "ko_trans": "",
+    "en_trans": "",
+    "trackType": "road racing",
+    "courseType": "circuit"
+  },
+  {
+    "name": "Panorámica Sprint",
+    "name_en": "Panoramica Sprint",
+    "ko_sound": "파노라미카 질주",
+    "en_sound": "Panoramica Sprint",
+    "ko_trans": "파노라마 질주",
+    "en_trans": "Panoramic Sprint",
+    "trackType": "road racing",
+    "courseType": "circuit"
+  },
+  {
+    "name": "Volcán Sprint",
+    "name_en": "Volcan Sprint",
+    "ko_sound": "볼칸 질주",
+    "en_sound": "Volcan Sprint",
+    "ko_trans": "화산 질주",
+    "en_trans": "Volcano Sprint",
+    "trackType": "road racing",
+    "courseType": "sprint"
+  },
+  {
+    "name": "Plaza Circuit",
+    "name_en": "Plaza Circuit",
+    "ko_sound": "플라자 서킷",
+    "en_sound": "Plaza Circuit",
+    "ko_trans": "광장 서킷",
+    "en_trans": "Square Circuit",
+    "trackType": "road racing",
+    "courseType": "circuit"
+  },
+  {
+    "name": "Copper Canyon Sprint",
+    "name_en": "Copper Canyon Sprint",
+    "ko_sound": "구리 협곡 질주",
+    "en_sound": "Copper Canyon Sprint",
+    "ko_trans": "",
+    "en_trans": "",
+    "trackType": "road racing",
+    "courseType": "sprint"
+  },
+  {
+    "name": "Lookout Circuit",
+    "name_en": "Lookout Circuit",
+    "ko_sound": "전망대 서킷",
+    "en_sound": "Lookout Circuit",
+    "ko_trans": "",
+    "en_trans": "",
+    "trackType": "road racing",
+    "courseType": "circuit"
+  },
+  {
+    "name": "Horizon Baja Scramble",
+    "name_en": "Horizon Baja Scramble",
+    "ko_sound": "Horizon 바하 스크램블",
+    "en_sound": "Horizon Baja Scramble",
+    "ko_trans": "낮은 지평선 스크램블",
+    "en_trans": "Low Horizon Scramble",
+    "trackType": "dirt racing",
+    "courseType": "scramble"
+  },
+  {
+    "name": "Baja California Trail",
+    "name_en": "Baja California Trail",
+    "ko_sound": "바하 칼리포르니아 트레일",
+    "en_sound": "Baja California Trail",
+    "ko_trans": "낮은 캘리포니아 트레일",
+    "en_trans": "Lower California Trail",
+    "trackType": "dirt racing",
+    "courseType": "trail"
+  },
+  {
+    "name": "Caldera Scramble",
+    "name_en": "Caldera Scramble",
+    "ko_sound": "칼데라 스크램블",
+    "en_sound": "Caldera Scramble",
+    "ko_trans": "",
+    "en_trans": "",
+    "trackType": "dirt racing",
+    "courseType": "scramble"
+  },
+  {
+    "name": "Montaña Trail",
+    "name_en": "Montana Trail",
+    "ko_sound": "몬타냐 트레일",
+    "en_sound": "Montana Trail",
+    "ko_trans": "산 트레일",
+    "en_trans": "Mountain Trail",
+    "trackType": "dirt racing",
+    "courseType": "trail"
+  },
+  {
+    "name": "Fuera Del Camino Trail",
+    "name_en": "Fuera Del Camino Trail",
+    "ko_sound": "푸에라 델 카미노 트레일",
+    "en_sound": "Fuera Del Camino Trail",
+    "ko_trans": "평범한 길에서 벗어난 트레일",
+    "en_trans": "Off the Beaten Path Trail",
+    "trackType": "dirt racing",
+    "courseType": "trail"
+  },
+  {
+    "name": "El Pípila Scramble",
+    "name_en": "El Pipila Scramble",
+    "ko_sound": "엘 피필라 스크램블",
+    "en_sound": "El Pipila Scramble",
+    "ko_trans": "불꽃을 들고 있는 사람 스크램블",
+    "en_trans": "The Torchbearer Scramble",
+    "trackType": "dirt racing",
+    "courseType": "scramble"
+  },
+  {
+    "name": "Bajío Trail",
+    "name_en": "Bajio Trail",
+    "ko_sound": "바히오 트레일",
+    "en_sound": "Bajio Trail",
+    "ko_trans": "저지대 트레일",
+    "en_trans": "Lowlands Trail",
+    "trackType": "dirt racing",
+    "courseType": "trail"
+  },
+  {
+    "name": "Barranca Trail",
+    "name_en": "Barranca Trail",
+    "ko_sound": "바란카 트레일",
+    "en_sound": "Barranca Trail",
+    "ko_trans": "협곡 트레일",
+    "en_trans": "Ravine Trail",
+    "trackType": "dirt racing",
+    "courseType": "trail"
+  },
+  {
+    "name": "The Gauntlet",
+    "name_en": "The Gauntlet",
+    "ko_sound": "시련",
+    "en_sound": "The Gauntlet",
+    "ko_trans": "",
+    "en_trans": "",
+    "trackType": "dirt racing",
+    "courseType": "gauntlet"
+  },
+  {
+    "name": "Mangrove Scramble",
+    "name_en": "Mangrove Scramble",
+    "ko_sound": "맹그로브 스크램블",
+    "en_sound": "Mangrove Scramble",
+    "ko_trans": "",
+    "en_trans": "",
+    "trackType": "dirt racing",
+    "courseType": "scramble"
+  },
+  {
+    "name": "Tulum Trail",
+    "name_en": "Tulum Trail",
+    "ko_sound": "툴룸 트레일",
+    "en_sound": "Tulum Trail",
+    "ko_trans": "",
+    "en_trans": "",
+    "trackType": "dirt racing",
+    "courseType": "trail"
+  },
+  {
+    "name": "Tapalpa Trail",
+    "name_en": "Tapalpa Trail",
+    "ko_sound": "타팔파 트레일",
+    "en_sound": "Tapalpa Trail",
+    "ko_trans": "",
+    "en_trans": "",
+    "trackType": "dirt racing",
+    "courseType": "trail"
+  },
+  {
+    "name": "Teotihuacán Scramble",
+    "name_en": "Teotihuacan Scramble",
+    "ko_sound": "테오티우아칸 스크램블",
+    "en_sound": "Teotihuacan Scramble",
+    "ko_trans": "",
+    "en_trans": "",
+    "trackType": "dirt racing",
+    "courseType": "trail"
+  },
+  {
+    "name": "Desierto Trail",
+    "name_en": "Desierto Trail",
+    "ko_sound": "데시에르토 트레일",
+    "en_sound": "Desierto Trail",
+    "ko_trans": "사막 트레일",
+    "en_trans": "Desert Trail",
+    "trackType": "dirt racing",
+    "courseType": "trail"
+  },
+  {
+    "name": "San Juan Scramble",
+    "name_en": "San Juan Scramble",
+    "ko_sound": "산 후안 스크램블",
+    "en_sound": "San Juan Scramble",
+    "ko_trans": "",
+    "en_trans": "",
+    "trackType": "dirt racing",
+    "courseType": "scramble"
+  },
+  {
+    "name": "Mulegé Town Scramble",
+    "name_en": "Mulege Town Scramble",
+    "ko_sound": "물레헤 타운 스크램블",
+    "en_sound": "Mulege Town Scramble",
+    "ko_trans": "",
+    "en_trans": "",
+    "trackType": "dirt racing",
+    "courseType": "scramble"
+  },
+  {
+    "name": "Cordillera Trail",
+    "name_en": "Cordillera Trail",
+    "ko_sound": "코르딜레라 트레일",
+    "en_sound": "Cordillera Trail",
+    "ko_trans": "산맥 트레일",
+    "en_trans": "Mountain Range Trail",
+    "trackType": "dirt racing",
+    "courseType": "trail"
+  },
+  {
+    "name": "River Scramble",
+    "name_en": "River Scramble",
+    "ko_sound": "강가 스크램블",
+    "en_sound": "River Scramble",
+    "ko_trans": "",
+    "en_trans": "",
+    "trackType": "dirt racing",
+    "courseType": "scramble"
+  },
+  {
+    "name": "La Selva Scramble",
+    "name_en": "La Selva Scramble",
+    "ko_sound": "라 셀바 스크램블",
+    "en_sound": "La Selva Scramble",
+    "ko_trans": "밀림 스크램블",
+    "en_trans": "The Jungle Scramble",
+    "trackType": "dirt racing",
+    "courseType": "scramble"
+  },
+  {
+    "name": "Cascada Trail",
+    "name_en": "Cascada Trail",
+    "ko_sound": "카스카다 트레일",
+    "en_sound": "Cascada Trail",
+    "ko_trans": "폭포 트레일",
+    "en_trans": "Waterfall Trail",
+    "trackType": "dirt racing",
+    "courseType": "trail"
+  },
+  {
+    "name": "Baja Cross Country Circuit",
+    "name_en": "Baja Cross Country Circuit",
+    "ko_sound": "바하 크로스 컨트리 서킷",
+    "en_sound": "Baja Cross Country Circuit",
+    "ko_trans": "저지대 크로스 컨트리 서킷",
+    "en_trans": "Lowlands Cross Country Circuit",
+    "trackType": "cross country",
+    "courseType": "circuit"
+  },
+  {
+    "name": "Las Dunas Cross Country",
+    "name_en": "Las Dunas Cross Country",
+    "ko_sound": "라스 두나스 크로스 컨트리",
+    "en_sound": "Las Dunas Cross Country",
+    "ko_trans": "모레언덕 크로스 컨트리",
+    "en_trans": "The Dunes Cross Country",
+    "trackType": "cross country",
+    "courseType": "cross country"
+  },
+  {
+    "name": "El Descenso Cross Country",
+    "name_en": "El Descenso Cross Country",
+    "ko_sound": "엘 데스텐소 크로스 컨트리",
+    "en_sound": "El Descenso Cross Country",
+    "ko_trans": "하강 크로스 컨트리",
+    "en_trans": "The Descent Cross Country",
+    "trackType": "cross country",
+    "courseType": "cross country"
+  },
+  {
+    "name": "The Titan",
+    "name_en": "The Titan",
+    "ko_sound": "타이탄",
+    "en_sound": "The Titan",
+    "ko_trans": "",
+    "en_trans": "",
+    "trackType": "cross country",
+    "courseType": "titan"
+  },
+  {
+    "name": "The Juggernaut",
+    "name_en": "The Juggernaut",
+    "ko_sound": "저거너트",
+    "en_sound": "The Juggernaut",
+    "ko_trans": "",
+    "en_trans": "",
+    "trackType": "cross country",
+    "courseType": "juggernaut"
+  },
+  {
+    "name": "Ribera Rocosa Cross Country",
+    "name_en": "Ribera Rocosa Cross Country",
+    "ko_sound": "리베라 로코사 크로스 컨트리",
+    "en_sound": "Ribera Rocosa Cross Country",
+    "ko_trans": "돌 바닷가 크로스 컨트리",
+    "en_trans": "Rocky Shore Cross Country",
+    "trackType": "cross country",
+    "courseType": "cross country"
+  },
+  {
+    "name": "Costera Cross Country Circuit",
+    "name_en": "Costera Cross Country Circuit",
+    "ko_sound": "코스테라 크로스 컨트리 서킷",
+    "en_sound": "Costera Cross Country Circuit",
+    "ko_trans": "해안가 크로스 컨트리 서킷",
+    "en_trans": "Coastal Cross Country Circuit",
+    "trackType": "cross country",
+    "courseType": "circuit"
+  },
+  {
+    "name": "Airfield Cross Country Circuit",
+    "name_en": "Airfield Cross Country Circuit",
+    "ko_sound": "비행장 크로스 컨트리 서킷",
+    "en_sound": "Airfield Cross Country Circuit",
+    "ko_trans": "",
+    "en_trans": "",
+    "trackType": "cross country",
+    "courseType": "circuit"
+  },
+  {
+    "name": "Granjas Cross Country",
+    "name_en": "Granjas Cross Country",
+    "ko_sound": "라스 그랑하스 크로스 컨트리",
+    "en_sound": "Granjas Cross Country",
+    "ko_trans": "농장 크로스 컨트리",
+    "en_trans": "Farms Cross Country",
+    "trackType": "cross country",
+    "courseType": "cross country"
+  },
+  {
+    "name": "Herencia Cross Country Circuit",
+    "name_en": "Herencia Cross Country Circuit",
+    "ko_sound": "헤렌시아 크로스 컨트리 서킷",
+    "en_sound": "Herencia Cross Country Circuit",
+    "ko_trans": "유산 크로스 컨트리 서킷",
+    "en_trans": "Heritage Cross Country Circuit",
+    "trackType": "cross country",
+    "courseType": "circuit"
+  },
+  {
+    "name": "Restos Cross Country",
+    "name_en": "Restos Cross Country",
+    "ko_sound": "레스토스 크로스 컨트리",
+    "en_sound": "Restos Cross Country",
+    "ko_trans": "유적 크로스 컨트리",
+    "en_trans": "Remains Cross Country",
+    "trackType": "cross country",
+    "courseType": "cross country"
+  },
+  {
+    "name": "Trópico Cross Country",
+    "name_en": "Tropico Cross Country",
+    "ko_sound": "트로피코 크로스 컨트리",
+    "en_sound": "Tropico Cross Country",
+    "ko_trans": "열대 크로스 컨트리",
+    "en_trans": "Tropic Cross Country",
+    "trackType": "cross country",
+    "courseType": "cross country"
+  },
+  {
+    "name": "Ek' Balam Cross Country Circuit",
+    "name_en": "Ek Balam Cross Country Circuit",
+    "ko_sound": "에크 발람 크로스 컨트리 서킷",
+    "en_sound": "Ek Balam Cross Country Circuit",
+    "ko_trans": "",
+    "en_trans": "",
+    "trackType": "cross country",
+    "courseType": "circuit"
+  },
+  {
+    "name": "Estadio Cross Country Circuit",
+    "name_en": "Estadio Cross Country Circuit",
+    "ko_sound": "에스타디오 크로스 컨트리 서킷",
+    "en_sound": "Estadio Cross Country Circuit",
+    "ko_trans": "경기장 크로스 컨트리 서킷",
+    "en_trans": "Stadium Cross Country Circuit",
+    "trackType": "cross country",
+    "courseType": "circuit"
+  },
+  {
+    "name": "Urban Cross Country Circuit",
+    "name_en": "Urban Cross Country Circuit",
+    "ko_sound": "도시 크로스 컨트리 서킷",
+    "en_sound": "Urban Cross Country Circuit",
+    "ko_trans": "",
+    "en_trans": "",
+    "trackType": "cross country",
+    "courseType": "circuit"
+  },
+  {
+    "name": "Copper Canyon Cross Country",
+    "name_en": "Copper Canyon Cross Country",
+    "ko_sound": "구리 협곡 크로스 컨트리",
+    "en_sound": "Copper Canyon Cross Country",
+    "ko_trans": "",
+    "en_trans": "",
+    "trackType": "cross country",
+    "courseType": "cross country"
+  },
+  {
+    "name": "Foto Final Cross Country",
+    "name_en": "Foto Final Cross Country",
+    "ko_sound": "포토 파이널 크로스 컨트리",
+    "en_sound": "Foto Final Cross Country",
+    "ko_trans": "포토 파이널 크로스 컨트리",
+    "en_trans": "Photo Final Cross Country",
+    "trackType": "cross country",
+    "courseType": "cross country"
+  },
+  {
+    "name": "Las Ranas Cross Country",
+    "name_en": "Las Ranas Cross Country",
+    "ko_sound": "라스 라나스 크로스 컨트리",
+    "en_sound": "Las Ranas Cross Country",
+    "ko_trans": "개구리 크로스 컨트리",
+    "en_trans": "The Frogs Cross Country",
+    "trackType": "cross country",
+    "courseType": "cross country"
+  },
+  {
+    "name": "Costa Este Cross Country",
+    "name_en": "Costa Este Cross Country",
+    "ko_sound": "코스타 에스테 크로스 컨트리",
+    "en_sound": "Costa Este Cross Country",
+    "ko_trans": "동해안 크로스 컨트리",
+    "en_trans": "East Coast Cross Country",
+    "trackType": "cross country",
+    "courseType": "cross country"
+  },
+  {
+    "name": "Oasis Cross Country",
+    "name_en": "Oasis Cross Country",
+    "ko_sound": "오아시스 크로스 컨트리",
+    "en_sound": "Oasis Cross Country",
+    "ko_trans": "",
+    "en_trans": "",
+    "trackType": "cross country",
+    "courseType": "cross country"
+  },
+  {
+    "name": "Festival Cross Country",
+    "name_en": "Festival Cross Country",
+    "ko_sound": "페스티벌 크로스 컨트리",
+    "en_sound": "Festival Cross Country",
+    "ko_trans": "",
+    "en_trans": "",
+    "trackType": "cross country",
+    "courseType": "cross country"
+  },
+  {
+    "name": "Ruta Norte",
+    "name_en": "Ruta Norte",
+    "ko_sound": "루나 노르테",
+    "en_sound": "Ruta Norte",
+    "ko_trans": "북부 노선",
+    "en_trans": "North Route",
+    "trackType": "street racing",
+    "courseType": "street racing"
+  },
+  {
+    "name": "El Lago Blanco",
+    "name_en": "El Lago Blanco",
+    "ko_sound": "엘 라고 블랑코",
+    "en_sound": "El Lago Blanco",
+    "ko_trans": "하얀 호수",
+    "en_trans": "The White Lake",
+    "trackType": "street racing",
+    "courseType": "street racing"
+  },
+  {
+    "name": "Castillo Del Mar",
+    "name_en": "Castillo Del Mar",
+    "ko_sound": "카스티요 델 마르",
+    "en_sound": "Castillo Del Mar",
+    "ko_trans": "바다의 성",
+    "en_trans": "Castle of the Sea",
+    "trackType": "street racing",
+    "courseType": "street racing"
+  },
+  {
+    "name": "Costa Rocosa",
+    "name_en": "Costa Rocosa",
+    "ko_sound": "코스타 로코사",
+    "en_sound": "Costa Rocosa",
+    "ko_trans": "바위 바닷가",
+    "en_trans": "Rocky Coast",
+    "trackType": "street racing",
+    "courseType": "street racing"
+  },
+  {
+    "name": "Highland Climb",
+    "name_en": "Highland Climb",
+    "ko_sound": "하이랜드 오르막",
+    "en_sound": "Highland Climb",
+    "ko_trans": "",
+    "en_trans": "",
+    "trackType": "street racing",
+    "courseType": "street racing"
+  },
+  {
+    "name": "Jungle Descent",
+    "name_en": "Jungle Descent",
+    "ko_sound": "밀림 내리막",
+    "en_sound": "Jungle Descent",
+    "ko_trans": "",
+    "en_trans": "",
+    "trackType": "street racing",
+    "courseType": "street racing"
+  },
+  {
+    "name": "Granjas De Tapalpa",
+    "name_en": "Granjas De Tapalpa",
+    "ko_sound": "그랑하스 데 타팔파",
+    "en_sound": "Granjas De Tapalpa",
+    "ko_trans": "타팔파 농장",
+    "en_trans": "Tapalpa Farms",
+    "trackType": "street racing",
+    "courseType": "street racing"
+  },
+  {
+    "name": "Carretera Chase",
+    "name_en": "Carretera Chase",
+    "ko_sound": "카레테라 추격",
+    "en_sound": "Carretera Chase",
+    "ko_trans": "고속도로 추격",
+    "en_trans": "Highway Chase",
+    "trackType": "street racing",
+    "courseType": "street racing"
+  },
+  {
+    "name": "Bosque Del Sur",
+    "name_en": "Bosque Del Sur",
+    "ko_sound": "보스크 델 수르",
+    "en_sound": "Bosque Del Sur",
+    "ko_trans": "남쪽 숲",
+    "en_trans": "Southern Forest",
+    "trackType": "street racing",
+    "courseType": "street racing"
+  },
+  {
+    "name": "Wetland Charge",
+    "name_en": "Wetland Charge",
+    "ko_sound": "습지 돌진",
+    "en_sound": "Wetland Charge",
+    "ko_trans": "",
+    "en_trans": "",
+    "trackType": "street racing",
+    "courseType": "street racing"
+  },
+  {
+    "name": "Coast Run",
+    "name_en": "Coast Run",
+    "ko_sound": "해안 런",
+    "en_sound": "Coast Run",
+    "ko_trans": "",
+    "en_trans": "",
+    "trackType": "street racing",
+    "courseType": "street racing"
+  },
+  {
+    "name": "The Marathon",
+    "name_en": "The Marathon",
+    "ko_sound": "마라톤",
+    "en_sound": "The Marathon",
+    "ko_trans": "",
+    "en_trans": "",
+    "trackType": "street racing",
+    "courseType": "marathon"
+  },
+  {
+    "name": "Horizon Callejera",
+    "name_en": "Horizon Callejera",
+    "ko_sound": "Horizon 카예헤라",
+    "en_sound": "Horizon Callejera",
+    "ko_trans": "길거리 지평선",
+    "en_trans": "Street Horizon",
+    "trackType": "street racing",
+    "courseType": "street racing"
+  },
+  {
+    "name": "Las Laderas",
+    "name_en": "Las Laderas",
+    "ko_sound": "라스 라데라스",
+    "en_sound": "Las Laderas",
+    "ko_trans": "비탈길",
+    "en_trans": "The Slopes",
+    "trackType": "street racing",
+    "courseType": "street racing"
+  },
+  {
+    "name": "Cruce Del Valle",
+    "name_en": "Cruce Del Valle",
+    "ko_sound": "크루스 델 바예",
+    "en_sound": "Cruce Del Valle",
+    "ko_trans": "계곡 교차로",
+    "en_trans": "Valley Crossroads",
+    "trackType": "street racing",
+    "courseType": "street racing"
+  },
+  {
+    "name": "Guanajuato Sur",
+    "name_en": "Guanajuato Sur",
+    "ko_sound": "과나후아토 수르",
+    "en_sound": "Guanajuato Sur",
+    "ko_trans": "과나후아토 남쪽",
+    "en_trans": "South Guanajuato",
+    "trackType": "street racing",
+    "courseType": "street racing"
+  },
+  {
+    "name": "Tunnel Run",
+    "name_en": "Tunnel Run",
+    "ko_sound": "터널 런",
+    "en_sound": "Tunnel Run",
+    "ko_trans": "",
+    "en_trans": "",
+    "trackType": "street racing",
+    "courseType": "street racing"
+  },
+  {
+    "name": "Las Afueras",
+    "name_en": "Las Afueras",
+    "ko_sound": "라스 아푸에라스",
+    "en_sound": "Las Afueras",
+    "ko_trans": "마을 외곽",
+    "en_trans": "The Outskirts",
+    "trackType": "street racing",
+    "courseType": "street racing"
+  },
+  {
+    "name": "Hilltop Descent",
+    "name_en": "Hilltop Descent",
+    "ko_sound": "언덕 꼭대기 내리막",
+    "en_sound": "Hilltop Descent",
+    "ko_trans": "",
+    "en_trans": "",
+    "trackType": "street racing",
+    "courseType": "street racing"
+  },
+  {
+    "name": "Cañón Run",
+    "name_en": "Canon Run",
+    "ko_sound": "협곡 런",
+    "en_sound": "Canon Run",
+    "ko_trans": "",
+    "en_trans": "",
+    "trackType": "street racing",
+    "courseType": "street racing"
+  },
+  {
+    "name": "Festival Gatecrash",
+    "name_en": "Festival Gatecrash",
+    "ko_sound": "페스티벌 무단 입장",
+    "en_sound": "Festival Gatecrash",
+    "ko_trans": "",
+    "en_trans": "",
+    "trackType": "street racing",
+    "courseType": "street racing"
+  },
+  {
+    "name": "Fastival Drag Strip",
+    "name_en": "Fastival Drag Strip",
+    "ko_sound": "페스티벌 드래그 직선 코스",
+    "en_sound": "Fastival Drag Strip",
+    "ko_trans": "",
+    "en_trans": "",
+    "trackType": "drag racing",
+    "courseType": "drag racing"
+  },
+  {
+    "name": "Aeródromo Drag Strip",
+    "name_en": "Aerodromo Drag Strip",
+    "ko_sound": "아에로드모 드래그 직선 코스",
+    "en_sound": "Aerodromo Drag Strip",
+    "ko_trans": "비행장 드래그 직선 코스",
+    "en_trans": "Aerodrome Drag Strip",
+    "trackType": "drag racing",
+    "courseType": "drag racing"
+  },
+  {
+    "name": "Teotihuacán Drag Strip",
+    "name_en": "Teotihuacan Drag Strip",
+    "ko_sound": "테오티우아칸 드래그 직선 코스",
+    "en_sound": "Teotihuacan Drag Strip",
+    "ko_trans": "",
+    "en_trans": "",
+    "trackType": "drag racing",
+    "courseType": "drag racing"
+  }
+]

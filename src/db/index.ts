@@ -23,7 +23,7 @@ export class ForzaWeekDB extends Dexie {
       car: '++id,name, year, country,driveTrain,door,engine,manufacture,bodyStyle',
       carFH5: '&id,division,rarity,boost,PI',
       carImage: '&id',
-      track: '++id, name, trackType,courseType,ko,en',
+      track: '++id, name, name_en,ko_sound,en_sound,ko_trans,en_trans,trackType,courseType',
     });
   }
 }
