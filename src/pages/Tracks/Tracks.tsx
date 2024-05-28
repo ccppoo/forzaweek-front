@@ -1,5 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 
+import { ImageRounded } from '@mui/icons-material';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import Avatar from '@mui/material/Avatar';
@@ -16,10 +17,42 @@ import { styled } from '@mui/material/styles';
 
 import * as image from '@/image';
 import { FlexBox, FullSizeCenteredFlexBox } from '@/components/styled';
+import useTrackSearchFilters from '@/store/trackSearchFilters';
+import type { TrackInfo } from '@/types/track';
 
+import Map from './Map';
 import { Image } from './styled';
 
 function TrackInfo() {}
+
+type TrackType = 'road racing' | 'dirt racing' | 'cross country' | 'street racing' | 'drag racing';
+
+const trackIcon: Record<TrackType, any> = {
+  'road racing': {
+    circuit: image.track_icon.road_track,
+    sprint: image.track_icon.road_sprint,
+    goliath: image.track_icon.goliath,
+    colossus: image.track_icon.colossus,
+  },
+  'dirt racing': {
+    trail: image.track_icon.offroad_track,
+    scramble: image.track_icon.offroad_sprint,
+    gauntlet: image.track_icon.gauntlet,
+  },
+  'cross country': {
+    'cross country': image.track_icon.offroad_sprint,
+    circuit: image.track_icon.offroad_track,
+    juggernaut: image.track_icon.juggernaut,
+    titan: image.track_icon.titan,
+  },
+  'street racing': {
+    'street racing': image.track_icon.street_racing,
+    marathon: image.track_icon.marathon,
+  },
+  'drag racing': {
+    'drag racing': image.track_icon.drag_racing,
+  },
+};
 
 function TrackInfoSummary() {
   const name = 'Arch of Mulegé Circuit';
@@ -120,58 +153,72 @@ function TrackTags() {
   return;
 }
 
-export default function Tracks() {
-  const navigate = useNavigate();
-
+function TrackRowItem({ track }: { track: TrackInfo }) {
   const WIDTH = '80%';
   const HEIGHT = 100;
-  const name = 'Arch of Mulegé Circuit';
   const road_type = 'road';
   const track_type = 'circuit';
-  const description = 'design of Hyundai elantra, its my style';
-  const maker = 'DecalMaster';
-  const share_code = '123 123 123';
   const laps = 3;
 
+  const trackicon = trackIcon[track.trackType as TrackType][track.courseType];
+
   return (
-    <Container sx={{ height: '100vh' }}>
-      <FullSizeCenteredFlexBox sx={{}}>
+    <FlexBox
+      sx={{
+        width: WIDTH,
+        maxWidth: 1200,
+        height: HEIGHT,
+        justifyContent: 'space-between',
+      }}
+      component={Paper}
+    >
+      <FlexBox sx={{ columnGap: 1 }}>
         <FlexBox
           sx={{
-            width: WIDTH,
-            maxWidth: 1200,
-            height: HEIGHT,
-            justifyContent: 'space-between',
+            aspectRatio: '1/1',
+            height: '100%',
           }}
-          component={Paper}
         >
-          <FlexBox sx={{ columnGap: 1 }}>
-            <FlexBox
-              sx={{
-                aspectRatio: '1/1',
-                height: '100%',
-              }}
-            >
-              <Image
-                src={image.track_icon.road_track}
-                sx={{
-                  objectFit: 'contain',
-                  borderTopLeftRadius: 4,
-                  borderBottomLeftRadius: 4,
-                }}
-              />
-            </FlexBox>
-            <FlexBox sx={{ flexDirection: 'column' }}>
-              <Typography variant="h5">{name}</Typography>
-              <FlexBox sx={{ columnGap: 1 }}>
-                <Typography variant="h6">{road_type}</Typography>
-                <Typography variant="h6">{track_type}</Typography>
-                <Typography variant="h6">{laps} laps</Typography>
-              </FlexBox>
-            </FlexBox>
-          </FlexBox>
-          <TrackPreview />
+          <Image
+            src={trackicon}
+            sx={{
+              objectFit: 'contain',
+              borderTopLeftRadius: 4,
+              borderBottomLeftRadius: 4,
+            }}
+          />
         </FlexBox>
+        <FlexBox sx={{ flexDirection: 'column' }}>
+          <Typography variant="h5">{track.name}</Typography>
+          <Typography variant="subtitle1">{track.en_trans || track.name}</Typography>
+          <FlexBox sx={{ columnGap: 1 }}>
+            <Typography variant="h6">{road_type}</Typography>
+            <Typography variant="h6">{track_type}</Typography>
+            <Typography variant="h6">{laps} laps</Typography>
+          </FlexBox>
+        </FlexBox>
+      </FlexBox>
+      <TrackPreview />
+    </FlexBox>
+  );
+}
+
+export default function Tracks() {
+  const navigate = useNavigate();
+  const [_, tracks] = useTrackSearchFilters();
+
+  return (
+    <Container sx={{ overflowY: 'scroll', marginTop: 1 }}>
+      <FlexBox sx={{ width: 1336, height: 800 }}>
+        <Map />
+      </FlexBox>
+      <FullSizeCenteredFlexBox
+        sx={{ height: '100%', flexDirection: 'column', rowGap: 1, paddingTop: 2 }}
+      >
+        {tracks.map((track: TrackInfo) => {
+          // track
+          return <TrackRowItem track={track} key={`track-info-track=${track.name_en}`} />;
+        })}
       </FullSizeCenteredFlexBox>
     </Container>
   );
