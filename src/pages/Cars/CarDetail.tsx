@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import ReactApexChart from 'react-apexcharts';
 import { useNavigate } from 'react-router-dom';
 
@@ -11,6 +12,7 @@ import Chip from '@mui/material/Chip';
 import Container from '@mui/material/Container';
 import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
+import Pagination from '@mui/material/Pagination';
 import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Unstable_Grid2';
@@ -77,51 +79,6 @@ function TitlePart() {
       </FlexBox>
       <FlexBox sx={{ alignItems: 'center', paddingX: 1 }}>
         <Typography variant="h4">{name}</Typography>
-      </FlexBox>
-    </FlexBox>
-  );
-}
-
-function Pagination() {
-  return (
-    <FlexBox sx={{ width: '100%', height: 50 }}>
-      <FlexBox
-        sx={{
-          width: '20%',
-          height: '100%',
-          justifyContent: 'end',
-          alignItems: 'center',
-        }}
-      >
-        <ArrowBackIosIcon />
-      </FlexBox>
-      <FlexBox sx={{ width: '60%', justifyContent: 'space-around', alignItems: 'center' }}>
-        {[1, 2, 3, 4, 5, 6].map((page) => {
-          return (
-            <FlexBox
-              sx={{
-                width: 40,
-                height: 25,
-                alignItems: 'center',
-                justifyContent: 'center',
-                border: '1px black solid',
-              }}
-              key={`pagination-page-${page}`}
-            >
-              <Typography>{page}</Typography>
-            </FlexBox>
-          );
-        })}
-      </FlexBox>
-      <FlexBox
-        sx={{
-          width: '20%',
-          height: '100%',
-          justifyContent: 'start',
-          alignItems: 'center',
-        }}
-      >
-        <ArrowForwardIosIcon />
       </FlexBox>
     </FlexBox>
   );
@@ -524,6 +481,11 @@ function RelatedDecal({ decalData }: { decalData: DecalData }) {
 }
 
 function RelatedDecals() {
+  const [page, setPage] = useState(1);
+  const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
+    setPage(value);
+  };
+
   return (
     <FlexBox
       sx={{
@@ -544,7 +506,9 @@ function RelatedDecals() {
         </Grid>
       </FlexBox>
       {/* Pagination */}
-      <Pagination />
+      <FlexBox sx={{ alignItems: 'center', justifyContent: 'center', paddingTop: 3 }}>
+        <Pagination count={10} page={page} onChange={handleChange} size="large" />
+      </FlexBox>
     </FlexBox>
   );
 }
@@ -563,6 +527,11 @@ function RelatedVideo() {
 }
 
 function RelatedVideos() {
+  const [page, setPage] = useState(1);
+  const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
+    setPage(value);
+  };
+
   return (
     <FlexBox
       sx={{
@@ -588,7 +557,9 @@ function RelatedVideos() {
         </Grid>
       </FlexBox>
       {/* Pagination */}
-      <Pagination />
+      <FlexBox sx={{ alignItems: 'center', justifyContent: 'center', paddingTop: 3 }}>
+        <Pagination count={10} page={page} onChange={handleChange} size="large" />
+      </FlexBox>
     </FlexBox>
   );
 }
