@@ -36,12 +36,20 @@ import series_33 from './poster/massive_Series_33_Apex_Allstars_series.webp';
 import { mulege } from './track/mulege';
 import track_lecerbohio from './track/track_1.jpg';
 import track_molehach from './track/track_2.jpg';
+import colossus from './track_icon/colossus.png';
 import crosscounrty_sprint from './track_icon/crosscountry_sprint.png';
 import crosscounrty_track from './track_icon/crosscountry_track.png';
+import drag_racing from './track_icon/drag_racing.png';
+import gauntlet from './track_icon/gauntlet.png';
+import goliath from './track_icon/goliath.png';
+import juggernaut from './track_icon/juggernaut.png';
+import marathon from './track_icon/marathon.png';
 import offroad_sprint from './track_icon/offroad_sprint.png';
 import offroad_track from './track_icon/offroad_track.png';
 import road_sprint from './track_icon/road_sprint.png';
 import road_track from './track_icon/road_track.png';
+import street_racing from './track_icon/street_racing.png';
+import titan from './track_icon/titan.png';
 
 const track_icon = {
   road_track: road_track,
@@ -50,6 +58,14 @@ const track_icon = {
   offroad_sprint: offroad_sprint,
   crosscounrty_track: crosscounrty_track,
   crosscounrty_sprint: crosscounrty_sprint,
+  drag_racing: drag_racing,
+  street_racing: street_racing,
+  titan: titan,
+  marathon: marathon,
+  juggernaut: juggernaut,
+  goliath: goliath,
+  gauntlet: gauntlet,
+  colossus: colossus,
 };
 
 const track = {
