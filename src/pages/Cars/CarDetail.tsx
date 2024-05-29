@@ -21,6 +21,7 @@ import { styled } from '@mui/material/styles';
 import { ApexOptions } from 'apexcharts';
 
 import * as image from '@/image';
+import Comments from '@/components/Comment';
 import { ImageShowHorizontal } from '@/components/ImageList';
 import { PI_Card } from '@/components/PI';
 import { FlexBox, FullSizeCenteredFlexBox } from '@/components/styled';
@@ -574,13 +575,8 @@ export default function Tracks() {
   const track_type = 'circuit';
 
   return (
-    <Container sx={{ height: '230vh', paddingTop: 50 }}>
-      <FullSizeCenteredFlexBox
-        sx={{
-          height: '100%',
-          marginTop: 50,
-        }}
-      >
+    <Container sx={{ paddingTop: 5 }}>
+      <FullSizeCenteredFlexBox>
         <FlexBox
           sx={{
             width: WIDTH,
@@ -588,8 +584,6 @@ export default function Tracks() {
             // height: '100%',
             flexDirection: 'column',
             paddingY: 2,
-            marginTop: 20,
-
             paddingX: 2,
             rowGap: 3,
           }}
@@ -601,6 +595,8 @@ export default function Tracks() {
           <BreifData />
           {/* 차 사진들 */}
           <ImageShowHorizontal images={CAR_IMAGES} />
+          {/* 댓글 */}
+          <Comments />
           {/* 데칼 사진들 */}
           <RelatedDecals />
           {/* TODO: 관련 튜닝 */}

@@ -19,7 +19,7 @@ import Grid from '@mui/material/Unstable_Grid2';
 import { styled } from '@mui/material/styles';
 
 import * as image from '@/image';
-import Comments, { Reply } from '@/components/Comment';
+import Comments from '@/components/Comment';
 import { ImageShowHorizontal } from '@/components/ImageList';
 import { FlexBox, FullSizeCenteredFlexBox } from '@/components/styled';
 import { decalsWithImage } from '@/data/decals';

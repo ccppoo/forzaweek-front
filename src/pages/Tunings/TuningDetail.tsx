@@ -19,6 +19,7 @@ import { styled } from '@mui/material/styles';
 import { ApexOptions } from 'apexcharts';
 
 import * as image from '@/image';
+import Comments from '@/components/Comment';
 import { PI_Card } from '@/components/PI';
 import { FlexBox, FullSizeCenteredFlexBox } from '@/components/styled';
 import { decalsWithImage } from '@/data/decals';
@@ -694,19 +695,14 @@ export default function TuningDetail() {
   const decalData = decalsWithImage[3];
   // DecalData;
   return (
-    <Container sx={{ height: '140vh', marginTop: 70 }}>
-      <FullSizeCenteredFlexBox
-        sx={{
-          height: '100%',
-        }}
-      >
+    <Container sx={{ paddingTop: 5 }}>
+      <FullSizeCenteredFlexBox>
         <FlexBox
           sx={{
             width: WIDTH,
             maxWidth: 1200,
             flexDirection: 'column',
             paddingY: 2,
-            marginTop: 20,
             paddingX: 2,
             rowGap: 2,
           }}
@@ -718,6 +714,8 @@ export default function TuningDetail() {
           <TuningInfo tuning={tunings[0]} />
           {/* 트랙 사진들 */}
           <TuningImages tuning={tunings[0]} />
+          {/* 댓글 */}
+          <Comments />
           {/* 데칼에 사용된 차 간단 정보 */}
           <BaseCarInfo />
           {/* 관련 영상 */}

@@ -16,6 +16,7 @@ import Grid from '@mui/material/Unstable_Grid2';
 import { styled } from '@mui/material/styles';
 
 import * as image from '@/image';
+import Comments from '@/components/Comment';
 import { ImageShowHorizontal } from '@/components/ImageList';
 import { PI_Card } from '@/components/PI';
 import { FlexBox, FullSizeCenteredFlexBox } from '@/components/styled';
@@ -424,22 +425,19 @@ export default function Tracks() {
   const track_type = 'circuit';
 
   return (
-    <Container sx={{ height: '130vh' }}>
+    <Container sx={{}}>
       <FullSizeCenteredFlexBox
         sx={{
           height: '100%',
-          marginTop: 50,
+          paddingTop: 5,
         }}
       >
         <FlexBox
           sx={{
             width: WIDTH,
             maxWidth: 1200,
-            // height: '100%',
             flexDirection: 'column',
             paddingY: 2,
-            marginTop: 20,
-
             paddingX: 2,
             rowGap: 3,
           }}
@@ -451,6 +449,8 @@ export default function Tracks() {
           <BreifData />
           {/* 트랙 사진들 */}
           <ImageShowHorizontal images={TRACK_IMAGES} />
+          {/* 댓글 */}
+          <Comments />
           {/* <ImageWithMap /> */}
           {/* TODO: 관련 튜닝 */}
           <RelatedTunings />
