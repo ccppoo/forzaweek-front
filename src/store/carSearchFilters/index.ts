@@ -1,8 +1,5 @@
-import { useCallback, useMemo } from 'react';
-import { atom, useRecoilState } from 'recoil';
+import { atomFamily, useRecoilState } from 'recoil';
 
-import type { Collection, Table } from 'dexie';
-// import { useQuery } from '@tanstack/react-query';
 import { useLiveQuery } from 'dexie-react-hooks';
 
 import { getCars } from '@/api/car';
@@ -49,7 +46,7 @@ export const searchOptionMaxLength = {
   rarity: RARITY.length,
 };
 
-const carSearchOptionState = atom<CarSearchOptions>({
+const carSearchOptionStateFamily = atomFamily<CarSearchOptions, string>({
   key: 'car-search-option-state',
   default: carSearchOptionDefault,
 });
@@ -176,9 +173,10 @@ export async function getCarData({
   return zipCar(carss as Car[], carfh5 as FH5_STAT[], carimgs as CarImage[]);
 }
 
-function useCarSearchFilters(): [CarSearchOptions, CarInfo[], boolean, Actions] {
-  const [carSearchOptions, setCarSearchOptions] = useRecoilState(carSearchOptionState);
-
+function useCarSearchFilters(scope: string): [CarSearchOptions, CarInfo[], boolean, Actions] {
+  const [carSearchOptions, setCarSearchOptions] = useRecoilState(carSearchOptionStateFamily(scope));
+  // const [carSearchOptions, setCarSearchOptions] = useRecoilState(carSearchOptionState);
+  console.log(`carSearchOptions : ${JSON.stringify(carSearchOptions)}`);
   const searchResults: CarInfo[] | undefined = useLiveQuery(
     () => getCarData(carSearchOptions),
     [
