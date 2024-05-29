@@ -6,9 +6,8 @@ import Grid from '@mui/material/Unstable_Grid2';
 
 import * as image from '@/image';
 import { FlexBox, FullSizeCenteredFlexBox } from '@/components/styled';
+import { Image } from '@/components/styled';
 import { CarInfo } from '@/types/car';
-
-import { Image } from './styled';
 
 function CarPreviewInfo({ carInfo }: { carInfo: CarInfo }) {
   const MANUFACTURER = carInfo.manufacture;

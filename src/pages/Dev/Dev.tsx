@@ -9,13 +9,12 @@ import { useLiveQuery } from 'dexie-react-hooks';
 import * as image from '@/image';
 import Meta from '@/components/Meta';
 import { FlexBox, FullSizeCenteredFlexBox } from '@/components/styled';
+import { Image } from '@/components/styled';
 import { imageMatch } from '@/data/cars';
 import carData from '@/data/cars.json';
 import trackData from '@/data/track.json';
 import { db } from '@/db';
 import { Track } from '@/db/schema';
-
-import { Image } from './styled';
 
 export type FH5_info = {
   division: string;

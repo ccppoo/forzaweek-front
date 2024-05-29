@@ -31,6 +31,7 @@ import { ApexOptions } from 'apexcharts';
 import * as image from '@/image';
 import { PI_Card } from '@/components/PI';
 import { FlexBox, FullSizeCenteredFlexBox } from '@/components/styled';
+import { Image } from '@/components/styled';
 import { carInfoWithImage } from '@/data/cars';
 import { decalsWithImage } from '@/data/decals';
 import type { DecalData } from '@/data/decals';
@@ -51,7 +52,6 @@ import {
 
 import TuningCarSelection from './TuningCarSearchFilter';
 import TuningOptionFilter from './TuningSearchFilter';
-import { Image } from './styled';
 
 function stringToColor(string: string) {
   let hash = 0;

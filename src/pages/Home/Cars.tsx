@@ -25,8 +25,8 @@ import * as image from '@/image';
 import MainFullBanner from '@/components/MainFullBanner';
 import PostCard from '@/components/PostCard';
 import { FlexBox, FullSizeCenteredFlexBox } from '@/components/styled';
+import { Image } from '@/components/styled';
 
-import { Image } from './styled';
 import { BOOST, COUNTRY, DIVISIONS, MANUFACTURER, PRODUCTION_YEAR, RARITY } from './values';
 
 function DivisionCell({ name }: { name: string }) {

@@ -4,11 +4,11 @@ import Leaflet from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 
 import { FlexBox, FullSizeCenteredFlexBox } from '@/components/styled';
+import { Image } from '@/components/styled';
 import useTrackSearchFilters from '@/store/trackSearchFilters';
 import type { TrackInfo } from '@/types/track';
 
 import './leaflet.css';
-import { Image } from './styled';
 
 export default function Map() {
   const center = { lat: 46.07323062540835, lng: -23.085936605930332 };

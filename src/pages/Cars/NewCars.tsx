@@ -3,8 +3,7 @@ import Grid from '@mui/material/Unstable_Grid2';
 
 import * as image from '@/image';
 import { FlexBox, FullSizeCenteredFlexBox } from '@/components/styled';
-
-import { Image } from './styled';
+import { Image } from '@/components/styled';
 
 const new_cars = [
   {

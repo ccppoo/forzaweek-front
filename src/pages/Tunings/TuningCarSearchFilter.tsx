@@ -31,6 +31,7 @@ import { useLiveQuery } from 'dexie-react-hooks';
 import * as image from '@/image';
 import { PI_Card } from '@/components/PI';
 import { FlexBox, FullSizeCenteredFlexBox } from '@/components/styled';
+import { Image } from '@/components/styled';
 import { carInfoWithImage } from '@/data/cars';
 import { decalsWithImage } from '@/data/decals';
 import type { DecalData } from '@/data/decals';
@@ -52,8 +53,6 @@ import {
   RARITY,
 } from '@/store/tuningSearchFilters/values';
 import type { CarImages, CarInfo, FH5_info } from '@/types/car';
-
-import { Image } from './styled';
 
 const carinfo = {
   manufacture: 'Hyundai',

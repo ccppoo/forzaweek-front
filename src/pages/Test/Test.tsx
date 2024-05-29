@@ -2,9 +2,8 @@ import { Box, Typography } from '@mui/material';
 
 import Meta from '@/components/Meta';
 import { FlexBox, FullSizeCenteredFlexBox } from '@/components/styled';
+import { Image } from '@/components/styled';
 import { useSubscriber } from '@/socket/subscriber';
-
-import { Image } from './styled';
 
 function Test() {
   const DEV_backend = 'wss://localhost:8443/dev';

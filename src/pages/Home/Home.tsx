@@ -25,11 +25,11 @@ import * as image from '@/image';
 import MainFullBanner from '@/components/MainFullBanner';
 import PostCard from '@/components/PostCard';
 import { FlexBox, FullSizeCenteredFlexBox } from '@/components/styled';
+import { Image } from '@/components/styled';
 
 import CardPreviews from './CardPreviews';
 import Cars from './Cars';
 import ShortCutMenu from './ShortCutMenu';
-import { Image } from './styled';
 
 const sections = ['NEWS', 'Week Festa', 'Tunings'];
 

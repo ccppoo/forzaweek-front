@@ -12,14 +12,13 @@ import { useLiveQuery } from 'dexie-react-hooks';
 import * as image from '@/image';
 import { getCars } from '@/api/car';
 import { FlexBox } from '@/components/styled';
+import { Image } from '@/components/styled';
 import { carInfoWithImage } from '@/data/cars';
 import { CarData, CarInfo } from '@/data/types';
 import { db } from '@/db';
 import type { Car, CarImage, FH5_STAT } from '@/db/schema';
-// import { getCarData } from '@/db/index';
 import useCarSearchFilters, { CarSearchOption } from '@/store/carSearchFilters';
 
-import { Image } from './styled';
 import {
   BOOST,
   COUNTRY,

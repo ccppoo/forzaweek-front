@@ -25,13 +25,12 @@ import { PI_Card } from '@/components/PI';
 import { RelatedTunings } from '@/components/Tunings';
 import { RelatedVideos } from '@/components/Videos';
 import { FlexBox, FullSizeCenteredFlexBox } from '@/components/styled';
+import { Image } from '@/components/styled';
 import { decalsWithImage } from '@/data/decals';
 import type { DecalData } from '@/data/decals';
 import { tunings } from '@/data/tunings';
 import type { Tuning } from '@/data/tunings';
 import { decals as decalImages } from '@/image/decal';
-
-import { Image } from './styled';
 
 const DECAL_IMAGES = decalImages.d140535376;
 

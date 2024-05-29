@@ -1,34 +1,20 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import Avatar from '@mui/material/Avatar';
-import Box from '@mui/material/Box';
-import Chip from '@mui/material/Chip';
 import Container from '@mui/material/Container';
-import Divider from '@mui/material/Divider';
-import IconButton from '@mui/material/IconButton';
-import Pagination from '@mui/material/Pagination';
 import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Unstable_Grid2';
-import { styled } from '@mui/material/styles';
-
-import { ApexOptions } from 'apexcharts';
 
 import * as image from '@/image';
+import { BriefData } from '@/components/Car';
 import Comments from '@/components/Comment';
 import { RelatedDecals } from '@/components/Decals';
 import { ImageShowHorizontal } from '@/components/ImageList';
-import { PI_Card } from '@/components/PI';
 import { RelatedTunings } from '@/components/Tunings';
 import { RelatedVideos } from '@/components/Videos';
 import { FlexBox, FullSizeCenteredFlexBox } from '@/components/styled';
-import { decalsWithImage } from '@/data/decals';
-import type { DecalData } from '@/data/decals';
-import { tunings } from '@/data/tunings';
-import type { Tuning } from '@/data/tunings';
-
-import { Image } from './styled';
+import { Image } from '@/components/styled';
 
 const CAR_IMAGES = [
   image.decal.elantra_front2,
@@ -83,58 +69,6 @@ function TitlePart() {
   );
 }
 
-function BreifData() {
-  const WIDTH = '100%';
-  const HEIGHT = '100%';
-  const name = 'Arch of Mulegé Circuit';
-  const road_type = 'road';
-  const track_type = 'circuit';
-  const laps = 3;
-  const description = 'design of Hyundai elantra, its my style';
-
-  return (
-    <FlexBox sx={{ width: '100%', height: '100%' }}>
-      <Grid container sx={{ paddingTop: 1 }}>
-        {/* 차 사진 */}
-        <Grid xs={4} sx={{}}>
-          <Image src={image.car.hyundaiElantra} sx={{ objectFit: 'contain' }} />
-        </Grid>
-        {/* 차 특징 설명 */}
-        <Grid
-          xs={8}
-          sx={{
-            height: '100%',
-            flexDirection: 'column',
-            paddingLeft: 2,
-          }}
-        >
-          <FlexBox sx={{ flexDirection: 'column' }}>
-            <Typography variant="h6">Description</Typography>
-            <Typography variant="body1">{description}</Typography>
-          </FlexBox>
-          <FlexBox sx={{ flexDirection: 'column' }}>
-            <FlexBox sx={{ alignItems: 'center', columnGap: 1 }}>
-              <Typography variant="h6">Road Type : </Typography>
-              <Typography variant="h6">{road_type}</Typography>
-            </FlexBox>
-            <FlexBox sx={{ alignItems: 'center', columnGap: 1 }}>
-              <Typography variant="h6">Track Type : </Typography>
-              <Typography variant="h6">{track_type}</Typography>
-              <Typography>laps: {laps}</Typography>
-            </FlexBox>
-            <FlexBox sx={{ flexDirection: 'column', columnGap: 1 }}>
-              <FlexBox sx={{ alignItems: 'center', columnGap: 1 }}>
-                <Typography variant="h6">Tags : </Typography>
-                <Typography variant="h6">{track_type}</Typography>
-              </FlexBox>
-            </FlexBox>
-          </FlexBox>
-        </Grid>
-      </Grid>
-    </FlexBox>
-  );
-}
-
 export default function CarDetail() {
   const navigate = useNavigate();
 
@@ -162,7 +96,7 @@ export default function CarDetail() {
           {/* 제목 */}
           <TitlePart />
           {/* 제목 밑에 사진이랑 특징 */}
-          <BreifData />
+          <BriefData />
           {/* 차 사진들 */}
           <ImageShowHorizontal images={CAR_IMAGES} />
           {/* 댓글 */}

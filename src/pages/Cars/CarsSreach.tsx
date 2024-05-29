@@ -13,6 +13,7 @@ import { useLiveQuery } from 'dexie-react-hooks';
 import * as image from '@/image';
 import { getCars } from '@/api/car';
 import { FlexBox } from '@/components/styled';
+import { Image } from '@/components/styled';
 import { carInfoWithImage } from '@/data/cars';
 import { CarData, CarInfo } from '@/data/types';
 import { db } from '@/db';
@@ -21,7 +22,6 @@ import useCarSearchFilters, { CarSearchOption } from '@/store/carSearchFilters';
 
 import CarPreviewCard from './CarPreviewCard';
 import TuningCarSelection from './CarSearchFilter';
-import { Image } from './styled';
 
 export default function CarSearch() {
   const [_, searchResults, isSearchOptionEmpty] = useCarSearchFilters();
