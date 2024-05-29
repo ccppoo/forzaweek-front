@@ -208,17 +208,18 @@ export default function Tracks() {
   const [_, tracks] = useTrackSearchFilters();
 
   return (
-    <Container sx={{ overflowY: 'scroll', marginTop: 1 }}>
-      <FlexBox sx={{ width: 1336, height: 800 }}>
-        <Map />
-      </FlexBox>
-      <FullSizeCenteredFlexBox
-        sx={{ height: '100%', flexDirection: 'column', rowGap: 1, paddingTop: 2 }}
-      >
-        {tracks.map((track: TrackInfo) => {
-          // track
-          return <TrackRowItem track={track} key={`track-info-track=${track.name_en}`} />;
-        })}
+    <Container sx={{ paddingTop: 5, minWidth: 1340 }}>
+      <FullSizeCenteredFlexBox sx={{ flexDirection: 'column' }}>
+        <FlexBox sx={{ width: 1336, height: 800 }}>
+          <Map />
+        </FlexBox>
+        <FlexBox
+          sx={{ height: '100%', width: '100%', flexDirection: 'column', rowGap: 1, paddingTop: 2 }}
+        >
+          {tracks.map((track: TrackInfo) => {
+            return <TrackRowItem track={track} key={`track-info-track=${track.name_en}`} />;
+          })}
+        </FlexBox>
       </FullSizeCenteredFlexBox>
     </Container>
   );
