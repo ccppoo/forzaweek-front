@@ -4,20 +4,20 @@ import { useNavigate } from 'react-router-dom';
 import Container from '@mui/material/Container';
 
 import { DecalCellListing } from '@/components/Decals';
+import { CarSearchAndSelect } from '@/components/Search';
 import { FlexBox, FullSizeCenteredFlexBox } from '@/components/styled';
 
-import DecalCarSelection from './DecalCarSearchFilter';
-
 export default function Decals() {
+  const searchScope = 'decals';
   const navigate = useNavigate();
   const [page, setPage] = useState(1);
   const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
     setPage(value);
   };
   return (
-    <Container sx={{ paddingTop: 5 }}>
+    <Container sx={{ paddingTop: 1 }}>
       <FullSizeCenteredFlexBox sx={{ flexDirection: 'column' }}>
-        <DecalCarSelection />
+        <CarSearchAndSelect scope={searchScope} doFinalSelect />
         <DecalCellListing />
       </FullSizeCenteredFlexBox>
     </Container>

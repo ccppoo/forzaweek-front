@@ -4,7 +4,6 @@ import { useNavigate } from 'react-router-dom';
 import Container from '@mui/material/Container';
 import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
-import Grid from '@mui/material/Unstable_Grid2';
 
 import * as image from '@/image';
 import { BriefData } from '@/components/Car';

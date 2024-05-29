@@ -1,53 +1,15 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlined';
-import FavoriteOutlinedIcon from '@mui/icons-material/FavoriteOutlined';
-import ModeCommentOutlinedIcon from '@mui/icons-material/ModeCommentOutlined';
-import RefreshOutlinedIcon from '@mui/icons-material/RefreshOutlined';
-import Autocomplete from '@mui/material/Autocomplete';
-import Avatar from '@mui/material/Avatar';
-import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Checkbox from '@mui/material/Checkbox';
-import Chip from '@mui/material/Chip';
-import Container from '@mui/material/Container';
-import FormControl from '@mui/material/FormControl';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormGroup from '@mui/material/FormGroup';
-import IconButton from '@mui/material/IconButton';
-import ListSubheader from '@mui/material/ListSubheader';
-import MenuItem from '@mui/material/MenuItem';
-import OutlinedInput from '@mui/material/OutlinedInput';
 import Paper from '@mui/material/Paper';
-import Select, { SelectChangeEvent } from '@mui/material/Select';
-import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
-import Grid from '@mui/material/Unstable_Grid2';
 
-import { ApexOptions } from 'apexcharts';
-
-import * as image from '@/image';
-import { PI_Card } from '@/components/PI';
-import { FlexBox, FullSizeCenteredFlexBox } from '@/components/styled';
-import { Image } from '@/components/styled';
-import { carInfoWithImage } from '@/data/cars';
-import { decalsWithImage } from '@/data/decals';
-import type { DecalData } from '@/data/decals';
-import { tunings } from '@/data/tunings';
-import type { Tuning } from '@/data/tunings';
-import { CarData, CarInfo } from '@/data/types';
-import { decals as decalImages } from '@/image/decal';
+import { FlexBox } from '@/components/styled';
 import useTuningSearchFilters from '@/store/tuningSearchFilters';
-import {
-  BOOST,
-  COUNTRY,
-  DIVISIONS,
-  MANUFACTURER,
-  PRODUCTION_YEAR,
-  PRODUCTION_YEARs,
-  RARITY,
-} from '@/store/tuningSearchFilters/values';
 
 function TuningOptionPIClass() {
   const PI_COLOR = {
