@@ -1,6 +1,7 @@
 import { useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+import { TextareaAutosize as BaseTextareaAutosize } from '@mui/base/TextareaAutosize';
 import Check from '@mui/icons-material/Check';
 import MoreHorizOutlinedIcon from '@mui/icons-material/MoreHorizOutlined';
 import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
@@ -39,6 +40,7 @@ import { minWidth } from '@mui/system';
 import PopupState, { bindMenu, bindTrigger } from 'material-ui-popup-state';
 
 import * as image from '@/image';
+import { MinHeightTextarea } from '@/components/TextArea';
 import { FlexBox, FullSizeCenteredFlexBox } from '@/components/styled';
 
 function stringToColor(string: string) {
@@ -117,6 +119,7 @@ function ReplyList({ replyListItems, isOpen }: { replyListItems: any[]; isOpen: 
             return <Reply key={`reply-${idx}`} />;
           })}
         </List>
+        <AddReply />
       </Collapse>
     </>
   );
@@ -124,7 +127,7 @@ function ReplyList({ replyListItems, isOpen }: { replyListItems: any[]; isOpen: 
 
 function Reply() {
   const name = 'someone';
-  const time = '2024-05-23';
+  const time = '2024-05-29';
   const comment = 'Mario Kart Wii be like';
 
   return (
@@ -148,6 +151,49 @@ function Reply() {
   );
 }
 
+function AddReply() {
+  // 대댓글 작성칸
+
+  return (
+    <>
+      <FlexBox>{/* empty */}</FlexBox>
+      <Box
+        sx={{
+          display: 'grid',
+          gridTemplateColumns: '35px auto',
+          width: '100%',
+          gridTemplateRows: null,
+        }}
+      >
+        <FlexBox sx={{ justifyContent: 'center', alignItems: 'center' }}>{/* empty */}</FlexBox>
+        <FlexBox
+          sx={{
+            border: '1px black solid',
+            paddingY: 0.2,
+            paddingX: 0.1,
+            borderRadius: 2,
+            width: '100%',
+            flexDirection: 'column',
+          }}
+        >
+          <MinHeightTextarea width={'100%'} placeholder="reply" />
+          {/* cancel, comment(submit) button */}
+          <FlexBox sx={{ justifyContent: 'end', paddingY: 0.3 }}>
+            <FlexBox sx={{ columnGap: 1 }}>
+              <Button color="warning" variant="outlined" size="small" sx={{ borderRadius: 3 }}>
+                cancel
+              </Button>
+              <Button color="success" variant="outlined" size="small" sx={{ borderRadius: 3 }}>
+                reply
+              </Button>
+            </FlexBox>
+          </FlexBox>
+        </FlexBox>
+      </Box>
+    </>
+  );
+}
+
 function Comment() {
   const [open, setOpen] = useState<boolean>(false);
   const [commentFolded, setCommentFolded] = useState<boolean>(false);
@@ -157,7 +203,7 @@ function Comment() {
   };
 
   const name = 'someone';
-  const time = '2024-05-23';
+  const time = '2024-05-29';
   const comment_score = 23;
   const comment_replies = 3;
   const comment =
@@ -203,8 +249,8 @@ function Comment() {
 const comments = [{}, {}, {}];
 
 export default function Comments() {
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   type CommentSortOption = 'Date' | 'Score' | 'Replies';
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [sortOption, setSortOption] = useState<CommentSortOption>('Date');
   const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -228,19 +274,33 @@ export default function Comments() {
   return (
     <FlexBox sx={{ width: '100%', flexDirection: 'column', rowGap: 2 }}>
       {/* Add Comment */}
-      <FlexBox>
-        <TextField
-          id="outlined-multiline-flexible"
-          label="Add a comment"
-          multiline
-          maxRows={4}
-          sx={{ minWidth: 600 }}
-        />
+      <FlexBox
+        sx={{
+          border: '1px black solid',
+          paddingY: 0.2,
+          paddingX: 0.1,
+          borderRadius: 2,
+          width: '100%',
+          flexDirection: 'column',
+        }}
+      >
+        <MinHeightTextarea width={'100%'} placeholder="comment" />
+        {/* cancel, comment(submit) button */}
+        <FlexBox sx={{ justifyContent: 'end', paddingY: 0.3 }}>
+          <FlexBox sx={{ columnGap: 1 }}>
+            <Button color="warning" variant="outlined" size="small" sx={{ borderRadius: 3 }}>
+              cancel
+            </Button>
+            <Button color="success" variant="outlined" size="small" sx={{ borderRadius: 3 }}>
+              reply
+            </Button>
+          </FlexBox>
+        </FlexBox>
       </FlexBox>
       {/* Comment sort option and search */}
-      <FlexBox sx={{ justifyContent: 'end', alignItems: 'center', columnGap: 1 }}>
+      <FlexBox sx={{ justifyContent: 'start', alignItems: 'center', columnGap: 0 }}>
         {/* Comment sort option and search */}
-        <Typography>Sort by : </Typography>
+        <Typography variant="subtitle1">Sort by : </Typography>
         <Button
           id="basic-button"
           aria-controls={open ? 'basic-menu' : undefined}
@@ -248,8 +308,13 @@ export default function Comments() {
           aria-expanded={open ? 'true' : undefined}
           onClick={handleClick}
           sx={{ paddingX: 0 }}
+          color="info"
+          size="small"
+          style={{
+            fontSize: 16,
+          }}
         >
-          <Typography>{sortOption}</Typography>
+          {sortOption}
         </Button>
         <Menu
           id="basic-menu"
