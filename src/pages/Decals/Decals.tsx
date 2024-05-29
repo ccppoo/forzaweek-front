@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlined';
@@ -9,6 +10,7 @@ import Button from '@mui/material/Button';
 import Chip from '@mui/material/Chip';
 import Container from '@mui/material/Container';
 import IconButton from '@mui/material/IconButton';
+import Pagination from '@mui/material/Pagination';
 import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Unstable_Grid2';
@@ -287,12 +289,19 @@ function DecalRowListing() {
 
 export default function Decals() {
   const navigate = useNavigate();
-
+  const [page, setPage] = useState(1);
+  const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
+    setPage(value);
+  };
   return (
     <Container sx={{ paddingTop: 5 }}>
       <FullSizeCenteredFlexBox sx={{ flexDirection: 'column' }}>
         <DecalCarSelection />
         <DecalCellListing />
+        {/* Pagination */}
+        <FlexBox sx={{ alignItems: 'center', justifyContent: 'center', paddingTop: 3 }}>
+          <Pagination count={10} page={page} onChange={handleChange} size="large" />
+        </FlexBox>
       </FullSizeCenteredFlexBox>
     </Container>
   );

@@ -336,7 +336,10 @@ function RelatedTunings() {
     S2: 998,
     X: 999,
   };
-
+  const [page, setPage] = useState(1);
+  const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
+    setPage(value);
+  };
   return (
     <FlexBox
       sx={{
@@ -376,7 +379,9 @@ function RelatedTunings() {
         </Grid>
       </FlexBox>
       {/* Pagination */}
-      <Pagination />
+      <FlexBox sx={{ alignItems: 'center', justifyContent: 'center', paddingTop: 3 }}>
+        <Pagination count={10} page={page} onChange={handleChange} size="large" />
+      </FlexBox>
     </FlexBox>
   );
 }

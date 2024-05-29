@@ -19,6 +19,7 @@ import IconButton from '@mui/material/IconButton';
 import ListSubheader from '@mui/material/ListSubheader';
 import MenuItem from '@mui/material/MenuItem';
 import OutlinedInput from '@mui/material/OutlinedInput';
+import Pagination from '@mui/material/Pagination';
 import Paper from '@mui/material/Paper';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import TextField from '@mui/material/TextField';
@@ -443,21 +444,21 @@ function DecalRowListing() {
 export default function Tunings() {
   const navigate = useNavigate();
 
-  const WIDTH = '100%';
-  const HEIGHT = 200;
-  const name = carinfo.name;
-  const manufacturer = carinfo.manufacture;
-  const year = carinfo.year;
-  const description = 'design of Hyundai elantra, its my style';
-  const maker = 'DecalMaster';
-  const share_code = '123 123 123';
+  const [page, setPage] = useState(1);
+  const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
+    setPage(value);
+  };
 
   return (
-    <Container sx={{ height: '140vh', paddingTop: 90 }}>
+    <Container sx={{ paddingTop: 5 }}>
       <FullSizeCenteredFlexBox sx={{ flexDirection: 'column' }}>
         <TuningCarSelection />
         <TuningOptionFilter />
         <TuningCellListing />
+        {/* Pagination */}
+        <FlexBox sx={{ alignItems: 'center', justifyContent: 'center', paddingTop: 3 }}>
+          <Pagination count={10} page={page} onChange={handleChange} size="large" />
+        </FlexBox>
       </FullSizeCenteredFlexBox>
     </Container>
   );
