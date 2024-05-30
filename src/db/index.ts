@@ -54,3 +54,33 @@ export async function getCarData(): Promise<CarInfo[]> {
   // console.log(`results : ${JSON.stringify(results)}`);
   return results;
 }
+
+export async function getCarInfo(name: string): Promise<CarInfo | undefined> {
+  const car = await db.car.where('name').equals(name).first();
+
+  if (!car) return undefined;
+  const { id: carID, ...res } = car;
+  const [fh5, images] = await Promise.all([
+    await db.carFH5.where('id').equals(carID!).first(),
+    await db.carImage.where('id').equals(carID!).first(),
+  ]);
+  const { id, ...resFH5 } = fh5!;
+  const { id: _, ...resImage } = images!;
+  const joined = { ...res, fh5: { ...resFH5 }, image: { ...resImage } };
+  return joined;
+}
+
+export async function getCarInfoByID(carId: number): Promise<CarInfo | undefined> {
+  const car = await db.car.get(carId);
+
+  if (!car) return undefined;
+  const { id: carID, ...res } = car;
+  const [fh5, images] = await Promise.all([
+    await db.carFH5.where('id').equals(carID!).first(),
+    await db.carImage.where('id').equals(carID!).first(),
+  ]);
+  const { id, ...resFH5 } = fh5!;
+  const { id: _, ...resImage } = images!;
+  const joined = { ...res, fh5: { ...resFH5 }, image: { ...resImage } };
+  return joined;
+}
