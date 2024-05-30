@@ -2,12 +2,10 @@ import { atomFamily, useRecoilState } from 'recoil';
 
 import { useLiveQuery } from 'dexie-react-hooks';
 
-import { getCars } from '@/api/car';
 import { db } from '@/db';
 import type { Car, CarImage, FH5_STAT } from '@/db/schema';
-import type { CarImages, CarInfo, FH5_info } from '@/types/car';
+import type { CarImages, CarInfo, FH5_info } from '@/types';
 
-// import type { Actions } from './types';
 import {
   BOOST,
   COUNTRY,
@@ -176,7 +174,7 @@ export async function getCarData({
 function useCarSearchFilters(scope: string): [CarSearchOptions, CarInfo[], boolean, Actions] {
   const [carSearchOptions, setCarSearchOptions] = useRecoilState(carSearchOptionStateFamily(scope));
   // const [carSearchOptions, setCarSearchOptions] = useRecoilState(carSearchOptionState);
-  console.log(`carSearchOptions : ${JSON.stringify(carSearchOptions)}`);
+  // console.log(`carSearchOptions : ${JSON.stringify(carSearchOptions)}`);
   const searchResults: CarInfo[] | undefined = useLiveQuery(
     () => getCarData(carSearchOptions),
     [

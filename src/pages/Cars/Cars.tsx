@@ -8,7 +8,7 @@ import Grid from '@mui/material/Unstable_Grid2';
 import { styled } from '@mui/material/styles';
 
 import { CarPreviewCard } from '@/components/Car';
-import { CarSearchAndSelect } from '@/components/Search';
+import { CarFilterAndSelect } from '@/components/Search';
 import { FlexBox, FullSizeCenteredFlexBox } from '@/components/styled';
 import useCarSearchFilters, { CarSearchOption } from '@/store/carSearchFilters';
 
@@ -25,7 +25,7 @@ export default function Cars() {
         {/* <NewCars /> */}
 
         {/* car search */}
-        <CarSearchAndSelect scope={carSearchScope} />
+        <CarFilterAndSelect scope={carSearchScope} />
         <FlexBox sx={{ height: 30, alignItems: 'center' }}>
           <Typography variant="h6">
             {isSearchOptionEmpty

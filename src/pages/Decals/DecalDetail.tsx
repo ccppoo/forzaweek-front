@@ -95,7 +95,7 @@ function DecalInfo({ decalData }: { decalData: DecalData }) {
       {/* 태그 */}
       <FlexBox sx={{ columnGap: 0.5 }}>
         {decalData.tags.map((tag) => {
-          return <Chip label={tag} />;
+          return <Chip label={tag} key={`decal-${decalData.share_code}-data-tag-${tag}`} />;
         })}
       </FlexBox>
       {/* 공유 코드 */}

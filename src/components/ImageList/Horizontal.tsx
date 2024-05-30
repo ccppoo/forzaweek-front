@@ -61,13 +61,13 @@ export default function ImageShowHorizontal({ images }: { images: string[] }) {
       sx={{
         width: '100%',
         height: '100%',
-
+        border: '1px black solid',
         flexDirection: 'column',
       }}
     >
-      <FlexBox>
+      {/* <FlexBox>
         <Typography variant="h3">{Title}</Typography>
-      </FlexBox>
+      </FlexBox> */}
 
       <FlexBox sx={{ width: '100%', flexDirection: 'column' }}>
         <FlexBox
@@ -75,14 +75,12 @@ export default function ImageShowHorizontal({ images }: { images: string[] }) {
             width: '100%',
             height: '100%',
             maxHeight: 450,
-            paddingY: 1,
           }}
         >
           {/* 큰 사진(1개) */}
           <FlexBox
             sx={{
               width: '100%',
-              // height: '100%',
               justifyContent: 'center',
               alignItems: 'center',
             }}

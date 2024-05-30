@@ -172,11 +172,11 @@ export default function DecalCellListing() {
   return (
     <FlexBox sx={{ width: '100%', flexDirection: 'column' }}>
       <FlexBox>
-        <Typography variant="h5">Other Decals</Typography>
+        <Typography variant="h5">Decals</Typography>
       </FlexBox>
       <Grid container sx={{ width: '100%' }} spacing={2}>
         {decalsWithImage.map((decal) => (
-          <DecalItemCell decal={decal} />
+          <DecalItemCell decal={decal} key={`decal-item-cell-${decal.share_code}`} />
         ))}
       </Grid>
       <FlexBox sx={{ alignItems: 'center', justifyContent: 'center', paddingTop: 3 }}>

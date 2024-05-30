@@ -111,7 +111,7 @@ function TuningInfo({ tuning }: { tuning: Tuning }) {
       {/* 태그 */}
       <FlexBox sx={{ columnGap: 0.5 }}>
         {tuning.tags.map((tag) => {
-          return <Chip label={tag} />;
+          return <Chip label={tag} variant="outlined" key={`tuning-tag-${tag}`} />;
         })}
       </FlexBox>
       {/* 공유 코드 */}

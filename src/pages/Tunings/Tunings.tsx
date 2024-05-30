@@ -26,7 +26,8 @@ import Grid from '@mui/material/Unstable_Grid2';
 import { ApexOptions } from 'apexcharts';
 
 import { PI_Card } from '@/components/PI';
-import { CarSearchAndSelect } from '@/components/Search';
+import { CarFilterAndSelect } from '@/components/Search';
+import { CarAndTagSearch } from '@/components/Search';
 import { FlexBox, FullSizeCenteredFlexBox } from '@/components/styled';
 import { Image } from '@/components/styled';
 import { tunings } from '@/data/tunings';
@@ -317,7 +318,7 @@ export default function Tunings() {
   return (
     <Container sx={{ paddingTop: 1 }}>
       <FullSizeCenteredFlexBox sx={{ flexDirection: 'column' }}>
-        <CarSearchAndSelect scope={searchScope} doFinalSelect />
+        <CarAndTagSearch searchScope={searchScope} />
         <TuningOptionFilter />
         <TuningCellListing />
         {/* Pagination */}
