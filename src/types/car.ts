@@ -20,3 +20,15 @@ export type CarInfo = {
   fh5: FH5_info;
   image: CarImages;
 };
+
+export type DriveTrainType = 'AWD' | 'FWD' | 'RWD';
+export type DoorNumberType = 1 | 2 | 3 | 4;
+export type BodyStyleType =
+  | 'sedan'
+  | 'hatchBack'
+  | 'coupe'
+  | 'wagon'
+  | 'ATV'
+  | 'limo'
+  | 'threeWheeler'
+  | 'convertible';

@@ -6,7 +6,7 @@ import 'leaflet/dist/leaflet.css';
 import { FlexBox, FullSizeCenteredFlexBox } from '@/components/styled';
 import { Image } from '@/components/styled';
 import useTrackSearchFilters from '@/store/trackSearchFilters';
-import type { TrackInfo } from '@/types/track';
+import type { TrackInfo } from '@/types';
 
 import './leaflet.css';
 

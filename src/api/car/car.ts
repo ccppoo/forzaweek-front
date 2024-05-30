@@ -5,7 +5,7 @@ import type { API_NAME } from '@/api/types';
 import carInfo from '@/data/car_data.json';
 import { db } from '@/db';
 import { getCarData } from '@/db/index';
-import type { CarImages, CarInfo, FH5_info } from '@/types/car';
+import type { CarImages, CarInfo, FH5_info } from '@/types';
 
 import type { BodyStyleType, CarData, CountyType, DoorNumberType, DriveTrainType } from './types';
 

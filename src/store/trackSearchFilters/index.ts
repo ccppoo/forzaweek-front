@@ -8,7 +8,7 @@ import { useLiveQuery } from 'dexie-react-hooks';
 import { getCars } from '@/api/car';
 import { db } from '@/db';
 import type { Car, CarImage, FH5_STAT, Track } from '@/db/schema';
-import type { TrackInfo } from '@/types/track';
+import type { TrackInfo } from '@/types';
 
 // import type { Actions } from './types';
 import {

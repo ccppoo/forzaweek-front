@@ -19,7 +19,7 @@ import * as image from '@/image';
 import { FlexBox, FullSizeCenteredFlexBox } from '@/components/styled';
 import { Image } from '@/components/styled';
 import useTrackSearchFilters from '@/store/trackSearchFilters';
-import type { TrackInfo } from '@/types/track';
+import type { TrackInfo } from '@/types';
 
 import Map from './Map';
 

@@ -1,14 +1,10 @@
-import { useCallback, useMemo } from 'react';
 import { atom, useRecoilState } from 'recoil';
 
-import type { Collection, Table } from 'dexie';
-// import { useQuery } from '@tanstack/react-query';
 import { useLiveQuery } from 'dexie-react-hooks';
 
-import { getCars } from '@/api/car';
 import { db } from '@/db';
 import type { Car, CarImage, FH5_STAT } from '@/db/schema';
-import type { CarImages, CarInfo, FH5_info } from '@/types/car';
+import type { CarImages, CarInfo, FH5_info } from '@/types';
 
 import {
   BOOST,

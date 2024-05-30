@@ -15,7 +15,7 @@ import { Image } from '@/components/styled';
 import { getCarInfo } from '@/db/index';
 import useCarAndTagFilter from '@/store/carAndTagFilter';
 import useCarSearchFilters, { CarSearchOption } from '@/store/carSearchFilters';
-import type { CarImages, CarInfo, FH5_info } from '@/types/car';
+import type { CarImages, CarInfo, FH5_info } from '@/types';
 
 const carinfo = {
   manufacture: 'Hyundai',

@@ -1,6 +1,6 @@
 import Dexie, { Table } from 'dexie';
 
-import type { CarImages, CarInfo, FH5_info } from '@/types/car';
+import type { CarImages, CarInfo, FH5_info } from '@/types';
 
 import { Car, CarImage, FH5_STAT, Track } from './schema';
 
