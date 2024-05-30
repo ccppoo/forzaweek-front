@@ -318,7 +318,7 @@ export default function Tunings() {
   return (
     <Container sx={{ paddingTop: 1 }}>
       <FullSizeCenteredFlexBox sx={{ flexDirection: 'column' }}>
-        <CarAndTagSearch searchScope={searchScope} />
+        <CarAndTagSearch searchScope={searchScope} doFinalSelect />
         <TuningOptionFilter />
         <TuningCellListing />
         {/* Pagination */}

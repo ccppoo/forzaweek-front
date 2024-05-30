@@ -19,7 +19,7 @@ export default function Decals() {
     <Container sx={{ paddingTop: 1 }}>
       <FullSizeCenteredFlexBox sx={{ flexDirection: 'column', rowGap: 2 }}>
         {/* 차, 태그 검색 */}
-        <CarAndTagSearch searchScope={searchScope} />
+        <CarAndTagSearch searchScope={searchScope} doFinalSelect />
         {/* 데칼 목록 */}
         <DecalCellListing />
       </FullSizeCenteredFlexBox>

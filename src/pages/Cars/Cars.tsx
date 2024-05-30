@@ -9,13 +9,14 @@ import { styled } from '@mui/material/styles';
 
 import { CarPreviewCard } from '@/components/Car';
 import { CarFilterAndSelect } from '@/components/Search';
+import { CarAndTagSearch } from '@/components/Search';
 import { FlexBox, FullSizeCenteredFlexBox } from '@/components/styled';
 import useCarSearchFilters, { CarSearchOption } from '@/store/carSearchFilters';
 
 export default function Cars() {
   const navigate = useNavigate();
-  const carSearchScope = 'cars';
-  const [_, searchResults, isSearchOptionEmpty] = useCarSearchFilters(carSearchScope);
+  const searchScope = 'cars';
+  const [_, searchResults, isSearchOptionEmpty] = useCarSearchFilters(searchScope);
   const totalCarString = (num: number) => `Total ${num} cars`;
   const TOTAL_CARS = 843;
 
@@ -25,7 +26,9 @@ export default function Cars() {
         {/* <NewCars /> */}
 
         {/* car search */}
-        <CarFilterAndSelect scope={carSearchScope} />
+        {/* <CarFilterAndSelect scope={carSearchScope} /> */}
+        {/* 차, 태그 검색 */}
+        <CarAndTagSearch searchScope={searchScope} />
         <FlexBox sx={{ height: 30, alignItems: 'center' }}>
           <Typography variant="h6">
             {isSearchOptionEmpty

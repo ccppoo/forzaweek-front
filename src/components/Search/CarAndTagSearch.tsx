@@ -22,16 +22,22 @@ import { FlexBox, FullSizeCenteredFlexBox } from '@/components/styled';
 import { tags } from '@/data/tags';
 import useCarAndTagFilter from '@/store/carAndTagFilter';
 
-export default function CarAndTagSearch({ searchScope }: { searchScope: string }) {
+interface CarAndTagSearchIterface {
+  searchScope: string;
+  doFinalSelect?: boolean;
+}
+
+export default function CarAndTagSearch(props: CarAndTagSearchIterface) {
+  const { searchScope, doFinalSelect: DoFinalSelect } = props;
   const navigate = useNavigate();
   const noCarSelected = 'No car selected (all cars)';
   const noTagsSelected = 'No tags selected (all tags)';
   const {
     filter: { car, tags: tagsSelected },
   } = useCarAndTagFilter(searchScope);
-  // console.log(`tagsSelected.length > 0 : ${tagsSelected.length}`);
+
   return (
-    <FlexBox sx={{ flexDirection: 'column' }}>
+    <FlexBox sx={{ flexDirection: 'column', width: '100%' }}>
       <FlexBox>
         <Typography variant="h6">Search Options</Typography>
       </FlexBox>
@@ -57,7 +63,7 @@ export default function CarAndTagSearch({ searchScope }: { searchScope: string }
                 <FlexBox>
                   <Typography>Search By filters</Typography>
                 </FlexBox>
-                <CarFilterAndSelect scope={searchScope} doFinalSelect />
+                <CarFilterAndSelect scope={searchScope} doFinalSelect={DoFinalSelect} />
               </FlexBox>
             </FlexBox>
           </FlexBox>
