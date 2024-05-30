@@ -1,17 +1,19 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+import Button from '@mui/material/Button';
 import FormControl from '@mui/material/FormControl';
 import ListSubheader from '@mui/material/ListSubheader';
 import MenuItem from '@mui/material/MenuItem';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
-import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 
 import * as image from '@/image';
 import { FlexBox, FullSizeCenteredFlexBox } from '@/components/styled';
 import { Image } from '@/components/styled';
+import { getCarInfo } from '@/db/index';
+import useCarAndTagFilter from '@/store/carAndTagFilter';
 import useCarSearchFilters, { CarSearchOption } from '@/store/carSearchFilters';
 import type { CarImages, CarInfo, FH5_info } from '@/types/car';
 
@@ -30,9 +32,24 @@ const carinfo = {
   },
 };
 
-export default function FinalSelect({ searchScope }: { searchScope: string }) {
-  const [_, carSearchResults] = useCarSearchFilters(searchScope);
-  const [carName, setCarName] = useState<string>(carinfo.name);
+// setFilter? : (car : CarInfo) => void;
+
+interface FinalSelectInterface {
+  scope: string;
+  setFilter?: (car: CarInfo) => void;
+}
+
+export default function FinalSelect(props: FinalSelectInterface) {
+  const { scope, setFilter } = props;
+  const {
+    actions: {
+      car: { setCar },
+    },
+  } = useCarAndTagFilter(scope);
+  const [_, carSearchResults] = useCarSearchFilters(scope);
+  const [carName, setCarName] = useState<string>(
+    carSearchResults.length > 0 ? carSearchResults[0].name : '',
+  );
   const ITEM_HEIGHT = 48;
   const ITEM_PADDING_TOP = 8;
   const MenuProps = {
@@ -43,7 +60,15 @@ export default function FinalSelect({ searchScope }: { searchScope: string }) {
       },
     },
   };
-  const handleChange = (event: SelectChangeEvent) => {
+
+  const submitToCarTagFilter = async () => {
+    if (carName == '') return;
+    const car = await getCarInfo(carName);
+    setCar(car);
+  };
+
+  const selectCarMenuItem = (event: SelectChangeEvent) => {
+    console.log(`event.target.value : ${JSON.stringify(event.target.value)}`);
     setCarName(event.target.value);
   };
 
@@ -73,22 +98,21 @@ export default function FinalSelect({ searchScope }: { searchScope: string }) {
           <Select
             labelId="demo-multiple-chip-label"
             id="demo-multiple-chip"
-            inputProps={{ 'aria-label': 'Without label' }}
-            value={availableCarLists}
-            onChange={handleChange}
+            inputProps={{}}
+            value={carName}
+            onChange={selectCarMenuItem}
             input={<OutlinedInput id="select-multiple-chip" />}
-            renderValue={(selected) => (
+            renderValue={(selected: string) => (
               <FlexBox>
                 <Typography>{selected}</Typography>
               </FlexBox>
             )}
             MenuProps={MenuProps}
           >
-            {manufactureList.map((p: string) => renderSelectGroup(p))}
+            {manufactureList.map((manufacture) => renderSelectGroup(manufacture))}
           </Select>
         </FormControl>
       </FlexBox>
-
       <Image
         src={image.car.hyundaiElantra}
         sx={{
@@ -96,6 +120,11 @@ export default function FinalSelect({ searchScope }: { searchScope: string }) {
           objectFit: 'contain',
         }}
       />
+      <FlexBox sx={{ justifyContent: 'end', paddingX: 0.5, paddingY: 0.5 }}>
+        <Button variant="outlined" size="small" onClick={submitToCarTagFilter}>
+          Select
+        </Button>
+      </FlexBox>
     </FlexBox>
   );
 }

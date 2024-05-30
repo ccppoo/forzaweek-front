@@ -1,3 +1,13 @@
-import CarSearchAndSelect from './CarSearchAndSelect';
+import AutocompleteCarSearchBar from './AutocompleteCarSearchBar';
+import CarAndTagSearch from './CarAndTagSearch';
+import CarFilterAndSelect from './CarFilterAndSelect';
+import CarSearchRecent from './Recent';
+import TagAutocompleteTextField from './TagAutoCompleteTextField';
 
-export { CarSearchAndSelect };
+export {
+  CarFilterAndSelect,
+  CarSearchRecent,
+  AutocompleteCarSearchBar,
+  TagAutocompleteTextField,
+  CarAndTagSearch,
+};

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 import Autocomplete from '@mui/material/Autocomplete';
 import Chip from '@mui/material/Chip';
@@ -18,27 +18,28 @@ import { carInfoWithImage } from '@/data/cars';
 import { CarData, CarInfo } from '@/data/types';
 import { db } from '@/db';
 import type { Car, CarImage, FH5_STAT } from '@/db/schema';
-import useCarSearchFilters, { CarSearchOption } from '@/store/carSearchFilters';
+import useCarAndTagFilter from '@/store/carAndTagFilter';
+import type { Tags } from '@/types';
 
-export default function AutocompleteTextField({
+export default function TagAutocompleteTextField({
   searchScope,
-  optionName,
   values,
-  groupOptions,
   limitTags,
 }: {
   searchScope: string;
-  optionName: CarSearchOption;
   values: string[];
-  groupOptions?: boolean;
   limitTags?: number;
 }) {
-  const [options, _, __, { setOption }] = useCarSearchFilters(searchScope);
-  const setSearchOption = (name: string[]) => setOption(name, optionName);
-  const selectedOptions = options[optionName];
-
+  const {
+    filter: { tags: tagsSelected },
+    actions: {
+      tag: { setTags },
+    },
+  } = useCarAndTagFilter(searchScope);
+  const setSearchOption = (tags: Tags) => setTags(tags);
   const ITEM_HEIGHT = 48;
   const ITEM_PADDING_TOP = 8;
+  const defaultValue = [...tagsSelected];
   const MenuProps = {
     PaperProps: {
       style: {
@@ -50,9 +51,9 @@ export default function AutocompleteTextField({
 
   return (
     <FlexBox sx={{ width: '100%', paddingX: 0 }}>
-      <FlexBox sx={{ width: 180, alignItems: 'center' }}>
+      {/* <FlexBox sx={{ width: 180, alignItems: 'center' }}>
         <Typography variant="subtitle1">{optionName}</Typography>
-      </FlexBox>
+      </FlexBox> */}
       <FlexBox sx={{ width: '100%' }}>
         <Autocomplete
           multiple
@@ -60,9 +61,11 @@ export default function AutocompleteTextField({
           id="tags-outlined"
           size="small"
           options={values}
-          groupBy={groupOptions ? (option) => option[0] : undefined}
+          // groupBy={groupOptions ? (option) => option[0] : undefined}
           getOptionLabel={(option) => option}
-          defaultValue={[...selectedOptions]}
+          defaultValue={[...tagsSelected]}
+          value={tagsSelected}
+          // inputValue=''
           filterSelectedOptions
           onChange={(event: any, newValue: string[]) => {
             setSearchOption(newValue);
@@ -75,7 +78,7 @@ export default function AutocompleteTextField({
           renderInput={(params) => (
             <TextField
               {...params}
-              placeholder={selectedOptions.length == 0 ? optionName : undefined}
+              placeholder={tagsSelected.length == 0 ? 'select tags' : undefined}
               sx={{}}
             />
           )}

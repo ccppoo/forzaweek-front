@@ -1,5 +1,6 @@
 import { useState } from 'react';
 
+import Divider from '@mui/material/Divider';
 import Grid2 from '@mui/material/Unstable_Grid2/Grid2';
 
 import * as image from '@/image';
@@ -25,7 +26,7 @@ interface CarSearchAndSelectInterface {
   doFinalSelect?: boolean;
 }
 
-export default function CarSearchAndSelect(props: CarSearchAndSelectInterface) {
+export default function CarFilterAndSelect(props: CarSearchAndSelectInterface) {
   const { scope, doFinalSelect } = props;
   const ITEM_HEIGHT = 48;
   const ITEM_PADDING_TOP = 8;
@@ -39,12 +40,6 @@ export default function CarSearchAndSelect(props: CarSearchAndSelectInterface) {
   };
   return (
     <FlexBox sx={{ flexDirection: 'column', width: '100%' }}>
-      {/* 최근 검색 */}
-      <CarSearchRecent />
-      {/* 검색 창 */}
-      <FlexBox sx={{}}>
-        <AutocompleteCarSearchBar searchScope={scope} />
-      </FlexBox>
       {/* 차 선택 */}
       <FlexBox
         sx={{
@@ -104,8 +99,9 @@ export default function CarSearchAndSelect(props: CarSearchAndSelectInterface) {
             limitTags={3}
           />
         </FlexBox>
+        {doFinalSelect && <Divider orientation="vertical" />}
         {/* 차 최종 선택 */}
-        {doFinalSelect && <FinalSelect searchScope={scope} />}
+        {doFinalSelect && <FinalSelect scope={scope} />}
       </FlexBox>
     </FlexBox>
   );
