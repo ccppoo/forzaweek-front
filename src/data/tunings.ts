@@ -1,6 +1,24 @@
 type DrivingSystem = 'AWD' | 'FWD' | 'RWD';
 type TierType = 'basic';
 
+export type TestReadings = {
+  maxspeed: number | null;
+  zero100: number;
+  tork: number;
+  output: number;
+  weight: number;
+  skid_pad: number;
+};
+
+export type Performance = {
+  handling: number;
+  speed: number;
+  acceleration: number;
+  launch: number;
+  braking: number;
+  offroad: number;
+};
+
 export type Tuning = {
   creater: {
     id: string;
@@ -14,22 +32,8 @@ export type Tuning = {
   created_at: string;
   share_code: string;
   PI: number;
-  test_reading: {
-    maxspeed: number | null;
-    zero100: number;
-    tork: number;
-    output: number;
-    weight: number;
-    skid_pad: number;
-  };
-  performance: {
-    handling: number;
-    speed: number;
-    acceleration: number;
-    launch: number;
-    braking: number;
-    offroad: number;
-  };
+  test_reading: TestReadings;
+  performance: Performance;
   suspension: string;
   tier: string;
   driving_system: DrivingSystem;

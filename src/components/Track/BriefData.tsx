@@ -19,7 +19,6 @@ import * as image from '@/image';
 import Comments from '@/components/Comment';
 import { ImageShowHorizontal } from '@/components/ImageList';
 import { PI_Card } from '@/components/PI';
-import { RelatedTunings } from '@/components/Tunings';
 import { RelatedVideos } from '@/components/Videos';
 import { FlexBox, FullSizeCenteredFlexBox } from '@/components/styled';
 import { Image } from '@/components/styled';
