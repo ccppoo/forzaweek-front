@@ -34,8 +34,7 @@ export function PI_Card({ pi_number, height }: { pi_number: number; height: numb
       </FlexBox>
       <FlexBox
         sx={{
-          border: '1px black solid',
-
+          border: `2px ${PI_COLOR} solid`,
           backgroundColor: 'white',
           borderTopRightRadius: 5,
           borderBottomRightRadius: 5,
@@ -46,7 +45,7 @@ export function PI_Card({ pi_number, height }: { pi_number: number; height: numb
           alignItems: 'center',
         }}
       >
-        <Typography fontWeight="fontWeightMedium">{pi_number}</Typography>
+        <Typography sx={{ fontWeight: 'bold', fontSize: 18 }}>{pi_number}</Typography>
       </FlexBox>
     </FlexBox>
   );
