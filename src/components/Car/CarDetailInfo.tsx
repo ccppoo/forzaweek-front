@@ -10,7 +10,7 @@ import * as image from '@/image';
 import { FlexBox } from '@/components/styled';
 import { Image } from '@/components/styled';
 
-export default function BriefData() {
+export default function CarDetailInfo() {
   const WIDTH = '100%';
   const HEIGHT = '100%';
   const name = 'Arch of Mulegé Circuit';

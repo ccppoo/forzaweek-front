@@ -1,5 +1,5 @@
-import BriefData from './BriefData';
-import BaseCarInfo from './CarInfo';
+import BriefCarInfo from './BriefCarInfo';
+import CarDetailInfo from './CarDetailInfo';
 import CarPreviewCard from './CarPreviewCard';
 
-export { BaseCarInfo, BriefData, CarPreviewCard };
+export { BriefCarInfo, CarDetailInfo, CarPreviewCard };

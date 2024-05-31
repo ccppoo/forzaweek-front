@@ -8,7 +8,7 @@ import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
 
 import * as image from '@/image';
-import { BaseCarInfo } from '@/components/Car';
+import { BriefCarInfo } from '@/components/Car';
 import Comments from '@/components/Comment';
 import { RelatedDecals } from '@/components/Decals';
 import { ImageShowHorizontal } from '@/components/ImageList';
@@ -164,7 +164,7 @@ export default function DecalDetail() {
           {/* <DecalImages decalData={decalData} /> */}
           <ImageShowHorizontal images={decalData.images} />
           {/* 데칼에 사용된 차 간단 정보 */}
-          <BaseCarInfo />
+          <BriefCarInfo />
           {/* 댓글 */}
           <Comments />
           {/* 다른 데칼 */}

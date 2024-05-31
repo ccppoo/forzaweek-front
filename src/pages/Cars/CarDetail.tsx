@@ -6,7 +6,7 @@ import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
 
 import * as image from '@/image';
-import { BriefData } from '@/components/Car';
+import { CarDetailInfo } from '@/components/Car';
 import Comments from '@/components/Comment';
 import { RelatedDecals } from '@/components/Decals';
 import { ImageShowHorizontal } from '@/components/ImageList';
@@ -95,7 +95,7 @@ export default function CarDetail() {
           {/* 제목 */}
           <TitlePart />
           {/* 제목 밑에 사진이랑 특징 */}
-          <BriefData />
+          <CarDetailInfo />
           {/* 차 사진들 */}
           <ImageShowHorizontal images={CAR_IMAGES} />
           {/* 댓글 */}
