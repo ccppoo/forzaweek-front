@@ -1,9 +1,5 @@
 import { useState } from 'react';
-import ReactApexChart from 'react-apexcharts';
-import { useNavigate } from 'react-router-dom';
 
-import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
-import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlined';
 import FavoriteOutlinedIcon from '@mui/icons-material/FavoriteOutlined';
 import Avatar from '@mui/material/Avatar';
@@ -18,19 +14,12 @@ import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Unstable_Grid2';
 import { styled } from '@mui/material/styles';
 
-import { ApexOptions } from 'apexcharts';
-
 import * as image from '@/image';
 import Comments from '@/components/Comment';
-import { ImageShowHorizontal } from '@/components/ImageList';
-import { PI_Card } from '@/components/PI';
-import { RelatedTunings } from '@/components/Tunings';
 import { FlexBox, FullSizeCenteredFlexBox } from '@/components/styled';
 import { Image } from '@/components/styled';
 import { decalsWithImage } from '@/data/decals';
 import type { DecalData } from '@/data/decals';
-import { tunings } from '@/data/tunings';
-import type { Tuning } from '@/data/tunings';
 
 function RelatedDecal({ decalData }: { decalData: DecalData }) {
   const creator = decalData.club ? `[${decalData.club}] ${decalData.creater}` : decalData.creater;
