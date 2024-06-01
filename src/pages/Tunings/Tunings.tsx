@@ -28,12 +28,11 @@ import { ApexOptions } from 'apexcharts';
 import { PI_Card } from '@/components/PI';
 import { CarFilterAndSelect } from '@/components/Search';
 import { CarAndTagSearch } from '@/components/Search';
+import TuningOptionFilter from '@/components/Tunings/TuningSearchFilter';
 import { FlexBox, FullSizeCenteredFlexBox } from '@/components/styled';
 import { Image } from '@/components/styled';
 import { tunings } from '@/data/tunings';
 import type { Tuning } from '@/data/tunings';
-
-import TuningOptionFilter from './TuningSearchFilter';
 
 function stringToColor(string: string) {
   let hash = 0;

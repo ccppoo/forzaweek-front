@@ -211,6 +211,8 @@ function TuningOptionTier() {
 export default function TuningOptionFilter() {
   // 차 선택하고 나서 필터링하는 옵션
 
+  // TODO: 튜닝 설정 태그처럼 recoil store로 바꾸기
+  // TODO: 서스펜션, 타이어, 구동방식 그림 아이콘
   return (
     <FlexBox sx={{ width: '100%', flexDirection: 'column', paddingY: 3 }}>
       <FlexBox>

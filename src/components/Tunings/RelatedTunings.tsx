@@ -2,74 +2,97 @@ import { useState } from 'react';
 import ReactApexChart from 'react-apexcharts';
 import { useNavigate } from 'react-router-dom';
 
-import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
-import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
-import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlined';
-import FavoriteOutlinedIcon from '@mui/icons-material/FavoriteOutlined';
 import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
+import ButtonBase from '@mui/material/ButtonBase';
 import Chip from '@mui/material/Chip';
 import Container from '@mui/material/Container';
 import Divider from '@mui/material/Divider';
-import IconButton from '@mui/material/IconButton';
 import Pagination from '@mui/material/Pagination';
 import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Unstable_Grid2';
 import { styled } from '@mui/material/styles';
 
-import { ApexOptions } from 'apexcharts';
-
 import * as image from '@/image';
-import Comments from '@/components/Comment';
-import { ImageShowHorizontal } from '@/components/ImageList';
 import { PI_Card } from '@/components/PI';
 import { FlexBox, FullSizeCenteredFlexBox } from '@/components/styled';
-import { decalsWithImage } from '@/data/decals';
-import type { DecalData } from '@/data/decals';
 import { tunings } from '@/data/tunings';
 import type { Tuning } from '@/data/tunings';
 
-function RelatedTuning({ tuning }: { tuning: Tuning }) {
-  const carInfo = {
-    manufacture: 'Hyundai',
-    year: 2021,
-    country: 'Korea',
-    name: '#98 Bryan Herta Autosport Elantra N',
-    drive_train: 'FWD',
-    body_style: 'sedan',
-    door: 4,
-    engine: 'ICE',
-    FH5: {
-      PI: 800,
-      division: 'track toys',
-    },
-  };
+import { smallChartOptions } from './chartOption';
 
+function ShareCode({ shareCode }: { shareCode: string }) {
   const share_code3 = [
-    tuning.share_code.substring(0, 3),
-    tuning.share_code.substring(3, 6),
-    tuning.share_code.substring(6, 9),
+    shareCode.substring(0, 3),
+    shareCode.substring(3, 6),
+    shareCode.substring(6, 9),
   ];
-  const data = {
-    labels: ['Acceleration', 'Speed', 'braking', 'offroad', 'launch', 'handling'],
-    datasets: [
-      {
-        data: [
-          tuning.performance.acceleration,
-          tuning.performance.speed,
-          tuning.performance.braking,
-          tuning.performance.offroad,
-          tuning.performance.launch,
-          tuning.performance.handling,
-        ],
-        backgroundColor: 'rgba(255, 99, 132, 0.2)',
-        borderColor: 'rgba(255, 99, 132, 1)',
-        borderWidth: 1,
-      },
-    ],
-  };
 
+  return (
+    <FlexBox
+      sx={{
+        width: '100%',
+        justifyContent: 'center',
+      }}
+    >
+      <FlexBox
+        sx={{
+          width: 180,
+
+          alignItems: 'center',
+          justifyContent: 'center',
+          columnGap: 1,
+          borderRadius: 2,
+          backgroundColor: '#d1d1d1',
+        }}
+      >
+        {share_code3.map((code_peice) => {
+          return (
+            <Typography variant="h6" key={`share-code-piece-${code_peice}`}>
+              {code_peice}
+            </Typography>
+          );
+        })}
+      </FlexBox>
+    </FlexBox>
+  );
+}
+
+function TuningBreifInfo({ tuning }: { tuning: Tuning }) {
+  const tuningTitle = 'good tuning';
+  const creator = tuning.creater.club
+    ? `[${tuning.creater.club}] ${tuning.creater.id}`
+    : tuning.creater.id;
+  // TODO: 이쁘게
+  return (
+    <Grid xs={6} sx={{ display: 'flex', flexDirection: 'column' }}>
+      <FlexBox sx={{ width: '100%' }}>
+        <Typography>{tuningTitle}</Typography>
+      </FlexBox>
+      <FlexBox>
+        <Typography>creator : {creator}</Typography>
+      </FlexBox>
+
+      <FlexBox>
+        <Typography>tags : grip</Typography>
+      </FlexBox>
+
+      <FlexBox>
+        <Typography>suspension : {tuning.suspension}</Typography>
+      </FlexBox>
+      <FlexBox>
+        <Typography>tier : {tuning.tier}</Typography>
+      </FlexBox>
+      <FlexBox>
+        <Typography>driving system : {tuning.driving_system}</Typography>
+      </FlexBox>
+      <ShareCode shareCode={tuning.share_code} />
+    </Grid>
+  );
+}
+
+function RelatedTuning({ tuning }: { tuning: Tuning }) {
   const series = [
     {
       name: 'performance',
@@ -84,71 +107,6 @@ function RelatedTuning({ tuning }: { tuning: Tuning }) {
     },
   ];
 
-  const options: ApexOptions = {
-    chart: {
-      type: 'radar',
-      toolbar: {
-        show: false,
-      },
-      events: {
-        mounted: (chart) => {
-          chart.windowResizeHandler();
-        },
-      },
-      redrawOnParentResize: true,
-    },
-    tooltip: {
-      enabled: false,
-    },
-    plotOptions: {
-      radar: {
-        size: 80,
-      },
-    },
-    yaxis: {
-      min: 0,
-      max: 10,
-      stepSize: 2,
-      tooltip: {
-        enabled: false,
-      },
-      labels: {
-        show: false,
-        formatter: (value) => {
-          return '';
-        },
-      },
-      axisTicks: {
-        show: false,
-      },
-      axisBorder: {
-        show: false,
-      },
-    },
-    dataLabels: {
-      enabled: true,
-    },
-    xaxis: {
-      categories: ['acceleration', 'speed', 'braking', 'offroad', 'launch', 'handling'],
-      labels: {
-        style: {
-          colors: '#050505',
-          fontWeight: 600,
-          fontSize: '10px',
-        },
-        offsetY: -1,
-      },
-    },
-
-    fill: {
-      opacity: 0.5,
-    },
-  };
-
-  const tuningTitle = 'good tuning';
-  const creator = tuning.creater.club
-    ? `[${tuning.creater.club}] ${tuning.creater.id}`
-    : tuning.creater.id;
   return (
     <Grid xs={6} sx={{ display: 'flex', flexDirection: 'column', padding: 1 }}>
       <Paper sx={{ display: 'flex', width: '100%', height: '100%' }} elevation={4}>
@@ -157,61 +115,18 @@ function RelatedTuning({ tuning }: { tuning: Tuning }) {
         </FlexBox>
         <Grid container sx={{ width: '100%' }}>
           {/* 성능 그래프 */}
-
           <Grid xs={6} sx={{ aspectRatio: '1/1' }}>
             <ReactApexChart
               series={series}
-              options={options}
+              options={smallChartOptions}
               width={'100%'}
               height={'100%'}
               type="radar"
               id={`radar-chart-${tuning.share_code}`}
             />
           </Grid>
-          {/* 튜닝 이름 */}
-          <Grid xs={6} sx={{ display: 'flex', flexDirection: 'column' }}>
-            <FlexBox sx={{ width: '100%' }}>
-              <Typography>{tuningTitle}</Typography>
-            </FlexBox>
-
-            <FlexBox>
-              <Typography>creator : {creator}</Typography>
-            </FlexBox>
-
-            <FlexBox>
-              <Typography>tags : grip</Typography>
-            </FlexBox>
-
-            <FlexBox>
-              <Typography>suspension : {tuning.suspension}</Typography>
-            </FlexBox>
-            <FlexBox>
-              <Typography>tier : {tuning.tier}</Typography>
-            </FlexBox>
-            <FlexBox>
-              <Typography>driving system : {tuning.driving_system}</Typography>
-            </FlexBox>
-            <FlexBox>
-              <FlexBox
-                sx={{
-                  width: '100%',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  columnGap: 1,
-                  borderRadius: 4,
-                  backgroundColor: '#d1d1d1',
-                }}
-              >
-                {share_code3.map((code_peice) => {
-                  return (
-                    <Typography variant="h6" key={`share-code-piece-${code_peice}`}>
-                      {code_peice}
-                    </Typography>
-                  );
-                })}
-              </FlexBox>
-            </FlexBox>
-          </Grid>
+          {/* 튜닝 간단 정보 */}
+          <TuningBreifInfo tuning={tuning} />
         </Grid>
       </Paper>
     </Grid>
@@ -229,10 +144,36 @@ export default function RelatedTunings() {
     S2: 998,
     X: 999,
   };
+
+  const ceilPI = (pi: number) => {
+    if (pi <= 500) return 500; // D
+    if (pi <= 600) return 600; // C
+    if (pi <= 700) return 700; // B
+    if (pi <= 800) return 800; // A
+    if (pi <= 900) return 900; // S1
+    if (pi <= 998) return 998; // S2
+    return 1000; // X
+  };
+  const floorPI = (pi: number) => {
+    if (pi <= 500) return 100; // D
+    if (pi <= 600) return 501; // C
+    if (pi <= 700) return 601; // B
+    if (pi <= 800) return 701; // A
+    if (pi <= 900) return 801; // S1
+    if (pi <= 998) return 901; // S2
+    return 999; // X
+  };
   const [page, setPage] = useState(1);
   const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
     setPage(value);
   };
+  const [tuningSearchRange, setTuningSearchRange] = useState<number[]>([900, 998]);
+  const setTuningSearchClass = (currPI: number) => {
+    setTuningSearchRange([floorPI(currPI), ceilPI(currPI)]);
+  };
+
+  console.log(`tuningSearchRange : ${JSON.stringify(tuningSearchRange)}`);
+
   return (
     <FlexBox
       sx={{
@@ -256,14 +197,24 @@ export default function RelatedTunings() {
           }}
         >
           {Object.values(TUNING_NUM).map((val) => {
-            return <PI_Card pi_number={val} height={40} key={`pi-card-val-${val}`} />;
+            return (
+              <ButtonBase
+                onClick={() => setTuningSearchClass(val)}
+                key={`pi-card-val-${val}-button`}
+              >
+                <PI_Card pi_number={val} height={40} />
+              </ButtonBase>
+            );
           })}
         </FlexBox>
 
         {/* 선택된 클래스에 있는 튜닝들 */}
         <Grid container>
           {tunings
-            .filter((tuning) => tuning.PI > 900 && tuning.PI <= 998)
+            .filter(
+              (tuning) => tuning.PI > tuningSearchRange[0] && tuning.PI <= tuningSearchRange[1],
+            )
+            .slice(0, 6)
             .map((tuning) => {
               return (
                 <RelatedTuning tuning={tuning} key={`tuning-${tuning.PI}-${tuning.share_code}`} />
