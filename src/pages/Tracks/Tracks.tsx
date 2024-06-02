@@ -208,7 +208,7 @@ export default function Tracks() {
   const [_, tracks] = useTrackSearchFilters();
 
   return (
-    <Container sx={{ paddingTop: 5, minWidth: 1340 }}>
+    <Container sx={{ paddingTop: 2, minWidth: 1340 }}>
       <FullSizeCenteredFlexBox sx={{ flexDirection: 'column' }}>
         <FlexBox sx={{ width: 1336, height: 800 }}>
           <Map />

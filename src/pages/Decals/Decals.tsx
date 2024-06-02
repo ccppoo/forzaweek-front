@@ -16,11 +16,14 @@ export default function Decals() {
   const navigate = useNavigate();
 
   return (
-    <Container sx={{ paddingTop: 1 }}>
+    <Container sx={{ paddingTop: 2 }}>
       <FullSizeCenteredFlexBox sx={{ flexDirection: 'column', rowGap: 2 }}>
         {/* 차, 태그 검색 */}
         <CarAndTagSearch searchScope={searchScope} doFinalSelect />
         {/* 데칼 목록 */}
+        {/* 검색 조건 선택 안되었을 경우 */}
+        <DecalCellListing />
+        <DecalCellListing />
         <DecalCellListing />
       </FullSizeCenteredFlexBox>
     </Container>

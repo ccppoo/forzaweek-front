@@ -21,7 +21,7 @@ export default function Cars() {
   const TOTAL_CARS = 843;
 
   return (
-    <Container sx={{ height: '120vh' }}>
+    <Container sx={{ paddingTop: 2 }}>
       <FlexBox sx={{ flexDirection: 'column', rowGap: 2, paddingTop: 1 }}>
         {/* <NewCars /> */}
 

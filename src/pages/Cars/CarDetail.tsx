@@ -45,7 +45,7 @@ function TitlePart() {
 
   return (
     <FlexBox sx={{ width: '100%', height: 50 }}>
-      {/* 트랙 아이콘 */}
+      {/* 제조사 로고 */}
       <FlexBox
         sx={{
           aspectRatio: '1/1',
@@ -78,7 +78,7 @@ export default function CarDetail() {
   const track_type = 'circuit';
 
   return (
-    <Container sx={{ paddingTop: 5 }}>
+    <Container sx={{ paddingTop: 2 }}>
       <FullSizeCenteredFlexBox>
         <FlexBox
           sx={{

@@ -29,7 +29,7 @@ export default function TuningDetail() {
   const WIDTH = '100%';
   const decalData = decalsWithImage[3];
   return (
-    <Container sx={{ paddingTop: 5 }}>
+    <Container sx={{ paddingTop: 2 }}>
       <FullSizeCenteredFlexBox>
         <FlexBox
           sx={{

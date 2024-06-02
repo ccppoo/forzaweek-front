@@ -71,7 +71,7 @@ export default function Tracks() {
       <FullSizeCenteredFlexBox
         sx={{
           height: '100%',
-          paddingTop: 5,
+          paddingTop: 2,
         }}
       >
         <FlexBox

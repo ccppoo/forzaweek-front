@@ -93,7 +93,7 @@ function DecalInfo({ decalData }: { decalData: DecalData }) {
         <Typography variant="h5">{creator}</Typography>
       </FlexBox>
       {/* 태그 */}
-      <FlexBox sx={{ columnGap: 0.5 }}>
+      <FlexBox sx={{ columnGap: 0.5, alignContent: 'flex-start' }}>
         {decalData.tags.map((tag) => {
           return <Chip label={tag} key={`decal-${decalData.share_code}-data-tag-${tag}`} />;
         })}
@@ -137,7 +137,7 @@ export default function DecalDetail() {
   const HEIGHT = '100%';
   const decalData = decalsWithImage[3];
   return (
-    <Container sx={{ paddingTop: 5 }}>
+    <Container sx={{ paddingTop: 2 }}>
       <FullSizeCenteredFlexBox
         sx={
           {
