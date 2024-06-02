@@ -47,7 +47,7 @@ export async function getCarData(): Promise<CarInfo[]> {
       // console.log(`fh5 : ${JSON.stringify(fh5)}`);
       const { id, ...resFH5 } = fh5!;
       const { id: _, ...resImage } = images!;
-      const joined = { ...res, fh5: { ...resFH5 }, image: { ...resImage } };
+      const joined = { id: carID!, ...res, fh5: { ...resFH5 }, image: { ...resImage } };
       return joined;
     }),
   );
@@ -66,7 +66,7 @@ export async function getCarInfo(name: string): Promise<CarInfo | undefined> {
   ]);
   const { id, ...resFH5 } = fh5!;
   const { id: _, ...resImage } = images!;
-  const joined = { ...res, fh5: { ...resFH5 }, image: { ...resImage } };
+  const joined = { id: carID!, ...res, fh5: { ...resFH5 }, image: { ...resImage } };
   return joined;
 }
 
@@ -81,6 +81,6 @@ export async function getCarInfoByID(carId: number): Promise<CarInfo | undefined
   ]);
   const { id, ...resFH5 } = fh5!;
   const { id: _, ...resImage } = images!;
-  const joined = { ...res, fh5: { ...resFH5 }, image: { ...resImage } };
+  const joined = { id: carID!, ...res, fh5: { ...resFH5 }, image: { ...resImage } };
   return joined;
 }

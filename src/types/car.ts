@@ -9,6 +9,7 @@ export type CarImages = {
 };
 
 export type CarInfo = {
+  id: number;
   name: string;
   year: number;
   country: string;
