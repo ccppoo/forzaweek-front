@@ -51,6 +51,7 @@ const carSearchOptionStateFamily = atomFamily<CarSearchOptions, string>({
 
 type Actions = {
   setOption: (name: string[], option: CarSearchOption) => void;
+  clearAllOptions: () => void;
 };
 
 interface GetCarDataIntf {
@@ -85,7 +86,7 @@ function zipCar(cars: Car[], fh5s: FH5_STAT[], images: CarImage[]) {
     const { id: carID, ...res } = cars[cnt];
     const { id, ...resFH5 } = fh5s[cnt];
     const { id: _, ...resImage } = images[cnt];
-    const joined = { ...res, fh5: { ...resFH5 }, image: { ...resImage } };
+    const joined = { id: carID!, ...res, fh5: { ...resFH5 }, image: { ...resImage } };
     vals.push(joined);
     cnt++;
   }
@@ -199,7 +200,16 @@ function useCarSearchFilters(scope: string): [CarSearchOptions, CarInfo[], boole
     });
   };
 
-  return [carSearchOptions, searchResults || [], isSearchOptionEmpty, { setOption }];
+  const clearAllOptions = () => {
+    setCarSearchOptions(carSearchOptionDefault);
+  };
+
+  return [
+    carSearchOptions,
+    searchResults || [],
+    isSearchOptionEmpty,
+    { setOption, clearAllOptions },
+  ];
 }
 
 export default useCarSearchFilters;
