@@ -9,7 +9,7 @@ import { useQuery } from '@tanstack/react-query';
 import { useLiveQuery } from 'dexie-react-hooks';
 
 import { FlexBox } from '@/components/styled';
-import { db, getCarInfoByID } from '@/db';
+import { db, getCarInfo, getCarInfoByID } from '@/db';
 import type { Car, CarImage, FH5_STAT } from '@/db/schema';
 import useCarAndTagFilter from '@/store/carAndTagFilter';
 import useCarSearchFilters, { CarSearchOption } from '@/store/carSearchFilters';
@@ -22,10 +22,10 @@ export default function AutocompleteCarSearchBar({ searchScope }: { searchScope:
   // 직접 검색해서 찾을 수 있는 검색 바
   // TODO: Selection -> DB에서 자동차 ID로 저장 + 하나 선택했으면 Search Filter 업데이트하기
 
-  // const [options, _, __, { setOption }] = useCarSearchFilters();
   const {
+    filter: { car },
     actions: {
-      car: { setCar },
+      car: { setCar, removeCar },
     },
   } = useCarAndTagFilter(searchScope);
   const options = useLiveQuery(getCarData) || [];
@@ -35,7 +35,7 @@ export default function AutocompleteCarSearchBar({ searchScope }: { searchScope:
     setCar(car);
   };
   return (
-    <FlexBox sx={{ width: '100%', paddingY: 1 }}>
+    <FlexBox sx={{ width: '100%', paddingY: 1, justifyContent: 'center' }}>
       <FlexBox sx={{ justifyContent: 'center', alignItems: 'center', paddingX: 1 }}>
         <SearchOutlinedIcon />
       </FlexBox>
@@ -53,16 +53,17 @@ export default function AutocompleteCarSearchBar({ searchScope }: { searchScope:
         groupBy={(option: Car) => option.manufacture}
         getOptionLabel={(option: Car) => option.name}
         defaultValue={null}
+        // value={selection}
         filterSelectedOptions
         onChange={(event: any, newValue: Car | null) => {
+          newValue || removeCar();
           setSelection(newValue || undefined);
           if (newValue?.id) {
             submitToCarTagFilter(newValue.id);
           }
-          // setCar(newValue?.name)
         }}
         renderInput={(params) => <TextField {...params} placeholder={'Search car'} sx={{}} />}
-        sx={{ width: '100%' }}
+        sx={{ width: '60%' }}
       />
     </FlexBox>
   );

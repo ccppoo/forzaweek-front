@@ -43,10 +43,10 @@ export default function FinalSelect(props: FinalSelectInterface) {
   const { scope, setFilter } = props;
   const {
     actions: {
-      car: { setCar },
+      car: { setCar, removeCar },
     },
   } = useCarAndTagFilter(scope);
-  const [_, carSearchResults] = useCarSearchFilters(scope);
+  const [_, carSearchResults, __, { clearAllOptions }] = useCarSearchFilters(scope);
   const [carName, setCarName] = useState<string>(
     carSearchResults.length > 0 ? carSearchResults[0].name : '',
   );
@@ -59,6 +59,10 @@ export default function FinalSelect(props: FinalSelectInterface) {
         width: 250,
       },
     },
+  };
+
+  const removeCarSelected = () => {
+    removeCar();
   };
 
   const submitToCarTagFilter = async () => {
@@ -120,9 +124,12 @@ export default function FinalSelect(props: FinalSelectInterface) {
           objectFit: 'contain',
         }}
       />
-      <FlexBox sx={{ justifyContent: 'end', paddingX: 0.5, paddingY: 0.5 }}>
+      <FlexBox sx={{ justifyContent: 'end', paddingX: 0.5, paddingY: 0.5, columnGap: 0.5 }}>
         <Button variant="outlined" size="small" onClick={submitToCarTagFilter}>
           Select
+        </Button>
+        <Button color="error" variant="outlined" size="small" onClick={removeCarSelected}>
+          clear
         </Button>
       </FlexBox>
     </FlexBox>

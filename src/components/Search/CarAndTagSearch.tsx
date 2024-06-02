@@ -30,7 +30,7 @@ interface CarAndTagSearchIterface {
 export default function CarAndTagSearch(props: CarAndTagSearchIterface) {
   const { searchScope, doFinalSelect: DoFinalSelect } = props;
   const navigate = useNavigate();
-  const noCarSelected = 'No car selected (all cars)';
+  const noCarSelected = 'No car selected';
   const noTagsSelected = 'No tags selected (all tags)';
   const {
     filter: { car, tags: tagsSelected },
@@ -49,7 +49,12 @@ export default function CarAndTagSearch(props: CarAndTagSearchIterface) {
           id="panel1-header"
         >
           <Typography sx={{ width: '20%', flexShrink: 0 }}>Car</Typography>
-          <Typography sx={{ color: 'text.secondary' }}>{car?.name || noCarSelected}</Typography>
+          <Typography
+            sx={{ color: car?.name ? 'text.main' : 'text.first' }}
+            fontWeight={car?.name ? 500 : 300}
+          >
+            {car?.name || noCarSelected}
+          </Typography>
         </AccordionSummary>
         <AccordionDetails>
           <FlexBox sx={{ flexDirection: 'column' }}>
@@ -61,7 +66,7 @@ export default function CarAndTagSearch(props: CarAndTagSearchIterface) {
             <FlexBox sx={{ rowGap: 1, flexDirection: 'column' }}>
               <FlexBox sx={{ flexDirection: 'column' }}>
                 <FlexBox>
-                  <Typography>Search By filters</Typography>
+                  <Typography variant="body2">Search By filters</Typography>
                 </FlexBox>
                 <CarFilterAndSelect scope={searchScope} doFinalSelect={DoFinalSelect} />
               </FlexBox>
@@ -84,7 +89,12 @@ export default function CarAndTagSearch(props: CarAndTagSearchIterface) {
               ))}
             </Stack>
           ) : (
-            <Typography sx={{ color: 'text.secondary' }}>{noTagsSelected}</Typography>
+            <Typography
+              sx={{ color: tagsSelected.length > 0 ? 'text.main' : 'text.first' }}
+              fontWeight={tagsSelected.length > 0 ? 500 : 300}
+            >
+              {noTagsSelected}
+            </Typography>
           )}
         </AccordionSummary>
         <AccordionDetails>
