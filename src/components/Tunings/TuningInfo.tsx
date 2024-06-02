@@ -73,7 +73,7 @@ export default function TuningInfo({ tuning }: { tuning: Tuning }) {
         <Typography variant="h5">{creator}</Typography>
       </FlexBox>
       {/* 태그 */}
-      <FlexBox sx={{ columnGap: 0.5 }}>
+      <FlexBox sx={{ columnGap: 0.5, alignContent: 'flex-start' }}>
         {tuning.tags.map((tag) => {
           return <Chip label={tag} variant="outlined" key={`tuning-tag-${tag}`} />;
         })}

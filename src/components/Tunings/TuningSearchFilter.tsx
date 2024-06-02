@@ -216,7 +216,7 @@ export default function TuningOptionFilter() {
   return (
     <FlexBox sx={{ width: '100%', flexDirection: 'column', paddingY: 3 }}>
       <FlexBox>
-        <Typography variant="h5">Choose Tuning Options</Typography>
+        <Typography variant="h6">Tuning Options</Typography>
       </FlexBox>
 
       <FlexBox sx={{ width: '100%', flexDirection: 'column' }} component={Paper}>

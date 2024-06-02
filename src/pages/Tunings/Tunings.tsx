@@ -23,307 +23,189 @@ import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Unstable_Grid2';
 
-import { ApexOptions } from 'apexcharts';
-
+import * as image from '@/image';
 import { PI_Card } from '@/components/PI';
 import { CarFilterAndSelect } from '@/components/Search';
 import { CarAndTagSearch } from '@/components/Search';
+import { TuningBriefCell } from '@/components/Tunings';
 import TuningOptionFilter from '@/components/Tunings/TuningSearchFilter';
+import { YearCard } from '@/components/YearCard';
 import { FlexBox, FullSizeCenteredFlexBox } from '@/components/styled';
 import { Image } from '@/components/styled';
 import { tunings } from '@/data/tunings';
 import type { Tuning } from '@/data/tunings';
+import { getCarInfo } from '@/db/index';
+import useCarAndTagFilter from '@/store/carAndTagFilter';
 
-function stringToColor(string: string) {
-  let hash = 0;
-  let i;
-
-  /* eslint-disable no-bitwise */
-  for (i = 0; i < string.length; i += 1) {
-    hash = string.charCodeAt(i) + ((hash << 5) - hash);
-  }
-
-  let color = '#';
-
-  for (i = 0; i < 3; i += 1) {
-    const value = (hash >> (i * 8)) & 0xff;
-    color += `00${value.toString(16)}`.slice(-2);
-  }
-  /* eslint-enable no-bitwise */
-
-  return color;
-}
-
-function stringAvatar(name: string) {
-  return {
-    sx: {
-      bgcolor: stringToColor(name),
-    },
-    children: `${name[0].toUpperCase()}`,
-  };
-}
-
-function TuningItemCell({ tuning }: { tuning: Tuning }) {
-  const carName = '#98 Bryan Herta Autosport Elantra N';
-  const manufacturer = 'Hyundai';
-  const year = 2021;
-  const WIDTH = '33%';
-  const HEIGHT = 400;
-  const series = [
-    {
-      name: 'performance',
-      data: [
-        tuning.performance.acceleration,
-        tuning.performance.speed,
-        tuning.performance.braking,
-        tuning.performance.offroad,
-        tuning.performance.launch,
-        tuning.performance.handling,
-      ],
-    },
-  ];
-
-  const options: ApexOptions = {
-    chart: {
-      type: 'radar',
-      toolbar: {
-        show: false,
-      },
-      events: {
-        mounted: (chart) => {
-          chart.windowResizeHandler();
-        },
-      },
-      redrawOnParentResize: true,
-    },
-    tooltip: {
-      enabled: false,
-    },
-    yaxis: {
-      min: 0,
-      max: 10,
-      stepSize: 2,
-      tooltip: {
-        enabled: false,
-      },
-      labels: {
-        show: false,
-        formatter: (value) => {
-          return '';
-        },
-      },
-      axisTicks: {
-        show: false,
-      },
-      axisBorder: {
-        show: false,
-      },
-    },
-    dataLabels: {
-      enabled: true,
-    },
-    xaxis: {
-      categories: ['acceleration', 'speed', 'braking', 'offroad', 'launch', 'handling'],
-      labels: {
-        style: {
-          colors: '#050505',
-          fontWeight: 500,
-        },
-        // show: false,
-      },
-    },
-
-    fill: {
-      opacity: 0.5,
+function TuningCellListingHeader() {
+  const carDetail = {
+    manufacture: 'Hyundai',
+    year: 2021,
+    country: 'Korea',
+    name: '#98 Bryan Herta Autosport Elantra N',
+    drive_train: 'FWD',
+    body_style: 'sedan',
+    door: 4,
+    engine: 'ICE',
+    FH5: {
+      PI: 800,
+      division: 'track toys',
     },
   };
 
-  const creator = tuning.creater.club
-    ? `[${tuning.creater.club}] ${tuning.creater.id}`
-    : tuning.creater.id;
-
-  const share_code3 = [
-    tuning.share_code.substring(0, 3),
-    tuning.share_code.substring(3, 6),
-    tuning.share_code.substring(6, 9),
-  ];
-
+  // 목차 시작, 자동차 사진 + 이름
   return (
-    <Grid xs={4}>
-      <Paper
-        sx={{
-          // width: '100%',
-          height: HEIGHT,
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'start',
-          paddingX: 0.5,
-        }}
-      >
-        <FlexBox
-          sx={{ paddingTop: 0.5, alignItems: 'center', justifyContent: 'end', columnGap: 0.5 }}
-        >
-          <PI_Card height={30} pi_number={tuning.PI} />
-        </FlexBox>
-        {/* 만든사람 */}
+    <FlexBox sx={{ flexDirection: 'row', paddingBottom: 2 }}>
+      {/* 자동차 사진 */}
+      <FlexBox sx={{ height: 80, aspectRatio: '16/9', maxWidth: '100%', alignItems: 'center' }}>
+        <Image src={image.car.hyundaiElantra} sx={{ objectFit: 'contain' }} />
+      </FlexBox>
+      {/* 제조사, 이름, 연식 */}
+      <FlexBox sx={{ flexDirection: 'column', paddingLeft: 1, justifyContent: 'center' }}>
+        {/* 제조사 */}
         <FlexBox>
-          <FlexBox sx={{ alignItems: 'center', columnGap: 1 }}>
-            <Avatar {...stringAvatar(tuning.creater.id)} sx={{ width: 25, height: 25 }} />
-            <Typography variant="h6">{creator}</Typography>
+          <FlexBox
+            sx={{
+              aspectRatio: '1/1',
+              height: 30,
+            }}
+          >
+            <Image
+              src={image.manufacturer.hyundai}
+              sx={{
+                objectFit: 'contain',
+                borderTopLeftRadius: 4,
+                borderBottomLeftRadius: 4,
+              }}
+            />
+          </FlexBox>
+          <FlexBox sx={{ alignItems: 'center', paddingX: 1 }}>
+            <Typography variant="subtitle2">{carDetail.manufacture}</Typography>
           </FlexBox>
         </FlexBox>
 
-        {/* 본문 */}
-        <FlexBox
-          sx={{
-            flexDirection: 'column',
-            width: '100%',
-            height: '100%',
-            paddingX: 1,
-            paddingY: 0.5,
-            rowGap: 2,
-            justifyContent: 'space-between',
-          }}
-        >
-          {/* 태그 */}
-          <FlexBox sx={{ flexDirection: 'column' }}>
-            <FlexBox
-              sx={{
-                height: '100%',
-                flexWrap: 'wrap',
-                columnGap: 0.2,
-                rowGap: 0.5,
-                justifyContent: 'start',
-                alignItems: 'flex-start',
-              }}
-            >
-              {tuning.tags.map((tag) => (
-                <Chip label={tag} key={`decal-tag-${tuning.share_code}-${tag}`} />
-              ))}
-            </FlexBox>
-          </FlexBox>
-          {/* 서스펜션, 타이어, 동작 방식 */}
+        <FlexBox sx={{ alignItems: 'center', columnGap: 1 }}>
           <FlexBox>
-            <FlexBox sx={{ flexDirection: 'column', width: '33%', border: '1px black solid' }}>
-              <FlexBox
-                sx={{ flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}
-              >
-                <Typography>Suspension</Typography>
-                <Typography>{tuning.suspension}</Typography>
-              </FlexBox>
-            </FlexBox>
-            <FlexBox sx={{ flexDirection: 'column', width: '33%', border: '1px black solid' }}>
-              <FlexBox
-                sx={{ flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}
-              >
-                <Typography>Tier</Typography>
-                <Typography>{tuning.tier}</Typography>
-              </FlexBox>
-            </FlexBox>
-            <FlexBox sx={{ flexDirection: 'column', width: '33%', border: '1px black solid' }}>
-              <FlexBox
-                sx={{ flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}
-              >
-                <Typography>Drive System</Typography>
-                <Typography>{tuning.driving_system}</Typography>
-              </FlexBox>
-            </FlexBox>
-          </FlexBox>
-          {/* 공유코드 + 댓글 + 좋아요 */}
-          <FlexBox sx={{ height: '20%', width: '100%', justifyContent: 'space-between' }}>
-            <FlexBox
-              sx={{
-                justifyContent: 'center',
-                alignItems: 'center',
-              }}
-            >
-              <FlexBox
-                sx={{
-                  width: '100%',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  columnGap: 1,
-                  paddingX: 1,
-                  borderRadius: 4,
-                  backgroundColor: '#d1d1d1',
-                }}
-              >
-                {share_code3.map((code_peice) => {
-                  return (
-                    <Typography variant="h6" key={`decal-row-share-code-piece-${code_peice}`}>
-                      {code_peice}
-                    </Typography>
-                  );
-                })}
-              </FlexBox>
-            </FlexBox>
-            <FlexBox>
-              <IconButton sx={{ borderRadius: 4 }}>
-                <ModeCommentOutlinedIcon fontSize="small" />
-                <FlexBox
-                  sx={{
-                    width: 30,
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    paddingLeft: 0.5,
-                  }}
-                >
-                  <Typography>{tuning.fav.count}</Typography>
-                </FlexBox>
-              </IconButton>
-              <IconButton sx={{ borderRadius: 4 }}>
-                {tuning.fav.checked ? (
-                  <FavoriteOutlinedIcon fontSize="small" />
-                ) : (
-                  <FavoriteBorderOutlinedIcon fontSize="small" />
-                )}
-                <FlexBox
-                  sx={{
-                    width: 30,
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    paddingLeft: 0.5,
-                  }}
-                >
-                  <Typography>{tuning.fav.count}</Typography>
-                </FlexBox>
-              </IconButton>
-            </FlexBox>
+            <Typography variant="subtitle1">{carDetail.name}</Typography>
           </FlexBox>
         </FlexBox>
-      </Paper>
-    </Grid>
+      </FlexBox>
+    </FlexBox>
   );
 }
 
-function TuningCellListing() {
+function TuningShowMore({ carName, searchScope }: { carName: string; searchScope: string }) {
+  // TODO:  처음부터 Car DB의 ID로 받아서 DB 쿼리 안하고 바로 세팅할 수 있도록
+
+  const {
+    actions: {
+      car: { setCar },
+    },
+  } = useCarAndTagFilter(searchScope);
+
+  // more -> search filter 보여주고 있는 차로 세팅 -> 재검색
+
+  const onClick = async () => {
+    console.log(`show more - tuning`);
+    const carInfo = await getCarInfo(carName);
+    console.log(`carInfo : ${JSON.stringify(carInfo)}`);
+    setCar(carInfo);
+  };
+
   return (
-    <Grid container sx={{ width: '100%' }} spacing={2}>
-      {[...tunings.slice(0, 9)].map((tuning) => (
-        <TuningItemCell tuning={tuning} key={`tuning-cell-${tuning.share_code}`} />
-      ))}
-    </Grid>
+    <FlexBox sx={{ justifyContent: 'end', paddingX: 1, paddingTop: 1 }}>
+      <FlexBox sx={{ justifyContent: 'center', alignItems: 'center', marginX: 1 }}>
+        <Button onClick={onClick}>show more</Button>
+      </FlexBox>
+    </FlexBox>
+  );
+}
+
+interface TuningCellListingInterface {
+  searchScope: string;
+  carName: string;
+  showMore?: boolean | undefined;
+}
+
+function TuningCellListing(props: TuningCellListingInterface) {
+  const { searchScope, carName, showMore } = props;
+
+  return (
+    <FlexBox sx={{ width: '100%', flexDirection: 'column', paddingBottom: 1 }}>
+      <TuningCellListingHeader />
+      <Grid container sx={{ width: '100%' }} spacing={2}>
+        {[...tunings.slice(0, 6)].map((tuning) => (
+          <TuningBriefCell tuning={tuning} key={`tuning-cell-${tuning.share_code}`} />
+        ))}
+      </Grid>
+      {/* Show More Tunings */}
+      {showMore && <TuningShowMore carName={carName} searchScope={searchScope} />}
+    </FlexBox>
+  );
+}
+
+function RecommandedTunings() {
+  const searchScope = 'tunings';
+  const carName = '#98 Elantra';
+  return (
+    <FlexBox sx={{ flexDirection: 'column' }}>
+      <TuningCellListing searchScope={searchScope} carName={carName} showMore />
+      <TuningCellListing searchScope={searchScope} carName={carName} showMore />
+      <TuningCellListing searchScope={searchScope} carName={carName} showMore />
+    </FlexBox>
+  );
+}
+
+function TuningsSearchResults() {
+  const [page, setPage] = useState(1);
+
+  const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
+    setPage(value);
+  };
+  return (
+    <FlexBox sx={{ width: '100%', flexDirection: 'column', paddingBottom: 1 }}>
+      <Grid container sx={{ width: '100%' }} spacing={2}>
+        {[...tunings.slice(0, 6)].map((tuning) => (
+          <TuningBriefCell tuning={tuning} key={`tuning-cell-${tuning.share_code}`} />
+        ))}
+      </Grid>
+      {/* Pagination */}
+      <FlexBox sx={{ alignItems: 'center', justifyContent: 'center', paddingTop: 3 }}>
+        <Pagination count={10} page={page} onChange={handleChange} size="large" />
+      </FlexBox>
+    </FlexBox>
+  );
+}
+function SearchResultTunings() {
+  const searchScope = 'tunings';
+  const carName = '#98 Elantra';
+  return (
+    <FlexBox sx={{ flexDirection: 'column', paddingTop: 3 }}>
+      <FlexBox>
+        <Typography variant="h6">Search results</Typography>
+      </FlexBox>
+      <TuningsSearchResults />
+    </FlexBox>
   );
 }
 
 export default function Tunings() {
   const navigate = useNavigate();
   const searchScope = 'tunings';
-  const [page, setPage] = useState(1);
-  const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
-    setPage(value);
-  };
 
+  const {
+    filter: { car, tags },
+  } = useCarAndTagFilter(searchScope);
+
+  // 1) 검색 조건이 없을 땐 -> 최근에 추가된 차, 검색 많이 된 차 미리 정해서 목록으로 올리기
+  // 2) 검색 조건이 생기면 -> 검색 조건에 맞는 차 목록 만들기
   return (
-    <Container sx={{ paddingTop: 1 }}>
+    <Container sx={{ paddingTop: 2 }}>
       <FullSizeCenteredFlexBox sx={{ flexDirection: 'column' }}>
         <CarAndTagSearch searchScope={searchScope} doFinalSelect />
         <TuningOptionFilter />
-        <TuningCellListing />
-        {/* Pagination */}
-        <FlexBox sx={{ alignItems: 'center', justifyContent: 'center', paddingTop: 3 }}>
-          <Pagination count={10} page={page} onChange={handleChange} size="large" />
-        </FlexBox>
+        {/* if no car selected */}
+        {car ? <SearchResultTunings /> : <RecommandedTunings />}
       </FullSizeCenteredFlexBox>
     </Container>
   );
