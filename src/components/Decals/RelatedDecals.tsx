@@ -2,6 +2,7 @@ import { useState } from 'react';
 
 import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlined';
 import FavoriteOutlinedIcon from '@mui/icons-material/FavoriteOutlined';
+import ModeCommentOutlinedIcon from '@mui/icons-material/ModeCommentOutlined';
 import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
 import Chip from '@mui/material/Chip';
@@ -60,46 +61,59 @@ function RelatedDecal({ decalData }: { decalData: DecalData }) {
               paddingBottom: 1,
             }}
           >
+            {/* 제작자 */}
             <FlexBox sx={{ width: '100%' }}>
               <Typography variant="h6">{creator}</Typography>
             </FlexBox>
-            <FlexBox sx={{ flexWrap: 'wrap', width: '100%', columnGap: 0.5, rowGap: 0.5 }}>
+            {/* 태그 */}
+            <FlexBox
+              sx={{
+                flexWrap: 'wrap',
+                width: '100%',
+                height: '100%',
+                paddingTop: 1,
+                columnGap: 0.5,
+                rowGap: 0.5,
+                alignContent: 'flex-start',
+              }}
+            >
               {decalData.tags.map((tag) => (
                 <Chip key={`decal-tag-${tag}`} size="small" label={tag} />
               ))}
             </FlexBox>
-            <FlexBox
+            {/* 좋아요, 댓글 */}
+            <Box
               sx={{
+                display: 'grid',
                 width: '100%',
-                columnGap: 2,
+                height: 25,
+                gridTemplateColumns: 'auto 55px 55px',
               }}
             >
-              {/* 공유코드 */}
-              <FlexBox
-                sx={{
-                  width: '100%',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  columnGap: 1,
-                  borderRadius: 4,
-                  backgroundColor: '#d1d1d1',
-                }}
-              >
-                {share_code3.map((code_peice) => {
-                  return (
-                    <Typography key={`decal-share-code-piece-${code_peice}`} variant="h6">
-                      {code_peice}
-                    </Typography>
-                  );
-                })}
+              <FlexBox></FlexBox>
+              {/* 댓글 */}
+              <FlexBox sx={{ justifyContent: 'center', alignItems: 'center' }}>
+                <IconButton sx={{ borderRadius: 1, paddingY: `2px`, paddingX: `4px` }}>
+                  <ModeCommentOutlinedIcon sx={{ fontSize: 15 }} />
+                  <FlexBox
+                    sx={{
+                      width: 30,
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      paddingLeft: 0.5,
+                    }}
+                  >
+                    <Typography fontSize={15}>{decalData.fav.count}</Typography>
+                  </FlexBox>
+                </IconButton>
               </FlexBox>
               {/* 하트 */}
               <FlexBox sx={{ justifyContent: 'center', alignItems: 'center' }}>
-                <IconButton sx={{ borderRadius: 4 }}>
+                <IconButton sx={{ borderRadius: 1, padding: `2px` }}>
                   {decalData.fav.checked ? (
-                    <FavoriteOutlinedIcon fontSize="small" />
+                    <FavoriteOutlinedIcon sx={{ fontSize: 15 }} />
                   ) : (
-                    <FavoriteBorderOutlinedIcon fontSize="small" />
+                    <FavoriteBorderOutlinedIcon sx={{ fontSize: 15 }} />
                   )}
                   <FlexBox
                     sx={{
@@ -109,11 +123,11 @@ function RelatedDecal({ decalData }: { decalData: DecalData }) {
                       paddingLeft: 0.5,
                     }}
                   >
-                    <Typography>{decalData.fav.count}</Typography>
+                    <Typography fontSize={15}>{decalData.fav.count}</Typography>
                   </FlexBox>
                 </IconButton>
               </FlexBox>
-            </FlexBox>
+            </Box>
           </Grid>
         </Grid>
       </Paper>
