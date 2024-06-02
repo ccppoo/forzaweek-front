@@ -23,7 +23,7 @@ function App() {
       <BrowserRouter>
         {/* <DevHeader /> */}
         <Header />
-        <Sidebar />
+        {/* <Sidebar /> */}
         <Pages />
       </BrowserRouter>
     </Fragment>
