@@ -1,7 +1,7 @@
 import { useState } from 'react';
 
+import Button from '@mui/material/Button';
 import Divider from '@mui/material/Divider';
-import Grid2 from '@mui/material/Unstable_Grid2/Grid2';
 
 import * as image from '@/image';
 import { getCars } from '@/api/car';
@@ -15,6 +15,7 @@ import {
   PRODUCTION_YEARs,
   RARITY,
 } from '@/data/values';
+import useCarSearchFilters, { CarSearchOption } from '@/store/carSearchFilters';
 
 import AutocompleteTextField from './AutoCompleteTextField';
 import AutocompleteCarSearchBar from './AutocompleteCarSearchBar';
@@ -30,14 +31,9 @@ export default function CarFilterAndSelect(props: CarSearchAndSelectInterface) {
   const { scope, doFinalSelect } = props;
   const ITEM_HEIGHT = 48;
   const ITEM_PADDING_TOP = 8;
-  const MenuProps = {
-    PaperProps: {
-      style: {
-        maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-        width: 250,
-      },
-    },
-  };
+
+  const [options, _, __, { clearAllOptions }] = useCarSearchFilters(scope);
+
   return (
     <FlexBox sx={{ flexDirection: 'column', width: '100%' }}>
       {/* 차 선택 */}
@@ -45,7 +41,7 @@ export default function CarFilterAndSelect(props: CarSearchAndSelectInterface) {
         sx={{
           border: '1px black solid',
           borderRadius: 1,
-          height: 320,
+          height: 340,
         }}
       >
         {/* 필터 조건 */}
@@ -98,6 +94,11 @@ export default function CarFilterAndSelect(props: CarSearchAndSelectInterface) {
             values={BOOST}
             limitTags={3}
           />
+          <FlexBox sx={{ justifyContent: 'end' }}>
+            <Button color="warning" variant="outlined" size="small" onClick={clearAllOptions}>
+              Clear all filters
+            </Button>
+          </FlexBox>
         </FlexBox>
         {doFinalSelect && <Divider orientation="vertical" />}
         {/* 차 최종 선택 */}

@@ -55,6 +55,15 @@ function useCarAndTagFilter(scope: string): {
     });
   };
 
+  const removeAllTags = () => {
+    setCarTagFilterOptions((prev) => {
+      return {
+        ...prev,
+        tags: [],
+      };
+    });
+  };
+
   const setCar = async (name: CarInfo | undefined) => {
     setCarTagFilterOptions((prev) => {
       return {
@@ -84,6 +93,7 @@ function useCarAndTagFilter(scope: string): {
         setTags,
         addTag,
         removeTag,
+        removeAllTags,
       },
     },
   };

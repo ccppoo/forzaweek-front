@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 import Autocomplete from '@mui/material/Autocomplete';
 import Chip from '@mui/material/Chip';
@@ -37,16 +37,10 @@ export default function AutocompleteTextField({
   const setSearchOption = (name: string[]) => setOption(name, optionName);
   const selectedOptions = options[optionName];
 
+  const selectedValues = useMemo(() => selectedOptions, [selectedOptions]);
+
   const ITEM_HEIGHT = 48;
   const ITEM_PADDING_TOP = 8;
-  const MenuProps = {
-    PaperProps: {
-      style: {
-        maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-        width: 250,
-      },
-    },
-  };
 
   return (
     <FlexBox sx={{ width: '100%', paddingX: 0 }}>
@@ -67,6 +61,7 @@ export default function AutocompleteTextField({
           onChange={(event: any, newValue: string[]) => {
             setSearchOption(newValue);
           }}
+          value={selectedValues}
           renderTags={(value: readonly string[], getTagProps) =>
             value.map((option: string, index: number) => (
               <Chip variant="outlined" label={option} {...getTagProps({ index })} size="small" />

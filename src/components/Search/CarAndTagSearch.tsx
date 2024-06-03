@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import { Paper, Typography } from '@mui/material';
+import { Button, Typography } from '@mui/material';
 import Accordion from '@mui/material/Accordion';
 import AccordionActions from '@mui/material/AccordionActions';
 import AccordionDetails from '@mui/material/AccordionDetails';
@@ -34,6 +34,10 @@ export default function CarAndTagSearch(props: CarAndTagSearchIterface) {
   const noTagsSelected = 'No tags selected (all tags)';
   const {
     filter: { car, tags: tagsSelected },
+    actions: {
+      tag: { removeAllTags },
+      car: { removeCar },
+    },
   } = useCarAndTagFilter(searchScope);
 
   return (
@@ -73,6 +77,11 @@ export default function CarAndTagSearch(props: CarAndTagSearchIterface) {
             </FlexBox>
           </FlexBox>
         </AccordionDetails>
+        <AccordionActions sx={{ paddingTop: 0 }}>
+          <Button color="error" variant="outlined" size="small" onClick={removeCar}>
+            Clear car selection
+          </Button>
+        </AccordionActions>
       </Accordion>
       {/* 태그 선택 */}
       <Accordion sx={{ width: '100%' }}>
@@ -102,6 +111,11 @@ export default function CarAndTagSearch(props: CarAndTagSearchIterface) {
             <TagAutocompleteTextField searchScope={searchScope} values={tags} />
           </FlexBox>
         </AccordionDetails>
+        <AccordionActions sx={{ paddingTop: 0 }}>
+          <Button color="error" variant="outlined" size="small" onClick={removeAllTags}>
+            Clear Tags
+          </Button>
+        </AccordionActions>
       </Accordion>
     </FlexBox>
   );
