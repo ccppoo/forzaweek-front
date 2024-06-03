@@ -1,15 +1,32 @@
-import { useState } from 'react';
+import { FC, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import { Divider } from '@mui/material';
+import Accordion from '@mui/material/Accordion';
+import AccordionActions from '@mui/material/AccordionActions';
+import AccordionDetails from '@mui/material/AccordionDetails';
+import AccordionSummary from '@mui/material/AccordionSummary';
 import Button from '@mui/material/Button';
 import Checkbox from '@mui/material/Checkbox';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormGroup from '@mui/material/FormGroup';
 import Paper from '@mui/material/Paper';
+import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
 
+import { PI_Short } from '@/components/PI';
 import { FlexBox } from '@/components/styled';
+import useCarAndTagFilter from '@/store/carAndTagFilter';
 import useTuningSearchFilters from '@/store/tuningSearchFilters';
+import type {
+  DrivingSystemOption,
+  PIClassOption,
+  SuspensionOption,
+  TierOption,
+} from '@/store/tuningSearchFilters/types';
+import type { PIClass } from '@/types';
+import { sortPIClass } from '@/utils';
 
 function TuningOptionPIClass() {
   const PI_COLOR = {
@@ -22,14 +39,13 @@ function TuningOptionPIClass() {
     X: '#32e60e',
   };
 
-  const TUNING_CLASSES: PI_CLASS[] = ['D', 'C', 'B', 'A', 'S1', 'S2', 'X'];
-  type PI_CLASS = 'D' | 'C' | 'B' | 'A' | 'S1' | 'S2' | 'X';
+  const TUNING_CLASSES: PIClass[] = ['D', 'C', 'B', 'A', 'S1', 'S2', 'X'];
 
-  const [tuningOption, _, { toggleOption, toggleAllSingleOption }] = useTuningSearchFilters();
+  const [tuningOption, { toggleOption, toggleAllSingleOption }] = useTuningSearchFilters();
   const options = tuningOption.PI;
-  const toggleOption_ = (val: PI_CLASS) => toggleOption(val, 'PI');
+  const toggleOption_ = (val: PIClass) => toggleOption(val, 'PI');
   return (
-    <FlexBox sx={{ width: '100%' }}>
+    <FlexBox sx={{ width: '100%', paddingLeft: 1 }}>
       {/* 클래스 */}
       <FlexBox sx={{ alignItems: 'center' }}>
         <FlexBox sx={{ width: 160 }}>
@@ -45,14 +61,14 @@ function TuningOptionPIClass() {
                   key={`formcontrol-tuning-class-check-${val}`}
                   control={
                     <Checkbox
-                      checked={options[val as PI_CLASS]}
+                      checked={options[val as PIClass]}
                       onChange={() => {
-                        toggleOption_(val as PI_CLASS);
+                        toggleOption_(val as PIClass);
                       }}
                       sx={{
-                        color: PI_COLOR[val as PI_CLASS],
+                        color: PI_COLOR[val as PIClass],
                         '&.Mui-checked': {
-                          color: PI_COLOR[val as PI_CLASS],
+                          color: PI_COLOR[val as PIClass],
                         },
                       }}
                     />
@@ -72,11 +88,11 @@ function TuningOptionSuspension() {
   type SuspensionType = 'drift' | 'race' | 'rally';
   const suspensionTypes: SuspensionType[] = ['drift', 'race', 'rally'];
 
-  const [tuningOption, _, { toggleOption, toggleAllSingleOption }] = useTuningSearchFilters();
+  const [tuningOption, { toggleOption, toggleAllSingleOption }] = useTuningSearchFilters();
   const options = tuningOption.suspension;
   const toggleOption_ = (val: SuspensionType) => toggleOption(val, 'suspension');
   return (
-    <FlexBox sx={{ width: '100%' }}>
+    <FlexBox sx={{ width: '100%', paddingLeft: 1 }}>
       <FlexBox sx={{ alignItems: 'center' }}>
         <FlexBox sx={{ width: 160 }}>
           <Button sx={{ color: 'black' }} onClick={() => toggleAllSingleOption('suspension')}>
@@ -119,11 +135,11 @@ function TuningOptionDrivingSystem() {
 
   const drivingSystemTypes: DrivingSystemType[] = ['FWD', 'AWD', 'RWD'];
 
-  const [tuningOption, _, { toggleOption, toggleAllSingleOption }] = useTuningSearchFilters();
+  const [tuningOption, { toggleOption, toggleAllSingleOption }] = useTuningSearchFilters();
   const options = tuningOption.drivingSystem;
   const toggleOption_ = (val: DrivingSystemType) => toggleOption(val, 'drivingSystem');
   return (
-    <FlexBox sx={{ width: '100%' }}>
+    <FlexBox sx={{ width: '100%', paddingLeft: 1 }}>
       <FlexBox sx={{ alignItems: 'center' }}>
         <FlexBox sx={{ width: 160 }}>
           <Button sx={{ color: 'black' }} onClick={() => toggleAllSingleOption('drivingSystem')}>
@@ -166,14 +182,17 @@ function TuningOptionTier() {
 
   const tierTypes: TierType[] = ['normal', 'snow', 'rally', 'offroad', 'slick', 'race', 'drag'];
 
-  const [tuningOption, _, { toggleOption, toggleAllSingleOption }] = useTuningSearchFilters();
+  const [tuningOption, { toggleOption, toggleAllSingleOption }] = useTuningSearchFilters();
   const options = tuningOption.tier;
   const toggleOption_ = (val: TierType) => toggleOption(val, 'tier');
   return (
-    <FlexBox sx={{ width: '100%' }}>
+    <FlexBox sx={{ width: '100%', paddingLeft: 1 }}>
       <FlexBox sx={{ alignItems: 'center' }}>
-        <FlexBox sx={{ width: 160, justifyContent: 'start' }}>
-          <Button sx={{ color: 'black' }} onClick={() => toggleAllSingleOption('tier')}>
+        <FlexBox sx={{ width: 160 }}>
+          <Button
+            sx={{ color: 'black', minWidth: 0 }}
+            onClick={() => toggleAllSingleOption('tier')}
+          >
             <Typography variant="body1">Tier</Typography>
           </Button>
         </FlexBox>
@@ -208,29 +227,120 @@ function TuningOptionTier() {
   );
 }
 
+type TuningOptionSummaryProps = { value: string };
+
+function TuningOptionSummaryDisplay({
+  name,
+  option,
+  sort,
+  Component,
+}: {
+  name: string;
+  option: PIClassOption | SuspensionOption | TierOption | DrivingSystemOption;
+  sort?: (val1: [string, boolean], val2: [string, boolean]) => number;
+  Component: FC<TuningOptionSummaryProps>;
+}) {
+  const tuningKeyName = (option: string, value: string) => `tuning-filter-${option}-${value}`;
+  const defaultSort = (opt1: [string, boolean], opt2: [string, boolean]) =>
+    opt1[0] > opt2[0] ? 1 : -1;
+  const sortMethod = sort || defaultSort;
+  return (
+    <FlexBox sx={{ flexDirection: 'column', alignItems: 'center' }}>
+      <FlexBox sx={{ justifyContent: 'start', width: '100%' }}>
+        <Typography variant="subtitle2" sx={{ fontWeight: 200 }}>
+          {name}
+        </Typography>
+      </FlexBox>
+      <FlexBox sx={{ columnGap: 1 }}>
+        {Object.entries(option)
+          .filter(([_, selected]) => selected)
+          .toSorted(sortMethod)
+          .map(([opt]) => {
+            return <Component key={tuningKeyName(name.replace(' ', '-'), opt)} value={opt} />;
+          })}
+      </FlexBox>
+    </FlexBox>
+  );
+}
+
+function TuningOptionSummarySmall(props: TuningOptionSummaryProps) {
+  // TODO: string -> icon
+  return (
+    <FlexBox sx={{ border: '1px black solid', borderRadius: 1, paddingX: 0.2 }}>
+      <Typography>{props.value}</Typography>
+    </FlexBox>
+  );
+}
+
+function TuningOptionPIClassSummarySmall(props: TuningOptionSummaryProps) {
+  return <PI_Short PIClass={props.value as PIClass} height={28} />;
+}
+
 export default function TuningOptionFilter() {
   // 차 선택하고 나서 필터링하는 옵션
+  const searchScope = 'tunings';
+  const {
+    filter: { car, tags },
+  } = useCarAndTagFilter(searchScope);
+  const [tuningOption, _] = useTuningSearchFilters();
 
-  // TODO: 튜닝 설정 태그처럼 recoil store로 바꾸기
+  const [expanded, setExpanded] = useState<boolean>(false);
+
+  const handleChange = (event: React.SyntheticEvent, isExpanded: boolean) => {
+    setExpanded((isExpanded) => !isExpanded);
+  };
+
   // TODO: 서스펜션, 타이어, 구동방식 그림 아이콘
+  const isSearchOptionApplied = !!car;
+  const noSearchOptionTooltipMSG = 'you could filter tunings after applying search options';
+
   return (
     <FlexBox sx={{ width: '100%', flexDirection: 'column', paddingY: 3 }}>
       <FlexBox>
         <Typography variant="h6">Tuning Options</Typography>
       </FlexBox>
-
-      <FlexBox sx={{ width: '100%', flexDirection: 'column' }} component={Paper}>
-        {/* 클래스 */}
-        <TuningOptionPIClass />
-        {/* 서스펜션 */}
-        <TuningOptionSuspension />
-        {/* 타이어 */}
-        <TuningOptionTier />
-        {/* 구동 방식 */}
-        <TuningOptionDrivingSystem />
-        {/* 태그 */}
-        <FlexBox></FlexBox>
-      </FlexBox>
+      <Paper sx={{ display: 'flex', width: '100%', flexDirection: 'column' }}>
+        <Tooltip title={isSearchOptionApplied ? null : noSearchOptionTooltipMSG} placement="top">
+          <Accordion disabled={!car} expanded={!!car && expanded} onChange={handleChange}>
+            <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+              <TuningOptionSummaryDisplay
+                name="PI Class"
+                option={tuningOption.PI}
+                sort={([piclass1, _], [piclass2, __]) => sortPIClass(piclass1, piclass2)}
+                Component={TuningOptionPIClassSummarySmall}
+              />
+              <Divider orientation="vertical" flexItem />
+              <TuningOptionSummaryDisplay
+                name="Suspension"
+                option={tuningOption.suspension}
+                Component={TuningOptionSummarySmall}
+              />
+              <Divider orientation="vertical" flexItem />
+              <TuningOptionSummaryDisplay
+                name="Tier"
+                option={tuningOption.tier}
+                Component={TuningOptionSummarySmall}
+              />
+              <Divider orientation="vertical" flexItem />
+              <TuningOptionSummaryDisplay
+                name="Driving System"
+                option={tuningOption.drivingSystem}
+                Component={TuningOptionSummarySmall}
+              />
+            </AccordionSummary>
+            <AccordionDetails>
+              <TuningOptionPIClass />
+              {/* 클래스 */}
+              {/* 서스펜션 */}
+              <TuningOptionSuspension />
+              {/* 타이어 */}
+              <TuningOptionTier />
+              {/* 구동 방식 */}
+              <TuningOptionDrivingSystem />
+            </AccordionDetails>
+          </Accordion>
+        </Tooltip>
+      </Paper>
     </FlexBox>
   );
 }
