@@ -24,6 +24,7 @@ import elantra_front2 from './decal/elantra_front_top_left.jpg';
 import elantra_front3 from './decal/elantra_front_top_right.jpg';
 import elantra_left from './decal/elantra_left.jpg';
 import elantra_right from './decal/elantra_right.jpg';
+import flags from './flag';
 import ford_focus_2001 from './ford_Focus2001.jpg';
 import ford_focus_2017 from './ford_focus2017.jpg';
 import honda_civic from './honda_civic.jpg';
@@ -132,4 +133,5 @@ export {
   ford_focus_2017,
   chevrolet_corvette_2020,
   series_33,
+  flags,
 };
