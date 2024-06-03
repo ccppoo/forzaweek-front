@@ -34,7 +34,8 @@ export default function ImageShowHorizontal({ images }: { images: string[] }) {
   const Title = 'Pictures';
   const gridRef = useRef<HTMLDivElement>(null);
 
-  const smallImgWidth = 208;
+  // const smallImgWidth = 208;
+  const smallImgWidth = 160;
   const smallImgHeight = Math.ceil((smallImgWidth / 16) * 9);
 
   // if (gridRef.current) {
