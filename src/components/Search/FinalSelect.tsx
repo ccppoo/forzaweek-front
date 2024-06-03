@@ -72,7 +72,6 @@ export default function FinalSelect(props: FinalSelectInterface) {
   };
 
   const selectCarMenuItem = (event: SelectChangeEvent) => {
-    console.log(`event.target.value : ${JSON.stringify(event.target.value)}`);
     setCarName(event.target.value);
   };
 
@@ -121,6 +120,7 @@ export default function FinalSelect(props: FinalSelectInterface) {
         src={image.car.hyundaiElantra}
         sx={{
           width: '100%',
+          height: 240,
           objectFit: 'contain',
         }}
       />
@@ -128,9 +128,9 @@ export default function FinalSelect(props: FinalSelectInterface) {
         <Button variant="outlined" size="small" onClick={submitToCarTagFilter}>
           Select
         </Button>
-        <Button color="error" variant="outlined" size="small" onClick={removeCarSelected}>
+        {/* <Button color="error" variant="outlined" size="small" onClick={removeCarSelected}>
           clear
-        </Button>
+        </Button> */}
       </FlexBox>
     </FlexBox>
   );
