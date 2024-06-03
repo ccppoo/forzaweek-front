@@ -1,3 +1,3 @@
-import { PI_Card } from './PICard';
+import { PI_Card, PI_Short } from './PICard';
 
-export { PI_Card };
+export { PI_Card, PI_Short };

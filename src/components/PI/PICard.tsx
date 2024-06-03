@@ -1,7 +1,8 @@
 import Typography from '@mui/material/Typography';
 
 import { FlexBox } from '@/components/styled';
-import { get_pi_class, get_pi_color } from '@/utils/car';
+import { PIClass } from '@/types';
+import { get_pi_class, get_pi_color, get_pi_color_by_class } from '@/utils/car';
 
 export function PI_Card({ pi_number, height }: { pi_number: number; height: number }) {
   const PI_CLASS = get_pi_class(pi_number);
@@ -46,6 +47,39 @@ export function PI_Card({ pi_number, height }: { pi_number: number; height: numb
         }}
       >
         <Typography sx={{ fontWeight: 'bold', fontSize: 18 }}>{pi_number}</Typography>
+      </FlexBox>
+    </FlexBox>
+  );
+}
+
+export const PIs = [];
+
+export function PI_Short({ PIClass, height }: { PIClass: PIClass; height: number }) {
+  const color = get_pi_color_by_class(PIClass);
+
+  return (
+    <FlexBox
+      sx={{
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: height,
+        width: height * 0.8,
+      }}
+    >
+      <FlexBox
+        sx={{
+          aspectRatio: '1/1',
+          justifyContent: 'center',
+          alignItems: 'center',
+          minWidth: 25,
+          height: height,
+          borderRadius: 1,
+          backgroundColor: color,
+        }}
+      >
+        <Typography fontWeight="fontWeightMedium" color="white" sx={{}}>
+          {PIClass}
+        </Typography>
       </FlexBox>
     </FlexBox>
   );
