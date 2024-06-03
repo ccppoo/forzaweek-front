@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+import { Divider } from '@mui/material';
+import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
@@ -42,28 +44,24 @@ const carDetail = {
 
 function TitlePart() {
   const name = carDetail.name;
+  const manufacture = 'Hyundai';
 
   return (
-    <FlexBox sx={{ width: '100%', height: 50 }}>
-      {/* 제조사 로고 */}
-      <FlexBox
-        sx={{
-          aspectRatio: '1/1',
-          height: '100%',
-        }}
-      >
-        <Image
-          src={image.manufacturer.hyundai}
-          sx={{
-            objectFit: 'contain',
-            borderTopLeftRadius: 4,
-            borderBottomLeftRadius: 4,
-          }}
-        />
-      </FlexBox>
-      <FlexBox sx={{ alignItems: 'center', paddingX: 1 }}>
+    <FlexBox sx={{ width: '100%', flexDirection: 'column' }}>
+      <FlexBox sx={{ alignItems: 'center', paddingX: 0 }}>
         <Typography variant="h4">{name}</Typography>
       </FlexBox>
+    </FlexBox>
+  );
+}
+
+function CarTags() {
+  return (
+    <FlexBox sx={{ flexDirection: 'column' }}>
+      <FlexBox>
+        <Typography>Tags</Typography>
+      </FlexBox>
+      <FlexBox></FlexBox>
     </FlexBox>
   );
 }
@@ -88,18 +86,26 @@ export default function CarDetail() {
             flexDirection: 'column',
             paddingY: 2,
             paddingX: 2,
-            rowGap: 3,
+            rowGap: 1,
           }}
           component={Paper}
         >
           {/* 제목 */}
           <TitlePart />
           {/* 제목 밑에 사진이랑 특징 */}
-          <CarDetailInfo />
+          <FlexBox sx={{ paddingY: 3 }}>
+            <CarDetailInfo />
+          </FlexBox>
+
+          {/* 태그 */}
+          {/* <CarTags /> */}
           {/* 차 사진들 */}
           <ImageShowHorizontal images={CAR_IMAGES} />
           {/* 댓글 */}
-          <Comments />
+          <FlexBox sx={{ paddingY: 3 }}>
+            <Comments />
+          </FlexBox>
+
           {/* 데칼 사진들 */}
           <RelatedDecals />
           {/* TODO: 관련 튜닝 */}
