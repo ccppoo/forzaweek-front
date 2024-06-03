@@ -5,8 +5,8 @@ import FavoriteOutlinedIcon from '@mui/icons-material/FavoriteOutlined';
 import ModeCommentOutlinedIcon from '@mui/icons-material/ModeCommentOutlined';
 import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
 import Chip from '@mui/material/Chip';
-import Container from '@mui/material/Container';
 import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
 import Pagination from '@mui/material/Pagination';
@@ -135,6 +135,33 @@ function RelatedDecal({ decalData }: { decalData: DecalData }) {
   );
 }
 
+function DecalsShowMore() {
+  // TODO:  처음부터 Car DB의 ID로 받아서 DB 쿼리 안하고 바로 세팅할 수 있도록
+
+  // const {
+  //   actions: {
+  //     car: { setCar },
+  //   },
+  // } = useCarAndTagFilter(searchScope);
+
+  // more -> search filter 보여주고 있는 차로 세팅 -> 재검색
+
+  const onClick = async () => {
+    console.log(`show more - tuning`);
+    // const carInfo = await getCarInfo(carName);
+    // console.log(`carInfo : ${JSON.stringify(carInfo)}`);
+    // setCar(carInfo);
+  };
+
+  return (
+    <FlexBox sx={{ justifyContent: 'end', paddingX: 1, paddingTop: 1 }}>
+      <FlexBox sx={{ justifyContent: 'center', alignItems: 'center', marginX: 1 }}>
+        <Button onClick={onClick}>show more</Button>
+      </FlexBox>
+    </FlexBox>
+  );
+}
+
 export default function RelatedDecals() {
   const [page, setPage] = useState(1);
   const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
@@ -150,7 +177,7 @@ export default function RelatedDecals() {
       }}
     >
       <FlexBox>
-        <Typography variant="h3">Decals</Typography>
+        <Typography variant="h5">Decals</Typography>
       </FlexBox>
       <FlexBox sx={{ width: '100%', flexDirection: 'column', rowGap: 1 }}>
         {/* 선택된 클래스에 있는 튜닝들 */}
@@ -160,10 +187,11 @@ export default function RelatedDecals() {
           ))}
         </Grid>
       </FlexBox>
+      <DecalsShowMore />
       {/* Pagination */}
-      <FlexBox sx={{ alignItems: 'center', justifyContent: 'center', paddingTop: 3 }}>
+      {/* <FlexBox sx={{ alignItems: 'center', justifyContent: 'center', paddingTop: 3 }}>
         <Pagination count={10} page={page} onChange={handleChange} size="large" />
-      </FlexBox>
+      </FlexBox> */}
     </FlexBox>
   );
 }

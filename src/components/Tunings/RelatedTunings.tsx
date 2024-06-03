@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 
 import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
 import ButtonBase from '@mui/material/ButtonBase';
 import Chip from '@mui/material/Chip';
 import Container from '@mui/material/Container';
@@ -20,6 +21,7 @@ import { FlexBox, FullSizeCenteredFlexBox } from '@/components/styled';
 import { tunings } from '@/data/tunings';
 import type { Tuning } from '@/data/tunings';
 
+import TuningBriefCell from './TuningBriefCell';
 import { smallChartOptions } from './chartOption';
 
 function ShareCode({ shareCode }: { shareCode: string }) {
@@ -133,6 +135,33 @@ function RelatedTuning({ tuning }: { tuning: Tuning }) {
   );
 }
 
+function TuningsShowMore() {
+  // TODO:  처음부터 Car DB의 ID로 받아서 DB 쿼리 안하고 바로 세팅할 수 있도록
+
+  // const {
+  //   actions: {
+  //     car: { setCar },
+  //   },
+  // } = useCarAndTagFilter(searchScope);
+
+  // more -> search filter 보여주고 있는 차로 세팅 -> 재검색
+
+  const onClick = async () => {
+    console.log(`show more - tuning`);
+    // const carInfo = await getCarInfo(carName);
+    // console.log(`carInfo : ${JSON.stringify(carInfo)}`);
+    // setCar(carInfo);
+  };
+
+  return (
+    <FlexBox sx={{ justifyContent: 'end', paddingX: 1, paddingTop: 1 }}>
+      <FlexBox sx={{ justifyContent: 'center', alignItems: 'center', marginX: 1 }}>
+        <Button onClick={onClick}>show more</Button>
+      </FlexBox>
+    </FlexBox>
+  );
+}
+
 export default function RelatedTunings() {
   const TUNING_CLASSES = ['D', 'C', 'B', 'A', 'S1', 'S2', 'X'];
   const TUNING_NUM = {
@@ -183,7 +212,7 @@ export default function RelatedTunings() {
       }}
     >
       <FlexBox>
-        <Typography variant="h3">Tunings</Typography>
+        <Typography variant="h5">Tunings</Typography>
       </FlexBox>
       <FlexBox sx={{ width: '100%', flexDirection: 'column', rowGap: 1 }}>
         {/* Tuning class */}
@@ -209,7 +238,7 @@ export default function RelatedTunings() {
         </FlexBox>
 
         {/* 선택된 클래스에 있는 튜닝들 */}
-        <Grid container>
+        <Grid container spacing={2}>
           {tunings
             .filter(
               (tuning) => tuning.PI > tuningSearchRange[0] && tuning.PI <= tuningSearchRange[1],
@@ -217,15 +246,16 @@ export default function RelatedTunings() {
             .slice(0, 6)
             .map((tuning) => {
               return (
-                <RelatedTuning tuning={tuning} key={`tuning-${tuning.PI}-${tuning.share_code}`} />
+                <TuningBriefCell tuning={tuning} key={`tuning-${tuning.PI}-${tuning.share_code}`} />
               );
             })}
         </Grid>
       </FlexBox>
+      <TuningsShowMore />
       {/* Pagination */}
-      <FlexBox sx={{ alignItems: 'center', justifyContent: 'center', paddingTop: 3 }}>
+      {/* <FlexBox sx={{ alignItems: 'center', justifyContent: 'center', paddingTop: 3 }}>
         <Pagination count={10} page={page} onChange={handleChange} size="large" />
-      </FlexBox>
+      </FlexBox> */}
     </FlexBox>
   );
 }
