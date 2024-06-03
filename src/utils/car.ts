@@ -1,3 +1,5 @@
+import type { PIClass } from '@/types';
+
 export function get_pi_class(pi_number: number): string {
   if (pi_number <= 500) return 'D';
   if (pi_number <= 600) return 'C';
@@ -16,4 +18,17 @@ export function get_pi_color(pi_number: number): string {
   if (pi_number <= 900) return '#b94fe3';
   if (pi_number <= 998) return '#164ff7';
   return '#32e60e';
+}
+
+export function get_pi_color_by_class(piClass: PIClass): string {
+  const piClassColor = {
+    D: '#0cdbed',
+    C: '#ede405',
+    B: '#f2881d',
+    A: '#f03518',
+    S1: '#b94fe3',
+    S2: '#164ff7',
+    X: '#32e60e',
+  };
+  return piClassColor[piClass];
 }

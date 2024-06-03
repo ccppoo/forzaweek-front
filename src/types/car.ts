@@ -22,6 +22,10 @@ export type CarInfo = {
   image: CarImages;
 };
 
+export type SuspensionType = 'drift' | 'race' | 'rally';
+export type TierType = 'normal' | 'snow' | 'rally' | 'offroad' | 'slick' | 'race' | 'drag';
+export type DrivingSystemType = 'FWD' | 'AWD' | 'RWD';
+
 export type DriveTrainType = 'AWD' | 'FWD' | 'RWD';
 export type DoorNumberType = 1 | 2 | 3 | 4;
 export type BodyStyleType =
