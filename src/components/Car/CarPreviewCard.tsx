@@ -1,7 +1,8 @@
 import { useState } from 'react';
 
-import Paper from '@mui/material/Paper';
-import Typography from '@mui/material/Typography';
+import BuildOutlinedIcon from '@mui/icons-material/BuildOutlined';
+import ColorLensOutlinedIcon from '@mui/icons-material/ColorLensOutlined';
+import { Box, Divider, IconButton, Paper, Typography } from '@mui/material';
 import Grid from '@mui/material/Unstable_Grid2';
 
 import { FlexBox } from '@/components/styled';
@@ -19,37 +20,26 @@ function CarPreviewInfo({ carInfo }: { carInfo: CarInfo }) {
   const DIVISION = carInfo.fh5.division;
 
   return (
-    <>
-      <FlexBox sx={{ columnGap: 1 }}>
-        {/* 여기 항목들은 길어서 줄넘김이 일어날 수 있는 것들 */}
-        <FlexBox>
-          {/* 제조사 로고 + 이름 */}
-          {/* 이름이 긴 경우 줄넘김 할 수 있도록 이름 아래에 한 칸 여유 남겨 놓을 것 */}
-          <Typography variant="body1">{MANUFACTURER}</Typography>
-        </FlexBox>
-        <FlexBox>
-          {/* 국기 + 국가 이름 */}
-          <Typography>{COUNRTY}</Typography>
-        </FlexBox>
+    <FlexBox
+      sx={{
+        maxWidth: '100%',
+        height: '100%',
+        justifyContent: 'center',
+        alignItems: 'center',
+      }}
+    >
+      <Image
+        src={carInfo.image.main}
+        sx={{
+          width: '100%',
+          objectFit: 'contain',
+        }}
+      />
+      <FlexBox sx={{ columnGap: 1, rowGap: 0.5, flexDirection: 'column' }}>
         {/* 연도 */}
         <Typography>{YEAR}</Typography>
-        <FlexBox></FlexBox>
-      </FlexBox>
-      <FlexBox sx={{ columnGap: 1, rowGap: 0.5, flexDirection: 'column' }}>
         {/* 줄넘김 없고, 길이가 한정된 것들 */}
-        <FlexBox sx={{ columnGap: 1 }}>
-          {/* == 인게임 스탯 == */}
-          <FlexBox sx={{ border: '1px black solid', borderRadius: 0.8, paddingX: 0.5 }}>
-            {/* PI, 색 반영해서 이쁘게 바꿀 것 */}
-            <Typography variant="body1">{PI}</Typography>
-          </FlexBox>
-        </FlexBox>
         <FlexBox sx={{ columnGap: 1, justifyContent: 'start' }}>
-          {/* == 현실 스탯 == */}
-          <FlexBox sx={{ border: '1px black solid', borderRadius: 0.8, paddingX: 0.5 }}>
-            {/* 사륜/전륜/후륜 */}
-            <Typography variant="body1">{DRIVE_TRAIN}</Typography>
-          </FlexBox>
           <FlexBox sx={{ border: '1px black solid', borderRadius: 0.8, paddingX: 0.5 }}>
             {/* Body Style - 세단/왜건/해치백 */}
             <Typography variant="body1">{BODY_STYLE}</Typography>
@@ -60,7 +50,7 @@ function CarPreviewInfo({ carInfo }: { carInfo: CarInfo }) {
           </FlexBox>
         </FlexBox>
       </FlexBox>
-    </>
+    </FlexBox>
   );
 }
 
@@ -72,55 +62,109 @@ export default function CarPreviewCard({ carInfo }: { carInfo: CarInfo }) {
 
   const FULL_NAME = carInfo.name;
 
+  const COUNRTY = carInfo.country;
+  const YEAR = carInfo.year;
+  const DRIVE_TRAIN = carInfo.driveTrain;
+  const BODY_STYLE = carInfo.bodyStyle;
+  // 인게임 스탯
+  const PI = carInfo.fh5.PI;
+  const DIVISION = carInfo.fh5.division;
+  // min 245 max 405
   return (
-    <Grid
-      sx={{
-        width: '100%',
-        height: 250,
-      }}
-      xs={12}
-      md={6}
-    >
-      <FlexBox
+    <FlexBox sx={{ minWidth: 400, width: 'calc( 50% - 20px )', maxWidth: 560 }}>
+      <Paper
         sx={{
-          paddingX: 0.5,
+          display: 'grid',
+          width: '100%',
+          gridTemplateColumns: '150px 5px auto',
+          gridTemplateRows: '120px',
           paddingTop: 0.5,
-          flexDirection: 'column',
-          alignItems: 'center',
-          height: '100%',
         }}
-        component={Paper}
       >
-        <Paper sx={{ width: '100%', minHeight: 36 }} elevation={3}>
-          <FlexBox sx={{ paddingX: 0.5, paddingY: 0.5 }}>
-            {/* 이름이 긴 경우 줄넘김 할 수 있도록 이름 아래에 한 칸 여유 남겨 놓을 것 */}
-            <Typography variant="h6">{FULL_NAME}</Typography>
-          </FlexBox>
-        </Paper>
-        <Grid container sx={{ width: '100%', height: '100%', maxHeight: 200, paddingTop: 1 }}>
-          <Grid
+        {/* 차 사진 */}
+        <FlexBox
+          sx={{
+            width: '100%',
+            height: '100%',
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}
+        >
+          <Image
+            src={carInfo.image.main}
             sx={{
-              maxWidth: '100%',
               height: '100%',
-              justifyContent: 'center',
-              alignItems: 'center',
+              objectFit: 'contain',
             }}
-            xs={6}
-            md={6}
+          />
+        </FlexBox>
+        {/* 여백  */}
+        <Divider orientation="vertical" sx={{ margin: 0 }} />
+        {/* 이름 기타 정보 */}
+        <FlexBox
+          sx={{
+            paddingX: 1,
+            width: '100%',
+            height: '100%',
+            flexDirection: 'column',
+            justifyContent: 'start',
+            rowGap: 0.3,
+          }}
+        >
+          {/* 차 이름 + 연식 */}
+          <FlexBox sx={{ width: '100%', paddingY: 0.2, alignItems: 'baseline', columnGap: 1 }}>
+            <Typography variant="h6">{FULL_NAME}</Typography>
+            <Typography variant="body2" sx={{ fontWeight: 200 }}>
+              {YEAR}
+            </Typography>
+          </FlexBox>
+          {/* 디비전 + 바로가기 버튼(데칼, 튜닝) */}
+          <FlexBox
+            sx={{
+              columnGap: 1,
+              justifyContent: 'start',
+              height: '100%',
+              paddingTop: 0.3,
+              flexDirection: 'column',
+            }}
           >
-            <Image
-              src={carInfo.image.main}
+            <FlexBox>
+              {/* 디비전 */}
+              <FlexBox
+                sx={{
+                  border: '1px black solid',
+                  borderRadius: 0.8,
+                  paddingX: 0.5,
+                  justifyContent: 'start',
+                }}
+              >
+                <Typography variant="body2">{DIVISION}</Typography>
+              </FlexBox>
+            </FlexBox>
+
+            {/* 데칼, 튜닝, 댓글  */}
+            <FlexBox
               sx={{
+                justifyContent: 'end',
                 width: '100%',
-                objectFit: 'contain',
+                height: '100%',
+                columnGap: 0.3,
+                alignItems: 'end',
               }}
-            />
-          </Grid>
-          <Grid sx={{ flexDirection: 'column' }} xs={6}>
-            <CarPreviewInfo carInfo={carInfo} />
-          </Grid>
-        </Grid>
-      </FlexBox>
-    </Grid>
+            >
+              {/* TODO: click -> goto decal selected car */}
+              <IconButton sx={{ padding: 0.4, borderRadius: 1 }}>
+                <ColorLensOutlinedIcon fontSize="small" />
+                <Typography sx={{ fontSize: '15px' }}>Decal</Typography>
+              </IconButton>
+              <IconButton sx={{ padding: 0.4, borderRadius: 1 }} size="small">
+                <BuildOutlinedIcon fontSize="small" />
+                <Typography sx={{ fontSize: '15px' }}>Tuning</Typography>
+              </IconButton>
+            </FlexBox>
+          </FlexBox>
+        </FlexBox>
+      </Paper>
+    </FlexBox>
   );
 }

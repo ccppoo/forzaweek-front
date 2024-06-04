@@ -4,13 +4,14 @@ import Container from '@mui/material/Container';
 import IconButton from '@mui/material/IconButton';
 import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
-import Grid from '@mui/material/Unstable_Grid2';
 import { styled } from '@mui/material/styles';
 
 import { CarPreviewCard } from '@/components/Car';
 import { CarFilterAndSelect } from '@/components/Search';
 import { CarAndTagSearch } from '@/components/Search';
+import { Image } from '@/components/styled';
 import { FlexBox, FullSizeCenteredFlexBox } from '@/components/styled';
+import manufacturer2 from '@/image/manufacturer2';
 import useCarSearchFilters, { CarSearchOption } from '@/store/carSearchFilters';
 
 export default function Cars() {
@@ -19,6 +20,10 @@ export default function Cars() {
   const [_, searchResults, isSearchOptionEmpty] = useCarSearchFilters(searchScope);
   const totalCarString = (num: number) => `Total ${num} cars`;
   const TOTAL_CARS = 843;
+
+  const searchResultsManufactures = [
+    ...new Set(searchResults.map((carinfo) => carinfo.manufacture)),
+  ].sort((a, b) => (a.toLowerCase() > b.toLowerCase() ? 1 : -1));
 
   return (
     <Container sx={{ paddingTop: 2 }}>
@@ -39,22 +44,59 @@ export default function Cars() {
           </Typography>
         </FlexBox>
         {/* search result cars */}
-        <Grid
-          container
+        <FlexBox
           sx={{
-            justifyContent: 'space-between',
+            width: '100%',
+            // justifyContent: 'space-around',
+            alignItems: 'center',
+            flexDirection: 'column',
+            rowGap: 1,
           }}
-          columnSpacing={{ xs: 1, md: 1 }}
-          rowSpacing={{ xs: 1, md: 1 }}
         >
-          {searchResults ? (
+          {searchResultsManufactures.map((manfuactre) => {
+            // @ts-ignore
+            const imgSrc = manufacturer2[manfuactre.toLowerCase().replace(' ', '_')];
+
+            return (
+              <FlexBox sx={{ flexDirection: 'column', width: '100%', paddingTop: 2 }}>
+                <FlexBox sx={{ height: 40, alignItems: 'center', paddingBottom: 1, columnGap: 2 }}>
+                  <Image
+                    src={imgSrc}
+                    sx={{
+                      height: '100%',
+                      width: 'auto',
+                      objectFit: 'contain',
+                    }}
+                  />
+                  <Typography>{manfuactre}</Typography>
+                </FlexBox>
+
+                <FlexBox
+                  sx={{
+                    width: '100%',
+                    justifyContent: 'space-between',
+                    // alignItems: 'center',
+                    flexWrap: 'wrap',
+                    rowGap: 1,
+                  }}
+                >
+                  {searchResults
+                    .filter((carinfo) => carinfo.manufacture == manfuactre)
+                    .map((carinfo) => {
+                      return <CarPreviewCard carInfo={carinfo} key={carinfo.name} />;
+                    })}
+                </FlexBox>
+              </FlexBox>
+            );
+          })}
+          {/* {searchResults ? (
             searchResults.map((carInfo) => {
               return <CarPreviewCard carInfo={carInfo} key={carInfo.name} />;
             })
           ) : (
             <FlexBox>loading</FlexBox>
-          )}
-        </Grid>
+          )} */}
+        </FlexBox>
       </FlexBox>
     </Container>
   );
