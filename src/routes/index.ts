@@ -63,6 +63,26 @@ const routes: Routes = {
     title: 'tuning detail',
     icon: HomeIcon,
   },
+  [Pages.Data]: {
+    component: asyncComponentLoader(() => import('@/pages/Data/Data')),
+    path: '/data',
+    title: 'data',
+    icon: HomeIcon,
+  },
+  [Pages.DataEdit]: {
+    component: asyncComponentLoader(() => import('@/pages/Data/Edit')),
+    path: '/data/edit/:dataType/:id',
+    devUrl: '/data/edit/nation/1',
+    title: 'edit data',
+    icon: HomeIcon,
+  },
+  [Pages.DataWrite]: {
+    component: asyncComponentLoader(() => import('@/pages/Data/Write')),
+    path: '/data/write/:dataType',
+    devUrl: '/data/write/nation',
+    title: 'write data',
+    icon: HomeIcon,
+  },
   [Pages.DEV]: {
     component: asyncComponentLoader(() => import('@/pages/Dev')),
     path: '/dev',

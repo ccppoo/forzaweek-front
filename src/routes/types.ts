@@ -14,6 +14,9 @@ enum Pages {
   TrackDetail,
   Tunings,
   TuningDetail,
+  Data,
+  DataWrite,
+  DataEdit,
   NotFound,
 }
 
