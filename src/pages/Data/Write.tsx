@@ -65,24 +65,30 @@ const rows = [
   createData(image.flags.uk, '영국', 'UK'),
 ];
 
+function DataInput() {
+  const dataName = 'nation flag';
+  return (
+    <FlexBox>
+      {/* 항목 이름 */}
+      <FlexBox>
+        <Typography>{dataName}</Typography>
+      </FlexBox>
+      {/* 채울 값 */}
+      <FlexBox></FlexBox>
+    </FlexBox>
+  );
+}
+
 function WriteData() {
   const [msg, setMSG] = useState<string>('');
+
+  const DataName = 'nation';
 
   return (
     <>
       <Meta title="Test" />
       <Container sx={{ display: 'flex', justifyContent: 'space-between' }}>
         <FullSizeCenteredFlexBox sx={{ flexDirection: 'column', rowGap: 4, paddingTop: 20 }}>
-          {/* 번역, 언어 */}
-          <FlexBox sx={{ border: '1px black solid', borderRadius: 1 }}>
-            {langs.map((val) => {
-              return (
-                <FlexBox sx={{}}>
-                  <Button>{val.lang}</Button>
-                </FlexBox>
-              );
-            })}
-          </FlexBox>
           {/* 데이터 값 */}
           <FlexBox sx={{ border: '1px black solid', borderRadius: 1 }}>
             {menus.map((val) => {
@@ -93,6 +99,25 @@ function WriteData() {
               );
             })}
           </FlexBox>
+          <Paper
+            sx={{
+              display: 'flex',
+              width: '100%',
+              paddingX: 2,
+              paddingY: 1,
+              flexDirection: 'column',
+            }}
+          >
+            {/* 제목 */}
+            <FlexBox sx={{ paddingBottom: 3 }}>
+              <Typography variant="h6">{DataName}</Typography>
+            </FlexBox>
+
+            {/* 데이터 채워야할 본문 */}
+            <FlexBox sx={{ flexDirection: 'column' }}>
+              <DataInput />
+            </FlexBox>
+          </Paper>
         </FullSizeCenteredFlexBox>
       </Container>
     </>
