@@ -2,10 +2,6 @@ import type { I18nLangCode } from '@/FormData/i18n';
 
 export const supportLangs: I18nLangCode[] = [
   {
-    code: 'ko',
-    country: '',
-  },
-  {
     code: 'en',
     country: '',
   },
@@ -16,5 +12,9 @@ export const supportLangs: I18nLangCode[] = [
   {
     code: 'en',
     country: 'GB',
+  },
+  {
+    code: 'ko',
+    country: '',
   },
 ];
