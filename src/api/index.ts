@@ -21,3 +21,4 @@ export const ContentTypeHeader = {
   'Content-Type': 'application/json',
 };
 
+export const API_HOST = import.meta.env.VITE_API_HOST;

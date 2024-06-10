@@ -2,11 +2,11 @@
 import * as path from 'path';
 import react from '@vitejs/plugin-react';
 import { defineConfig } from 'vite';
-import { VitePWA } from 'vite-plugin-pwa';
 import mkcert from 'vite-plugin-mkcert';
+import { VitePWA } from 'vite-plugin-pwa';
+
 import manifest from './manifest.json';
 
-// https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
     react(),
@@ -21,15 +21,15 @@ export default defineConfig({
         globPatterns: ['**/*.{js,css,html}', '**/*.{svg,png,jpg,gif}'],
       },
     }),
-    mkcert({})
+    mkcert({}),
   ],
   server: {
     hmr: {
-      host : 'localhost'
-    }, 
-
-
+      host: 'localhost',
+    },
   },
+  envDir: './env',
+
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),
