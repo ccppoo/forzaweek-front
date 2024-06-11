@@ -20,25 +20,26 @@ export async function AddNewNation({ nation }: { nation: NationEditSchema }) {
   const valueGivenI18n = nation.i18n.filter((i18n) => !!i18n.value);
   const valueGivenLang = valueGivenI18n.map((i18n) => i18n.lang);
   const values = { ...nation, langs: [...valueGivenLang], i18n: [...valueGivenI18n] };
-  console.log(`values : ${JSON.stringify(values)}`);
-
+  // console.log(`values : ${JSON.stringify(values)}`);
+  const enDefault = valueGivenI18n.filter(
+    (i18n) => i18n.lang.code == 'en' && i18n.lang.country == '',
+  )[0];
   const data = {
     name: valueGivenI18n.map((i18n) => {
       return { value: i18n.value, lang: i18n.lang.code, country: i18n.lang.country || null };
     }),
+    name_en: enDefault.value,
+    image: nation.flagImage,
   };
 
-  const formData = new FormData();
-  formData.append('file', nation.flagImageURL!);
-  formData.append('name', new Blob([JSON.stringify(data)], { type: 'application/json' }));
-  // console.log(`data : ${JSON.stringify(data)}`);
+  console.log(`data : ${JSON.stringify(data)}`);
 
-  const path_ = `nation/test`;
+  const path_ = `nation`;
   // const params = `date=${_date}&segment=${segment}`;
   const url = `${API_HOST}/${path_}`;
-  const resp = await axios.post(url, formData, {
+  const resp = await axios.post(url, data, {
     headers: {
-      'Content-Type': 'multipart/form-data',
+      'Content-Type': 'application/json',
     },
   });
   console.log(`resp.data : ${JSON.stringify(resp.data)}`);
@@ -47,7 +48,7 @@ export async function AddNewNation({ nation }: { nation: NationEditSchema }) {
   // return resp.data;
 }
 
-export async function UploadNationFlag({ fileBlobURL }: { fileBlobURL: string }) {
+export async function UploadNationFlag({ fileBlobURL }: { fileBlobURL: string }): Promise<string> {
   const formData = new FormData();
 
   const response = await fetch(fileBlobURL);
@@ -65,7 +66,10 @@ export async function UploadNationFlag({ fileBlobURL }: { fileBlobURL: string })
     },
   });
 
-  console.log(`resp.data : ${JSON.stringify(resp.data)}`);
+  const { image } = resp.data;
+  console.log(`resp.data.image : ${image}`);
+
+  return image;
 }
 
 export async function GetNation({

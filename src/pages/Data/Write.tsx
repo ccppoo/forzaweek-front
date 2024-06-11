@@ -88,7 +88,7 @@ function DataTextInput() {
     formState: { errors },
   } = useForm<NationEditSchema>({
     defaultValues: nationEditSchemaDefault,
-    mode: 'onTouched',
+    mode: 'onChange',
   });
 
   const { fields, append, remove, update } = useFieldArray({
@@ -99,16 +99,11 @@ function DataTextInput() {
   // const queryClient = useQueryClient()
 
   const submit = async (data: NationEditSchema) => {
+    console.log(`data : ${JSON.stringify(data)}`);
     // const values = getValues();
     const queryKey = ['add_nation', data.i18n[0].value];
 
     await AddNewNation({ nation: data });
-    // const result = useQuery({
-    //   queryKey: ['add_nation', data.i18n[0].value],
-    //   queryFn: AddNewNation,
-    // });
-    // await AddNewNation({queryKey : queryKey, data})
-    // console.log(`values :${JSON.stringify(data)}`);
   };
 
   const handleOnError = (errors: SubmitErrorHandler<NationEditSchema>) => {
@@ -120,7 +115,7 @@ function DataTextInput() {
 
   const removeImage = () => {
     setImagePreview(null);
-    setValue('flagImageURL', undefined);
+    setValue('flagImage', undefined);
   };
 
   const handleUploadClick = async (e: ChangeEvent<HTMLInputElement>) => {
@@ -131,10 +126,9 @@ function DataTextInput() {
     const selectedFile = e.target.files[0];
 
     const fileBlobURL = URL.createObjectURL(selectedFile);
-    // console.log(`fileBlobURL :${JSON.stringify(fileBlobURL)} type : ${typeof fileBlobURL}`);
-    await UploadNationFlag({ fileBlobURL: fileBlobURL });
+    const serverSideImageName = await UploadNationFlag({ fileBlobURL: fileBlobURL });
     setImagePreview(fileBlobURL || null);
-    setValue('flagImageURL', fileBlobURL);
+    setValue('flagImage', serverSideImageName);
 
     // 업로드되는 파일에는 url이 있어야 한다. filePath로 보내줄 url이다.
     //획득한 Blob URL Address를 브라우져에서 그대로 호출 시에 이미지는 표시가 되고 ,
@@ -174,7 +168,7 @@ function DataTextInput() {
                 height: '100%',
                 backgroundColor: 'rgba(244,244,244, 0.4)',
                 borderRadius: 2,
-                border: !!errors?.flagImageURL ? '2px solid #d32f2f' : '1px solid black',
+                border: !!errors?.flagImage ? '2px solid #d32f2f' : '1px solid black',
               }}
             >
               {imagePreview && <Image src={imagePreview} sx={{ objectFit: 'contain' }} />}
@@ -186,7 +180,7 @@ function DataTextInput() {
                   sx={{}}
                   style={{ color: '#d32f2f', fontWeight: 400, fontSize: '0.75rem' }}
                 >
-                  {errors.flagImageURL?.message}
+                  {errors.flagImage?.message}
                 </Typography>
               </FlexBox>
               <FlexBox sx={{ columnGap: 1, height: '90%', alignItems: 'center' }}>
@@ -201,7 +195,7 @@ function DataTextInput() {
                   Remove
                 </Button>
                 <Controller
-                  name="flagImageURL"
+                  name="flagImage"
                   control={control}
                   rules={{
                     required: {
@@ -229,7 +223,7 @@ function DataTextInput() {
                           onChange(e.target.files?.[0]);
                           handleUploadClick(e);
 
-                          trigger('flagImageURL');
+                          trigger('flagImage');
                         }}
                       />
                     </Button>
