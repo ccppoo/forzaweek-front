@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useParams } from 'react-router-dom';
 
 import { Box, Button, Paper, Typography } from '@mui/material';
 import Container from '@mui/material/Container';
@@ -28,44 +29,6 @@ import trackData from '@/data/track.json';
 import { db } from '@/db';
 import { Track } from '@/db/schema';
 import useAddDataDialog from '@/store/addDataDialog';
-
-const menus = [
-  {
-    name: 'nation',
-  },
-  {
-    name: 'manufacturer',
-  },
-  {
-    name: 'drive train',
-  },
-  {
-    name: 'engine',
-  },
-  {
-    name: 'car',
-  },
-  {
-    name: 'body style',
-  },
-  {
-    name: 'stat',
-  },
-  {
-    name: 'tuning',
-  },
-];
-
-const langs = [
-  {
-    lang: 'ko',
-    country: [],
-  },
-  {
-    lang: 'en',
-    country: ['us', 'uk'],
-  },
-];
 
 function createData(flagImage: string, ko: string, en: string) {
   return { flagImage, ko, en };
@@ -118,20 +81,22 @@ function BasicTable() {
 }
 
 function Data() {
-  const [msg, setMSG] = useState<string>('');
+  const { dataType } = useParams();
+
+  console.log(`dataType : ${dataType}`);
 
   return (
     <Container sx={{ display: 'flex', justifyContent: 'space-between' }}>
       <FullSizeCenteredFlexBox sx={{ flexDirection: 'column', rowGap: 4, paddingTop: 20 }}>
         {/* 데이터 값 */}
         <FlexBox sx={{ border: '1px black solid', borderRadius: 1 }}>
-          {menus.map((val) => {
+          {/* {menus.map((val) => {
             return (
               <FlexBox sx={{}}>
                 <Button>{val.name}</Button>
               </FlexBox>
             );
-          })}
+          })} */}
         </FlexBox>
 
         <BasicTable />
