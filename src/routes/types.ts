@@ -25,7 +25,7 @@ type PathRouteCustomProps = {
   title?: string;
   component: FC;
   icon?: FC<SvgIconProps>;
-  dev?: boolean;
+  devHide?: boolean;
   devUrl?: string;
 };
 

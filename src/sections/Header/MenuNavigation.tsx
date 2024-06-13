@@ -50,9 +50,9 @@ function NavigationButton({ name, path }: { name: string; path: string }) {
 
 export default function MenuNavigation({ leftPadding }: { leftPadding: number }) {
   return (
-    <Toolbar variant="dense" sx={{ marginX: `${leftPadding}px`, columnGap: 1 }}>
+    <Toolbar variant="dense" sx={{ marginX: `${leftPadding}px`, columnGap: 1, flexWrap: 'wrap' }}>
       {Object.entries(routes)
-        .filter(([key, item]) => item.title)
+        .filter(([key, item]) => item.title && !item.devHide)
         .map(([key, item]) => (
           <NavigationButton
             name={item.title!}

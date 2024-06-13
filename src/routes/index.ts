@@ -73,21 +73,26 @@ const routes: Routes = {
   [Pages.DataList]: {
     component: asyncComponentLoader(() => import('@/pages/Data/List')),
     path: '/data/:dataType',
-    devUrl: '/data/nation',
-    title: 'data',
+    devUrl: '/data/manufacturer',
+    // devHide: true,
+
+    title: 'data list',
     icon: HomeIcon,
   },
   [Pages.DataEdit]: {
     component: asyncComponentLoader(() => import('@/pages/Data/Edit')),
-    path: '/data/:dataType/edit/:id',
-    devUrl: '/data/nation/edit/1',
+    path: '/data/:dataType/edit/:itemID',
+    // devUrl: '/data/nation/edit/666851ce98f3742acfec3f67',
+    // devHide: true,
     title: 'edit data',
     icon: HomeIcon,
   },
   [Pages.DataWrite]: {
     component: asyncComponentLoader(() => import('@/pages/Data/Write')),
     path: '/data/:dataType/write',
-    devUrl: '/data/nation/write',
+    devUrl: '/data/manufacturer/write',
+    // devHide: true,
+
     title: 'write data',
     icon: HomeIcon,
   },
@@ -95,12 +100,13 @@ const routes: Routes = {
     component: asyncComponentLoader(() => import('@/pages/Dev')),
     path: '/dev',
     title: 'dev',
+
     icon: HomeIcon,
   },
   [Pages.NotFound]: {
     component: asyncComponentLoader(() => import('@/pages/NotFound')),
     path: '*',
-    dev: false,
+    devHide: true,
   },
 };
 

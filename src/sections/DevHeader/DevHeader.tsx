@@ -38,8 +38,8 @@ function DevHeader() {
       <AppBar color="transparent" elevation={1} position="sticky" sx={{ top: 0, paddingX: 0 }}>
         <Toolbar sx={{ padding: 0 }}>
           <Container sx={{ display: 'flex', justifyContent: 'center', columnGap: 1 }}>
-            {Object.values(routes).map(({ title, path, dev, devUrl }) => {
-              if (dev != false) return <LinkButton name={title!} path={devUrl || path!} />;
+            {Object.values(routes).map(({ title, path, devHide, devUrl }) => {
+              if (!devHide) return <LinkButton name={title!} path={devUrl || path!} />;
             })}
             {/* <FlexBox></FlexBox> */}
           </Container>
