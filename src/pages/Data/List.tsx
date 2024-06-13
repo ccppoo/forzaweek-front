@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import { Box, Button, Paper, Typography } from '@mui/material';
 import Container from '@mui/material/Container';
@@ -14,70 +14,123 @@ import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
-import TextField from '@mui/material/TextField';
 
-// import { useSubscriber } from '@/socket/subscriber';
-import { useLiveQuery } from 'dexie-react-hooks';
+import { useQuery } from '@tanstack/react-query';
 
-import * as image from '@/image';
-import Meta from '@/components/Meta';
+import { DeleteNation, GetAllNation } from '@/api/data/nation';
 import { FlexBox, FullSizeCenteredFlexBox } from '@/components/styled';
 import { Image } from '@/components/styled';
-import { imageMatch } from '@/data/cars';
-import carData from '@/data/cars.json';
-import trackData from '@/data/track.json';
-import { db } from '@/db';
-import { Track } from '@/db/schema';
-import useAddDataDialog from '@/store/addDataDialog';
-
-function createData(flagImage: string, ko: string, en: string) {
-  return { flagImage, ko, en };
-}
-
-const rows = [
-  createData(image.flags.korea, '한국', 'Korea'),
-  createData(image.flags.japan, '일본', 'Japan'),
-  createData(image.flags.usa, '미국', 'USA'),
-  createData(image.flags.uk, '영국', 'UK'),
-];
 
 function BasicTable() {
-  const [opened, { open }] = useAddDataDialog();
+  const dataType = 'nation';
 
-  return (
-    <FlexBox sx={{ width: '100%', flexDirection: 'column', rowGap: 2 }}>
-      {/* 데이터 추가 버튼 */}
-      <FlexBox sx={{ justifyContent: 'end' }}>
-        <Button variant="outlined" onClick={open}>
-          add data
-        </Button>
-      </FlexBox>
-      <TableContainer component={Paper}>
-        <Table sx={{ minWidth: 650 }} aria-label="simple table">
-          <TableHead>
-            <TableRow>
-              <TableCell>Nation flag</TableCell>
-              <TableCell align="right">한국어(ko)</TableCell>
-              <TableCell align="right">영어(en)</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {rows.map((row) => (
-              <TableRow key={row.en} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-                <TableCell component="th" scope="row">
-                  <FlexBox sx={{ width: 60, height: 40, border: '0.5px black solid' }}>
-                    <Image src={row.flagImage} />
-                  </FlexBox>
+  const navigate = useNavigate();
+
+  const { data } = useQuery({ queryKey: ['get nations'], queryFn: GetAllNation, staleTime: 10 });
+
+  const deleteItem = async (itemID: string) => {
+    // TODO: alert
+
+    await DeleteNation({ documentID: itemID });
+  };
+
+  const addItem = () => {
+    navigate(`/data/${dataType}/write`);
+  };
+
+  const editItem = (itemID: string) => {
+    // TODO:
+    // /data/nation/edit/666851ce98f3742acfec3f67',
+    navigate(`/data/${dataType}/edit/${itemID}`);
+  };
+
+  if (data) {
+    const columns = [...new Set([...data.flatMap((dat) => dat.i18n.map((lan) => lan.lang))])];
+
+    const rowss = data.map(({ id, imageURL, i18n, name_en }) => {
+      return {
+        id: id,
+        image: imageURL,
+        name_en,
+        i18n: i18n,
+      };
+    });
+
+    return (
+      <FlexBox sx={{ width: '100%', flexDirection: 'column', rowGap: 2 }}>
+        {/* 데이터 추가 버튼 */}
+        <FlexBox sx={{ justifyContent: 'end' }}>
+          <Button variant="outlined" onClick={addItem}>
+            add data
+          </Button>
+        </FlexBox>
+        <TableContainer component={Paper}>
+          <Table sx={{ minWidth: 650 }} aria-label="simple table">
+            <TableHead>
+              <TableRow>
+                <TableCell>Nation flag</TableCell>
+                {columns.map((col) => {
+                  return (
+                    <TableCell align="right" key={`table-nation-column-${col}`}>
+                      {col}
+                    </TableCell>
+                  );
+                })}
+                <TableCell align="center" colSpan={1}>
+                  Action
                 </TableCell>
-                <TableCell align="right">{row.ko}</TableCell>
-                <TableCell align="right">{row.en}</TableCell>
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
-    </FlexBox>
-  );
+            </TableHead>
+            <TableBody>
+              {rowss.map((row) => (
+                <TableRow
+                  key={`table-row-${row.name_en}`}
+                  sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                >
+                  <TableCell component="th" scope="row">
+                    <FlexBox sx={{ width: 60, height: 40, border: '0.5px black solid' }}>
+                      <Image src={row.image} />
+                    </FlexBox>
+                  </TableCell>
+                  {row.i18n.map(({ lang, value }) => {
+                    return (
+                      <TableCell align="right" key={`table-cell-${lang}`}>
+                        {value}
+                      </TableCell>
+                    );
+                  })}
+                  <TableCell
+                    align="right"
+                    key={`table-cell-${row.name_en}-action`}
+                    sx={{ width: 75 }}
+                  >
+                    <FlexBox sx={{ columnGap: 1 }}>
+                      <Button
+                        color="info"
+                        variant="outlined"
+                        size="small"
+                        onClick={() => editItem(row.id)}
+                      >
+                        Edit
+                      </Button>
+                      <Button
+                        color="error"
+                        variant="outlined"
+                        size="small"
+                        onClick={() => deleteItem(row.id)}
+                      >
+                        Delete
+                      </Button>
+                    </FlexBox>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </FlexBox>
+    );
+  }
 }
 
 function Data() {
@@ -87,17 +140,11 @@ function Data() {
 
   return (
     <Container sx={{ display: 'flex', justifyContent: 'space-between' }}>
-      <FullSizeCenteredFlexBox sx={{ flexDirection: 'column', rowGap: 4, paddingTop: 20 }}>
+      <FullSizeCenteredFlexBox
+        sx={{ flexDirection: 'column', rowGap: 4, paddingTop: 1, paddingBottom: 2 }}
+      >
         {/* 데이터 값 */}
-        <FlexBox sx={{ border: '1px black solid', borderRadius: 1 }}>
-          {/* {menus.map((val) => {
-            return (
-              <FlexBox sx={{}}>
-                <Button>{val.name}</Button>
-              </FlexBox>
-            );
-          })} */}
-        </FlexBox>
+        <FlexBox sx={{ border: '1px black solid', borderRadius: 1 }}></FlexBox>
 
         <BasicTable />
       </FullSizeCenteredFlexBox>

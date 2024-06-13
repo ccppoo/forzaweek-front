@@ -1,12 +1,17 @@
-import { useState } from 'react';
+import { ChangeEvent, ReactElement, useEffect, useState } from 'react';
+import { useController } from 'react-hook-form';
+import { Controller, FormProvider, useFieldArray, useForm } from 'react-hook-form';
+import type { SubmitErrorHandler } from 'react-hook-form';
+import { FieldValues, Path, useFormContext } from 'react-hook-form';
+import { Route, Routes, useParams } from 'react-router-dom';
 
-import { Box, Button, Paper, Typography } from '@mui/material';
+import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
+import FileUploadOutlined from '@mui/icons-material/FileUploadOutlined';
+import { Box, Button, Checkbox, IconButton, List, Paper, Typography } from '@mui/material';
+import { TextFieldProps } from '@mui/material';
 import Container from '@mui/material/Container';
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
-import DialogTitle from '@mui/material/DialogTitle';
+import MenuItem from '@mui/material/MenuItem';
+import Select, { SelectChangeEvent } from '@mui/material/Select';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -15,19 +20,16 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import TextField from '@mui/material/TextField';
 
-// import { useSubscriber } from '@/socket/subscriber';
-import { useLiveQuery } from 'dexie-react-hooks';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 
 import * as image from '@/image';
-import Meta from '@/components/Meta';
-import { FlexBox, FullSizeCenteredFlexBox } from '@/components/styled';
+import type { NationEditSchema } from '@/FormData/nation';
+import { nationEditSchemaDefault } from '@/FormData/nation';
+import { AddNewNation, EditNation, GetNationEdit, UploadNationFlag } from '@/api/data/nation';
+import { FlexBox, FullSizeCenteredFlexBox, VisuallyHiddenInput } from '@/components/styled';
 import { Image } from '@/components/styled';
-import { imageMatch } from '@/data/cars';
-import carData from '@/data/cars.json';
-import trackData from '@/data/track.json';
-import { db } from '@/db';
-import { Track } from '@/db/schema';
-import useAddDataDialog from '@/store/addDataDialog';
+
+import * as Forms from './forms';
 
 const menus = [
   {
@@ -56,60 +58,55 @@ const menus = [
   },
 ];
 
-const langs = [
-  {
-    lang: 'ko',
-    country: [],
-  },
-  {
-    lang: 'en',
-    country: ['us', 'uk'],
-  },
-];
-
-function createData(flagImage: string, ko: string, en: string) {
-  return { flagImage, ko, en };
-}
-
-const rows = [
-  createData(image.flags.korea, '한국', 'Korea'),
-  createData(image.flags.japan, '일본', 'Japan'),
-  createData(image.flags.usa, '미국', 'USA'),
-  createData(image.flags.uk, '영국', 'UK'),
-];
-
 function EditData() {
-  const [msg, setMSG] = useState<string>('');
+  const DataName = 'nation';
+  const { dataType, itemID } = useParams();
+  const { data } = useQuery({
+    queryKey: [dataType!, { dataType: dataType!, itemID: itemID! }],
+    queryFn: GetNationEdit,
+    staleTime: -1,
+  });
 
-  return (
-    <>
-      <Meta title="Test" />
+  const EditForms: Record<string, (data: any) => ReactElement> = {
+    nation: (data) => <Forms.NationForm nationEditSchema={data} />,
+  };
+
+  // console.log(`resp : ${JSON.stringify(data)}`);
+
+  if (data) {
+    return (
       <Container sx={{ display: 'flex', justifyContent: 'space-between' }}>
-        <FullSizeCenteredFlexBox sx={{ flexDirection: 'column', rowGap: 4, paddingTop: 20 }}>
-          {/* 번역, 언어 */}
-          <FlexBox sx={{ border: '1px black solid', borderRadius: 1 }}>
-            {langs.map((val) => {
-              return (
-                <FlexBox sx={{}}>
-                  <Button>{val.lang}</Button>
-                </FlexBox>
-              );
-            })}
-          </FlexBox>
+        <FullSizeCenteredFlexBox sx={{ flexDirection: 'column', rowGap: 4, paddingTop: 2 }}>
           {/* 데이터 값 */}
           <FlexBox sx={{ border: '1px black solid', borderRadius: 1 }}>
             {menus.map((val) => {
               return (
-                <FlexBox sx={{}}>
+                <FlexBox sx={{}} key={`data-input-menu-${val.name}`}>
                   <Button>{val.name}</Button>
                 </FlexBox>
               );
             })}
           </FlexBox>
+          <Paper
+            sx={{
+              display: 'flex',
+              width: '100%',
+              paddingX: 5,
+              paddingY: 1,
+              flexDirection: 'column',
+            }}
+          >
+            {/* 제목 */}
+            <FlexBox sx={{ paddingBottom: 3 }}>
+              <Typography variant="h6">{DataName}</Typography>
+            </FlexBox>
+            {/* 데이터 채워야할 본문 */}
+            {EditForms[dataType!](data)}
+          </Paper>
         </FullSizeCenteredFlexBox>
       </Container>
-    </>
-  );
+    );
+  }
 }
 
 export default EditData;

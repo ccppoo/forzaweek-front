@@ -1,140 +1,78 @@
 import { useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 
+import FlagOutlinedIcon from '@mui/icons-material/FlagOutlined';
 import { Box, Button, Paper, Typography } from '@mui/material';
 import Container from '@mui/material/Container';
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
-import DialogTitle from '@mui/material/DialogTitle';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import TextField from '@mui/material/TextField';
 
-// import { useSubscriber } from '@/socket/subscriber';
-import { useLiveQuery } from 'dexie-react-hooks';
+import { useQuery } from '@tanstack/react-query';
 
 import * as image from '@/image';
+import { GetDataStatus } from '@/api/data/status';
+import type { DataStatus, DataType } from '@/api/data/types';
 import Meta from '@/components/Meta';
 import { FlexBox, FullSizeCenteredFlexBox } from '@/components/styled';
 import { Image } from '@/components/styled';
-import { imageMatch } from '@/data/cars';
-import carData from '@/data/cars.json';
-import trackData from '@/data/track.json';
-import { db } from '@/db';
-import { Track } from '@/db/schema';
 import useAddDataDialog from '@/store/addDataDialog';
 
-const menus = [
-  {
-    name: 'nation',
-  },
-  {
-    name: 'manufacturer',
-  },
-  {
-    name: 'drive train',
-  },
-  {
-    name: 'engine',
-  },
-  {
-    name: 'car',
-  },
-  {
-    name: 'body style',
-  },
-  {
-    name: 'stat',
-  },
-  {
-    name: 'tuning',
-  },
-];
+// const menu: DataType[] = ['nation' as DataType];
 
-const langs = [
-  {
-    lang: 'ko',
-    country: [],
-  },
-  {
-    lang: 'en',
-    country: ['us', 'uk'],
-  },
-];
-
-function createData(flagImage: string, ko: string, en: string) {
-  return { flagImage, ko, en };
+interface DataItemProps {
+  name: string;
+  number: number | undefined;
 }
 
-const rows = [
-  createData(image.flags.korea, '한국', 'Korea'),
-  createData(image.flags.japan, '일본', 'Japan'),
-  createData(image.flags.usa, '미국', 'USA'),
-  createData(image.flags.uk, '영국', 'UK'),
-];
+function DataItemCell(props: DataItemProps) {
+  const { name, number } = props;
+  const navigate = useNavigate();
 
-function BasicTable() {
-  const [opened, { open }] = useAddDataDialog();
+  const navigateTo = (dataName: string) => navigate(`/data/${dataName}`);
+
+  const title = name[0].toUpperCase().concat(name.substring(1));
 
   return (
-    <FlexBox sx={{ width: '100%', flexDirection: 'column', rowGap: 2 }}>
-      {/* 데이터 추가 버튼 */}
-      <FlexBox sx={{ justifyContent: 'end' }}>
-        <Button variant="outlined" onClick={open}>
-          add data
-        </Button>
+    <Paper sx={{ display: 'grid', gridTemplateRows: '150px', gridTemplateColumns: '150px 300px' }}>
+      <FlexBox sx={{}}>사진</FlexBox>
+      <FlexBox sx={{ flexDirection: 'column', paddingY: 1, rowGap: 2 }}>
+        <FlexBox sx={{ columnGap: 1 }}>
+          <FlagOutlinedIcon style={{ fontSize: 30 }} />
+          <Typography variant="h5">{title}</Typography>
+        </FlexBox>
+        <FlexBox>
+          <Typography variant="body1">
+            {name.toLowerCase()} saved : {number}
+          </Typography>
+        </FlexBox>
+        <FlexBox sx={{ justifyContent: 'end', alignItems: 'end', height: '100%' }}>
+          <Button sx={{ padding: 1 }} size="small" onClick={() => navigateTo(name)}>
+            more
+          </Button>
+        </FlexBox>
       </FlexBox>
-      <TableContainer component={Paper}>
-        <Table sx={{ minWidth: 650 }} aria-label="simple table">
-          <TableHead>
-            <TableRow>
-              <TableCell>Nation flag</TableCell>
-              <TableCell align="right">한국어(ko)</TableCell>
-              <TableCell align="right">영어(en)</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {rows.map((row) => (
-              <TableRow key={row.en} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-                <TableCell component="th" scope="row">
-                  <FlexBox sx={{ width: 60, height: 40, border: '0.5px black solid' }}>
-                    <Image src={row.flagImage} />
-                  </FlexBox>
-                </TableCell>
-                <TableCell align="right">{row.ko}</TableCell>
-                <TableCell align="right">{row.en}</TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
-    </FlexBox>
+    </Paper>
   );
 }
 
 function Data() {
-  const [msg, setMSG] = useState<string>('');
+  const menu: DataType[] = ['nation'];
+
+  const { data } = useQuery({
+    queryKey: ['data_status'],
+    queryFn: GetDataStatus,
+    staleTime: 30,
+    placeholderData: {
+      nation: undefined,
+    },
+  });
 
   return (
     <Container sx={{ display: 'flex', justifyContent: 'space-between' }}>
-      <FullSizeCenteredFlexBox sx={{ flexDirection: 'column', rowGap: 4, paddingTop: 20 }}>
-        {/* 데이터 값 */}
-        <FlexBox sx={{ border: '1px black solid', borderRadius: 1 }}>
-          {menus.map((val) => {
-            return (
-              <FlexBox sx={{}}>
-                <Button>{val.name}</Button>
-              </FlexBox>
-            );
-          })}
-        </FlexBox>
-
-        <BasicTable />
+      <FullSizeCenteredFlexBox sx={{ flexDirection: 'column', rowGap: 4, paddingTop: 3 }}>
+        {menu.map((dataName) => {
+          return (
+            <DataItemCell key={`data-menu-${dataName}`} name={dataName} number={data![dataName]} />
+          );
+        })}
       </FullSizeCenteredFlexBox>
     </Container>
   );
