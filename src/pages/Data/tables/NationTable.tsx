@@ -1,13 +1,7 @@
-import { ReactElement, useState } from 'react';
+import { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import { Box, Button, Paper, Typography } from '@mui/material';
-import Container from '@mui/material/Container';
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
-import DialogTitle from '@mui/material/DialogTitle';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -21,9 +15,7 @@ import { DeleteNation, GetAllNation } from '@/api/data/nation';
 import { FlexBox, FullSizeCenteredFlexBox } from '@/components/styled';
 import { Image } from '@/components/styled';
 
-import * as Tables from './tables';
-
-function BasicTable() {
+export default function NationTable() {
   const dataType = 'nation';
 
   const navigate = useNavigate();
@@ -134,29 +126,3 @@ function BasicTable() {
     );
   }
 }
-
-function Data() {
-  const { dataType } = useParams();
-
-  const ListTables: Record<string, () => ReactElement> = {
-    nation: () => <Tables.NationTable />,
-    manufacturer: () => <Tables.ManufacturerTable />,
-  };
-
-  console.log(`dataType : ${dataType}`);
-
-  return (
-    <Container sx={{ display: 'flex', justifyContent: 'space-between' }}>
-      <FullSizeCenteredFlexBox
-        sx={{ flexDirection: 'column', rowGap: 4, paddingTop: 1, paddingBottom: 2 }}
-      >
-        {/* 데이터 값 */}
-        <FlexBox sx={{ border: '1px black solid', borderRadius: 1 }}></FlexBox>
-
-        {ListTables[dataType!]()}
-      </FullSizeCenteredFlexBox>
-    </Container>
-  );
-}
-
-export default Data;

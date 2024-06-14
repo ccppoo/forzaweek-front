@@ -54,7 +54,7 @@ function DataItemCell(props: DataItemProps) {
 }
 
 function Data() {
-  const menu: DataType[] = ['nation'];
+  const menu: DataType[] = ['nation', 'manufacturer'];
 
   const { data } = useQuery({
     queryKey: ['data_status'],
@@ -62,17 +62,24 @@ function Data() {
     staleTime: 30,
     placeholderData: {
       nation: undefined,
+      manufacturer: undefined,
     },
   });
 
   return (
     <Container sx={{ display: 'flex', justifyContent: 'space-between' }}>
       <FullSizeCenteredFlexBox sx={{ flexDirection: 'column', rowGap: 4, paddingTop: 3 }}>
-        {menu.map((dataName) => {
-          return (
-            <DataItemCell key={`data-menu-${dataName}`} name={dataName} number={data![dataName]} />
-          );
-        })}
+        <FlexBox sx={{ flexWrap: 'wrap', columnGap: 1 }}>
+          {menu.map((dataName) => {
+            return (
+              <DataItemCell
+                key={`data-menu-${dataName}`}
+                name={dataName}
+                number={data![dataName]}
+              />
+            );
+          })}
+        </FlexBox>
       </FullSizeCenteredFlexBox>
     </Container>
   );

@@ -1,13 +1,7 @@
-import { ReactElement, useState } from 'react';
+import { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import { Box, Button, Paper, Typography } from '@mui/material';
-import Container from '@mui/material/Container';
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
-import DialogTitle from '@mui/material/DialogTitle';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -17,23 +11,25 @@ import TableRow from '@mui/material/TableRow';
 
 import { useQuery } from '@tanstack/react-query';
 
-import { DeleteNation, GetAllNation } from '@/api/data/nation';
+import { DeleteManufacturer, GetAllManufacturer } from '@/api/data/manufacturer';
 import { FlexBox, FullSizeCenteredFlexBox } from '@/components/styled';
 import { Image } from '@/components/styled';
 
-import * as Tables from './tables';
-
-function BasicTable() {
-  const dataType = 'nation';
+export default function ManufacturerTable() {
+  const dataType = 'manufacturer';
 
   const navigate = useNavigate();
 
-  const { data } = useQuery({ queryKey: ['get nations'], queryFn: GetAllNation, staleTime: 10 });
+  const { data } = useQuery({
+    queryKey: ['get manufacturer'],
+    queryFn: GetAllManufacturer,
+    staleTime: 10,
+  });
 
   const deleteItem = async (itemID: string) => {
     // TODO: alert
 
-    await DeleteNation({ documentID: itemID });
+    await DeleteManufacturer({ documentID: itemID });
   };
 
   const addItem = () => {
@@ -48,12 +44,13 @@ function BasicTable() {
 
   if (data) {
     const columns = [...new Set([...data.flatMap((dat) => dat.i18n.map((lan) => lan.lang))])];
-
-    const rowss = data.map(({ id, imageURL, i18n, name_en }) => {
+    const rowss = data.map(({ id, imageURL, i18n, name_en, founded, origin }) => {
       return {
         id: id,
         image: imageURL,
         name_en,
+        origin: origin,
+        founded: founded,
         i18n: i18n,
       };
     });
@@ -70,10 +67,12 @@ function BasicTable() {
           <Table sx={{ minWidth: 650 }} aria-label="simple table">
             <TableHead>
               <TableRow>
-                <TableCell>Nation flag</TableCell>
+                <TableCell>Manufacturer Logo</TableCell>
+                <TableCell align="center">Origin</TableCell>
+                <TableCell align="center">founded</TableCell>
                 {columns.map((col) => {
                   return (
-                    <TableCell align="right" key={`table-nation-column-${col}`}>
+                    <TableCell align="center" key={`table-nation-column-${col}`}>
                       {col}
                     </TableCell>
                   );
@@ -94,9 +93,23 @@ function BasicTable() {
                       <Image src={row.image} />
                     </FlexBox>
                   </TableCell>
+                  <TableCell scope="row" align="center">
+                    <FlexBox sx={{ justifyContent: 'center', alignItems: 'center', columnGap: 2 }}>
+                      {/* <FlexBox sx={{ width: 60, height: 40, border: '0.5px black solid' }}> */}
+                      <FlexBox sx={{ width: 60, height: 40 }}>
+                        <Image src={row.origin.imageURL} />
+                      </FlexBox>
+                      <Typography>{row.origin.name_en}</Typography>
+                    </FlexBox>
+                  </TableCell>
+                  <TableCell scope="row" align="center">
+                    <FlexBox sx={{ justifyContent: 'center' }}>
+                      <Typography>{row.founded}</Typography>
+                    </FlexBox>
+                  </TableCell>
                   {row.i18n.map(({ lang, value }) => {
                     return (
-                      <TableCell align="right" key={`table-cell-${lang}`}>
+                      <TableCell align="center" key={`table-cell-${lang}`}>
                         {value}
                       </TableCell>
                     );
@@ -134,29 +147,3 @@ function BasicTable() {
     );
   }
 }
-
-function Data() {
-  const { dataType } = useParams();
-
-  const ListTables: Record<string, () => ReactElement> = {
-    nation: () => <Tables.NationTable />,
-    manufacturer: () => <Tables.ManufacturerTable />,
-  };
-
-  console.log(`dataType : ${dataType}`);
-
-  return (
-    <Container sx={{ display: 'flex', justifyContent: 'space-between' }}>
-      <FullSizeCenteredFlexBox
-        sx={{ flexDirection: 'column', rowGap: 4, paddingTop: 1, paddingBottom: 2 }}
-      >
-        {/* 데이터 값 */}
-        <FlexBox sx={{ border: '1px black solid', borderRadius: 1 }}></FlexBox>
-
-        {ListTables[dataType!]()}
-      </FullSizeCenteredFlexBox>
-    </Container>
-  );
-}
-
-export default Data;

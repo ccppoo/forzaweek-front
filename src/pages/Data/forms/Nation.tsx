@@ -9,7 +9,8 @@ import TextField from '@mui/material/TextField';
 
 import type { NationEditSchema } from '@/FormData/nation';
 import { nationEditSchemaDefault } from '@/FormData/nation';
-import { AddNewNation, EditNation, UploadNationFlag } from '@/api/data/nation';
+import { UploadTempImage } from '@/api/data/image';
+import { AddNewNation, EditNation } from '@/api/data/nation';
 import { FlexBox, FullSizeCenteredFlexBox, VisuallyHiddenInput } from '@/components/styled';
 import { Image } from '@/components/styled';
 
@@ -74,7 +75,10 @@ export default function NationForm(props: dataTextInputIntf) {
     const selectedFile = e.target.files[0];
 
     const fileBlobURL = URL.createObjectURL(selectedFile);
-    const serverSideImageName = await UploadNationFlag({ fileBlobURL: fileBlobURL });
+    const serverSideImageName = await UploadTempImage({
+      folder: 'nation',
+      fileBlobURL: fileBlobURL,
+    });
     setImagePreview(fileBlobURL || null);
     setValue('imageURL', serverSideImageName);
 
@@ -164,7 +168,7 @@ export default function NationForm(props: dataTextInputIntf) {
                         name={name}
                         onBlur={onBlur}
                         type="file"
-                        accept="image/*"
+                        accept="image/svg+xml"
                         onChange={(e) => {
                           const file = e.target.files?.[0];
                           onChange(e.target.files?.[0]);

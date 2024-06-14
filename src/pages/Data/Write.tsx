@@ -9,13 +9,7 @@ import { Box, Button, Checkbox, IconButton, List, Paper, Typography } from '@mui
 import Container from '@mui/material/Container';
 import TextField from '@mui/material/TextField';
 
-import { useQuery, useQueryClient } from '@tanstack/react-query';
-
-import type { NationEditSchema } from '@/FormData/nation';
-import { nationEditSchemaDefault } from '@/FormData/nation';
 import { methods } from '@/FormData/provider';
-import { AddNewNation, UploadNationFlag } from '@/api/data/nation';
-import Meta from '@/components/Meta';
 import { FlexBox, FullSizeCenteredFlexBox, VisuallyHiddenInput } from '@/components/styled';
 import { Image } from '@/components/styled';
 import { manufacturer } from '@/image';
@@ -58,39 +52,36 @@ function WriteData() {
   };
 
   return (
-    <>
-      <Meta title="Test" />
-      <Container sx={{ display: 'flex', justifyContent: 'space-between' }}>
-        <FullSizeCenteredFlexBox sx={{ flexDirection: 'column', rowGap: 4, paddingTop: 2 }}>
-          {/* 데이터 값 */}
-          <FlexBox sx={{ border: '1px black solid', borderRadius: 1 }}>
-            {menus.map((val) => {
-              return (
-                <FlexBox sx={{}} key={`data-input-menu-${val.name}`}>
-                  <Button>{val.name}</Button>
-                </FlexBox>
-              );
-            })}
+    <Container sx={{ display: 'flex', justifyContent: 'space-between' }}>
+      <FullSizeCenteredFlexBox sx={{ flexDirection: 'column', rowGap: 4, paddingTop: 2 }}>
+        {/* 데이터 값 */}
+        <FlexBox sx={{ border: '1px black solid', borderRadius: 1 }}>
+          {menus.map((val) => {
+            return (
+              <FlexBox sx={{}} key={`data-input-menu-${val.name}`}>
+                <Button>{val.name}</Button>
+              </FlexBox>
+            );
+          })}
+        </FlexBox>
+        <Paper
+          sx={{
+            display: 'flex',
+            width: '100%',
+            paddingX: 5,
+            paddingY: 1,
+            flexDirection: 'column',
+          }}
+        >
+          {/* 제목 */}
+          <FlexBox sx={{ paddingBottom: 3 }}>
+            <Typography variant="h6">{dataType}</Typography>
           </FlexBox>
-          <Paper
-            sx={{
-              display: 'flex',
-              width: '100%',
-              paddingX: 5,
-              paddingY: 1,
-              flexDirection: 'column',
-            }}
-          >
-            {/* 제목 */}
-            <FlexBox sx={{ paddingBottom: 3 }}>
-              <Typography variant="h6">{dataType}</Typography>
-            </FlexBox>
-            {/* 데이터 채워야할 본문 */}
-            {WriteForms[dataType!]}
-          </Paper>
-        </FullSizeCenteredFlexBox>
-      </Container>
-    </>
+          {/* 데이터 채워야할 본문 */}
+          {WriteForms[dataType!]}
+        </Paper>
+      </FullSizeCenteredFlexBox>
+    </Container>
   );
 }
 

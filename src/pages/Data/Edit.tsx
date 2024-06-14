@@ -20,12 +20,12 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import TextField from '@mui/material/TextField';
 
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 
 import * as image from '@/image';
 import type { NationEditSchema } from '@/FormData/nation';
 import { nationEditSchemaDefault } from '@/FormData/nation';
-import { AddNewNation, EditNation, GetNationEdit, UploadNationFlag } from '@/api/data/nation';
+import { AddNewNation, EditNation, GetNationEdit } from '@/api/data/nation';
 import { FlexBox, FullSizeCenteredFlexBox, VisuallyHiddenInput } from '@/components/styled';
 import { Image } from '@/components/styled';
 
@@ -64,14 +64,15 @@ function EditData() {
   const { data } = useQuery({
     queryKey: [dataType!, { dataType: dataType!, itemID: itemID! }],
     queryFn: GetNationEdit,
-    staleTime: -1,
+    staleTime: 0,
   });
 
   const EditForms: Record<string, (data: any) => ReactElement> = {
     nation: (data) => <Forms.NationForm nationEditSchema={data} />,
+    manufacturer: (data) => <Forms.ManufacturerForm manufacturerEditSchema={data} />,
   };
 
-  // console.log(`resp : ${JSON.stringify(data)}`);
+  console.log(`resp : ${JSON.stringify(data)}`);
 
   if (data) {
     return (
