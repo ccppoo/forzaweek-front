@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-import type { NationEditSchema } from '@/FormData/nation';
+import type { ManufacturerEditSchema } from '@/FormData/manufacturer';
 import type { API_NAME } from '@/api/types';
 
 import { API_HOST } from '../index';
@@ -10,38 +10,54 @@ type YYYY_MM_DD = string;
 type DailyThemeID = string;
 type NationName = string;
 
+type ManufacturerLang = {
+  value: string;
+  lang: string;
+};
+
 type NationLang = {
   value: string;
   lang: string;
 };
 
 type GetNation = {
-  id: string;
   i18n: NationLang[];
   name_en: string;
   imageURL: string;
 };
 
-export async function AddNewNation({ nation }: { nation: NationEditSchema }) {
-  // }): Promise<DailyTheme> {
-  // console.log(`nation : ${JSON.stringify(nation)}`);
+type GetManufacturer = {
+  id: string;
+  i18n: ManufacturerLang[];
+  name_en: string;
+  founded: number;
+  origin: GetNation;
+  imageURL: string;
+};
 
-  const valueGivenI18n = nation.i18n.filter((i18n) => !!i18n.value);
+export async function AddNewManufacturer({
+  manufacturer,
+}: {
+  manufacturer: ManufacturerEditSchema;
+}) {
+  const valueGivenI18n = manufacturer.i18n.filter((i18n) => !!i18n.value);
   const valueGivenLang = valueGivenI18n.map((i18n) => i18n.lang);
-  const values = { ...nation, langs: [...valueGivenLang], i18n: [...valueGivenI18n] };
-  // console.log(`values : ${JSON.stringify(values)}`);
+  const values = { ...manufacturer, langs: [...valueGivenLang], i18n: [...valueGivenI18n] };
   const enDefault = valueGivenI18n.filter((i18n) => i18n.lang == 'en')[0];
+
   const data = {
     i18n: valueGivenI18n.map((i18n) => {
       return { value: i18n.value, lang: i18n.lang };
     }),
+    origin: manufacturer.origin,
     name_en: enDefault.value,
-    imageURL: nation.imageURL,
+    founded: manufacturer.founded,
+    imageURL: manufacturer.imageURL,
   };
 
   // console.log(`data : ${JSON.stringify(data)}`);
 
-  const path_ = `nation`;
+  const path_ = `manufacturer`;
   // const params = `date=${_date}&segment=${segment}`;
   const url = `${API_HOST}/${path_}`;
   const resp = await axios.post(url, data, {
@@ -49,26 +65,35 @@ export async function AddNewNation({ nation }: { nation: NationEditSchema }) {
       'Content-Type': 'application/json',
     },
   });
-  // console.log(`resp.data : ${JSON.stringify(resp.data)}`);
-  // const resp = await axios.get<JandiCommitDayOfWeekStatResponse>(url, { headers: { ...AuthHeaders(token) } });
-
-  // return resp.data;
 }
 
-export async function EditNation({ nation }: { nation: NationEditSchema }) {
-  const enDefault = nation.i18n.filter((i18n) => i18n.lang == 'en')[0];
+export async function EditManufacturer({ manufacturer }: { manufacturer: ManufacturerEditSchema }) {
+  const enDefault = manufacturer.i18n.filter((i18n) => i18n.lang == 'en')[0];
   const data = {
-    id: nation.id,
-    i18n: nation.i18n.map((i18n) => {
+    id: manufacturer.id,
+    i18n: manufacturer.i18n.map((i18n) => {
       return { value: i18n.value, lang: i18n.lang };
     }),
+    origin: manufacturer.origin,
+    founded: manufacturer.founded,
     name_en: enDefault.value,
-    imageURL: nation.imageURL,
+    imageURL: manufacturer.imageURL,
   };
 
-  // console.log(`data : ${JSON.stringify(data)}`);
+  console.log(`data : ${JSON.stringify(data)}`);
 
-  const path_ = `nation/edit/${data.id}`;
+  const a = {
+    id: '666be9211cd10aafae87323a',
+    origin: '6669647c5e6b6310989810d0',
+    i18n: [
+      { value: 'Ford', lang: 'en' },
+      { value: '포드', lang: 'ko' },
+    ],
+    name_en: 'Ford',
+    imageURL: 'https://fzwcdn.forzaweek.com/manufacturer/Ford_logo.webp',
+  };
+
+  const path_ = `manufacturer/edit/${data.id}`;
   const url = `${API_HOST}/${path_}`;
   const resp = await axios.post(url, data, {
     headers: {
@@ -80,7 +105,7 @@ export async function EditNation({ nation }: { nation: NationEditSchema }) {
   // return resp.data;
 }
 
-export async function GetNationEdit({
+export async function GetManufacturerEdit({
   queryKey,
 }: {
   queryKey: [API_NAME, { dataType: string; itemID: string }];
@@ -97,10 +122,14 @@ export async function GetNationEdit({
 }
 
 //  "https://fzwcdn.forzaweek.com/nation/Korea_flag.svg"
-export async function GetAllNation({ queryKey }: { queryKey: [API_NAME] }): Promise<GetNation[]> {
+export async function GetAllManufacturer({
+  queryKey,
+}: {
+  queryKey: [API_NAME];
+}): Promise<GetManufacturer[]> {
   const [_] = queryKey;
 
-  const path_ = `nation`;
+  const path_ = `manufacturer`;
 
   const url = `${API_HOST}/${path_}`;
 
@@ -109,7 +138,7 @@ export async function GetAllNation({ queryKey }: { queryKey: [API_NAME] }): Prom
   return resp.data;
 }
 
-export async function DeleteNation({ documentID }: { documentID: string }) {
+export async function DeleteManufacturer({ documentID }: { documentID: string }) {
   // const [documentID] = documentID;
 
   const path_ = `nation`;

@@ -1,4 +1,4 @@
-export type DataType = 'nation';
+export type DataType = 'nation' | 'manufacturer';
 
 export type DataStatus = Record<DataType, number | undefined>;
 // export type DataStatus = {
