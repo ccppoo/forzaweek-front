@@ -182,7 +182,7 @@ export default function ManufacturerForm(props: dataTextInputIntf) {
                           name={name}
                           onBlur={onBlur}
                           type="file"
-                          accept=".png, .webp"
+                          accept=".png, .webp, .svg"
                           onChange={(e) => {
                             const file = e.target.files?.[0];
                             onChange(e.target.files?.[0]);

@@ -168,7 +168,7 @@ export default function NationForm(props: dataTextInputIntf) {
                         name={name}
                         onBlur={onBlur}
                         type="file"
-                        accept="image/svg+xml"
+                        accept=".svg, .webp"
                         onChange={(e) => {
                           const file = e.target.files?.[0];
                           onChange(e.target.files?.[0]);
