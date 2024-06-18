@@ -26,7 +26,7 @@ export const carEditSchema = z.object({
   short_name_en: z.optional(z.string()),
   short_i18n: z.array(i18nTextFieldSchema), // 짧은 이름
 
-  fh5_meta: FH5CarMetaSchema, // 희귀도, 가격, 부스트
+  fh5_meta: z.optional(FH5CarMetaSchema), // 희귀도, 가격, 부스트
 });
 
 export type CarEditSchema = z.infer<typeof carEditSchema>;

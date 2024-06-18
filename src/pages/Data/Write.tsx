@@ -1,18 +1,11 @@
-import { ChangeEvent, FC, ReactElement, useEffect, useState } from 'react';
-import { Controller, FormProvider, useFieldArray, useForm } from 'react-hook-form';
-import type { SubmitErrorHandler } from 'react-hook-form';
+import { ReactElement, useEffect, useState } from 'react';
 import { Route, Routes, useParams } from 'react-router-dom';
 
-import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
-import FileUploadOutlined from '@mui/icons-material/FileUploadOutlined';
 import { Box, Button, Checkbox, IconButton, List, Paper, Typography } from '@mui/material';
 import Container from '@mui/material/Container';
 import TextField from '@mui/material/TextField';
 
-import { methods } from '@/FormData/provider';
 import { FlexBox, FullSizeCenteredFlexBox, VisuallyHiddenInput } from '@/components/styled';
-import { Image } from '@/components/styled';
-import { manufacturer } from '@/image';
 
 import * as Forms from './forms';
 
@@ -49,6 +42,7 @@ function WriteData() {
   const WriteForms: Record<string, ReactElement> = {
     nation: <Forms.NationForm />,
     manufacturer: <Forms.ManufacturerForm />,
+    car: <Forms.CarForm />,
   };
 
   return (
