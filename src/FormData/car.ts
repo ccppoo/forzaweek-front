@@ -9,22 +9,26 @@ export const FH5CarMetaSchema = z.object({
   rarity: z.optional(z.string()),
   boost: z.optional(z.string()),
   value: z.optional(z.number().gte(0)),
+  division: z.optional(z.string()),
 });
 
 export const carEditSchema = z.object({
   id: z.optional(z.string()), // 차 자체 DocumnetID
-  manufacturer: z.optional(z.string()), // 제조사 DocumentID
-  imageURLs: z.array(z.string()),
-  production_year: z.optional(z.number().gte(1900).lte(2554)),
 
+  manufacturer: z.optional(z.string()), // 제조사 DocumentID
+
+  name_en: z.optional(z.string()),
+  name: z.array(i18nTextFieldSchema), // 원래 이름
+  short_name_en: z.optional(z.string()),
+  short_name: z.array(i18nTextFieldSchema), // 짧은 이름
+
+  imageURLs: z.array(z.string()),
+  firstImage: z.optional(z.string()),
+
+  production_year: z.optional(z.number().gte(1900).lte(2554)),
   engineType: z.optional(z.string()), // 내연, 전기, 수소, 등
   bodyStyle: z.optional(z.string()), // 세단, 헤치백, 등
   door: z.optional(z.number().gte(0)), // 문 숫자
-
-  name_en: z.optional(z.string()),
-  i18n: z.array(i18nTextFieldSchema), // 원래 이름
-  short_name_en: z.optional(z.string()),
-  short_i18n: z.array(i18nTextFieldSchema), // 짧은 이름
 
   fh5_meta: z.optional(FH5CarMetaSchema), // 희귀도, 가격, 부스트
 });
@@ -33,16 +37,21 @@ export type CarEditSchema = z.infer<typeof carEditSchema>;
 
 export const carEditSchemaDefault: CarEditSchema = {
   imageURLs: [],
+  firstImage: undefined,
 
   manufacturer: undefined,
   production_year: undefined,
 
+  engineType: undefined,
+  bodyStyle: undefined,
+  door: 0,
+
   name_en: undefined,
-  i18n: [...supportLangs].map((langDefault) => {
+  name: [...supportLangs].map((langDefault) => {
     return { lang: langDefault, value: '' };
   }),
   short_name_en: undefined,
-  short_i18n: [...supportLangs].map((langDefault) => {
+  short_name: [...supportLangs].map((langDefault) => {
     return { lang: langDefault, value: '' };
   }),
 
@@ -50,5 +59,6 @@ export const carEditSchemaDefault: CarEditSchema = {
     rarity: undefined,
     boost: undefined,
     value: undefined,
+    division: undefined,
   },
 };
