@@ -77,6 +77,10 @@ export const BOOST = [
   'STUNT SKILLS',
 ];
 
+export const BODY_STYLE = ['Sedan', 'SUV'];
+
+export const ENGINE_TYPE = ['ICE', 'EV', 'HV'];
+
 export const MANUFACTURER = [
   'Abarth',
   'Acura',

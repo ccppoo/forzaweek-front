@@ -5,11 +5,6 @@ import type { API_NAME } from '@/api/types';
 
 import { API_HOST } from '../index';
 
-type YYYY_MM_DD = string;
-
-type DailyThemeID = string;
-type NationName = string;
-
 type ManufacturerLang = {
   value: string;
   lang: string;
@@ -58,7 +53,6 @@ export async function AddNewManufacturer({
   // console.log(`data : ${JSON.stringify(data)}`);
 
   const path_ = `manufacturer`;
-  // const params = `date=${_date}&segment=${segment}`;
   const url = `${API_HOST}/${path_}`;
   const resp = await axios.post(url, data, {
     headers: {
@@ -80,18 +74,7 @@ export async function EditManufacturer({ manufacturer }: { manufacturer: Manufac
     imageURL: manufacturer.imageURL,
   };
 
-  console.log(`data : ${JSON.stringify(data)}`);
-
-  const a = {
-    id: '666be9211cd10aafae87323a',
-    origin: '6669647c5e6b6310989810d0',
-    i18n: [
-      { value: 'Ford', lang: 'en' },
-      { value: '포드', lang: 'ko' },
-    ],
-    name_en: 'Ford',
-    imageURL: 'https://fzwcdn.forzaweek.com/manufacturer/Ford_logo.webp',
-  };
+  // console.log(`data : ${JSON.stringify(data)}`);
 
   const path_ = `manufacturer/edit/${data.id}`;
   const url = `${API_HOST}/${path_}`;
@@ -139,8 +122,6 @@ export async function GetAllManufacturer({
 }
 
 export async function DeleteManufacturer({ documentID }: { documentID: string }) {
-  // const [documentID] = documentID;
-
   const path_ = `nation`;
 
   const url = `${API_HOST}/${path_}/${documentID}`;

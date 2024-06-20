@@ -1,6 +1,3 @@
-export type DataType = 'nation' | 'manufacturer';
+export type DataType = 'nation' | 'manufacturer' | 'car';
 
 export type DataStatus = Record<DataType, number | undefined>;
-// export type DataStatus = {
-//   nation: number | undefined;
-// };

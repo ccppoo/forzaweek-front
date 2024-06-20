@@ -25,14 +25,21 @@ import { useQuery } from '@tanstack/react-query';
 
 import type { CarEditSchema } from '@/FormData/car';
 import { carEditSchemaDefault } from '@/FormData/car';
+import { AddNewCar, EditCar } from '@/api/data/car';
 import { UploadTempImage } from '@/api/data/image';
-import { AddNewManufacturer, EditManufacturer, GetAllManufacturer } from '@/api/data/manufacturer';
+import { GetAllManufacturer } from '@/api/data/manufacturer';
 import { FlexBox, FullSizeCenteredFlexBox, VisuallyHiddenInput } from '@/components/styled';
 import { Image } from '@/components/styled';
+import { BODY_STYLE, BOOST, DIVISIONS, ENGINE_TYPE, RARITY } from '@/data/values';
 
 interface dataTextInputIntf {
   carEditSchema?: CarEditSchema;
 }
+
+type ImageItem = {
+  name: string;
+  url: string;
+};
 
 export default function CarForm(props: dataTextInputIntf) {
   const { carEditSchema } = props;
@@ -44,6 +51,7 @@ export default function CarForm(props: dataTextInputIntf) {
     getValues,
     trigger,
     setValue,
+    setError,
 
     formState: { errors },
   } = useForm<CarEditSchema>({
@@ -58,35 +66,30 @@ export default function CarForm(props: dataTextInputIntf) {
 
   const [imagePreviews, setImagePreviews] = useState<string[]>(getValues('imageURLs')); // Blob URL
   const isEditMode = !!getValues('id');
-  const { fields, append, remove, update } = useFieldArray({
+  const { fields: names } = useFieldArray({
     control,
-    name: 'i18n',
+    name: 'name',
+  });
+
+  const { fields: short_names } = useFieldArray({
+    control,
+    name: 'short_name',
   });
 
   // console.log(`isEditMode :${isEditMode}`);
   const submit = async (data: CarEditSchema) => {
-    console.log(`data : ${JSON.stringify(data)}`);
-    // const values = getValues();
-    // const queryKey = ['add_nation', data.i18n[0].value];
-
     if (isEditMode) {
-      await EditManufacturer({ manufacturer: data });
+      await EditCar({ car: data });
       return;
     }
     if (!isEditMode) {
-      await AddNewManufacturer({ manufacturer: data });
+      await AddNewCar({ car: data });
     }
   };
 
   const handleOnError = (errors: SubmitErrorHandler<CarEditSchema>) => {
     console.log(errors);
     // console.log(`errors : ${JSON.stringify(errors)}`);
-  };
-
-  const removeImage = () => {
-    setImagePreviews([]);
-    setValue('imageURLs', []);
-    // setImagePreview(null);
   };
 
   const handleUploadClick = async (e: ChangeEvent<HTMLInputElement>) => {
@@ -96,15 +99,9 @@ export default function CarForm(props: dataTextInputIntf) {
     if (!e.target.files) return;
     let uploadingImages: string[] = [];
     for (let idx: number = 0; idx < e.target.files.length; idx++) {
-      // console.log(`e.target.files   :${JSON.stringify(e.target.files[idx])}`);
-      const selectedFile = e.target.files[0];
+      const selectedFile = e.target.files[idx];
       const fileBlobURL = URL.createObjectURL(selectedFile);
-      console.log(`fileBlobURL :${fileBlobURL}`);
       uploadingImages = [...uploadingImages, fileBlobURL];
-      // const serverSideImageName = await UploadTempImage({
-      //   folder: 'manufacturer',
-      //   fileBlobURL: fileBlobURL,
-      // });
     }
     // console.log(`uploadingImages : ${uploadingImages}`);
     const uploaded_images = [...imagePreviews, ...uploadingImages];
@@ -113,19 +110,32 @@ export default function CarForm(props: dataTextInputIntf) {
     setValue('imageURLs', uploaded_images);
   };
 
-  useEffect(() => {
-    return () => {
-      if (imagePreviews) {
-        imagePreviews.map((imgPreview) => URL.revokeObjectURL(imgPreview));
-      }
-      // URL.revokeObjectURL(imagePreviews[0]);
-    };
-  }, [imagePreviews]);
+  // useEffect(() => {
+  //   return () => {
+  //     if (imagePreviews) {
+  //       // imagePreviews.map((imgPreview) => URL.revokeObjectURL(imgPreview));
+  //     }
+  //   };
+  // }, [imagePreviews]);
 
-  // fh5_meta
+  const setAsRepresentiveImage = (imageUrl: string) => {
+    setValue('firstImage', imageUrl);
+    setImagePreviews((prev) => [imageUrl, ...prev.filter((val) => val != imageUrl)]);
+  };
 
-  const bodyStyles = ['Sedan', 'SUV'];
-  const engineTypes = ['ICE', 'EV', 'HV'];
+  const removeAllImage = () => {
+    setImagePreviews([]);
+    setValue('imageURLs', []);
+  };
+
+  const removeImage = (imageUrl: string) => {
+    const prevImage = getValues('imageURLs');
+    const removed = prevImage.filter((val) => val != imageUrl);
+    setValue('imageURLs', removed);
+    setImagePreviews(removed);
+  };
+
+  const BoostSelectRequired = watch('fh5_meta.rarity') == 'Forza Edition';
 
   if (manufacturerList) {
     // console.log(`manufacturerList : ${JSON.stringify(manufacturerList)}`);
@@ -162,6 +172,10 @@ export default function CarForm(props: dataTextInputIntf) {
                   borderRadius: 2,
                   border: !!errors?.imageURLs ? '2px solid #d32f2f' : '1px solid black',
                   flexWrap: 'wrap',
+                  rowGap: 1,
+                  columnGap: 2,
+                  paddingX: 1,
+                  paddingY: 1,
                 }}
               >
                 {imagePreviews.map((imgBlob) => {
@@ -170,34 +184,38 @@ export default function CarForm(props: dataTextInputIntf) {
                       key={`uploaded-image-${imgBlob}`}
                       sx={{ flexDirection: 'column', width: 240 }}
                     >
-                      <Image
-                        src={imgBlob}
-                        sx={{ objectFit: 'contain', width: '100%', height: 135 }}
-                      />
+                      <Paper>
+                        <Image
+                          src={imgBlob}
+                          sx={{ objectFit: 'contain', width: '100%', height: 135 }}
+                        />
+                      </Paper>
                       <FlexBox
                         sx={{
                           height: 35,
                           columnGap: 1,
-                          justifyContent: 'space-around',
+                          justifyContent: 'end',
                           alignItems: 'center',
                         }}
                       >
-                        <Button variant="contained" size="small">
+                        <Button
+                          variant="contained"
+                          size="small"
+                          sx={{ paddingY: '2px', paddingX: '4px' }}
+                          onClick={() => setAsRepresentiveImage(imgBlob)}
+                        >
                           대표이미지
                         </Button>
-                        <FlexBox
-                          sx={{ alignItems: 'center', justifyContent: 'end', columnGap: 0.5 }}
+                        <Button
+                          color="error"
+                          variant="contained"
+                          size="small"
+                          sx={{ paddingY: '2px', paddingX: '2px' }}
+                          startIcon={<DeleteOutlineOutlinedIcon />}
+                          onClick={() => removeImage(imgBlob)}
                         >
-                          <Button
-                            color="error"
-                            variant="contained"
-                            size="small"
-                            sx={{ paddingY: '2px', paddingX: '2px' }}
-                            startIcon={<DeleteOutlineOutlinedIcon />}
-                          >
-                            삭제
-                          </Button>
-                        </FlexBox>
+                          삭제
+                        </Button>
                       </FlexBox>
                     </FlexBox>
                   );
@@ -220,7 +238,7 @@ export default function CarForm(props: dataTextInputIntf) {
                     color="error"
                     // disabled={!!!imagePreviews}
                     startIcon={<DeleteOutlinedIcon />}
-                    onClick={removeImage}
+                    onClick={removeAllImage}
                     size="small"
                   >
                     Remove All
@@ -249,10 +267,10 @@ export default function CarForm(props: dataTextInputIntf) {
                           onBlur={onBlur}
                           type="file"
                           multiple
-                          accept=".png, .webp, .svg"
+                          accept=".jpg, .jpeg, .png, .webp, .svg"
                           onChange={(e) => {
                             const file = e.target.files?.[0];
-                            onChange(e.target.files?.[0]);
+                            // onChange(e.target.files?.[0]);
                             handleUploadClick(e);
                             trigger('imageURLs');
                           }}
@@ -342,7 +360,7 @@ export default function CarForm(props: dataTextInputIntf) {
                   SelectProps={{ MenuProps: { sx: { maxHeight: 450 } } }}
                   size="small"
                 >
-                  {bodyStyles.map((bodyStyle) => (
+                  {BODY_STYLE.map((bodyStyle) => (
                     <MenuItem key={`body-style-${bodyStyle}`} value={bodyStyle}>
                       <FlexBox>
                         {/* <Box sx={{ height: 40, width: 60 }}>
@@ -370,16 +388,16 @@ export default function CarForm(props: dataTextInputIntf) {
                   select
                   fullWidth
                   label="Select"
-                  defaultValue={getValues('bodyStyle') || ''}
-                  inputProps={register('bodyStyle', {
-                    required: 'Please select bodyStyle',
+                  defaultValue={getValues('engineType') || ''}
+                  inputProps={register('engineType', {
+                    required: 'Please select engineType',
                   })}
-                  error={!!errors.bodyStyle}
-                  helperText={errors.bodyStyle?.message}
+                  error={!!errors.engineType}
+                  helperText={errors.engineType?.message}
                   SelectProps={{ MenuProps: { sx: { maxHeight: 450 } } }}
                   size="small"
                 >
-                  {engineTypes.map((engineType) => (
+                  {ENGINE_TYPE.map((engineType) => (
                     <MenuItem key={`engine-type-${engineType}`} value={engineType}>
                       <FlexBox>
                         {/* <Box sx={{ height: 40, width: 60 }}>
@@ -408,27 +426,20 @@ export default function CarForm(props: dataTextInputIntf) {
                     rules={{ required: true }}
                     control={control}
                     name="door"
-                    render={({ field }) => (
-                      <RadioGroup {...field} row>
-                        <FormControlLabel value={2} control={<Radio />} label="2" />
-                        <FormControlLabel value={4} control={<Radio />} label="4" />
+                    render={({ field: { name, onBlur, onChange, value } }) => (
+                      <RadioGroup value={value} onBlur={onBlur} onChange={onChange} row>
+                        <FormControlLabel value={0} control={<Radio size="small" />} label="0" />
+                        <FormControlLabel value={1} control={<Radio size="small" />} label="1" />
+                        <FormControlLabel value={2} control={<Radio size="small" />} label="2" />
+                        <FormControlLabel value={3} control={<Radio size="small" />} label="3" />
+                        <FormControlLabel value={4} control={<Radio size="small" />} label="4" />
+                        <FormControlLabel value={5} control={<Radio size="small" />} label="5" />
+                        <FormControlLabel value={6} control={<Radio size="small" />} label="6" />
                       </RadioGroup>
                     )}
                   />
                 </FlexBox>
-                <FlexBox
-                  sx={{ justifyContent: 'end', width: '100%', alignItems: 'center', columnGap: 1 }}
-                >
-                  <Typography>기타</Typography>
-                  <TextField
-                    {...register(`door`, { required: true })}
-                    defaultValue={''}
-                    size="small"
-                    sx={{ width: 80 }}
-                    error={errors.door && !!errors.door}
-                    helperText={errors.door && 'you must provide value'}
-                  />
-                </FlexBox>
+                <Typography>{errors.door && errors.door.message}</Typography>
               </FlexBox>
             </Box>
             <Box
@@ -461,7 +472,7 @@ export default function CarForm(props: dataTextInputIntf) {
             </Typography>
 
             <FlexBox sx={{ flexDirection: 'column', rowGap: 1 }}>
-              {fields.map((field, index) => {
+              {names.map((field, index) => {
                 const langType = `${field.lang}`;
                 return (
                   <FlexBox key={`nation-input-value-${index}`} sx={{ width: '100%' }}>
@@ -480,13 +491,13 @@ export default function CarForm(props: dataTextInputIntf) {
 
                     <FlexBox sx={{ width: '100%', minWidth: 300 }}>
                       <TextField
-                        {...register(`i18n.${index}.value`, { required: true })}
+                        {...register(`name.${index}.value`, { required: true })}
                         defaultValue={''}
                         // placeholder={!isDefaultLang ? 'optional' : undefined}
                         size="small"
                         fullWidth
-                        error={errors.i18n && !!errors.i18n[index]?.value}
-                        helperText={errors.i18n && errors.i18n[index] && 'you must provide value'}
+                        error={errors.name && !!errors.name[index]?.value}
+                        helperText={errors.name && errors.name[index] && 'you must provide value'}
                       />
                     </FlexBox>
                   </FlexBox>
@@ -502,7 +513,7 @@ export default function CarForm(props: dataTextInputIntf) {
             </FlexBox>
 
             <FlexBox sx={{ flexDirection: 'column', rowGap: 1 }}>
-              {fields.map((field, index) => {
+              {short_names.map((field, index) => {
                 const langType = `${field.lang}`;
                 return (
                   <FlexBox key={`nation-input-value-${index}`} sx={{ width: '100%' }}>
@@ -521,12 +532,14 @@ export default function CarForm(props: dataTextInputIntf) {
 
                     <FlexBox sx={{ width: '100%', minWidth: 300 }}>
                       <TextField
-                        {...register(`short_i18n.${index}.value`, { required: true })}
+                        {...register(`short_name.${index}.value`, { required: true })}
                         defaultValue={''}
                         size="small"
                         fullWidth
-                        error={errors.i18n && !!errors.i18n[index]?.value}
-                        helperText={errors.i18n && errors.i18n[index] && 'you must provide value'}
+                        error={errors.short_name && !!errors.short_name[index]?.value}
+                        helperText={
+                          errors.short_name && errors.short_name[index] && 'you must provide value'
+                        }
                       />
                     </FlexBox>
                   </FlexBox>
@@ -534,6 +547,163 @@ export default function CarForm(props: dataTextInputIntf) {
               })}
             </FlexBox>
           </FlexBox>
+
+          <FlexBox sx={{ flexDirection: 'column', rowGap: 1, paddingTop: 5 }}>
+            <FlexBox sx={{ alignItems: 'center' }}>
+              <Typography variant="h5" sx={{ fontWeight: 300 }}>
+                Forza Horizon 5 traits
+              </Typography>
+            </FlexBox>
+          </FlexBox>
+
+          <Box
+            sx={{
+              display: 'grid',
+              width: '100%',
+              gridTemplateColumns: '1fr 1fr',
+              gridTemplateRows: 'repeat(auto-fill, 80px)',
+              columnGap: 6,
+              rowGap: 0,
+            }}
+          >
+            <Box
+              sx={{ display: 'grid', gridTemplateColumns: '160px auto', gridTemplateRows: '80px' }}
+            >
+              <FlexBox sx={{ alignItems: 'center', minWidth: 'fit-content', maxWidth: 150 }}>
+                <Typography variant="h5" sx={{ fontWeight: 300 }}>
+                  Division
+                </Typography>
+              </FlexBox>
+              <FlexBox sx={{ alignItems: 'center', width: '100%', justifyContent: 'left' }}>
+                <TextField
+                  select
+                  fullWidth
+                  label="Select"
+                  defaultValue={getValues('fh5_meta.division') || ''}
+                  inputProps={register('fh5_meta.division', {
+                    required: 'Please select division',
+                  })}
+                  error={!!errors.manufacturer}
+                  helperText={errors.manufacturer?.message}
+                  SelectProps={{ MenuProps: { sx: { maxHeight: 450 } } }}
+                  size="small"
+                >
+                  {DIVISIONS.map((division, idx) => (
+                    <MenuItem key={`select-${division}-${idx}`} value={division}>
+                      <FlexBox>
+                        {/* <Box sx={{ height: 40, width: 60 }}>
+                        <Image src={manufacturer.imageURL} sx={{ objectFit: 'contain' }} />
+                      </Box> */}
+                        <FlexBox sx={{ alignItems: 'center', paddingX: 2 }}>
+                          <Typography>{division}</Typography>
+                        </FlexBox>
+                      </FlexBox>
+                    </MenuItem>
+                  ))}
+                </TextField>
+              </FlexBox>
+            </Box>
+            <Box
+              sx={{ display: 'grid', gridTemplateColumns: '160px auto', gridTemplateRows: '80px' }}
+            >
+              <FlexBox sx={{ alignItems: 'center', minWidth: 'fit-content', maxWidth: 150 }}>
+                <Typography variant="h5" sx={{ fontWeight: 300 }}>
+                  Value
+                </Typography>
+              </FlexBox>
+              <FlexBox
+                sx={{ alignItems: 'center', width: '100%', justifyContent: 'left', columnGap: 2 }}
+              >
+                <TextField
+                  {...register(`fh5_meta.value`, { required: true })}
+                  defaultValue={''}
+                  size="small"
+                  fullWidth
+                  error={errors.fh5_meta && !!errors.fh5_meta?.value}
+                  helperText={
+                    errors.fh5_meta && !!errors.fh5_meta?.value && 'you must provide value'
+                  }
+                />
+                <Typography>CR</Typography>
+              </FlexBox>
+            </Box>
+            <Box
+              sx={{ display: 'grid', gridTemplateColumns: '160px auto', gridTemplateRows: '80px' }}
+            >
+              <FlexBox sx={{ alignItems: 'center', minWidth: 'fit-content', maxWidth: 150 }}>
+                <Typography variant="h5" sx={{ fontWeight: 300 }}>
+                  Rarirty
+                </Typography>
+              </FlexBox>
+              <FlexBox sx={{ alignItems: 'center', width: '100%', justifyContent: 'left' }}>
+                <TextField
+                  select
+                  fullWidth
+                  label="Select"
+                  defaultValue={getValues('fh5_meta.rarity') || 'Common'}
+                  inputProps={register('fh5_meta.rarity', {
+                    required: 'Please select rarity',
+                  })}
+                  error={!!errors.fh5_meta?.rarity}
+                  helperText={!!errors.fh5_meta?.rarity?.message}
+                  SelectProps={{ MenuProps: { sx: { maxHeight: 450 } } }}
+                  size="small"
+                >
+                  {RARITY.map((division, idx) => (
+                    <MenuItem key={`select-${division}-${idx}`} value={division}>
+                      <FlexBox>
+                        {/* <Box sx={{ height: 40, width: 60 }}>
+                        <Image src={manufacturer.imageURL} sx={{ objectFit: 'contain' }} />
+                      </Box> */}
+                        <FlexBox sx={{ alignItems: 'center', paddingX: 2 }}>
+                          <Typography>{division}</Typography>
+                        </FlexBox>
+                      </FlexBox>
+                    </MenuItem>
+                  ))}
+                </TextField>
+              </FlexBox>
+            </Box>
+            <Box
+              sx={{ display: 'grid', gridTemplateColumns: '160px auto', gridTemplateRows: '80px' }}
+            >
+              <FlexBox sx={{ alignItems: 'center', minWidth: 'fit-content', maxWidth: 150 }}>
+                <Typography variant="h5" sx={{ fontWeight: 300 }}>
+                  Boost
+                </Typography>
+              </FlexBox>
+              <FlexBox sx={{ alignItems: 'center', width: '100%', justifyContent: 'left' }}>
+                <TextField
+                  select
+                  fullWidth
+                  label="Select"
+                  disabled={!BoostSelectRequired}
+                  defaultValue={getValues('fh5_meta.boost') || ''}
+                  inputProps={register('fh5_meta.boost', {
+                    required: BoostSelectRequired && 'Please select boost',
+                  })}
+                  error={!!errors.manufacturer}
+                  helperText={errors.manufacturer?.message}
+                  SelectProps={{ MenuProps: { sx: { maxHeight: 450 } } }}
+                  size="small"
+                >
+                  {BOOST.map((division, idx) => (
+                    <MenuItem key={`select-${division}-${idx}`} value={division}>
+                      <FlexBox>
+                        {/* <Box sx={{ height: 40, width: 60 }}>
+                        <Image src={manufacturer.imageURL} sx={{ objectFit: 'contain' }} />
+                      </Box> */}
+                        <FlexBox sx={{ alignItems: 'center', paddingX: 2 }}>
+                          <Typography>{division}</Typography>
+                        </FlexBox>
+                      </FlexBox>
+                    </MenuItem>
+                  ))}
+                </TextField>
+              </FlexBox>
+            </Box>
+          </Box>
+
           <FlexBox sx={{ justifyContent: 'end', paddingTop: 2, paddingBottom: 1 }}>
             <Button type="submit" variant="contained">
               Save
