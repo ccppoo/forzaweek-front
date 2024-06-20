@@ -54,7 +54,7 @@ function DataItemCell(props: DataItemProps) {
 }
 
 function Data() {
-  const menu: DataType[] = ['nation', 'manufacturer'];
+  const menu: DataType[] = ['nation', 'manufacturer', 'car'];
 
   const { data } = useQuery({
     queryKey: ['data_status'],
@@ -63,13 +63,14 @@ function Data() {
     placeholderData: {
       nation: undefined,
       manufacturer: undefined,
+      car: undefined,
     },
   });
 
   return (
     <Container sx={{ display: 'flex', justifyContent: 'space-between' }}>
       <FullSizeCenteredFlexBox sx={{ flexDirection: 'column', rowGap: 4, paddingTop: 3 }}>
-        <FlexBox sx={{ flexWrap: 'wrap', columnGap: 1 }}>
+        <FlexBox sx={{ flexWrap: 'wrap', columnGap: 1, rowGap: 2 }}>
           {menu.map((dataName) => {
             return (
               <DataItemCell

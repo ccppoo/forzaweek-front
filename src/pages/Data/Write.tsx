@@ -47,7 +47,9 @@ function WriteData() {
 
   return (
     <Container sx={{ display: 'flex', justifyContent: 'space-between' }}>
-      <FullSizeCenteredFlexBox sx={{ flexDirection: 'column', rowGap: 4, paddingTop: 2 }}>
+      <FullSizeCenteredFlexBox
+        sx={{ flexDirection: 'column', rowGap: 4, paddingTop: 2, paddingBottom: 15 }}
+      >
         {/* 데이터 값 */}
         <FlexBox sx={{ border: '1px black solid', borderRadius: 1 }}>
           {menus.map((val) => {
