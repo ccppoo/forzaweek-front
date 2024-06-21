@@ -3,14 +3,24 @@ import { z } from 'zod';
 import { supportLangs } from '@/config/i18n';
 
 import { i18nTextFieldSchema } from './i18n';
+import { manufacturerSchemaType } from './manufacturer';
 
 // NOTE: 시리즈 추가 지원시 필드 항목에 추가 (FM : ..., FH4 : ...,)
-export const FH5CarMetaSchema = z.object({
+const FH5CarMetaSchema = z.object({
   rarity: z.optional(z.string()),
   boost: z.optional(z.string()),
   value: z.optional(z.number().gte(0)),
   division: z.optional(z.string()),
 });
+
+const _FH5CarMetaSchemaType = z.object({
+  rarity: z.string(),
+  boost: z.string(),
+  value: z.number().gte(0),
+  division: z.string(),
+});
+
+export type FH5CarMetaSchemaType = z.infer<typeof _FH5CarMetaSchemaType>;
 
 export const carEditSchema = z.object({
   id: z.optional(z.string()), // 차 자체 DocumnetID
@@ -32,6 +42,28 @@ export const carEditSchema = z.object({
 
   fh5_meta: z.optional(FH5CarMetaSchema), // 희귀도, 가격, 부스트
 });
+
+export const carSchemaType = z.object({
+  id: z.string(), // 차 자체 DocumnetID
+
+  manufacturer: manufacturerSchemaType, // 제조사 DocumentID
+
+  name_en: z.string(),
+  name: z.array(i18nTextFieldSchema), // 원래 이름
+  short_name_en: z.string(),
+  short_name: z.array(i18nTextFieldSchema), // 짧은 이름
+
+  imageURLs: z.array(z.string()),
+  firstImage: z.string(),
+
+  production_year: z.number().gte(1900).lte(2554),
+  engineType: z.string(), // 내연, 전기, 수소, 등
+  bodyStyle: z.string(), // 세단, 헤치백, 등
+  door: z.number().gte(0), // 문 숫자
+
+  fh5_meta: _FH5CarMetaSchemaType, // 희귀도, 가격, 부스트
+});
+export type CarSchemaType = z.infer<typeof carSchemaType>;
 
 export type CarEditSchema = z.infer<typeof carEditSchema>;
 
