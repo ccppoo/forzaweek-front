@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-import type { CarEditSchema } from '@/FormData/car';
+import type { CarEditSchema, CarSchemaType } from '@/FormData/car';
 import { UploadImage } from '@/api/data/image';
 import type { API_NAME } from '@/api/types';
 
@@ -49,50 +49,31 @@ export async function AddNewCar({ car }: { car: CarEditSchema }) {
 }
 
 export async function EditCar({ car }: { car: CarEditSchema }) {
-  const enDefault = car.name.filter((i18n) => i18n.lang == 'en')[0];
-  // const data = {
-  //   id: car.id,
-  //   i18n: car.i18n.map((i18n) => {
-  //     return { value: i18n.value, lang: i18n.lang };
-  //   }),
-  //   origin: car.origin,
-  //   founded: car.founded,
-  //   name_en: enDefault.value,
-  //   imageURL: car.imageURL,
-  // };
+  const NAME_EN = car.name.filter((i18n) => i18n.lang == 'en')[0].value;
+  const SHORT_NAME_EN = car.short_name.filter((i18n) => i18n.lang == 'en')[0].value;
+  const { id: docID } = car;
 
-  // console.log(`data : ${JSON.stringify(data)}`);
+  const data = {
+    ...car,
+    name_en: NAME_EN,
+    short_name_en: SHORT_NAME_EN,
+  };
+  console.log(`data : ${JSON.stringify(data)}`);
 
-  // const path_ = `manufacturer/edit/${data.id}`;
-  // const url = `${API_HOST}/${path_}`;
-  // const resp = await axios.post(url, data, {
-  //   headers: {
-  //     'Content-Type': 'application/json',
-  //   },
-  // });
-  // console.log(`resp.data : ${JSON.stringify(resp.data)}`);
+  const path_ = `car/edit/${docID}`;
+  const url = `${API_HOST}/${path_}`;
+  const resp = await axios.post(url, data, {
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
+  console.log(`resp.data : ${JSON.stringify(resp.data)}`);
 
   // return resp.data;
 }
 
-export async function GetCarEdit({
-  queryKey,
-}: {
-  queryKey: [API_NAME, { dataType: string; itemID: string }];
-}) {
-  const [_, { itemID, dataType }] = queryKey;
-
-  const path_ = `${dataType}/edit/${itemID}`;
-
-  const url = `${API_HOST}/${path_}`;
-
-  const resp = await axios.get(url);
-
-  return resp.data;
-}
-
-//  "https://fzwcdn.forzaweek.com/nation/Korea_flag.svg"
-export async function GetAllCar({ queryKey }: { queryKey: [API_NAME] }): Promise<GetCar[]> {
+// TODO: pagination
+export async function GetAllCar({ queryKey }: { queryKey: [API_NAME] }): Promise<CarSchemaType[]> {
   const [_] = queryKey;
 
   const path_ = `car`;

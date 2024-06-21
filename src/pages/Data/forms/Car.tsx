@@ -52,7 +52,6 @@ export default function CarForm(props: dataTextInputIntf) {
     trigger,
     setValue,
     setError,
-
     formState: { errors },
   } = useForm<CarEditSchema>({
     defaultValues: carEditSchema || carEditSchemaDefault,
@@ -109,14 +108,6 @@ export default function CarForm(props: dataTextInputIntf) {
     setImagePreviews(uploaded_images);
     setValue('imageURLs', uploaded_images);
   };
-
-  // useEffect(() => {
-  //   return () => {
-  //     if (imagePreviews) {
-  //       // imagePreviews.map((imgPreview) => URL.revokeObjectURL(imgPreview));
-  //     }
-  //   };
-  // }, [imagePreviews]);
 
   const setAsRepresentiveImage = (imageUrl: string) => {
     setValue('firstImage', imageUrl);
