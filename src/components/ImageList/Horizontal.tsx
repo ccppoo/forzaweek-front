@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import { SvgIconComponent } from '@mui/icons-material';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
@@ -34,7 +34,6 @@ export default function ImageShowHorizontal({ images }: { images: string[] }) {
   const Title = 'Pictures';
   const gridRef = useRef<HTMLDivElement>(null);
 
-  // const smallImgWidth = 208;
   const smallImgWidth = 160;
   const smallImgHeight = Math.ceil((smallImgWidth / 16) * 9);
 
@@ -45,17 +44,22 @@ export default function ImageShowHorizontal({ images }: { images: string[] }) {
   const shiftIndex = (value: number) => {
     setImageIndex((idx) => {
       if (idx + value < 0) {
-        gridRef.current?.scroll({ behavior: 'smooth', left: 240 * 0 });
+        gridRef.current?.scroll({ behavior: 'smooth', left: smallImgWidth * 0 });
         return 0;
       }
       if (idx + value >= imagesLen - 1) {
-        gridRef.current?.scroll({ behavior: 'smooth', left: 240 * (imagesLen - 1) });
+        gridRef.current?.scroll({ behavior: 'smooth', left: smallImgWidth * (imagesLen - 1) });
         return imagesLen - 1;
       }
-      gridRef.current?.scroll({ behavior: 'smooth', left: 240 * (idx + value) });
+      gridRef.current?.scroll({ behavior: 'smooth', left: smallImgWidth * (idx + value) });
       return idx + value;
     });
   };
+
+  // TODO: when Click, scroll to center of selected images
+  // useEffect(()=> {
+  //   gridRef.current?.scroll({ behavior: 'smooth', left: smallImgWidth * (imageIndex - 1) });
+  // }, [imageIndex])
 
   return (
     <FlexBox
