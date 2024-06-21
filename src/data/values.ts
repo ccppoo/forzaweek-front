@@ -77,7 +77,7 @@ export const BOOST = [
   'STUNT SKILLS',
 ];
 
-export const BODY_STYLE = ['Sedan', 'SUV'];
+export const BODY_STYLE = ['Sedan', 'SUV', 'Hatchback'];
 
 export const ENGINE_TYPE = ['ICE', 'EV', 'HV'];
 

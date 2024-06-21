@@ -5,11 +5,6 @@ import type { API_NAME } from '@/api/types';
 
 import { API_HOST } from '../index';
 
-type YYYY_MM_DD = string;
-
-type DailyThemeID = string;
-type NationName = string;
-
 type NationLang = {
   value: string;
   lang: string;
@@ -80,23 +75,6 @@ export async function EditNation({ nation }: { nation: NationEditSchema }) {
   // return resp.data;
 }
 
-export async function GetNationEdit({
-  queryKey,
-}: {
-  queryKey: [API_NAME, { dataType: string; itemID: string }];
-}) {
-  const [_, { itemID, dataType }] = queryKey;
-
-  const path_ = `${dataType}/edit/${itemID}`;
-
-  const url = `${API_HOST}/${path_}`;
-
-  const resp = await axios.get(url);
-
-  return resp.data;
-}
-
-//  "https://fzwcdn.forzaweek.com/nation/Korea_flag.svg"
 export async function GetAllNation({ queryKey }: { queryKey: [API_NAME] }): Promise<GetNation[]> {
   const [_] = queryKey;
 

@@ -25,7 +25,7 @@ import { useQuery } from '@tanstack/react-query';
 import * as image from '@/image';
 import type { NationEditSchema } from '@/FormData/nation';
 import { nationEditSchemaDefault } from '@/FormData/nation';
-import { AddNewNation, EditNation, GetNationEdit } from '@/api/data/nation';
+import { GetSchemaForEdit } from '@/api/data/edit';
 import { FlexBox, FullSizeCenteredFlexBox, VisuallyHiddenInput } from '@/components/styled';
 import { Image } from '@/components/styled';
 
@@ -63,13 +63,14 @@ function EditData() {
   const { dataType, itemID } = useParams();
   const { data } = useQuery({
     queryKey: [dataType!, { dataType: dataType!, itemID: itemID! }],
-    queryFn: GetNationEdit,
+    queryFn: GetSchemaForEdit,
     staleTime: 0,
   });
 
   const EditForms: Record<string, (data: any) => ReactElement> = {
     nation: (data) => <Forms.NationForm nationEditSchema={data} />,
     manufacturer: (data) => <Forms.ManufacturerForm manufacturerEditSchema={data} />,
+    car: (data) => <Forms.CarForm carEditSchema={data} />,
   };
 
   console.log(`resp : ${JSON.stringify(data)}`);

@@ -13,6 +13,17 @@ export const manufacturerEditSchema = z.object({
   name_en: z.optional(z.string()),
 });
 
+export const manufacturerSchemaType = z.object({
+  id: z.string(),
+  imageURL: z.string(),
+  origin: z.string(),
+  founded: z.number(),
+  i18n: z.array(i18nTextFieldSchema),
+  name_en: z.string(),
+});
+
+export type ManufacturerSchemaType = z.infer<typeof manufacturerSchemaType>;
+
 export type ManufacturerEditSchema = z.infer<typeof manufacturerEditSchema>;
 
 export const manufacturerEditSchemaDefault: ManufacturerEditSchema = {
