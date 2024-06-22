@@ -12,6 +12,9 @@ declare module 'notistack' {
     customNotification: {
       message?: string;
     };
+    itemDeleteNotification: {
+      message?: string;
+    };
   }
 }
 
