@@ -11,49 +11,106 @@ import TableRow from '@mui/material/TableRow';
 
 import { useQuery } from '@tanstack/react-query';
 
-import { DeleteManufacturer, GetAllManufacturer } from '@/api/data/manufacturer';
+import { GetAllManufacturer } from '@/api/data/manufacturer';
+import type { GetManufacturer } from '@/api/data/manufacturer';
+import DeleteItemPopUp from '@/components/Dialogs/DeletePopUp';
 import { FlexBox, FullSizeCenteredFlexBox } from '@/components/styled';
 import { Image } from '@/components/styled';
 
-export default function ManufacturerTable() {
-  const dataType = 'manufacturer';
+function ManufacturerRowItem({ manufacturer }: { manufacturer: GetManufacturer }) {
+  const DATA_TYPE = 'manufacturer';
 
   const navigate = useNavigate();
 
+  const [deletePopUpOpened, setDeletePopUpOpened] = useState<boolean>(false);
+
+  const closeDeletePopUp = () => {
+    setDeletePopUpOpened(false);
+  };
+
+  const openDeletePopUp = () => {
+    setDeletePopUpOpened(true);
+  };
+
+  const editItem = (itemID: string) => {
+    // TODO:
+    navigate(`/data/${DATA_TYPE}/edit/${itemID}`);
+  };
+
+  return (
+    <TableRow
+      key={`table-row-${manufacturer.name_en}`}
+      sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+    >
+      <TableCell component="th" scope="row">
+        <FlexBox sx={{ width: 60, height: 40, border: '0.5px black solid' }}>
+          <Image src={manufacturer.imageURL} />
+        </FlexBox>
+      </TableCell>
+      <TableCell scope="row" align="center">
+        <FlexBox sx={{ justifyContent: 'center', alignItems: 'center', columnGap: 2 }}>
+          {/* <FlexBox sx={{ width: 60, height: 40, border: '0.5px black solid' }}> */}
+          <FlexBox sx={{ width: 60, height: 40 }}>
+            <Image src={manufacturer.origin.imageURL} />
+          </FlexBox>
+          <Typography>{manufacturer.origin.name_en}</Typography>
+        </FlexBox>
+      </TableCell>
+      <TableCell scope="row" align="center">
+        <FlexBox sx={{ justifyContent: 'center' }}>
+          <Typography>{manufacturer.founded}</Typography>
+        </FlexBox>
+      </TableCell>
+      {manufacturer.i18n.map(({ lang, value }) => {
+        return (
+          <TableCell align="center" key={`table-cell-${lang}`}>
+            {value}
+          </TableCell>
+        );
+      })}
+      <TableCell align="right" key={`table-cell-${manufacturer.name_en}-action`} sx={{ width: 75 }}>
+        <FlexBox sx={{ columnGap: 1 }}>
+          <Button
+            color="info"
+            variant="outlined"
+            size="small"
+            onClick={() => editItem(manufacturer.id)}
+          >
+            Edit
+          </Button>
+          <Button color="error" variant="outlined" size="small" onClick={openDeletePopUp}>
+            Delete
+          </Button>
+        </FlexBox>
+        <DeleteItemPopUp
+          opened={deletePopUpOpened}
+          onClose={closeDeletePopUp}
+          dataType={DATA_TYPE}
+          itemID={manufacturer.id}
+        />
+      </TableCell>
+    </TableRow>
+  );
+}
+
+export default function ManufacturerTable() {
+  const DATA_TYPE = 'manufacturer';
+
+  const navigate = useNavigate();
+
+  // TODO: delete, edit 한 다음에 다시 부르기
   const { data } = useQuery({
     queryKey: ['get manufacturer'],
     queryFn: GetAllManufacturer,
     staleTime: 10,
   });
 
-  const deleteItem = async (itemID: string) => {
-    // TODO: alert
-
-    await DeleteManufacturer({ documentID: itemID });
-  };
-
   const addItem = () => {
-    navigate(`/data/${dataType}/write`);
-  };
-
-  const editItem = (itemID: string) => {
-    // TODO:
-    // /data/nation/edit/666851ce98f3742acfec3f67',
-    navigate(`/data/${dataType}/edit/${itemID}`);
+    navigate(`/data/${DATA_TYPE}/write`);
   };
 
   if (data) {
     const columns = [...new Set([...data.flatMap((dat) => dat.i18n.map((lan) => lan.lang))])];
-    const rowss = data.map(({ id, imageURL, i18n, name_en, founded, origin }) => {
-      return {
-        id: id,
-        image: imageURL,
-        name_en,
-        origin: origin,
-        founded: founded,
-        i18n: i18n,
-      };
-    });
 
     return (
       <FlexBox sx={{ width: '100%', flexDirection: 'column', rowGap: 2 }}>
@@ -83,62 +140,11 @@ export default function ManufacturerTable() {
               </TableRow>
             </TableHead>
             <TableBody>
-              {rowss.map((row) => (
-                <TableRow
-                  key={`table-row-${row.name_en}`}
-                  sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                >
-                  <TableCell component="th" scope="row">
-                    <FlexBox sx={{ width: 60, height: 40, border: '0.5px black solid' }}>
-                      <Image src={row.image} />
-                    </FlexBox>
-                  </TableCell>
-                  <TableCell scope="row" align="center">
-                    <FlexBox sx={{ justifyContent: 'center', alignItems: 'center', columnGap: 2 }}>
-                      {/* <FlexBox sx={{ width: 60, height: 40, border: '0.5px black solid' }}> */}
-                      <FlexBox sx={{ width: 60, height: 40 }}>
-                        <Image src={row.origin.imageURL} />
-                      </FlexBox>
-                      <Typography>{row.origin.name_en}</Typography>
-                    </FlexBox>
-                  </TableCell>
-                  <TableCell scope="row" align="center">
-                    <FlexBox sx={{ justifyContent: 'center' }}>
-                      <Typography>{row.founded}</Typography>
-                    </FlexBox>
-                  </TableCell>
-                  {row.i18n.map(({ lang, value }) => {
-                    return (
-                      <TableCell align="center" key={`table-cell-${lang}`}>
-                        {value}
-                      </TableCell>
-                    );
-                  })}
-                  <TableCell
-                    align="right"
-                    key={`table-cell-${row.name_en}-action`}
-                    sx={{ width: 75 }}
-                  >
-                    <FlexBox sx={{ columnGap: 1 }}>
-                      <Button
-                        color="info"
-                        variant="outlined"
-                        size="small"
-                        onClick={() => editItem(row.id)}
-                      >
-                        Edit
-                      </Button>
-                      <Button
-                        color="error"
-                        variant="outlined"
-                        size="small"
-                        onClick={() => deleteItem(row.id)}
-                      >
-                        Delete
-                      </Button>
-                    </FlexBox>
-                  </TableCell>
-                </TableRow>
+              {data.map((manu, idx) => (
+                <ManufacturerRowItem
+                  manufacturer={manu}
+                  key={`manufacturer-table-row-item-${manu.name_en}-${idx}`}
+                />
               ))}
             </TableBody>
           </Table>

@@ -125,11 +125,6 @@ function CarItemCell({ carData }: { carData: CarSchemaType }) {
   const openImageModal = () => setImageModalOpened(true);
   const closeImageModal = () => setImageModalOpened(false);
 
-  const deleteItem = async (itemID: string) => {
-    // TODO: alert
-    await DeleteCar({ documentID: itemID });
-  };
-
   const editItem = (itemID: string) => {
     navigate(`/data/${DATA_TYPE}/edit/${itemID}`);
   };
@@ -231,6 +226,7 @@ export default function CarTable() {
   const navigate = useNavigate();
 
   // TODO: pagination
+  // TODO: delete, edit 한 다음에 다시 부르기
   const { data } = useQuery({
     queryKey: ['get car'],
     queryFn: GetAllCar,

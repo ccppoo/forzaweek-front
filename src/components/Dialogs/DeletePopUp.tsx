@@ -58,6 +58,7 @@ export default function DeleteItemPopUp({
 
   const title = `${dataType} 항목을 삭제합니까?`;
 
+  // TODO: 컴포넌트 부르는 애들이 직접 제공할 것
   const itemShortDetail = '아이템 내용';
 
   return (

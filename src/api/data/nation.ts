@@ -10,7 +10,7 @@ type NationLang = {
   lang: string;
 };
 
-type GetNation = {
+export type GetNation = {
   id: string;
   i18n: NationLang[];
   name_en: string;
@@ -83,18 +83,6 @@ export async function GetAllNation({ queryKey }: { queryKey: [API_NAME] }): Prom
   const url = `${API_HOST}/${path_}`;
 
   const resp = await axios.get(url, {});
-
-  return resp.data;
-}
-
-export async function DeleteNation({ documentID }: { documentID: string }) {
-  // const [documentID] = documentID;
-
-  const path_ = `nation`;
-
-  const url = `${API_HOST}/${path_}/${documentID}`;
-
-  const resp = await axios.delete(url);
 
   return resp.data;
 }

@@ -11,45 +11,83 @@ import TableRow from '@mui/material/TableRow';
 
 import { useQuery } from '@tanstack/react-query';
 
-import { DeleteNation, GetAllNation } from '@/api/data/nation';
+import { GetAllNation } from '@/api/data/nation';
+import type { GetNation } from '@/api/data/nation';
+import DeleteItemPopUp from '@/components/Dialogs/DeletePopUp';
 import { FlexBox, FullSizeCenteredFlexBox } from '@/components/styled';
 import { Image } from '@/components/styled';
 
-export default function NationTable() {
-  const dataType = 'nation';
+function NationRowItem({ nation }: { nation: GetNation }) {
+  const DATA_TYPE = 'nation';
 
   const navigate = useNavigate();
 
-  const { data } = useQuery({ queryKey: ['get nations'], queryFn: GetAllNation, staleTime: 10 });
+  const [deletePopUpOpened, setDeletePopUpOpened] = useState<boolean>(false);
 
-  const deleteItem = async (itemID: string) => {
-    // TODO: alert
-
-    await DeleteNation({ documentID: itemID });
+  const closeDeletePopUp = () => {
+    setDeletePopUpOpened(false);
   };
 
-  const addItem = () => {
-    navigate(`/data/${dataType}/write`);
+  const openDeletePopUp = () => {
+    setDeletePopUpOpened(true);
   };
 
   const editItem = (itemID: string) => {
     // TODO:
     // /data/nation/edit/666851ce98f3742acfec3f67',
-    navigate(`/data/${dataType}/edit/${itemID}`);
+    navigate(`/data/${DATA_TYPE}/edit/${itemID}`);
+  };
+
+  return (
+    <TableRow
+      key={`table-row-${nation.name_en}`}
+      sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+    >
+      <TableCell component="th" scope="row">
+        <FlexBox sx={{ width: 60, height: 40, border: '0.5px black solid' }}>
+          <Image src={nation.imageURL} />
+        </FlexBox>
+      </TableCell>
+      {nation.i18n.map(({ lang, value }) => {
+        return (
+          <TableCell align="right" key={`table-cell-${lang}`}>
+            {value}
+          </TableCell>
+        );
+      })}
+      <TableCell align="right" key={`table-cell-${nation.name_en}-action`} sx={{ width: 75 }}>
+        <FlexBox sx={{ columnGap: 1 }}>
+          <Button color="info" variant="outlined" size="small" onClick={() => editItem(nation.id)}>
+            Edit
+          </Button>
+          <Button color="error" variant="outlined" size="small" onClick={openDeletePopUp}>
+            Delete
+          </Button>
+        </FlexBox>
+        <DeleteItemPopUp
+          opened={deletePopUpOpened}
+          onClose={closeDeletePopUp}
+          dataType={DATA_TYPE}
+          itemID={nation.id}
+        />
+      </TableCell>
+    </TableRow>
+  );
+}
+
+export default function NationTable() {
+  const DATA_TYPE = 'nation';
+
+  const navigate = useNavigate();
+
+  const { data } = useQuery({ queryKey: ['get nations'], queryFn: GetAllNation, staleTime: 10 });
+
+  const addItem = () => {
+    navigate(`/data/${DATA_TYPE}/write`);
   };
 
   if (data) {
     const columns = [...new Set([...data.flatMap((dat) => dat.i18n.map((lan) => lan.lang))])];
-
-    const rowss = data.map(({ id, imageURL, i18n, name_en }) => {
-      return {
-        id: id,
-        image: imageURL,
-        name_en,
-        i18n: i18n,
-      };
-    });
-
     return (
       <FlexBox sx={{ width: '100%', flexDirection: 'column', rowGap: 2 }}>
         {/* 데이터 추가 버튼 */}
@@ -76,48 +114,8 @@ export default function NationTable() {
               </TableRow>
             </TableHead>
             <TableBody>
-              {rowss.map((row) => (
-                <TableRow
-                  key={`table-row-${row.name_en}`}
-                  sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                >
-                  <TableCell component="th" scope="row">
-                    <FlexBox sx={{ width: 60, height: 40, border: '0.5px black solid' }}>
-                      <Image src={row.image} />
-                    </FlexBox>
-                  </TableCell>
-                  {row.i18n.map(({ lang, value }) => {
-                    return (
-                      <TableCell align="right" key={`table-cell-${lang}`}>
-                        {value}
-                      </TableCell>
-                    );
-                  })}
-                  <TableCell
-                    align="right"
-                    key={`table-cell-${row.name_en}-action`}
-                    sx={{ width: 75 }}
-                  >
-                    <FlexBox sx={{ columnGap: 1 }}>
-                      <Button
-                        color="info"
-                        variant="outlined"
-                        size="small"
-                        onClick={() => editItem(row.id)}
-                      >
-                        Edit
-                      </Button>
-                      <Button
-                        color="error"
-                        variant="outlined"
-                        size="small"
-                        onClick={() => deleteItem(row.id)}
-                      >
-                        Delete
-                      </Button>
-                    </FlexBox>
-                  </TableCell>
-                </TableRow>
+              {data.map((nation, idx) => (
+                <NationRowItem nation={nation} key={`table-row-${nation.name_en}=${idx}`} />
               ))}
             </TableBody>
           </Table>

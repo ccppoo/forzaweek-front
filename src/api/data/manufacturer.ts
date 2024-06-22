@@ -21,7 +21,7 @@ type GetNation = {
   imageURL: string;
 };
 
-type GetManufacturer = {
+export type GetManufacturer = {
   id: string;
   i18n: ManufacturerLang[];
   name_en: string;
@@ -104,7 +104,6 @@ export async function GetManufacturerEdit({
   return resp.data;
 }
 
-//  "https://fzwcdn.forzaweek.com/nation/Korea_flag.svg"
 export async function GetAllManufacturer({
   queryKey,
 }: {
@@ -117,16 +116,6 @@ export async function GetAllManufacturer({
   const url = `${API_HOST}/${path_}`;
 
   const resp = await axios.get(url, {});
-
-  return resp.data;
-}
-
-export async function DeleteManufacturer({ documentID }: { documentID: string }) {
-  const path_ = `nation`;
-
-  const url = `${API_HOST}/${path_}/${documentID}`;
-
-  const resp = await axios.delete(url);
 
   return resp.data;
 }
