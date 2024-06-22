@@ -35,7 +35,8 @@ const notifications: Notifications = {
       vertical: 'bottom',
       horizontal: 'left',
     },
-    autoHideDuration: 6000,
+    autoHideDuration: 3500,
+    onClose: () => {},
   },
   maxSnack: isMobile ? 3 : 4,
 };
