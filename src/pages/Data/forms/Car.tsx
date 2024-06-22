@@ -1,6 +1,7 @@
 import { ChangeEvent, useEffect, useState } from 'react';
 import { Controller, FormProvider, useFieldArray, useForm } from 'react-hook-form';
 import type { SubmitErrorHandler } from 'react-hook-form';
+import { useNavigate } from 'react-router-dom';
 
 import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
 import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
@@ -69,6 +70,10 @@ export default function CarForm(props: dataTextInputIntf) {
     control,
     name: 'name',
   });
+
+  const navigate = useNavigate();
+
+  const goBackToListPage = () => navigate(`/data/car`);
 
   const { fields: short_names } = useFieldArray({
     control,
@@ -695,9 +700,12 @@ export default function CarForm(props: dataTextInputIntf) {
             </Box>
           </Box>
 
-          <FlexBox sx={{ justifyContent: 'end', paddingTop: 2, paddingBottom: 1 }}>
+          <FlexBox sx={{ justifyContent: 'end', paddingTop: 2, paddingBottom: 1, columnGap: 2 }}>
+            <Button onClick={goBackToListPage} variant="outlined" color="warning">
+              Cancel
+            </Button>
             <Button type="submit" variant="contained">
-              Save
+              {isEditMode ? 'Edit' : 'Save'}
             </Button>
           </FlexBox>
         </form>

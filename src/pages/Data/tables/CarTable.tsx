@@ -2,50 +2,21 @@ import { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import CloseIcon from '@mui/icons-material/Close';
-import TabContext from '@mui/lab/TabContext';
-import TabList from '@mui/lab/TabList';
-import TabPanel from '@mui/lab/TabPanel';
 import { Box, Button, Paper, Typography } from '@mui/material';
-import type { DialogProps } from '@mui/material';
 import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
 import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
-import Tab from '@mui/material/Tab';
-import Tabs from '@mui/material/Tabs';
 import Tooltip from '@mui/material/Tooltip';
-import Grid from '@mui/material/Unstable_Grid2';
 
 import { useQuery } from '@tanstack/react-query';
 
 import type { CarSchemaType, FH5CarMetaSchemaType } from '@/FormData/car';
 import { DeleteCar, GetAllCar } from '@/api/data/car';
+import DeleteItemPopUp from '@/components/Dialogs/DeletePopUp';
 import { ImageShowHorizontal } from '@/components/ImageList';
 import { FlexBox, FullSizeCenteredFlexBox } from '@/components/styled';
 import { Image } from '@/components/styled';
-
-interface TabPanelProps {
-  children?: React.ReactNode;
-  index: string;
-  value: { division: string; rarity: string; boost: string; value: number };
-  show: boolean;
-}
-
-function CustomTabPanel(props: TabPanelProps) {
-  const { children, value, show, index, ...other } = props;
-
-  return (
-    <div
-      role="tabpanel"
-      hidden={!show}
-      id={`simple-tabpanel-${index}`}
-      aria-labelledby={`simple-tab-${index}`}
-      {...other}
-    >
-      {index && <Box sx={{ p: 3 }}>{children}</Box>}
-    </div>
-  );
-}
 
 function CarRealDetail({ name, value }: { name: string; value: string }) {
   return (
@@ -135,13 +106,18 @@ function CarItemMoreImagesDialog({
 }
 
 function CarItemCell({ carData }: { carData: CarSchemaType }) {
-  const dataType = 'car';
+  const DATA_TYPE = 'car';
 
-  const [value, setValue] = useState<string>('fh5');
   const navigate = useNavigate();
 
-  const handleChange = (event: React.SyntheticEvent, newValue: string) => {
-    setValue(newValue);
+  const [deletePopUpOpened, setDeletePopUpOpened] = useState<boolean>(false);
+
+  const closeDeletePopUp = () => {
+    setDeletePopUpOpened(false);
+  };
+
+  const openDeletePopUp = () => {
+    setDeletePopUpOpened(true);
   };
 
   const [imageModalOpened, setImageModalOpened] = useState<boolean>(false);
@@ -155,7 +131,7 @@ function CarItemCell({ carData }: { carData: CarSchemaType }) {
   };
 
   const editItem = (itemID: string) => {
-    navigate(`/data/${dataType}/edit/${itemID}`);
+    navigate(`/data/${DATA_TYPE}/edit/${itemID}`);
   };
 
   return (
@@ -194,16 +170,17 @@ function CarItemCell({ carData }: { carData: CarSchemaType }) {
           <Button color="info" variant="outlined" size="small" onClick={() => editItem(carData.id)}>
             Edit
           </Button>
-          <Button
-            color="error"
-            variant="outlined"
-            size="small"
-            onClick={() => deleteItem(carData.id)}
-          >
+          <Button color="error" variant="outlined" size="small" onClick={openDeletePopUp}>
             Delete
           </Button>
         </FlexBox>
       </FlexBox>
+      <DeleteItemPopUp
+        opened={deletePopUpOpened}
+        onClose={closeDeletePopUp}
+        dataType={DATA_TYPE}
+        itemID={carData.id}
+      />
       <FlexBox sx={{ width: '100%', height: '100%' }}>
         <FlexBox sx={{ height: '100%', flex: 1, flexDirection: 'column' }}>
           <Image src={carData.firstImage} sx={{ objectFit: 'contain' }} />
@@ -249,7 +226,7 @@ function CarItemCell({ carData }: { carData: CarSchemaType }) {
 }
 
 export default function CarTable() {
-  const dataType = 'car';
+  const DATA_TYPE = 'car';
 
   const navigate = useNavigate();
 
@@ -260,20 +237,8 @@ export default function CarTable() {
     staleTime: 10,
   });
 
-  const deleteItem = async (itemID: string) => {
-    // TODO: alert
-
-    await DeleteCar({ documentID: itemID });
-  };
-
   const addItem = () => {
-    navigate(`/data/${dataType}/write`);
-  };
-
-  const editItem = (itemID: string) => {
-    // TODO:
-    // /data/car/edit/666851ce98f3742acfec3f67',
-    navigate(`/data/${dataType}/edit/${itemID}`);
+    navigate(`/data/${DATA_TYPE}/write`);
   };
 
   // console.log(`data :  ${JSON.stringify(data)}`);
