@@ -14,6 +14,8 @@ function Data() {
     nation: () => <Tables.NationTable />,
     manufacturer: () => <Tables.ManufacturerTable />,
     car: () => <Tables.CarTable />,
+    decal: () => <Tables.DecalTable />,
+    tag: () => <Tables.TagTable />,
   };
 
   // console.log(`dataType : ${dataType}`);
@@ -25,7 +27,6 @@ function Data() {
       >
         {/* 데이터 값 */}
         <FlexBox sx={{ border: '1px black solid', borderRadius: 1 }}></FlexBox>
-
         {ListTables[dataType!]()}
       </FullSizeCenteredFlexBox>
     </Container>
