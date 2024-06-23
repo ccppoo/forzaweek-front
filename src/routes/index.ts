@@ -37,6 +37,13 @@ const routes: Routes = {
     devUrl: '/decal/1',
     icon: HomeIcon,
   },
+  [Pages.DecalWrite]: {
+    component: asyncComponentLoader(() => import('@/pages/Decals/DecalWrite')),
+    path: '/decal/write',
+    title: 'decal write',
+    devUrl: '/decal/write',
+    icon: HomeIcon,
+  },
   [Pages.Tracks]: {
     component: asyncComponentLoader(() => import('@/pages/Tracks/Tracks')),
     path: '/track',
@@ -82,7 +89,7 @@ const routes: Routes = {
   [Pages.DataEdit]: {
     component: asyncComponentLoader(() => import('@/pages/Data/Edit')),
     path: '/data/:dataType/edit/:itemID',
-    // devUrl: '/data/nation/edit/666851ce98f3742acfec3f67',
+    devUrl: '/data/manufacturer/edit/666be9211cd10aafae87323a',
     // devHide: true,
     title: 'edit data',
     icon: HomeIcon,
@@ -90,7 +97,7 @@ const routes: Routes = {
   [Pages.DataWrite]: {
     component: asyncComponentLoader(() => import('@/pages/Data/Write')),
     path: '/data/:dataType/write',
-    devUrl: '/data/manufacturer/write',
+    devUrl: '/data/tag/write',
     // devHide: true,
 
     title: 'write data',

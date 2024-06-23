@@ -10,6 +10,7 @@ enum Pages {
   CarDetail,
   Decals,
   DecalDetail,
+  DecalWrite,
   Tracks,
   TrackDetail,
   Tunings,

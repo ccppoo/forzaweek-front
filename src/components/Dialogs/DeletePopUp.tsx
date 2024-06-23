@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
 
 import CloseIcon from '@mui/icons-material/Close';
 import { Box, Button, Paper, Typography } from '@mui/material';
@@ -15,8 +14,6 @@ import { green, red } from '@mui/material/colors';
 
 import { useQuery } from '@tanstack/react-query';
 
-import type { CarSchemaType, FH5CarMetaSchemaType } from '@/FormData/car';
-import { DeleteCar, GetAllCar } from '@/api/data/car';
 import { DeleteItem } from '@/api/data/delete';
 import { Image } from '@/components/styled';
 import useNotifications from '@/store/notifications';

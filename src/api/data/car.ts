@@ -84,13 +84,3 @@ export async function GetAllCar({ queryKey }: { queryKey: [API_NAME] }): Promise
 
   return resp.data;
 }
-
-export async function DeleteCar({ documentID }: { documentID: string }) {
-  const path_ = `car`;
-
-  const url = `${API_HOST}/${path_}/${documentID}`;
-
-  const resp = await axios.delete(url);
-
-  return resp.data;
-}

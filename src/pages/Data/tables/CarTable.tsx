@@ -12,7 +12,7 @@ import Tooltip from '@mui/material/Tooltip';
 import { useQuery } from '@tanstack/react-query';
 
 import type { CarSchemaType, FH5CarMetaSchemaType } from '@/FormData/car';
-import { DeleteCar, GetAllCar } from '@/api/data/car';
+import { GetAllCar } from '@/api/data/car';
 import DeleteItemPopUp from '@/components/Dialogs/DeletePopUp';
 import { ImageShowHorizontal } from '@/components/ImageList';
 import { FlexBox, FullSizeCenteredFlexBox } from '@/components/styled';
