@@ -10,7 +10,6 @@ export const tagEditSchema = z.object({
   name_en: z.optional(z.string()),
   description: z.array(i18nTextFieldSchema),
   kind: z.optional(z.string()),
-
   mergedTo: z.optional(z.string()),
 });
 
@@ -20,8 +19,18 @@ export const tagSchemaType = z.object({
   name_en: z.string(),
   description: z.array(i18nTextFieldSchema),
   kind: z.string(),
-  mergedTo: z.string(),
+  mergedTo: z.optional(z.string()),
 });
+
+// 글 작성시 추가하는 스키마 -> 글 작성시에만 사용
+export const tagWrite = z.object({
+  id: z.optional(z.string()),
+  name: z.array(i18nTextFieldSchema),
+  name_en: z.string(),
+  kind: z.string(),
+});
+
+export type TagWrite = z.infer<typeof tagWrite>;
 
 export type TagSchemaType = z.infer<typeof tagSchemaType>;
 
