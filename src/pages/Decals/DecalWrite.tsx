@@ -3,6 +3,7 @@ import { Controller, FormProvider, useFieldArray, useForm, useFormContext } from
 import type { SubmitErrorHandler } from 'react-hook-form';
 
 import DeleteForeverOutlinedIcon from '@mui/icons-material/DeleteForeverOutlined';
+import FileUploadOutlined from '@mui/icons-material/FileUploadOutlined';
 import ImageOutlinedIcon from '@mui/icons-material/ImageOutlined';
 import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
 import {
@@ -28,7 +29,7 @@ import type { TagEditSchema, TagSchemaType, TagWrite } from '@/FormData/tag';
 import { GetAllCar } from '@/api/data/car';
 import { AddNewDecal, EditDecal } from '@/api/data/decal';
 import CarSearchAndSelectDialog from '@/components/Search/CarSearchAndSelectDialog';
-import { FlexBox, FullSizeCenteredFlexBox } from '@/components/styled';
+import { FlexBox, FullSizeCenteredFlexBox, Image, VisuallyHiddenInput } from '@/components/styled';
 import { TAGS } from '@/data/tags';
 import type { TagSchemaTypeExtended } from '@/data/tags';
 
@@ -182,16 +183,10 @@ export default function DecalWrite(props: dataTextInputIntf) {
     console.log(`data : ${JSON.stringify(data)}`);
     // const values = getValues();
     // const queryKey = ['add_nation', data.i18n[0].value];
-
-    if (isEditMode) {
-      await EditDecal({ decal: data });
-      return;
-    }
-    if (!isEditMode) {
-      await AddNewDecal({ decal: data });
-    }
+    return;
   };
 
+  const [imagePreviewIdx, setImagePreviewIdx] = useState<number>(0);
   const handleOnError = (errors: SubmitErrorHandler<DecalEditSchema>) => {
     console.log(errors);
     // console.log(`errors : ${JSON.stringify(errors)}`);
@@ -246,181 +241,280 @@ export default function DecalWrite(props: dataTextInputIntf) {
 
   return (
     <Container sx={{ paddingTop: 2 }}>
-      <FullSizeCenteredFlexBox
-        sx={{ flexDirection: 'column', rowGap: 2, width: '100%', paddingBottom: 10 }}
-      >
+      <FullSizeCenteredFlexBox sx={{ width: '100%', paddingBottom: 10, paddingTop: 4 }}>
         <FormProvider {...methods}>
-          <Box
-            sx={{
-              width: '100%',
-              display: 'grid',
-              gridTemplateColumns: '200px auto',
-              gridTemplateRows: '100px',
-            }}
-          >
-            <FlexBox sx={{ alignItems: 'center', height: '100%' }}>
-              <Typography>Base Car</Typography>
-            </FlexBox>
-            <Paper
-              sx={{
-                display: 'flex',
-                alignItems: 'center',
-                height: '100%',
-                columnGap: 2,
-              }}
-            >
-              <FlexBox sx={{ width: '80%', paddingLeft: 2 }}>{selectedCar && selectedCar}</FlexBox>
-              <FlexBox sx={{ width: '20%', paddingX: 1 }}>
-                <Button variant="outlined" onClick={openCarSelectDialog}>
-                  select car
-                </Button>
-              </FlexBox>
-            </Paper>
-            <CarSearchAndSelectDialog
-              onClose={closeCarSelectDialog}
-              opened={carSelectDialogOpened}
-              selectScope={selectScope}
-            />
-          </Box>
-          {/* 1. 원본 제작자 이름 */}
-          <Box
-            sx={{
-              width: '100%',
-              display: 'grid',
-              gridTemplateColumns: '200px auto',
-              gridTemplateRows: '50px',
-            }}
-          >
-            <FlexBox sx={{ alignItems: 'center' }}>
-              <Typography>Creator username</Typography>
-            </FlexBox>
-            <FlexBox sx={{ alignItems: 'center' }}>
-              <TextField
-                fullWidth
-                label=""
-                defaultValue={methods.getValues('creator') || ''}
-                inputProps={methods.register('creator', {
-                  required: 'Please input creator of decal',
-                })}
-                error={!!methods.formState.errors.share_code}
-                helperText={methods.formState.errors.share_code?.message}
-                SelectProps={{ MenuProps: { sx: { maxHeight: 450 } } }}
-                size="small"
-              />
-            </FlexBox>
-          </Box>
-          {/* 2. 공유 코드 입력 */}
-          <Box
-            sx={{
-              width: '100%',
-              display: 'grid',
-              gridTemplateColumns: '200px auto',
-              gridTemplateRows: '50px',
-            }}
-          >
-            <FlexBox sx={{ alignItems: 'center' }}>
-              <Typography>Share code</Typography>
-            </FlexBox>
-            {/* 3개로 나눠서 보기 편하게 */}
-            <FlexBox sx={{ alignItems: 'center' }}>
-              <TextField
-                fullWidth
-                label="e.g) 1234567890"
-                defaultValue={methods.getValues('share_code') || ''}
-                inputProps={methods.register('share_code', {
-                  required: 'Please input share code',
-                })}
-                error={!!methods.formState.errors.share_code}
-                helperText={methods.formState.errors.share_code?.message}
-                SelectProps={{ MenuProps: { sx: { maxHeight: 450 } } }}
-                size="small"
-              />
-            </FlexBox>
-          </Box>
-          {/* 3. 태그 붙이기 */}
-          <Box
-            sx={{
-              width: '100%',
-              display: 'grid',
-              gridTemplateColumns: '200px auto',
-              gridTemplateRows: 'auto',
-            }}
-          >
-            <FlexBox sx={{ alignItems: 'center', height: 60 }}>
-              <Typography>Decal Tags</Typography>
-            </FlexBox>
-            {/* 태그 자동완성 검색 -> 엔터누르면 완성되는 형식으로 */}
-            <FlexBox sx={{ width: '100%', flexDirection: 'column', rowGap: 1 }}>
-              <TagSearchTextFeild />
-              <Paper sx={{ backgroundColor: 'EEEEEE', paddingX: 1, paddingY: 1, minHeight: 48 }}>
-                {tagsAdded.length > 0 ? (
-                  <FlexBox sx={{ flexWrap: 'wrap', columnGap: 1, rowGap: 1 }}>
-                    {tagsAdded.map((tagValue, idx) => (
-                      <Chip
-                        label={tagValue.name_en}
-                        onDelete={() => deleteAddedTag(idx)}
-                        key={`decal-write-tag-input-${tagValue}-${idx}`}
-                      />
-                    ))}
-                  </FlexBox>
-                ) : (
-                  <FlexBox sx={{ alignItems: 'center', height: '100%' }}>
-                    <Typography fontWeight={300}>
-                      Add tags that could describe this decal
-                    </Typography>
-                  </FlexBox>
-                )}
-              </Paper>
-            </FlexBox>
-          </Box>
-          {/* 4. 이미지 올리기 */}
-          <Box
-            sx={{
-              width: '100%',
-              display: 'grid',
-              gridTemplateColumns: '200px auto',
-              gridTemplateRows: 'auto',
-            }}
-          >
-            <FlexBox>
-              <Typography>Decal Images</Typography>
-            </FlexBox>
-            <FlexBox sx={{ width: '100%', height: 400, columnGap: 2 }}>
-              <FlexBox sx={{ flex: 5, border: '1px solid black' }}></FlexBox>
-              <FlexBox sx={{ flex: 2, border: '1px solid black', flexDirection: 'column' }}>
-                {/* 사진 목록 */}
-                <FlexBox sx={{ flex: 5, border: '1px solid black', overflowY: 'scroll' }}></FlexBox>
-                {/* 사진 추가, 옵션 */}
+          <form onSubmit={methods.handleSubmit(submit)} style={{ width: '100%' }}>
+            <FlexBox sx={{ flexDirection: 'column', rowGap: 2, width: '100%' }}>
+              <Box
+                sx={{
+                  width: '100%',
+                  display: 'grid',
+                  gridTemplateColumns: '200px auto',
+                  gridTemplateRows: '200px',
+                }}
+              >
+                <FlexBox sx={{ alignItems: 'center', height: '100%' }}>
+                  <Typography>Base Car</Typography>
+                </FlexBox>
                 <FlexBox
                   sx={{
-                    flex: 1,
-                    height: '100%',
-                    justifyContent: 'end',
                     alignItems: 'center',
-                    paddingX: 1,
-                    columnGap: 1,
+                    height: '100%',
+                    columnGap: 2,
                   }}
                 >
-                  <Button
-                    variant="outlined"
-                    startIcon={<DeleteForeverOutlinedIcon />}
-                    size="small"
-                    color="error"
+                  <Paper
+                    sx={{
+                      width: '100%',
+                      height: '100%',
+                      paddingLeft: 2,
+                      paddingY: 1,
+                      display: 'flex',
+                    }}
                   >
-                    Remove all
-                  </Button>
-                  <Button variant="contained" startIcon={<ImageOutlinedIcon />} size="small">
-                    Upload
-                  </Button>
+                    {selectedCar && selectedCar}
+                    <FlexBox sx={{ height: '100%', aspectRatio: '16/9' }}>
+                      <Image />
+                    </FlexBox>
+                    <FlexBox
+                      sx={{
+                        width: '100%',
+                        height: '100%',
+                        flexDirection: 'column',
+                        justifyContent: 'space-between',
+                        paddingX: 1,
+                      }}
+                    >
+                      <FlexBox>
+                        <Typography>name</Typography>
+                        <Typography>{selectedCar && selectedCar}</Typography>
+                      </FlexBox>
+                      <FlexBox
+                        sx={{
+                          flexDirection: 'column',
+                          justifyContent: 'center',
+                          width: '100%',
+                          alignItems: 'end',
+                        }}
+                      >
+                        <Button variant="outlined" onClick={openCarSelectDialog}>
+                          select car
+                        </Button>
+                      </FlexBox>
+                    </FlexBox>
+                  </Paper>
                 </FlexBox>
+                <CarSearchAndSelectDialog
+                  onClose={closeCarSelectDialog}
+                  opened={carSelectDialogOpened}
+                  selectScope={selectScope}
+                />
+              </Box>
+              {/* 1. 원본 제작자 이름 */}
+              <Box
+                sx={{
+                  width: '100%',
+                  display: 'grid',
+                  gridTemplateColumns: '200px auto',
+                  gridTemplateRows: '50px',
+                }}
+              >
+                <FlexBox sx={{ alignItems: 'center' }}>
+                  <Typography>Creator username</Typography>
+                </FlexBox>
+                <FlexBox sx={{ alignItems: 'center' }}>
+                  <TextField
+                    fullWidth
+                    label=""
+                    defaultValue={methods.getValues('creator') || ''}
+                    inputProps={methods.register('creator', {
+                      required: 'Please input creator of decal',
+                    })}
+                    error={!!methods.formState.errors.share_code}
+                    helperText={methods.formState.errors.share_code?.message}
+                    SelectProps={{ MenuProps: { sx: { maxHeight: 450 } } }}
+                    size="small"
+                  />
+                </FlexBox>
+              </Box>
+              {/* 2. 공유 코드 입력 */}
+              <Box
+                sx={{
+                  width: '100%',
+                  display: 'grid',
+                  gridTemplateColumns: '200px auto',
+                  gridTemplateRows: '50px',
+                }}
+              >
+                <FlexBox sx={{ alignItems: 'center' }}>
+                  <Typography>Share code</Typography>
+                </FlexBox>
+                {/* 3개로 나눠서 보기 편하게 */}
+                <FlexBox sx={{ alignItems: 'center' }}>
+                  <TextField
+                    fullWidth
+                    label="e.g) 1234567890"
+                    defaultValue={methods.getValues('share_code') || ''}
+                    inputProps={methods.register('share_code', {
+                      required: 'Please input share code',
+                    })}
+                    error={!!methods.formState.errors.share_code}
+                    helperText={methods.formState.errors.share_code?.message}
+                    SelectProps={{ MenuProps: { sx: { maxHeight: 450 } } }}
+                    size="small"
+                  />
+                </FlexBox>
+              </Box>
+              {/* 3. 태그 붙이기 */}
+              <Box
+                sx={{
+                  width: '100%',
+                  display: 'grid',
+                  gridTemplateColumns: '200px auto',
+                  gridTemplateRows: 'auto',
+                }}
+              >
+                <FlexBox sx={{ alignItems: 'center', height: 60 }}>
+                  <Typography>Decal Tags</Typography>
+                </FlexBox>
+                {/* 태그 자동완성 검색 -> 엔터누르면 완성되는 형식으로 */}
+                <FlexBox sx={{ width: '100%', flexDirection: 'column', rowGap: 1 }}>
+                  <TagSearchTextFeild />
+                  <Paper
+                    sx={{ backgroundColor: 'EEEEEE', paddingX: 1, paddingY: 1, minHeight: 48 }}
+                  >
+                    {tagsAdded.length > 0 ? (
+                      <FlexBox sx={{ flexWrap: 'wrap', columnGap: 1, rowGap: 1 }}>
+                        {tagsAdded.map((tagValue, idx) => (
+                          <Chip
+                            label={tagValue.name_en}
+                            onDelete={() => deleteAddedTag(idx)}
+                            key={`decal-write-tag-input-${tagValue}-${idx}`}
+                          />
+                        ))}
+                      </FlexBox>
+                    ) : (
+                      <FlexBox sx={{ alignItems: 'center', height: '100%' }}>
+                        <Typography fontWeight={300}>
+                          Add tags that could describe this decal
+                        </Typography>
+                      </FlexBox>
+                    )}
+                  </Paper>
+                </FlexBox>
+              </Box>
+              {/* 4. 이미지 올리기 */}
+              <Box
+                sx={{
+                  width: '100%',
+                  display: 'grid',
+                  gridTemplateColumns: '200px auto',
+                  gridTemplateRows: 'auto',
+                }}
+              >
+                <FlexBox>
+                  <Typography>Decal Images</Typography>
+                </FlexBox>
+                <FlexBox sx={{ width: '100%', height: 400, columnGap: 2 }}>
+                  <FlexBox sx={{ flex: 7, border: '1px solid black' }}>
+                    {imagePreviews && (
+                      <Image src={imagePreviews[imagePreviewIdx]} sx={{ objectFit: 'contain' }} />
+                    )}
+                  </FlexBox>
+                  <FlexBox sx={{ flex: 3, border: '1px solid black', flexDirection: 'column' }}>
+                    {/* 사진 목록 */}
+                    <FlexBox
+                      sx={{
+                        flex: 5,
+                        border: '1px solid black',
+                        overflowY: 'scroll',
+                        columnGap: '2%',
+                        padding: 0.5,
+                        justifyContent: 'start',
+                        flexShrink: 1,
+
+                        flexWrap: 'wrap',
+                        height: '100%',
+                      }}
+                    >
+                      {imagePreviews.map((imgURL, idx) => {
+                        return (
+                          <FlexBox
+                            key={`decal-image-upload-${imgURL}-${idx}`}
+                            sx={{ width: '45%', height: 'auto' }}
+                            component={Paper}
+                          >
+                            <Image src={imgURL} sx={{ objectFit: 'contain' }} />
+                          </FlexBox>
+                        );
+                      })}
+                    </FlexBox>
+                    {/* 사진 추가, 옵션 */}
+                    <FlexBox
+                      sx={{
+                        flex: 1,
+                        height: '100%',
+                        justifyContent: 'end',
+                        alignItems: 'center',
+                        paddingX: 1,
+                        columnGap: 1,
+                      }}
+                    >
+                      <Button
+                        variant="outlined"
+                        // startIcon={<DeleteForeverOutlinedIcon />}
+
+                        size="small"
+                        color="error"
+                      >
+                        Remove all
+                      </Button>
+                      <Controller
+                        name="imageURLs"
+                        control={methods.control}
+                        rules={{
+                          required: {
+                            value: true,
+                            message: 'you sould provide image',
+                          },
+                        }}
+                        render={({ field: { ref, name, onBlur, onChange } }) => (
+                          <Button
+                            variant="contained"
+                            // disabled={!!imagePreviews}
+                            startIcon={<FileUploadOutlined />}
+                            component={'label'}
+                            size="small"
+                          >
+                            Upload Image
+                            <VisuallyHiddenInput
+                              ref={ref}
+                              name={name}
+                              onBlur={onBlur}
+                              type="file"
+                              multiple
+                              accept=".jpg, .jpeg, .png, .webp"
+                              onChange={(e) => {
+                                // const file = e.target.files?.[0];
+                                // // onChange(e.target.files?.[0]);
+                                handleUploadClick(e);
+                                methods.trigger('imageURLs');
+                              }}
+                            />
+                          </Button>
+                        )}
+                      />
+                    </FlexBox>
+                  </FlexBox>
+                </FlexBox>
+              </Box>
+              <FlexBox sx={{ width: '100%', justifyContent: 'end' }}>
+                <Button type="submit" variant="outlined">
+                  Post
+                </Button>
               </FlexBox>
             </FlexBox>
-          </Box>
-          <FlexBox sx={{ width: '100%', justifyContent: 'end' }}>
-            <Button type="submit" variant="outlined">
-              Post
-            </Button>
-          </FlexBox>
+          </form>
         </FormProvider>
       </FullSizeCenteredFlexBox>
     </Container>
