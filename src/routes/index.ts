@@ -70,6 +70,13 @@ const routes: Routes = {
     title: 'tuning detail',
     icon: HomeIcon,
   },
+
+  [Pages.TuningWrite]: {
+    component: asyncComponentLoader(() => import('@/pages/Tunings/TuningWrite')),
+    path: '/tuning/write',
+    title: 'tuning write',
+    icon: HomeIcon,
+  },
   [Pages.Data]: {
     component: asyncComponentLoader(() => import('@/pages/Data/Data')),
     path: '/data',
