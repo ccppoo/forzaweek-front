@@ -1,0 +1,52 @@
+import { z } from 'zod';
+
+import { tagWrite } from '@/FormData/tag';
+
+import { tuningDetailed, tuningDetailedDefault } from './detailed';
+import type { TuningDetailedType } from './detailed';
+import { tuningPerformance, tuningPerformanceDefault } from './performance';
+import type { TuningPerformanceType } from './performance';
+import { tuningTestReading, tuningTestReadingDefault } from './testReading';
+import type { TuningTestReadingType } from './testReading';
+
+export const tuningEditSchema = z.object({
+  id: z.optional(z.string()), // 튜닝 글 작성 자체 DocumnetID
+
+  share_code: z.optional(z.string()), // 공유코드
+  car: z.optional(z.string()), // 차 (id)
+  creator: z.optional(z.string()), // 튜닝 제작자
+
+  tags: z.array(tagWrite), // 튜닝 태그
+
+  performance: tuningPerformance, // 성능 레이더 차트
+  testReadings: tuningTestReading, // 성능 지표
+  detailedTuning: tuningDetailed, // 세부 튜닝
+});
+export type TuningEditSchema = z.infer<typeof tuningEditSchema>;
+
+export const tuningEditSchemaDefault: TuningEditSchema = {
+  share_code: undefined, // 공유코드
+  car: undefined, // 차 (id)
+  creator: undefined, // 튜닝 제작자
+
+  tags: [], // 튜닝 태그
+  performance: tuningPerformanceDefault,
+  testReadings: tuningTestReadingDefault,
+  detailedTuning: tuningDetailedDefault,
+};
+
+// 태그는 최초 생성시 string으로 제공, 이후 서버에서 올 때는 무조건 general type으로 생성하고 반환됨
+export const tuningSchemaType = z.object({
+  id: z.string(), // 차 자체 DocumnetID
+
+  share_code: z.string(), // 공유코드
+  car: z.string(), // 차 (id)
+  creator: z.string(), // 데칼 제작자
+
+  tags: z.array(tagWrite), // 튜닝 태그
+
+  performance: tuningPerformance, // 성능 레이더 차트
+  testReadings: tuningTestReading, // 성능 지표
+  detailedTuning: tuningDetailed, // 세부 튜닝
+});
+export type TuningSchemaType = z.infer<typeof tuningSchemaType>;
