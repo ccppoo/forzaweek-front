@@ -23,9 +23,9 @@ import TextField from '@mui/material/TextField';
 
 import { useQuery } from '@tanstack/react-query';
 
-import type { DecalEditSchema } from '@/FormData/decal';
-import { decalEditSchemaDefault } from '@/FormData/decal';
 import type { TagEditSchema, TagSchemaType, TagWrite } from '@/FormData/tag';
+import type { TuningEditSchema } from '@/FormData/tuning';
+import { tuningEditSchemaDefault } from '@/FormData/tuning';
 import { GetAllCar } from '@/api/data/car';
 import { AddNewDecal, EditDecal } from '@/api/data/decal';
 import CarSearchAndSelectDialog from '@/components/Search/CarSearchAndSelectDialog';
@@ -37,7 +37,7 @@ import DetailedTuningTabs from './DetailedTuningTabs';
 import TuningPerformance from './TuningPerformance';
 
 interface dataTextInputIntf {
-  decalEditSchema?: DecalEditSchema;
+  tuningEditSchema?: TuningEditSchema;
 }
 
 function TagSearchTextFeild() {
@@ -166,9 +166,9 @@ export default function TuningWrite(props: dataTextInputIntf) {
   const searchScope = 'tuning-write';
   const selectScope = 'tuning-post-create';
 
-  const { decalEditSchema } = props;
-  const methods = useForm<DecalEditSchema>({
-    defaultValues: decalEditSchema || decalEditSchemaDefault,
+  const { tuningEditSchema } = props;
+  const methods = useForm<TuningEditSchema>({
+    defaultValues: tuningEditSchema || tuningEditSchemaDefault,
     mode: 'onChange',
   });
   // const { append, fields } = useFieldArray({ control, name: 'tags' });
@@ -176,13 +176,12 @@ export default function TuningWrite(props: dataTextInputIntf) {
   const { remove, fields: tagFields } = useFieldArray({ control: methods.control, name: 'tags' });
 
   const isEditMode = !!methods.getValues('id');
-  const [imagePreviews, setImagePreviews] = useState<string[]>(methods.getValues('imageURLs')); // Blob URL
 
   const selectedCar = methods.getValues('car');
   const tagsAdded = methods.watch('tags');
 
   console.log(`isEditMode :${isEditMode}`);
-  const submit = async (data: DecalEditSchema) => {
+  const submit = async (data: TuningEditSchema) => {
     console.log(`data : ${JSON.stringify(data)}`);
     // const values = getValues();
     // const queryKey = ['add_nation', data.i18n[0].value];
@@ -190,44 +189,9 @@ export default function TuningWrite(props: dataTextInputIntf) {
   };
 
   const [imagePreviewIdx, setImagePreviewIdx] = useState<number>(0);
-  const handleOnError = (errors: SubmitErrorHandler<DecalEditSchema>) => {
+  const handleOnError = (errors: SubmitErrorHandler<TuningEditSchema>) => {
     console.log(errors);
     // console.log(`errors : ${JSON.stringify(errors)}`);
-  };
-
-  const handleUploadClick = async (e: ChangeEvent<HTMLInputElement>) => {
-    e.preventDefault();
-    e.persist();
-
-    if (!e.target.files) return;
-    let uploadingImages: string[] = [];
-    for (let idx: number = 0; idx < e.target.files.length; idx++) {
-      const selectedFile = e.target.files[idx];
-      const fileBlobURL = URL.createObjectURL(selectedFile);
-      uploadingImages = [...uploadingImages, fileBlobURL];
-    }
-    // console.log(`uploadingImages : ${uploadingImages}`);
-    const uploaded_images = [...imagePreviews, ...uploadingImages];
-    // console.log(`uploaded_images : ${uploaded_images}`);
-    setImagePreviews(uploaded_images);
-    methods.setValue('imageURLs', uploaded_images);
-  };
-
-  const setAsRepresentiveImage = (imageUrl: string) => {
-    methods.setValue('firstImage', imageUrl);
-    setImagePreviews((prev) => [imageUrl, ...prev.filter((val) => val != imageUrl)]);
-  };
-
-  const removeAllImage = () => {
-    setImagePreviews([]);
-    methods.setValue('imageURLs', []);
-  };
-
-  const removeImage = (imageUrl: string) => {
-    const prevImage = methods.getValues('imageURLs');
-    const removed = prevImage.filter((val) => val != imageUrl);
-    methods.setValue('imageURLs', removed);
-    setImagePreviews(removed);
   };
 
   const [carSelectDialogOpened, setCarSelectDialogOpened] = useState<boolean>(false);
@@ -247,12 +211,12 @@ export default function TuningWrite(props: dataTextInputIntf) {
       <FullSizeCenteredFlexBox sx={{ width: '100%', paddingBottom: 10, paddingTop: 4 }}>
         <FormProvider {...methods}>
           <form onSubmit={methods.handleSubmit(submit)} style={{ width: '100%' }}>
-            <FlexBox sx={{ flexDirection: 'column', rowGap: 2, width: '100%' }}>
+            <FlexBox sx={{ flexDirection: 'column', rowGap: 4, width: '100%' }}>
               <Box
                 sx={{
                   width: '100%',
                   display: 'grid',
-                  gridTemplateColumns: '200px auto',
+                  gridTemplateColumns: '175px auto',
                   gridTemplateRows: '200px',
                 }}
               >
@@ -318,7 +282,7 @@ export default function TuningWrite(props: dataTextInputIntf) {
                 sx={{
                   width: '100%',
                   display: 'grid',
-                  gridTemplateColumns: '200px auto',
+                  gridTemplateColumns: '175px auto',
                   gridTemplateRows: '50px',
                 }}
               >
@@ -345,7 +309,7 @@ export default function TuningWrite(props: dataTextInputIntf) {
                 sx={{
                   width: '100%',
                   display: 'grid',
-                  gridTemplateColumns: '200px auto',
+                  gridTemplateColumns: '175px auto',
                   gridTemplateRows: '50px',
                 }}
               >
@@ -373,7 +337,7 @@ export default function TuningWrite(props: dataTextInputIntf) {
                 sx={{
                   width: '100%',
                   display: 'grid',
-                  gridTemplateColumns: '200px auto',
+                  gridTemplateColumns: '175px auto',
                   gridTemplateRows: 'auto',
                 }}
               >
@@ -411,7 +375,7 @@ export default function TuningWrite(props: dataTextInputIntf) {
                 sx={{
                   width: '100%',
                   display: 'grid',
-                  gridTemplateColumns: '200px auto',
+                  gridTemplateColumns: '175px auto',
                   gridTemplateRows: 'auto',
                 }}
               >
@@ -427,7 +391,7 @@ export default function TuningWrite(props: dataTextInputIntf) {
                 sx={{
                   width: '100%',
                   display: 'grid',
-                  gridTemplateColumns: '200px auto',
+                  gridTemplateColumns: '175px auto',
                   gridTemplateRows: 'auto',
                 }}
               >
