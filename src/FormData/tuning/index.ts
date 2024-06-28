@@ -15,7 +15,7 @@ export const tuningEditSchema = z.object({
   creator: z.optional(z.string()), // 튜닝 제작자
 
   tags: z.array(tagWrite), // 튜닝 태그
-
+  pi: z.optional(z.number().min(100).max(999)),
   performance: tuningPerformance, // 성능 레이더 차트
   testReadings: tuningTestReading, // 성능 지표
   tuningMajorParts: tuningMajorParts,
@@ -29,6 +29,7 @@ export const tuningEditSchemaDefault: TuningEditSchema = {
   creator: undefined, // 튜닝 제작자
 
   tags: [], // 튜닝 태그
+  pi: 800,
   performance: tuningPerformanceDefault,
   testReadings: tuningTestReadingDefault,
   tuningMajorParts: tuningMajorPartsDefault,
@@ -44,7 +45,7 @@ export const tuningSchemaType = z.object({
   creator: z.string(), // 데칼 제작자
 
   tags: z.array(tagWrite), // 튜닝 태그
-
+  pi: z.number(), // PI 성능 - 클래스는 값 범위에 따라서 보여줌
   performance: tuningPerformance, // 성능 레이더 차트
   testReadings: tuningTestReading, // 성능 지표
   tuningMajorParts: tuningMajorParts, // 튜닝 주요 부품 - 서스펜션, 타이어, AWD/RWD/FWD
