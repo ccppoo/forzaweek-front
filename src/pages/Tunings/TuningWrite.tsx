@@ -34,6 +34,7 @@ import { TAGS } from '@/data/tags';
 import type { TagSchemaTypeExtended } from '@/data/tags';
 
 import DetailedTuningTabs from './DetailedTuningTabs';
+import TuningPI from './TuningPI';
 import TuningPerformance from './TuningPerformance';
 
 interface dataTextInputIntf {
@@ -368,6 +369,22 @@ export default function TuningWrite(props: dataTextInputIntf) {
                       </FlexBox>
                     )}
                   </Paper>
+                </FlexBox>
+              </Box>
+              {/* 3. 튜닝 성능 입력(PI) */}
+              <Box
+                sx={{
+                  width: '100%',
+                  display: 'grid',
+                  gridTemplateColumns: '175px auto',
+                  gridTemplateRows: 'auto',
+                }}
+              >
+                <FlexBox>
+                  <Typography>Tuning PI</Typography>
+                </FlexBox>
+                <FlexBox sx={{ width: '100%', height: '100%', columnGap: 2 }}>
+                  <TuningPI />
                 </FlexBox>
               </Box>
               {/* 4. 튜닝 성능 입력 */}
