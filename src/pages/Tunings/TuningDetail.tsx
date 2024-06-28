@@ -44,10 +44,10 @@ export default function TuningDetail() {
         >
           {/* 튜닝 태그, 게시자, 공유 코드 */}
           <TuningInfo tuning={tunings[0]} />
-          {/* 튜닝 레이더 차트랑 성능 표 */}
-          <RadarChartAndPerformance tuning={tunings[0]} />
           {/* 튜닝에 사용된 차 간단 정보 */}
           <BriefCarInfo />
+          {/* 튜닝 레이더 차트랑 성능 표 */}
+          <RadarChartAndPerformance tuning={tunings[0]} />
           <Divider flexItem variant="fullWidth" />
           {/* 댓글 */}
           <Comments />

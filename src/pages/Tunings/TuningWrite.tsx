@@ -348,7 +348,7 @@ export default function TuningWrite(props: dataTextInputIntf) {
                 <FlexBox sx={{ width: '100%', flexDirection: 'column', rowGap: 1 }}>
                   <TagSearchTextFeild />
                   <Paper
-                    sx={{ backgroundColor: 'EEEEEE', paddingX: 1, paddingY: 1, minHeight: 48 }}
+                    sx={{ backgroundColor: 'EEEEEE', paddingX: 1, paddingY: 1, minHeight: 96 }}
                   >
                     {tagsAdded.length > 0 ? (
                       <FlexBox sx={{ flexWrap: 'wrap', columnGap: 1, rowGap: 1 }}>
@@ -361,7 +361,7 @@ export default function TuningWrite(props: dataTextInputIntf) {
                         ))}
                       </FlexBox>
                     ) : (
-                      <FlexBox sx={{ alignItems: 'center', height: '100%' }}>
+                      <FlexBox sx={{ alignItems: 'center', height: '100%', paddingLeft: 1 }}>
                         <Typography fontWeight={300}>
                           Add tags that could describe this decal
                         </Typography>
