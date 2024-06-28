@@ -16,7 +16,7 @@ import {
   Paper,
   Typography,
 } from '@mui/material';
-import Container from '@mui/material/Container';
+import FormControl from '@mui/material/FormControl';
 import Slider from '@mui/material/Slider';
 import TextField from '@mui/material/TextField';
 
@@ -26,11 +26,6 @@ import { getPrecision } from '@/utils/math';
 
 import { chartOptions } from './charOption';
 
-type TestReading = {
-  name: string;
-  value: number | null;
-  unit?: string;
-};
 interface SliderValueProp {
   name: string;
   min: number;
@@ -40,38 +35,6 @@ interface SliderValueProp {
   minMaxReverse?: boolean;
   unitChar?: string;
 }
-const testReadings: TestReading[] = [
-  {
-    name: '최고속도',
-    value: 298.5,
-    unit: 'km/h',
-  },
-  {
-    name: '0-100km/h',
-    value: 5.671,
-    unit: '초',
-  },
-  {
-    name: '출력',
-    value: 665,
-    unit: 'ps',
-  },
-  {
-    name: '토크',
-    value: 70,
-    unit: 'kg·m',
-  },
-  {
-    name: '중량',
-    value: 1450,
-    unit: 'kg',
-  },
-  {
-    name: '횡Gs',
-    value: 1.56,
-  },
-];
-const performaceDefault = [4.5, 6.1, 9.1, 7.6, 5.7, 7.7];
 
 const getFormPath: (base: string[], depth: string[]) => FieldName<TuningEditSchema> = (
   base: string[],
@@ -81,7 +44,7 @@ const getFormPath: (base: string[], depth: string[]) => FieldName<TuningEditSche
 function SliderValue(props: SliderValueProp) {
   const { name, min, max, unitChar, minMaxReverse, step, formPath } = props;
 
-  const { control, watch, getValues, setValue } = useFormContext<TuningEditSchema>();
+  const { getValues, setValue } = useFormContext<TuningEditSchema>();
 
   const sliderMin = min;
   const sliderMax = max;
@@ -125,6 +88,7 @@ function SliderValue(props: SliderValueProp) {
         minHeight: 60,
         height: '100%',
         gridTemplateColumns: '125px 1fr 50px',
+        paddingRight: 1,
       }}
     >
       <FlexBox
@@ -134,7 +98,9 @@ function SliderValue(props: SliderValueProp) {
           paddingX: 1,
         }}
       >
-        <Typography variant="h6">{name}</Typography>
+        <Typography variant="h6" fontSize={18}>
+          {name}
+        </Typography>
       </FlexBox>
       <FlexBox
         sx={{
@@ -276,18 +242,25 @@ function PerformaceChartInput() {
     },
   ];
 
+  const PERFORMANCE_MAX = 10;
+  const PERFORMANCE_MIN = 0;
+  const PERFORMANCE_STEP = 0.1;
+
+  const RADAR_CHART_WIDTH = 500;
+  const RADAR_CHART_HEIGHT = 450;
+
   return (
     <FlexBox sx={{ flexDirection: 'column', rowGap: 2, paddingBottom: 2, height: '100%' }}>
       <FlexBox>
         <Typography variant="h5">Performance</Typography>
       </FlexBox>
-      <FlexBox sx={{ width: '100%', minWidth: 500, height: '100%' }}>
+      <FlexBox sx={{ width: '100%', minWidth: 500, height: '100%' }} component={Paper}>
         <FlexBox sx={{ width: '100%' }}>
           <ReactApexChart
             series={series}
             options={chartOptions}
-            width={500}
-            height={'100%'}
+            width={RADAR_CHART_WIDTH}
+            height={RADAR_CHART_HEIGHT}
             type="radar"
             id={`tuning-detail-radar-chart-${1}`}
           />
@@ -303,9 +276,9 @@ function PerformaceChartInput() {
             {performanceTraits.map((trait, idx) => {
               return (
                 <SliderValue
-                  min={0}
-                  max={10}
-                  step={0.1}
+                  min={PERFORMANCE_MIN}
+                  max={PERFORMANCE_MAX}
+                  step={PERFORMANCE_STEP}
                   name={trait}
                   formPath={getFormPath(formPathBase, [trait])}
                   key={`tuning-performance-input-slide-${trait}`}
@@ -319,9 +292,485 @@ function PerformaceChartInput() {
   );
 }
 
-function TestReadingInput() {
-  const { control, watch } = useFormContext();
+function TestReadingMaxSpeed() {
+  const { control, watch, getValues, formState } = useFormContext<TuningEditSchema>();
 
+  const formPathUnit = `testReadings.maxspeed.unit`;
+  const formPathValue = `testReadings.maxspeed.value`;
+  const unitChoiceWidth = 100;
+  const Name = 'Max Speed';
+  const units = ['km/h', 'mph'];
+
+  return (
+    <FlexBox sx={{ columnGap: 2 }}>
+      <FlexBox sx={{ alignItems: 'center', height: '100%', flex: 5, columnGap: 1 }}>
+        <Typography variant="h6" fontWeight={350}>
+          {Name}
+        </Typography>
+      </FlexBox>
+      <FlexBox sx={{ height: '100%', flex: 5, columnGap: 1 }}>
+        <FlexBox
+          sx={{
+            height: '100%',
+            justifyContent: 'end',
+            alignItems: 'center',
+            flex: 5,
+            columnGap: 1,
+          }}
+        >
+          {/* TODO: 입력 숫자 제한(소수점 허용) */}
+          <TextField
+            id="outlined-controlled"
+            size="small"
+            autoComplete="off"
+            defaultValue={getValues(formPathValue) || ''}
+            sx={{ width: 80 }}
+            inputProps={{
+              sx: {
+                textAlign: 'right',
+                '&::placeholder': {
+                  textAlign: 'right',
+                },
+              },
+            }}
+          />
+        </FlexBox>
+        <FlexBox sx={{ height: '100%', alignItems: 'center', flex: 5, columnGap: 1 }}>
+          <FormControl variant="standard" sx={{ width: unitChoiceWidth }}>
+            <TextField
+              select
+              defaultValue={getValues(formPathUnit) || ''}
+              inputProps={control.register(formPathUnit, {
+                required: 'Please select manufacturer',
+              })}
+              error={!!formState.errors.testReadings?.maxspeed?.unit}
+              helperText={!!formState.errors.testReadings?.maxspeed?.message}
+              SelectProps={{
+                MenuProps: { sx: { maxHeight: 250, padding: 0 } },
+                sx: {
+                  '& .MuiSelect-select': {
+                    paddingX: 0,
+                    paddingY: 0.5,
+                  },
+                },
+              }}
+              sx={{ padding: 0 }}
+              size="small"
+            >
+              {units.map((tUnit) => (
+                <MenuItem key={`test-reading-unit-${Name}-unit-${tUnit}`} value={tUnit}>
+                  <FlexBox>
+                    <FlexBox sx={{ alignItems: 'center', paddingX: 2 }}>
+                      <Typography>{tUnit}</Typography>
+                    </FlexBox>
+                  </FlexBox>
+                </MenuItem>
+              ))}
+            </TextField>
+          </FormControl>
+        </FlexBox>
+      </FlexBox>
+    </FlexBox>
+  );
+}
+
+function TestReadingZero100() {
+  const { control, watch, getValues, formState } = useFormContext<TuningEditSchema>();
+
+  const formPathUnit = `testReadings.zero100.unit`;
+  const formPathValue = `testReadings.zero100.value`;
+  const unitChoiceWidth = 100;
+  const Name = '0-100';
+  const units = ['km/h', 'mph'];
+
+  return (
+    <FlexBox sx={{ columnGap: 2 }}>
+      <FlexBox sx={{ alignItems: 'center', height: '100%', flex: 5, columnGap: 1 }}>
+        <Typography variant="h6" fontWeight={350}>
+          {Name}
+        </Typography>
+        <FormControl variant="standard" sx={{ width: unitChoiceWidth }}>
+          <TextField
+            select
+            defaultValue={getValues(formPathUnit) || ''}
+            inputProps={control.register(formPathUnit, {
+              required: 'Please select manufacturer',
+            })}
+            error={!!formState.errors.testReadings?.maxspeed?.unit}
+            helperText={!!formState.errors.testReadings?.maxspeed?.message}
+            SelectProps={{
+              MenuProps: { sx: { maxHeight: 250, padding: 0 } },
+              sx: {
+                '& .MuiSelect-select': {
+                  paddingX: 0,
+                  paddingY: 0.5,
+                },
+              },
+            }}
+            sx={{ padding: 0 }}
+            fullWidth
+            size="small"
+          >
+            {units.map((tUnit) => (
+              <MenuItem key={`test-reading-unit-${Name}-unit-${tUnit}`} value={tUnit}>
+                <FlexBox>
+                  <FlexBox sx={{ alignItems: 'center', paddingX: 2 }}>
+                    <Typography>{tUnit}</Typography>
+                  </FlexBox>
+                </FlexBox>
+              </MenuItem>
+            ))}
+          </TextField>
+        </FormControl>
+      </FlexBox>
+      <FlexBox sx={{ alignItems: 'center', height: '100%', flex: 5, columnGap: 1 }}>
+        <FlexBox
+          sx={{
+            height: '100%',
+            justifyContent: 'end',
+            alignItems: 'center',
+            flex: 5,
+            columnGap: 1,
+          }}
+        >
+          {/* TODO: 입력 숫자 제한(소수점 허용) */}
+          <TextField
+            id="outlined-controlled"
+            size="small"
+            autoComplete="off"
+            defaultValue={getValues(formPathValue) || ''}
+            sx={{ width: 80 }}
+            inputProps={{
+              sx: {
+                textAlign: 'right',
+                '&::placeholder': {
+                  textAlign: 'right',
+                },
+              },
+            }}
+          />
+        </FlexBox>
+        <FlexBox sx={{ height: '100%', alignItems: 'center', flex: 5, columnGap: 1 }}>
+          <Typography>seconds</Typography>
+        </FlexBox>
+      </FlexBox>
+    </FlexBox>
+  );
+}
+
+function TestReadingOutput() {
+  const { control, watch, getValues, formState } = useFormContext<TuningEditSchema>();
+
+  const formPathUnit = `testReadings.output.unit`;
+  const formPathValue = `testReadings.output.value`;
+  const unitChoiceWidth = 100;
+  const Name = 'Output';
+  const units = ['ps', 'hp'];
+
+  return (
+    <FlexBox sx={{ columnGap: 2 }}>
+      <FlexBox sx={{ alignItems: 'center', height: '100%', flex: 5, columnGap: 1 }}>
+        <Typography variant="h6" fontWeight={350}>
+          {Name}
+        </Typography>
+      </FlexBox>
+      <FlexBox sx={{ height: '100%', flex: 5, columnGap: 1 }}>
+        <FlexBox
+          sx={{
+            height: '100%',
+            justifyContent: 'end',
+            alignItems: 'center',
+            flex: 5,
+            columnGap: 1,
+          }}
+        >
+          {/* TODO: 입력 숫자 제한(소수점 허용) */}
+          <TextField
+            id="outlined-controlled"
+            size="small"
+            autoComplete="off"
+            defaultValue={getValues(formPathValue) || ''}
+            sx={{ width: 80 }}
+            inputProps={{
+              sx: {
+                textAlign: 'right',
+                '&::placeholder': {
+                  textAlign: 'right',
+                },
+              },
+            }}
+          />
+        </FlexBox>
+        <FlexBox sx={{ height: '100%', alignItems: 'center', flex: 5, columnGap: 1 }}>
+          <FormControl variant="standard" sx={{ width: unitChoiceWidth }}>
+            <TextField
+              select
+              defaultValue={getValues(formPathUnit) || ''}
+              inputProps={control.register(formPathUnit, {
+                required: 'Please select manufacturer',
+              })}
+              error={!!formState.errors.testReadings?.maxspeed?.unit}
+              helperText={!!formState.errors.testReadings?.maxspeed?.message}
+              SelectProps={{
+                MenuProps: { sx: { maxHeight: 250, padding: 0 } },
+                sx: {
+                  '& .MuiSelect-select': {
+                    paddingX: 0,
+                    paddingY: 0.5,
+                  },
+                },
+              }}
+              sx={{ padding: 0 }}
+              fullWidth
+              size="small"
+            >
+              {units.map((tUnit) => (
+                <MenuItem key={`test-reading-unit-${Name}-unit-${tUnit}`} value={tUnit}>
+                  <FlexBox>
+                    <FlexBox sx={{ alignItems: 'center', paddingX: 2 }}>
+                      <Typography>{tUnit}</Typography>
+                    </FlexBox>
+                  </FlexBox>
+                </MenuItem>
+              ))}
+            </TextField>
+          </FormControl>
+        </FlexBox>
+      </FlexBox>
+    </FlexBox>
+  );
+}
+
+function TestReadingTork() {
+  const { control, watch, getValues, formState } = useFormContext<TuningEditSchema>();
+
+  const formPathUnit = `testReadings.tork.unit`;
+  const formPathValue = `testReadings.tork.value`;
+  const unitChoiceWidth = 100;
+  const Name = 'Tork';
+  const units = ['kg·m'];
+
+  return (
+    <FlexBox sx={{ columnGap: 2 }}>
+      <FlexBox sx={{ alignItems: 'center', height: '100%', flex: 5, columnGap: 1 }}>
+        <Typography variant="h6" fontWeight={350}>
+          {Name}
+        </Typography>
+      </FlexBox>
+      <FlexBox sx={{ height: '100%', flex: 5, columnGap: 1 }}>
+        {/* TODO: 입력 숫자 제한(소수점 허용) */}
+        <FlexBox sx={{ height: '100%', alignItems: 'center', justifyContent: 'end', flex: 5 }}>
+          <TextField
+            id="outlined-controlled"
+            size="small"
+            autoComplete="off"
+            defaultValue={getValues(formPathValue) || ''}
+            sx={{ width: 80 }}
+            inputProps={{
+              sx: {
+                textAlign: 'right',
+                '&::placeholder': {
+                  textAlign: 'right',
+                },
+              },
+            }}
+          />
+        </FlexBox>
+        <FlexBox sx={{ height: '100%', alignItems: 'center', flex: 5 }}>
+          <FormControl variant="standard" sx={{ width: unitChoiceWidth }}>
+            <TextField
+              select
+              defaultValue={getValues(formPathUnit) || ''}
+              inputProps={control.register(formPathUnit, {
+                required: 'Please select manufacturer',
+              })}
+              error={!!formState.errors.testReadings?.maxspeed?.unit}
+              helperText={!!formState.errors.testReadings?.maxspeed?.message}
+              SelectProps={{
+                MenuProps: { sx: { maxHeight: 250, padding: 0 } },
+                sx: {
+                  '& .MuiSelect-select': {
+                    paddingX: 0,
+                    paddingY: 0.5,
+                  },
+                },
+              }}
+              sx={{ padding: 0 }}
+              fullWidth
+              size="small"
+            >
+              {units.map((tUnit) => (
+                <MenuItem key={`test-reading-unit-${Name}-unit-${tUnit}`} value={tUnit}>
+                  <FlexBox>
+                    <FlexBox sx={{ alignItems: 'center', paddingX: 2 }}>
+                      <Typography>{tUnit}</Typography>
+                    </FlexBox>
+                  </FlexBox>
+                </MenuItem>
+              ))}
+            </TextField>
+          </FormControl>
+        </FlexBox>
+      </FlexBox>
+    </FlexBox>
+  );
+}
+
+function TestReadingWeight() {
+  const { control, watch, getValues, formState } = useFormContext<TuningEditSchema>();
+
+  const formPathUnit = `testReadings.weight.unit`;
+  const formPathValue = `testReadings.weight.value`;
+  const unitChoiceWidth = 100;
+  const Name = 'Weight';
+  const units = ['kg', 'lb'];
+
+  return (
+    <FlexBox sx={{ columnGap: 2 }}>
+      <FlexBox sx={{ alignItems: 'center', height: '100%', flex: 5, columnGap: 1 }}>
+        <Typography variant="h6" fontWeight={350}>
+          {Name}
+        </Typography>
+      </FlexBox>
+      <FlexBox sx={{ height: '100%', flex: 5, columnGap: 1 }}>
+        {/* TODO: 입력 숫자 제한(소수점 허용) */}
+        <FlexBox sx={{ height: '100%', alignItems: 'center', justifyContent: 'end', flex: 5 }}>
+          <TextField
+            id="outlined-controlled"
+            size="small"
+            autoComplete="off"
+            defaultValue={getValues(formPathValue) || ''}
+            sx={{ width: 80 }}
+            inputProps={{
+              sx: {
+                textAlign: 'right',
+                '&::placeholder': {
+                  textAlign: 'right',
+                },
+              },
+            }}
+          />
+        </FlexBox>
+        <FlexBox sx={{ height: '100%', alignItems: 'center', flex: 5 }}>
+          <FormControl variant="standard" sx={{ width: unitChoiceWidth }}>
+            <TextField
+              select
+              defaultValue={getValues(formPathUnit) || ''}
+              inputProps={control.register(formPathUnit, {
+                required: 'Please select manufacturer',
+              })}
+              error={!!formState.errors.testReadings?.maxspeed?.unit}
+              helperText={!!formState.errors.testReadings?.maxspeed?.message}
+              SelectProps={{
+                MenuProps: { sx: { maxHeight: 250, padding: 0 } },
+                sx: {
+                  '& .MuiSelect-select': {
+                    paddingX: 0,
+                    paddingY: 0.5,
+                  },
+                },
+              }}
+              sx={{ padding: 0 }}
+              fullWidth
+              size="small"
+            >
+              {units.map((tUnit) => (
+                <MenuItem key={`test-reading-unit-${Name}-unit-${tUnit}`} value={tUnit}>
+                  <FlexBox>
+                    <FlexBox sx={{ alignItems: 'center', paddingX: 2 }}>
+                      <Typography>{tUnit}</Typography>
+                    </FlexBox>
+                  </FlexBox>
+                </MenuItem>
+              ))}
+            </TextField>
+          </FormControl>
+        </FlexBox>
+      </FlexBox>
+    </FlexBox>
+  );
+}
+
+function TestReadingSkidPad() {
+  const { control, watch, getValues, formState } = useFormContext<TuningEditSchema>();
+
+  const formPathUnit = `testReadings.skid_pad.unit`;
+  const formPathValue = `testReadings.skid_pad.value`;
+  const unitChoiceWidth = 100;
+  const Name = 'Skid pad';
+  const units = ['Gs'];
+
+  return (
+    <FlexBox sx={{ columnGap: 2 }}>
+      <FlexBox sx={{ alignItems: 'center', height: '100%', flex: 5, columnGap: 1 }}>
+        <Typography variant="h6" fontWeight={350}>
+          {Name}
+        </Typography>
+      </FlexBox>
+      <FlexBox sx={{ height: '100%', flex: 5, columnGap: 1 }}>
+        {/* TODO: 입력 숫자 제한(소수점 허용) */}
+        <FlexBox sx={{ height: '100%', alignItems: 'center', justifyContent: 'end', flex: 5 }}>
+          <TextField
+            id="outlined-controlled"
+            size="small"
+            autoComplete="off"
+            defaultValue={getValues(formPathValue) || ''}
+            sx={{ width: 80 }}
+            inputProps={{
+              sx: {
+                textAlign: 'right',
+                '&::placeholder': {
+                  textAlign: 'right',
+                },
+              },
+            }}
+          />
+        </FlexBox>
+        <FlexBox sx={{ height: '100%', alignItems: 'center', flex: 5 }}>
+          {units.length > 1 ? (
+            <FormControl variant="standard" sx={{ width: unitChoiceWidth }}>
+              <TextField
+                select
+                defaultValue={getValues(formPathUnit) || ''}
+                inputProps={control.register(formPathUnit, {
+                  required: 'Please select manufacturer',
+                })}
+                error={!!formState.errors.testReadings?.maxspeed?.unit}
+                helperText={!!formState.errors.testReadings?.maxspeed?.message}
+                SelectProps={{
+                  MenuProps: { sx: { maxHeight: 250, padding: 0 } },
+                  sx: {
+                    '& .MuiSelect-select': {
+                      paddingX: 0,
+                      paddingY: 0.5,
+                    },
+                  },
+                }}
+                sx={{ padding: 0 }}
+                fullWidth
+                size="small"
+              >
+                {units.map((tUnit) => (
+                  <MenuItem key={`test-reading-unit-${Name}-unit-${tUnit}`} value={tUnit}>
+                    <FlexBox>
+                      <FlexBox sx={{ alignItems: 'center', paddingX: 2 }}>
+                        <Typography>{tUnit}</Typography>
+                      </FlexBox>
+                    </FlexBox>
+                  </MenuItem>
+                ))}
+              </TextField>
+            </FormControl>
+          ) : (
+            <Typography>{units[0]}</Typography>
+          )}
+        </FlexBox>
+      </FlexBox>
+    </FlexBox>
+  );
+}
+
+function TestReadingInput() {
   return (
     <FlexBox sx={{ flexDirection: 'column', rowGap: 2 }}>
       <FlexBox>
@@ -331,41 +780,200 @@ function TestReadingInput() {
         sx={{
           display: 'grid',
           width: '100%',
-          gridTemplateColumns: '1fr 1fr 1fr',
-          gridTemplateRows: 'repeat(2, 50px)',
+          gridTemplateColumns: '1fr 1fr',
+          gridTemplateRows: 'repeat(3, 80px)',
+          rowGap: 1,
+          columnGap: 10,
+          paddingX: 1,
         }}
+        component={Paper}
       >
-        {testReadings.map((reading) => {
-          return (
-            <FlexBox key={`test-reading-input-${reading.name}`} sx={{ columnGap: 2 }}>
-              <FlexBox sx={{ alignItems: 'center', height: '100%', width: 100 }}>
-                <Typography>{reading.name}</Typography>
-              </FlexBox>
-              <FlexBox sx={{ alignItems: 'center', height: '100%', columnGap: 1 }}>
-                {/* 입력 숫자 제한(소수점 허용) */}
-                <TextField
-                  id="outlined-controlled"
-                  size="small"
-                  autoComplete="off"
-                  sx={{ width: 80 }}
-                  inputProps={{
-                    sx: {
-                      textAlign: 'right',
-                      '&::placeholder': {
-                        textAlign: 'right',
-                      },
-                    },
-                  }}
-                />
-                <Typography>{reading.unit}</Typography>
-              </FlexBox>
-            </FlexBox>
-          );
-        })}
+        <TestReadingMaxSpeed />
+        <TestReadingZero100 />
+        <TestReadingOutput />
+        <TestReadingTork />
+        <TestReadingWeight />
+        <TestReadingSkidPad />
       </Box>
     </FlexBox>
   );
 }
+
+function TuningMajorPartsTier() {
+  const { control, watch, getValues, formState } = useFormContext<TuningEditSchema>();
+
+  const formPathValue = `tuningMajorParts.tier`;
+  const unitChoiceWidth = 150;
+  const Name = 'Tier';
+  const choies = ['normal', 'drift', 'rally', 'offroad', 'drag'];
+
+  return (
+    <FlexBox sx={{ columnGap: 2 }}>
+      <FlexBox sx={{ alignItems: 'center', height: '100%', flex: 4, columnGap: 1 }}>
+        <Typography variant="h6" fontWeight={350}>
+          {Name}
+        </Typography>
+      </FlexBox>
+      <FlexBox sx={{ height: '100%', flex: 5, columnGap: 1 }}>
+        <FlexBox sx={{ height: '100%', alignItems: 'center', flex: 6, columnGap: 1 }}>
+          <FormControl variant="standard" sx={{ width: unitChoiceWidth }}>
+            <TextField
+              select
+              defaultValue={getValues(formPathValue) || ''}
+              inputProps={control.register(formPathValue, {
+                required: 'Please select manufacturer',
+              })}
+              fullWidth
+              error={!!formState.errors.testReadings?.maxspeed?.unit}
+              helperText={!!formState.errors.testReadings?.maxspeed?.message}
+              SelectProps={{
+                MenuProps: { sx: { maxHeight: 350, padding: 0 } },
+              }}
+              sx={{ padding: 0 }}
+              size="small"
+            >
+              {choies.map((choice) => (
+                <MenuItem key={`major-parts-${Name}-${choice}`} value={choice}>
+                  <FlexBox>
+                    <FlexBox sx={{ alignItems: 'center', paddingX: 2, paddingY: 1 }}>
+                      <Typography>{choice}</Typography>
+                    </FlexBox>
+                  </FlexBox>
+                </MenuItem>
+              ))}
+            </TextField>
+          </FormControl>
+        </FlexBox>
+      </FlexBox>
+    </FlexBox>
+  );
+}
+
+function TuningMajorPartsSuspension() {
+  const { control, watch, getValues, formState } = useFormContext<TuningEditSchema>();
+
+  const formPathValue = `tuningMajorParts.suspension`;
+  const unitChoiceWidth = 150;
+  const Name = 'Suspension';
+  const choies = ['normal', 'drift', 'rally', 'offroad', 'speed'];
+
+  return (
+    <FlexBox sx={{ columnGap: 2 }}>
+      <FlexBox sx={{ alignItems: 'center', height: '100%', flex: 4, columnGap: 1 }}>
+        <Typography variant="h6" fontWeight={350}>
+          {Name}
+        </Typography>
+      </FlexBox>
+      <FlexBox sx={{ height: '100%', flex: 5, columnGap: 1 }}>
+        <FlexBox sx={{ height: '100%', alignItems: 'center', flex: 6, columnGap: 1 }}>
+          <FormControl variant="standard" sx={{ width: unitChoiceWidth }}>
+            <TextField
+              select
+              defaultValue={getValues(formPathValue) || ''}
+              inputProps={control.register(formPathValue, {
+                required: 'Please select manufacturer',
+              })}
+              fullWidth
+              error={!!formState.errors.testReadings?.maxspeed?.unit}
+              helperText={!!formState.errors.testReadings?.maxspeed?.message}
+              SelectProps={{
+                MenuProps: { sx: { maxHeight: 350, padding: 0 } },
+              }}
+              sx={{ padding: 0 }}
+              size="small"
+            >
+              {choies.map((choice) => (
+                <MenuItem key={`major-parts-${Name}-${choice}`} value={choice}>
+                  <FlexBox>
+                    <FlexBox sx={{ alignItems: 'center', paddingX: 2, paddingY: 1 }}>
+                      <Typography>{choice}</Typography>
+                    </FlexBox>
+                  </FlexBox>
+                </MenuItem>
+              ))}
+            </TextField>
+          </FormControl>
+        </FlexBox>
+      </FlexBox>
+    </FlexBox>
+  );
+}
+
+function TuningMajorPartsDrivingSystem() {
+  const { control, watch, getValues, formState } = useFormContext<TuningEditSchema>();
+
+  const formPathValue = `tuningMajorParts.drivingSystem`;
+  const unitChoiceWidth = 150;
+  const Name = 'Driving System';
+  const choies = ['AWD', 'RWD', 'FWD'];
+
+  return (
+    <FlexBox sx={{ columnGap: 2 }}>
+      <FlexBox sx={{ alignItems: 'center', height: '100%', flex: 5, columnGap: 1 }}>
+        <Typography variant="h6" fontWeight={350}>
+          {Name}
+        </Typography>
+      </FlexBox>
+      <FlexBox sx={{ height: '100%', flex: 5, columnGap: 1 }}>
+        <FlexBox sx={{ height: '100%', alignItems: 'center', flex: 5, columnGap: 1 }}>
+          <FormControl variant="standard" sx={{ width: unitChoiceWidth }}>
+            <TextField
+              select
+              defaultValue={getValues(formPathValue) || ''}
+              inputProps={control.register(formPathValue, {
+                required: 'Please select manufacturer',
+              })}
+              fullWidth
+              error={!!formState.errors.testReadings?.maxspeed?.unit}
+              helperText={!!formState.errors.testReadings?.maxspeed?.message}
+              SelectProps={{
+                MenuProps: { sx: { maxHeight: 350, padding: 0 } },
+              }}
+              sx={{ padding: 0 }}
+              size="small"
+            >
+              {choies.map((choice) => (
+                <MenuItem key={`major-parts-${Name}-${choice}`} value={choice}>
+                  <FlexBox>
+                    <FlexBox sx={{ alignItems: 'center', paddingX: 2, paddingY: 1 }}>
+                      <Typography>{choice}</Typography>
+                    </FlexBox>
+                  </FlexBox>
+                </MenuItem>
+              ))}
+            </TextField>
+          </FormControl>
+        </FlexBox>
+      </FlexBox>
+    </FlexBox>
+  );
+}
+
+function TuningMajorParts() {
+  return (
+    <FlexBox sx={{ flexDirection: 'column', rowGap: 2 }}>
+      <FlexBox>
+        <Typography variant="h5">Major Parts</Typography>
+      </FlexBox>
+      <Box
+        sx={{
+          display: 'grid',
+          width: '100%',
+          gridTemplateColumns: 'repeat(3, 1fr)',
+          gridTemplateRows: '120px',
+          columnGap: 5,
+          paddingX: 1,
+        }}
+        component={Paper}
+      >
+        <TuningMajorPartsTier />
+        <TuningMajorPartsSuspension />
+        <TuningMajorPartsDrivingSystem />
+      </Box>
+    </FlexBox>
+  );
+}
+
 export default function TuningPerformance() {
   return (
     <FlexBox
@@ -373,6 +981,7 @@ export default function TuningPerformance() {
     >
       <PerformaceChartInput />
       <TestReadingInput />
+      <TuningMajorParts />
     </FlexBox>
   );
 }
