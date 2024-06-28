@@ -27,7 +27,9 @@ import {
   Paper,
   Typography,
 } from '@mui/material';
+import FormControlLabel from '@mui/material/FormControlLabel';
 import Slider from '@mui/material/Slider';
+import Switch from '@mui/material/Switch';
 import Tab from '@mui/material/Tab';
 import TextField from '@mui/material/TextField';
 
@@ -175,7 +177,7 @@ function SliderValue(props: SliderValueProp) {
         width: '100%',
         display: 'grid',
         height: SliderHeight || 60,
-        gridTemplateColumns: '5fr 4fr 1fr',
+        gridTemplateColumns: '5fr 4fr 80px',
       }}
     >
       <FlexBox
@@ -211,9 +213,10 @@ function SliderValue(props: SliderValueProp) {
       </FlexBox>
       <FlexBox
         sx={{
-          width: 100,
+          width: '100%',
           alignItems: 'center',
           justifyContent: 'center',
+          paddingRight: 1,
           columnGap: 1,
         }}
       >
@@ -311,12 +314,32 @@ function TiresOption() {
 
   const formPathBase = ['detailedTuning', 'tiers'];
 
+  const [notMyOption, setNotMyOption] = useState<boolean>(false);
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>, checked: boolean) => {
+    setNotMyOption(!event.target.checked);
+  };
+
   return (
-    <TabPanel value={tuningIndex} sx={{ paddingX: 0 }}>
-      <Paper
-        sx={{ display: 'flex', flexDirection: 'column', width: '100%', height: '100%', rowGap: 2 }}
+    <TabPanel value={tuningIndex} sx={{ paddingX: 0.5 }}>
+      <FlexBox sx={{ width: '100%', justifyContent: 'end', alignItems: 'center' }}>
+        <FormControlLabel
+          // @ts-ignore
+          control={<Switch checked={!notMyOption} onClick={handleChange} color="info" />}
+          label="I have this option activated"
+          sx={{ '& .MuiFormControlLabel-label': { fontWeight: 200 } }}
+        />
+      </FlexBox>
+      <FlexBox
+        sx={{
+          flexDirection: 'column',
+          width: '100%',
+          height: '100%',
+          rowGap: 2,
+          opacity: notMyOption ? 0.4 : 1,
+          pointerEvents: notMyOption ? 'none' : 'auto',
+        }}
       >
-        <Divider />
+        <Divider flexItem />
         <SliderTitle name="Tier Pressure" LeftName={'LOW'} RightName={'HIGH'} unitName={'PSI'} />
         <SliderValue
           name="FRONT"
@@ -332,7 +355,7 @@ function TiresOption() {
           max={55}
           step={0.1}
         />
-      </Paper>
+      </FlexBox>
     </TabPanel>
   );
 }
@@ -350,7 +373,7 @@ function GearingOption() {
   // TODO: gearNumber 바꾼거 -> form 제출할 때 받아서 서버로 보낼 때 array에 있는 값 길이 맞추기
   const [gearNumbers, setGearNumbers] = useState<number>(5);
 
-  const removeGear = () => {
+  const reduceGear = () => {
     setGearNumbers((n) => (n > GEAR_MIN ? n - 1 : n));
     window.scrollBy({ top: -sliderHeight, behavior: 'smooth' });
   };
@@ -360,12 +383,32 @@ function GearingOption() {
   };
   const ordinal = ['1st', '2nd', '3rd'];
 
+  const [notMyOption, setNotMyOption] = useState<boolean>(false);
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>, checked: boolean) => {
+    setNotMyOption(!event.target.checked);
+  };
+
   return (
     <TabPanel value={tuningIndex} sx={{ paddingX: 0 }}>
-      <Paper
-        sx={{ display: 'flex', flexDirection: 'column', width: '100%', height: '100%', rowGap: 2 }}
+      <FlexBox sx={{ width: '100%', justifyContent: 'end', alignItems: 'center' }}>
+        <FormControlLabel
+          // @ts-ignore
+          control={<Switch checked={!notMyOption} onClick={handleChange} color="info" />}
+          label="I have this option activated"
+          sx={{ '& .MuiFormControlLabel-label': { fontWeight: 200 } }}
+        />
+      </FlexBox>
+      <FlexBox
+        sx={{
+          flexDirection: 'column',
+          width: '100%',
+          height: '100%',
+          rowGap: 2,
+          opacity: notMyOption ? 0.4 : 1,
+          pointerEvents: notMyOption ? 'none' : 'auto',
+        }}
       >
-        <Divider />
+        <Divider flexItem />
         <SliderTitle name={tuningIndex} LeftName={'SPEED'} RightName={'ACCELERATION'} />
         <SliderValue
           name="Final Drive"
@@ -399,10 +442,10 @@ function GearingOption() {
             variant="outlined"
             color="error"
             startIcon={<RemoveCircleOutlineOutlinedIcon />}
-            onClick={removeGear}
+            onClick={reduceGear}
             disabled={gearNumbers <= GEAR_MIN}
           >
-            remove gear
+            reduce gear
           </Button>
           <Button
             variant="outlined"
@@ -413,7 +456,7 @@ function GearingOption() {
             add gear
           </Button>
         </FlexBox>
-      </Paper>
+      </FlexBox>
     </TabPanel>
   );
 }
@@ -421,13 +464,31 @@ function AlignmentOption() {
   const tuningIndex: TuningOption = 'Alignment';
 
   const formPathBase = ['detailedTuning', 'alignment'];
-
+  const [notMyOption, setNotMyOption] = useState<boolean>(false);
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>, checked: boolean) => {
+    setNotMyOption(!event.target.checked);
+  };
   return (
     <TabPanel value={tuningIndex} sx={{ paddingX: 0 }}>
-      <Paper
-        sx={{ display: 'flex', flexDirection: 'column', width: '100%', height: '100%', rowGap: 2 }}
+      <FlexBox sx={{ width: '100%', justifyContent: 'end', alignItems: 'center' }}>
+        <FormControlLabel
+          // @ts-ignore
+          control={<Switch checked={!notMyOption} onClick={handleChange} color="info" />}
+          label="I have this option activated"
+          sx={{ '& .MuiFormControlLabel-label': { fontWeight: 200 } }}
+        />
+      </FlexBox>
+      <FlexBox
+        sx={{
+          flexDirection: 'column',
+          width: '100%',
+          height: '100%',
+          rowGap: 2,
+          opacity: notMyOption ? 0.4 : 1,
+          pointerEvents: notMyOption ? 'none' : 'auto',
+        }}
       >
-        <Divider />
+        <Divider flexItem />
         <SliderTitle name={'Camber'} LeftName={'Negative'} RightName={'Positive'} />
         <SliderValue
           name="Front"
@@ -468,20 +529,38 @@ function AlignmentOption() {
           unitChar="°"
           formPath={getFormPath(formPathBase, ['frontCaster', 'angle'])}
         />
-      </Paper>
+      </FlexBox>
     </TabPanel>
   );
 }
 function AntirollBarsOption() {
   const tuningIndex: TuningOption = 'Antiroll Bars';
   const formPathBase = ['detailedTuning', 'antirollBars'];
-
+  const [notMyOption, setNotMyOption] = useState<boolean>(false);
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>, checked: boolean) => {
+    setNotMyOption(!event.target.checked);
+  };
   return (
     <TabPanel value={tuningIndex} sx={{ paddingX: 0 }}>
-      <Paper
-        sx={{ display: 'flex', flexDirection: 'column', width: '100%', height: '100%', rowGap: 2 }}
+      <FlexBox sx={{ width: '100%', justifyContent: 'end', alignItems: 'center' }}>
+        <FormControlLabel
+          // @ts-ignore
+          control={<Switch checked={!notMyOption} onClick={handleChange} color="info" />}
+          label="I have this option activated"
+          sx={{ '& .MuiFormControlLabel-label': { fontWeight: 200 } }}
+        />
+      </FlexBox>
+      <FlexBox
+        sx={{
+          flexDirection: 'column',
+          width: '100%',
+          height: '100%',
+          rowGap: 2,
+          opacity: notMyOption ? 0.4 : 1,
+          pointerEvents: notMyOption ? 'none' : 'auto',
+        }}
       >
-        <Divider />
+        <Divider flexItem />
         <SliderTitle name={'Antiroll Bars'} LeftName={'Soft'} RightName={'Stiff'} />
         <SliderValue
           name="Front"
@@ -497,7 +576,7 @@ function AntirollBarsOption() {
           step={0.01}
           formPath={getFormPath(formPathBase, ['antirollBars', 'rear'])}
         />
-      </Paper>
+      </FlexBox>
     </TabPanel>
   );
 }
@@ -506,14 +585,32 @@ function SpringsOption() {
   const formPathBase = ['detailedTuning', 'springs'];
 
   const unitName = 'LB/IN';
-
+  const [notMyOption, setNotMyOption] = useState<boolean>(false);
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>, checked: boolean) => {
+    setNotMyOption(!event.target.checked);
+  };
   // FIXME: 최소/최대 값이 다름
   return (
     <TabPanel value={tuningIndex} sx={{ paddingX: 0 }}>
-      <Paper
-        sx={{ display: 'flex', flexDirection: 'column', width: '100%', height: '100%', rowGap: 2 }}
+      <FlexBox sx={{ width: '100%', justifyContent: 'end', alignItems: 'center' }}>
+        <FormControlLabel
+          // @ts-ignore
+          control={<Switch checked={!notMyOption} onClick={handleChange} color="info" />}
+          label="I have this option activated"
+          sx={{ '& .MuiFormControlLabel-label': { fontWeight: 200 } }}
+        />
+      </FlexBox>
+      <FlexBox
+        sx={{
+          flexDirection: 'column',
+          width: '100%',
+          height: '100%',
+          rowGap: 2,
+          opacity: notMyOption ? 0.4 : 1,
+          pointerEvents: notMyOption ? 'none' : 'auto',
+        }}
       >
-        <Divider />
+        <Divider flexItem />
         <SliderTitle name={'Springs'} LeftName={'Soft'} RightName={'Stiff'} unitName="LB/IN" />
         <SliderValue
           name="Front"
@@ -548,18 +645,36 @@ function SpringsOption() {
           unitChar="IN"
           formPath={getFormPath(formPathBase, ['rideHeight', 'rear'])}
         />
-      </Paper>
+      </FlexBox>
     </TabPanel>
   );
 }
 function DampingOption() {
   const tuningIndex: TuningOption = 'Damping';
   const formPathBase = ['detailedTuning', 'damping'];
-
+  const [notMyOption, setNotMyOption] = useState<boolean>(false);
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>, checked: boolean) => {
+    setNotMyOption(!event.target.checked);
+  };
   return (
     <TabPanel value={tuningIndex} sx={{ paddingX: 0 }}>
-      <Paper
-        sx={{ display: 'flex', flexDirection: 'column', width: '100%', height: '100%', rowGap: 2 }}
+      <FlexBox sx={{ width: '100%', justifyContent: 'end', alignItems: 'center' }}>
+        <FormControlLabel
+          // @ts-ignore
+          control={<Switch checked={!notMyOption} onClick={handleChange} color="info" />}
+          label="I have this option activated"
+          sx={{ '& .MuiFormControlLabel-label': { fontWeight: 200 } }}
+        />
+      </FlexBox>
+      <FlexBox
+        sx={{
+          flexDirection: 'column',
+          width: '100%',
+          height: '100%',
+          rowGap: 2,
+          opacity: notMyOption ? 0.4 : 1,
+          pointerEvents: notMyOption ? 'none' : 'auto',
+        }}
       >
         <Divider flexItem />
         <SliderTitle name={'Rebound Stiffness'} LeftName={'Soft'} RightName={'Stiff'} />
@@ -592,7 +707,7 @@ function DampingOption() {
           step={0.1}
           formPath={getFormPath(formPathBase, ['bumpStiffness', 'rear'])}
         />
-      </Paper>
+      </FlexBox>
     </TabPanel>
   );
 }
@@ -600,13 +715,31 @@ function AeroOption() {
   const tuningIndex: TuningOption = 'Aero';
   // FIXME: 최소/최대 값이 다름
   const formPathBase = ['detailedTuning', 'aero'];
-
+  const [notMyOption, setNotMyOption] = useState<boolean>(false);
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>, checked: boolean) => {
+    setNotMyOption(!event.target.checked);
+  };
   return (
     <TabPanel value={tuningIndex} sx={{ paddingX: 0 }}>
-      <Paper
-        sx={{ display: 'flex', flexDirection: 'column', width: '100%', height: '100%', rowGap: 2 }}
+      <FlexBox sx={{ width: '100%', justifyContent: 'end', alignItems: 'center' }}>
+        <FormControlLabel
+          // @ts-ignore
+          control={<Switch checked={!notMyOption} onClick={handleChange} color="info" />}
+          label="I have this option activated"
+          sx={{ '& .MuiFormControlLabel-label': { fontWeight: 200 } }}
+        />
+      </FlexBox>
+      <FlexBox
+        sx={{
+          flexDirection: 'column',
+          width: '100%',
+          height: '100%',
+          rowGap: 2,
+          opacity: notMyOption ? 0.4 : 1,
+          pointerEvents: notMyOption ? 'none' : 'auto',
+        }}
       >
-        <Divider />
+        <Divider flexItem />
         <SliderTitle name={'Downforce'} LeftName={'Speed'} RightName={'Cornering'} unitName="LB" />
         <SliderValue
           name="Front"
@@ -624,20 +757,38 @@ function AeroOption() {
           unitChar="LB"
           formPath={getFormPath(formPathBase, ['downforce', 'rear'])}
         />
-      </Paper>
+      </FlexBox>
     </TabPanel>
   );
 }
 function BrakeOption() {
   const tuningIndex: TuningOption = 'Brake';
   const formPathBase = ['detailedTuning', 'brake'];
-
+  const [notMyOption, setNotMyOption] = useState<boolean>(false);
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>, checked: boolean) => {
+    setNotMyOption(!event.target.checked);
+  };
   return (
     <TabPanel value={tuningIndex} sx={{ paddingX: 0 }}>
-      <Paper
-        sx={{ display: 'flex', flexDirection: 'column', width: '100%', height: '100%', rowGap: 2 }}
+      <FlexBox sx={{ width: '100%', justifyContent: 'end', alignItems: 'center' }}>
+        <FormControlLabel
+          // @ts-ignore
+          control={<Switch checked={!notMyOption} onClick={handleChange} color="info" />}
+          label="I have this option activated"
+          sx={{ '& .MuiFormControlLabel-label': { fontWeight: 200 } }}
+        />
+      </FlexBox>
+      <FlexBox
+        sx={{
+          flexDirection: 'column',
+          width: '100%',
+          height: '100%',
+          rowGap: 2,
+          opacity: notMyOption ? 0.4 : 1,
+          pointerEvents: notMyOption ? 'none' : 'auto',
+        }}
       >
-        <Divider />
+        <Divider flexItem />
         <SliderTitle name={'Braking Force'} LeftName={'Front'} RightName={'Rear'} />
         {/* TODO: 역순 */}
         <SliderValue
@@ -659,20 +810,38 @@ function BrakeOption() {
           step={1}
           formPath={getFormPath(formPathBase, ['breakingForce', 'pressure'])}
         />
-      </Paper>
+      </FlexBox>
     </TabPanel>
   );
 }
 function DirffrentialOption() {
   const tuningIndex: TuningOption = 'Dirffrential';
   const formPathBase = ['detailedTuning', 'diffrential'];
-
+  const [notMyOption, setNotMyOption] = useState<boolean>(false);
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>, checked: boolean) => {
+    setNotMyOption(!event.target.checked);
+  };
   return (
     <TabPanel value={tuningIndex} sx={{ paddingX: 0 }}>
-      <Paper
-        sx={{ display: 'flex', flexDirection: 'column', width: '100%', height: '100%', rowGap: 2 }}
+      <FlexBox sx={{ width: '100%', justifyContent: 'end', alignItems: 'center' }}>
+        <FormControlLabel
+          // @ts-ignore
+          control={<Switch checked={!notMyOption} onClick={handleChange} color="info" />}
+          label="I have this option activated"
+          sx={{ '& .MuiFormControlLabel-label': { fontWeight: 200 } }}
+        />
+      </FlexBox>
+      <FlexBox
+        sx={{
+          flexDirection: 'column',
+          width: '100%',
+          height: '100%',
+          rowGap: 2,
+          opacity: notMyOption ? 0.4 : 1,
+          pointerEvents: notMyOption ? 'none' : 'auto',
+        }}
       >
-        <Divider />
+        <Divider flexItem />
         <SliderTitle name={'Rear'} LeftName={'Low'} RightName={'High'} />
         <SliderValue
           name="Acceleration"
@@ -690,7 +859,7 @@ function DirffrentialOption() {
           step={1}
           formPath={getFormPath(formPathBase, ['rear', 'deceleration'])}
         />
-      </Paper>
+      </FlexBox>
     </TabPanel>
   );
 }
@@ -701,9 +870,10 @@ export default function DetailedTuningTabs() {
   const changeTuningTabIndex = (event: SyntheticEvent, index: TuningOption) => {
     setTuningTab(index);
   };
-
+  // TODO: 튜닝에 해당 없을 경우(~단 기어 추가 옵션) disable하기
+  // disable된 튜닝 Tab 페이지는 서버로 보낼 때, 지우고 보내기
   return (
-    <Box sx={{ width: '100%', height: '100%', typography: 'body1' }}>
+    <Box sx={{ width: '100%', height: '100%', typography: 'body1' }} component={Paper}>
       <TabContext value={tuningTab}>
         <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
           <TabList onChange={changeTuningTabIndex} aria-label="tabs">
