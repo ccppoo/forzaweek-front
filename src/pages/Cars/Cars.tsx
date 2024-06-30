@@ -58,7 +58,10 @@ export default function Cars() {
             const imgSrc = manufacturer2[manfuactre.toLowerCase().replace(' ', '_')];
 
             return (
-              <FlexBox sx={{ flexDirection: 'column', width: '100%', paddingTop: 2 }}>
+              <FlexBox
+                sx={{ flexDirection: 'column', width: '100%', paddingTop: 2 }}
+                key={`search-manufacturer-${manfuactre}`}
+              >
                 <FlexBox sx={{ height: 40, alignItems: 'center', paddingBottom: 1, columnGap: 2 }}>
                   <Image
                     src={imgSrc}
