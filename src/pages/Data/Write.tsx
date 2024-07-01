@@ -43,7 +43,6 @@ function WriteData() {
     nation: <Forms.NationForm />,
     manufacturer: <Forms.ManufacturerForm />,
     car: <Forms.CarForm />,
-    decal: <Forms.DecalForm />,
     tag: <Forms.TagForm />,
   };
 

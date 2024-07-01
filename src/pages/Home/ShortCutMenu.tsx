@@ -79,7 +79,7 @@ export default function ShortCutMenu() {
   return (
     <FlexBox sx={{ width: '100%', justifyContent: 'center', paddingTop: 1, columnGap: 1 }}>
       {MenuItems.map(({ name, path, icon }) => (
-        <MenuButton name={name} path={path} Icon={icon} />
+        <MenuButton name={name} path={path} Icon={icon} key={`short-cut-menu-${name}-${path}`} />
       ))}
     </FlexBox>
   );
