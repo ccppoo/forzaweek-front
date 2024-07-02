@@ -4,6 +4,7 @@ import { supportLangs } from '@/config/i18n';
 
 import { i18nTextFieldSchema } from './i18n';
 import { manufacturerSchemaType } from './manufacturer';
+import { _FH5PerformanceSchemaType, tuningPerformance } from './tuning/performance';
 
 // NOTE: 시리즈 추가 지원시 필드 항목에 추가 (FM : ..., FH4 : ...,)
 const FH5CarMetaSchema = z.object({
@@ -40,7 +41,13 @@ export const carEditSchema = z.object({
   bodyStyle: z.optional(z.string()), // 세단, 헤치백, 등
   door: z.optional(z.number().gte(0)), // 문 숫자
 
-  fh5_meta: z.optional(FH5CarMetaSchema), // 희귀도, 가격, 부스트
+  fh5: z.optional(
+    z.object({
+      meta: FH5CarMetaSchema,
+      performance: tuningPerformance,
+      pi: z.number().min(100).max(999),
+    }),
+  ),
 });
 
 export const carSchemaType = z.object({
@@ -61,7 +68,14 @@ export const carSchemaType = z.object({
   bodyStyle: z.string(), // 세단, 헤치백, 등
   door: z.number().gte(0), // 문 숫자
 
-  fh5_meta: _FH5CarMetaSchemaType, // 희귀도, 가격, 부스트
+  // 불러오는 차가 FH4 전용일 수 있으므로 optional이여야 함
+  fh5: z.optional(
+    z.object({
+      meta: _FH5CarMetaSchemaType,
+      performance: _FH5PerformanceSchemaType,
+      pi: z.number().min(100).max(999),
+    }),
+  ),
 });
 export type CarSchemaType = z.infer<typeof carSchemaType>;
 
@@ -87,10 +101,21 @@ export const carEditSchemaDefault: CarEditSchema = {
     return { lang: langDefault, value: '' };
   }),
 
-  fh5_meta: {
-    rarity: undefined,
-    boost: undefined,
-    value: undefined,
-    division: undefined,
+  fh5: {
+    meta: {
+      rarity: undefined,
+      boost: undefined,
+      value: undefined,
+      division: undefined,
+    },
+    performance: {
+      acceleration: 0,
+      braking: 0,
+      handling: 0,
+      launch: 0,
+      offroad: 0,
+      speed: 0,
+    },
+    pi: 700,
   },
 };

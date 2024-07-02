@@ -41,6 +41,15 @@ export const tuningPerformance = z.object({
 
 export type TuningPerformanceType = z.infer<typeof tuningPerformance>;
 
+export const _FH5PerformanceSchemaType = z.object({
+  rarity: z.string(),
+  boost: z.string(),
+  value: z.number().gte(0),
+  division: z.string(),
+});
+
+export type FH5PerformanceSchemaType = z.infer<typeof _FH5PerformanceSchemaType>;
+
 export const tuningPerformanceDefault: TuningPerformanceType = {
   acceleration: 6.0,
   speed: 6.0,

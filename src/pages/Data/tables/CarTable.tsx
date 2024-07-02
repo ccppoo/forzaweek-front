@@ -212,7 +212,7 @@ function CarItemCell({ carData }: { carData: CarSchemaType }) {
           <FlexBox
             sx={{ width: '60%', flexDirection: 'column', paddingX: 2, justifyContent: 'center' }}
           >
-            <CarFH5Meta fh5_meta={carData.fh5_meta} />
+            {carData.fh5 && carData.fh5.meta && <CarFH5Meta fh5_meta={carData.fh5.meta} />}
           </FlexBox>
         </FlexBox>
       </FlexBox>

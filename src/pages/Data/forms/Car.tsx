@@ -1,4 +1,4 @@
-import { ChangeEvent, useEffect, useState } from 'react';
+import { ChangeEvent, FocusEvent, useEffect, useState } from 'react';
 import { Controller, FormProvider, useFieldArray, useForm } from 'react-hook-form';
 import type { SubmitErrorHandler } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
@@ -32,6 +32,7 @@ import { GetAllManufacturer } from '@/api/data/manufacturer';
 import { FlexBox, FullSizeCenteredFlexBox, VisuallyHiddenInput } from '@/components/styled';
 import { Image } from '@/components/styled';
 import { BODY_STYLE, BOOST, DIVISIONS, ENGINE_TYPE, RARITY } from '@/data/values';
+import { get_pi_class, get_pi_color, get_pi_color_by_class } from '@/utils/car';
 
 interface dataTextInputIntf {
   carEditSchema?: CarEditSchema;
@@ -131,7 +132,32 @@ export default function CarForm(props: dataTextInputIntf) {
     setImagePreviews(removed);
   };
 
-  const BoostSelectRequired = watch('fh5_meta.rarity') == 'Forza Edition';
+  const BoostSelectRequired = watch('fh5.meta.rarity') == 'Forza Edition';
+
+  type PerformanceName = 'speed' | 'handling' | 'acceleration' | 'launch' | 'braking' | 'offroad';
+  const perfomnaces: PerformanceName[] = [
+    'speed',
+    'handling',
+    'acceleration',
+    'launch',
+    'braking',
+    'offroad',
+  ];
+
+  const [sliderValue, setSliderValue] = useState<number>(getValues('fh5.pi') as number);
+  const [textValue, setTextValue] = useState<string>(
+    getValues('fh5.pi') ? `${getValues('fh5.pi')}` : '',
+  );
+
+  const PI_CLASS_COLOR = get_pi_color(sliderValue);
+  const PI_CARD_INPUT_HEIGHT = 50;
+
+  const setSliderTextfieldValue = (value: number) => {
+    // console.log(`value : ${value}`);
+    setSliderValue(value);
+    setValue('fh5.pi', value);
+    setTextValue(value.toString());
+  };
 
   if (manufacturerList) {
     // console.log(`manufacturerList : ${JSON.stringify(manufacturerList)}`);
@@ -575,8 +601,8 @@ export default function CarForm(props: dataTextInputIntf) {
                   select
                   fullWidth
                   label="Select"
-                  defaultValue={getValues('fh5_meta.division') || ''}
-                  inputProps={register('fh5_meta.division', {
+                  defaultValue={getValues('fh5.meta.division') || ''}
+                  inputProps={register('fh5.meta.division', {
                     required: 'Please select division',
                   })}
                   error={!!errors.manufacturer}
@@ -611,13 +637,16 @@ export default function CarForm(props: dataTextInputIntf) {
                 sx={{ alignItems: 'center', width: '100%', justifyContent: 'left', columnGap: 2 }}
               >
                 <TextField
-                  {...register(`fh5_meta.value`, { required: true })}
+                  {...register(`fh5.meta.value`, { required: true })}
                   defaultValue={''}
                   size="small"
                   fullWidth
-                  error={errors.fh5_meta && !!errors.fh5_meta?.value}
+                  error={errors.fh5 && errors.fh5.meta && !!errors.fh5.meta?.value}
                   helperText={
-                    errors.fh5_meta && !!errors.fh5_meta?.value && 'you must provide value'
+                    errors.fh5 &&
+                    errors.fh5.meta &&
+                    !!errors.fh5.meta?.value &&
+                    'you must provide value'
                   }
                 />
                 <Typography>CR</Typography>
@@ -636,12 +665,12 @@ export default function CarForm(props: dataTextInputIntf) {
                   select
                   fullWidth
                   label="Select"
-                  defaultValue={getValues('fh5_meta.rarity') || 'Common'}
-                  inputProps={register('fh5_meta.rarity', {
+                  defaultValue={getValues('fh5.meta.rarity') || 'Common'}
+                  inputProps={register('fh5.meta.rarity', {
                     required: 'Please select rarity',
                   })}
-                  error={!!errors.fh5_meta?.rarity}
-                  helperText={!!errors.fh5_meta?.rarity?.message}
+                  error={errors.fh5 && !!errors.fh5.meta?.rarity}
+                  helperText={errors.fh5 && !!errors.fh5.meta?.rarity?.message}
                   SelectProps={{ MenuProps: { sx: { maxHeight: 450 } } }}
                   size="small"
                 >
@@ -674,8 +703,8 @@ export default function CarForm(props: dataTextInputIntf) {
                   fullWidth
                   label="Select"
                   disabled={!BoostSelectRequired}
-                  defaultValue={getValues('fh5_meta.boost') || ''}
-                  inputProps={register('fh5_meta.boost', {
+                  defaultValue={getValues('fh5.meta.boost') || ''}
+                  inputProps={register('fh5.meta.boost', {
                     required: BoostSelectRequired && 'Please select boost',
                   })}
                   error={!!errors.manufacturer}
@@ -698,6 +727,177 @@ export default function CarForm(props: dataTextInputIntf) {
                 </TextField>
               </FlexBox>
             </Box>
+          </Box>
+
+          <FlexBox sx={{ flexDirection: 'column', rowGap: 1, paddingTop: 5 }}>
+            <FlexBox sx={{ alignItems: 'center' }}>
+              <Typography variant="h5" sx={{ fontWeight: 300 }}>
+                Forza Horizon 5 default performance
+              </Typography>
+            </FlexBox>
+          </FlexBox>
+          <FlexBox sx={{ rowGap: 1, paddingY: 1, alignItems: 'center', columnGap: 5 }}>
+            <FlexBox sx={{ justifyContent: 'center', width: '100%' }}>
+              {/* PI Card UI Input */}
+              <FlexBox
+                sx={{
+                  width: '100%',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}
+              >
+                {/* class char */}
+                <FlexBox
+                  sx={{
+                    backgroundColor: PI_CLASS_COLOR,
+                    minWidth: 25,
+                    height: PI_CARD_INPUT_HEIGHT,
+                    aspectRatio: '1/1',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    borderTopLeftRadius: 5,
+                    borderBottomLeftRadius: 5,
+                  }}
+                >
+                  <Typography fontWeight="fontWeightMedium" color="white">
+                    {get_pi_class(sliderValue)}
+                  </Typography>
+                </FlexBox>
+                <FlexBox
+                  sx={{
+                    border: `2px ${PI_CLASS_COLOR} solid`,
+                    backgroundColor: 'white',
+                    borderTopRightRadius: 5,
+                    borderBottomRightRadius: 5,
+                    minWidth: 50,
+                    width: PI_CARD_INPUT_HEIGHT * 1.5,
+                    height: PI_CARD_INPUT_HEIGHT,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}
+                >
+                  <TextField
+                    id="outlined-controlled"
+                    size="small"
+                    autoComplete="off"
+                    value={textValue}
+                    sx={{ width: 80, '& fieldset': { border: 'none' } }}
+                    // fullWidth
+                    inputProps={{
+                      sx: {
+                        textAlign: 'center',
+                        '&::placeholder': {
+                          textAlign: 'center',
+                        },
+                      },
+                    }}
+                    onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                      const originValue = event.target.value;
+                      var value = event.target.value;
+                      // console.log(`start value : ${value}`);
+                      if (typeof value !== 'string') {
+                        setTextValue('');
+                      }
+                      // 숫자 외 제거
+                      if (!value.match(/^[0-9]+$/)) {
+                        const replaced = value.replace(/[^0-9]/g, '');
+                        setTextValue(replaced);
+                        value = replaced;
+                      }
+
+                      // value = replaced;
+                      // 숫자 처리
+                      try {
+                        const sliderVal = Number.parseFloat(value);
+
+                        if (Number.isNaN(sliderVal)) {
+                          // console.log(`sliderVal NaN : ${sliderVal}`);
+                          setSliderValue(0);
+                        }
+                      } catch {
+                        // console.log(`catch`);
+                        // 소수점 입력 시작
+                        if (value.endsWith('.')) {
+                          const num = Number.parseFloat(value.substring(0, -1));
+                          setSliderValue(num);
+                        }
+                      }
+                      setTextValue(value);
+                    }}
+                    onBlur={(e: FocusEvent<HTMLInputElement>) => {
+                      e.stopPropagation();
+                      e.preventDefault();
+                      // 입력 다 마치고 슬라이더 값 업데이트
+                      const completedInput = Number.parseInt(textValue);
+                      if (!Number.isFinite(completedInput)) {
+                        // 이상한 경우 기본값으로
+                        setSliderTextfieldValue(700);
+                      }
+
+                      if (completedInput < 100) {
+                        setSliderTextfieldValue(100);
+                      } else if (completedInput > 999) {
+                        setSliderTextfieldValue(999);
+                      } else {
+                        setSliderTextfieldValue(completedInput);
+                      }
+                      // console.log(`on blur`);
+                    }}
+                  />
+                </FlexBox>
+              </FlexBox>
+            </FlexBox>
+          </FlexBox>
+          <Box
+            sx={{
+              display: 'grid',
+              width: '100%',
+              gridTemplateColumns: '1fr 1fr 1fr',
+              gridTemplateRows: 'repeat(2, 50px)',
+              columnGap: 6,
+              rowGap: 0,
+            }}
+          >
+            {perfomnaces.map((perfName) => (
+              <FlexBox
+                key={`car-default-performnace-input-${perfName}`}
+                sx={{ width: '100%', alignItems: 'center', justifyContent: 'space-between' }}
+              >
+                <FlexBox
+                  sx={{
+                    minWidth: 80,
+                    width: 80,
+                    justifyContent: 'start',
+                    alignItems: 'center',
+                  }}
+                >
+                  <Typography variant="h6" sx={{ fontWeight: 300 }}>
+                    {perfName}
+                  </Typography>
+                </FlexBox>
+
+                <FlexBox sx={{ width: 80 }}>
+                  <TextField
+                    {...register(`fh5.performance.${perfName}`, { required: true })}
+                    defaultValue={''}
+                    // placeholder={!isDefaultLang ? 'optional' : undefined}
+                    size="small"
+                    fullWidth
+                    error={
+                      errors.fh5 && errors.fh5.performance && !!errors.fh5.performance[perfName]
+                    }
+                    inputProps={{
+                      sx: {
+                        textAlign: 'right',
+                        '&::placeholder': {
+                          textAlign: 'right',
+                        },
+                      },
+                    }}
+                  />
+                </FlexBox>
+              </FlexBox>
+            ))}
           </Box>
 
           <FlexBox sx={{ justifyContent: 'end', paddingTop: 2, paddingBottom: 1, columnGap: 2 }}>
