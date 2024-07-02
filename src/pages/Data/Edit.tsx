@@ -1,33 +1,13 @@
 import { ChangeEvent, ReactElement, useEffect, useState } from 'react';
-import { useController } from 'react-hook-form';
-import { Controller, FormProvider, useFieldArray, useForm } from 'react-hook-form';
-import type { SubmitErrorHandler } from 'react-hook-form';
-import { FieldValues, Path, useFormContext } from 'react-hook-form';
 import { Route, Routes, useParams } from 'react-router-dom';
 
-import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
-import FileUploadOutlined from '@mui/icons-material/FileUploadOutlined';
 import { Box, Button, Checkbox, IconButton, List, Paper, Typography } from '@mui/material';
-import { TextFieldProps } from '@mui/material';
 import Container from '@mui/material/Container';
-import MenuItem from '@mui/material/MenuItem';
-import Select, { SelectChangeEvent } from '@mui/material/Select';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import TextField from '@mui/material/TextField';
 
 import { useQuery } from '@tanstack/react-query';
 
-import * as image from '@/image';
-import type { NationEditSchema } from '@/FormData/nation';
-import { nationEditSchemaDefault } from '@/FormData/nation';
 import { GetSchemaForEdit } from '@/api/data/edit';
 import { FlexBox, FullSizeCenteredFlexBox, VisuallyHiddenInput } from '@/components/styled';
-import { Image } from '@/components/styled';
 
 import * as Forms from './forms';
 
@@ -59,12 +39,11 @@ const menus = [
 ];
 
 function EditData() {
-  const DataName = 'nation';
   const { dataType, itemID } = useParams();
   const { data } = useQuery({
     queryKey: [dataType!, { dataType: dataType!, itemID: itemID! }],
     queryFn: GetSchemaForEdit,
-    staleTime: 0,
+    staleTime: 1,
   });
 
   const EditForms: Record<string, (data: any) => ReactElement> = {
@@ -101,7 +80,7 @@ function EditData() {
           >
             {/* 제목 */}
             <FlexBox sx={{ paddingBottom: 3 }}>
-              <Typography variant="h6">{DataName}</Typography>
+              <Typography variant="h6">{dataType}</Typography>
             </FlexBox>
             {/* 데이터 채워야할 본문 */}
             {EditForms[dataType!](data)}
