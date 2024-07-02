@@ -3,3 +3,9 @@ export interface CarImage {
   main: string;
   images: string[];
 }
+
+export interface CarImage2 {
+  id: string;
+  first: string;
+  images: string[];
+}

@@ -1,6 +1,6 @@
 import * as image from '@/image';
 
-import carInfo from './car_data.json';
+// import carInfo from './car_data.json';
 import manyCars from './cars.json';
 import { CarData, CarInfo } from './types';
 
@@ -40,7 +40,7 @@ export const imageMatch: Record<string, string> = {
   'Corvette Stingray Coupe': image.car.chevrolet_corvette,
 };
 
-export const carInfoWithImage: CarData[] = carInfo.map((value) => {
-  const carName: string = value.name;
-  return { info: value, image: imageMatch[carName] };
-});
+// export const carInfoWithImage: CarData[] = carInfo.map((value) => {
+//   const carName: string = value.name;
+//   return { info: value, image: imageMatch[carName] };
+// });
