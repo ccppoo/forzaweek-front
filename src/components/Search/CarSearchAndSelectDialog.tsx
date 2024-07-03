@@ -8,15 +8,17 @@ import AutocompleteCarSearchBar2 from '@/components/Search/AutocompleteCarSearch
 import { FlexBox, FullSizeCenteredFlexBox } from '@/components/styled';
 import { Image } from '@/components/styled';
 import type { Car } from '@/db/schema';
+import type { CarInfoEssential } from '@/types/car';
 
 interface CarSearchAndSelectDialogIntf {
   selectScope: string;
   opened: boolean;
+  setCar: (car: CarInfoEssential) => void;
   onClose: () => void;
 }
 
 export default function CarSearchAndSelectDialog(props: CarSearchAndSelectDialogIntf) {
-  const { selectScope, opened, onClose: closeDialog } = props;
+  const { selectScope, opened, setCar, onClose: closeDialog } = props;
 
   const {
     control,
@@ -30,16 +32,18 @@ export default function CarSearchAndSelectDialog(props: CarSearchAndSelectDialog
     if (reason && reason === 'backdropClick') return;
     closeDialog();
   };
-  const [carSelected, setCarSelected] = useState<Car | undefined>();
+  const [carSelected, setCarSelected] = useState<CarInfoEssential | undefined>();
 
-  const onSelectCar = (car: Car) => {
+  const onSelectCar = (car: CarInfoEssential) => {
     setCarSelected(car);
   };
 
-  const CarName = carSelected?.name || 'Car Not Selected';
+  const CarName = carSelected?.name_en || 'Car Not Selected';
 
   const submitCarSelected = () => {
-    setValue('car', carSelected?.name);
+    if (carSelected) {
+      setCar(carSelected);
+    }
     closeDialog();
   };
 
@@ -56,7 +60,7 @@ export default function CarSearchAndSelectDialog(props: CarSearchAndSelectDialog
         >
           {/* 사진 올 자리 */}
           <FlexBox sx={{ height: '100%', width: 200, border: '1px solid black' }}>
-            <Image sx={{ backgroundColor: '#DDDDDD' }} />
+            <Image sx={{ backgroundColor: '#ffffff' }} src={carSelected?.image.first} />
           </FlexBox>
           <FlexBox
             sx={{

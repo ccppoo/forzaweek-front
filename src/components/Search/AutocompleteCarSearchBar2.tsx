@@ -10,9 +10,11 @@ import { useLiveQuery } from 'dexie-react-hooks';
 
 import { FlexBox } from '@/components/styled';
 import { db, getCarInfo, getCarInfoByID } from '@/db';
+import { getAllCarEssential } from '@/db/query';
 import type { Car, CarImage, FH5_STAT } from '@/db/schema';
 import useCarAndTagFilter from '@/store/carAndTagFilter';
 import useCarSearchFilters, { CarSearchOption } from '@/store/carSearchFilters';
+import type { CarInfoEssential } from '@/types/car';
 
 async function getCarData(): Promise<Car[]> {
   return await db.car.toArray();
@@ -20,7 +22,7 @@ async function getCarData(): Promise<Car[]> {
 
 interface AutocompleteCarSearchBar2Intf {
   searchScope: string;
-  onSelect: (car: Car) => void;
+  onSelect: (car: CarInfoEssential) => void;
 }
 
 export default function AutocompleteCarSearchBar2(props: AutocompleteCarSearchBar2Intf) {
@@ -34,8 +36,8 @@ export default function AutocompleteCarSearchBar2(props: AutocompleteCarSearchBa
       car: { setCar },
     },
   } = useCarAndTagFilter(searchScope);
-  const options = useLiveQuery(getCarData) || [];
-  const [carValue, setCarValue] = useState<Car | undefined>(undefined);
+  const options = useLiveQuery(getAllCarEssential) || [];
+  const [carValue, setCarValue] = useState<CarInfoEssential | undefined>(undefined);
   const [inputValue, setInputValue] = useState<string>('');
 
   const submitToCarTagFilter = async (carID: number) => {
@@ -56,20 +58,19 @@ export default function AutocompleteCarSearchBar2(props: AutocompleteCarSearchBa
           const displayOptions = options.filter((option) => {
             const search = state.inputValue.toLowerCase().trim();
             return [
-              option.name.toLowerCase().trim().includes(search),
-              option.manufacture.toLowerCase().trim().includes(search),
-              option.country.toLowerCase().trim().includes(search),
-              option.model.toLowerCase().trim().includes(search),
+              option.name_en.toLowerCase().trim().includes(search),
+              option.manufacturer.name_en.toLowerCase().trim().includes(search),
+              option.short_name_en.toLowerCase().trim().includes(search),
             ].some((x) => x);
           });
           return displayOptions;
         }}
-        groupBy={(option: Car) => option.manufacture}
-        getOptionLabel={(option: Car) => option.name}
+        groupBy={(option: CarInfoEssential) => option.manufacturer.name_en}
+        getOptionLabel={(option: CarInfoEssential) => option.name_en}
         defaultValue={null}
         autoSelect
         value={carValue}
-        onChange={(event, newValue: Car | string | null) => {
+        onChange={(event, newValue: CarInfoEssential | string | null) => {
           if (newValue === null) {
             // 지우는 경우 무시
             setInputValue('');
