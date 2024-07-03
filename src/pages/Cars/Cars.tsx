@@ -11,8 +11,30 @@ import { CarFilterAndSelect } from '@/components/Search';
 import { CarAndTagSearch } from '@/components/Search';
 import { Image } from '@/components/styled';
 import { FlexBox, FullSizeCenteredFlexBox } from '@/components/styled';
-import manufacturer2 from '@/image/manufacturer2';
+import { Manufacturer } from '@/db/schema';
+import { manufacturer } from '@/image';
 import useCarSearchFilters, { CarSearchOption } from '@/store/carSearchFilters';
+
+const sortedManufacutererSet = (manufacturerers: Manufacturer[]): Manufacturer[] => {
+  const IDset: string[] = [...new Set(manufacturerers.map((manufacturerer) => manufacturerer.id))];
+
+  const _mans = IDset.map((id) => {
+    let _man = undefined;
+    for (const man of manufacturerers) {
+      if (man.id == id) {
+        _man = man;
+        break;
+      }
+    }
+    if (_man) {
+      return _man;
+    }
+  });
+  const _mans2 = _mans
+    .filter((x) => x != undefined)
+    .sort((a, b) => (a.name_en.toLowerCase() > b.name_en.toLowerCase() ? 1 : -1));
+  return _mans2;
+};
 
 export default function Cars() {
   const navigate = useNavigate();
@@ -21,9 +43,9 @@ export default function Cars() {
   const totalCarString = (num: number) => `Total ${num} cars`;
   const TOTAL_CARS = 843;
 
-  const searchResultsManufactures = [
-    ...new Set(searchResults.map((carinfo) => carinfo.manufacture)),
-  ].sort((a, b) => (a.toLowerCase() > b.toLowerCase() ? 1 : -1));
+  const searchResultManufacturers = sortedManufacutererSet(
+    searchResults.map((carinfo) => carinfo.manufacturer),
+  );
 
   return (
     <Container sx={{ paddingTop: 2 }}>
@@ -48,30 +70,40 @@ export default function Cars() {
           sx={{
             width: '100%',
             // justifyContent: 'space-around',
+            paddingBottom: 4,
             alignItems: 'center',
             flexDirection: 'column',
             rowGap: 1,
           }}
         >
-          {searchResultsManufactures.map((manfuactre) => {
+          {searchResultManufacturers.map((man) => {
             // @ts-ignore
-            const imgSrc = manufacturer2[manfuactre.toLowerCase().replace(' ', '_')];
+            const imgSrc = man.imageURL;
 
             return (
               <FlexBox
                 sx={{ flexDirection: 'column', width: '100%', paddingTop: 2 }}
-                key={`search-manufacturer-${manfuactre}`}
+                key={`search-manufacturer-${man.name_en}`}
               >
-                <FlexBox sx={{ height: 40, alignItems: 'center', paddingBottom: 1, columnGap: 2 }}>
+                <FlexBox
+                  sx={{
+                    height: 50,
+                    alignItems: 'center',
+                    marginTop: 2,
+                    paddingBottom: 1,
+                    paddingLeft: 1,
+                    columnGap: 2,
+                  }}
+                >
                   <Image
                     src={imgSrc}
                     sx={{
-                      height: '100%',
+                      height: 30,
                       width: 'auto',
                       objectFit: 'contain',
                     }}
                   />
-                  <Typography>{manfuactre}</Typography>
+                  <Typography>{man.name_en}</Typography>
                 </FlexBox>
 
                 <FlexBox
@@ -80,25 +112,23 @@ export default function Cars() {
                     justifyContent: 'space-between',
                     // alignItems: 'center',
                     flexWrap: 'wrap',
-                    rowGap: 1,
+                    rowGap: 1.5,
                   }}
                 >
                   {searchResults
-                    .filter((carinfo) => carinfo.manufacture == manfuactre)
+                    .filter((carinfo) => carinfo.manufacturer.id == man.id)
                     .map((carinfo) => {
-                      return <CarPreviewCard carInfo={carinfo} key={carinfo.name} />;
+                      return (
+                        <CarPreviewCard
+                          carInfo={carinfo}
+                          key={`car-preview-card-${carinfo.id}-${carinfo.name_en}`}
+                        />
+                      );
                     })}
                 </FlexBox>
               </FlexBox>
             );
           })}
-          {/* {searchResults ? (
-            searchResults.map((carInfo) => {
-              return <CarPreviewCard carInfo={carInfo} key={carInfo.name} />;
-            })
-          ) : (
-            <FlexBox>loading</FlexBox>
-          )} */}
         </FlexBox>
       </FlexBox>
     </Container>

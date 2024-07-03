@@ -3,6 +3,9 @@ import { useState } from 'react';
 import Button from '@mui/material/Button';
 import Divider from '@mui/material/Divider';
 
+import { useLiveQuery } from 'dexie-react-hooks';
+
+import * as query from '@/db/query';
 import * as image from '@/image';
 import { getCars } from '@/api/car';
 import { FlexBox } from '@/components/styled';
@@ -17,7 +20,10 @@ import {
 } from '@/data/values';
 import useCarSearchFilters, { CarSearchOption } from '@/store/carSearchFilters';
 
-import AutocompleteTextField from './AutoCompleteTextField';
+import AutocompleteTextField, {
+  AutocompleteManufacturerTextField,
+  AutocompleteNationTextField,
+} from './AutoCompleteTextField';
 import AutocompleteCarSearchBar from './AutocompleteCarSearchBar';
 import FinalSelect from './FinalSelect';
 import CarSearchRecent from './Recent';
@@ -33,6 +39,9 @@ export default function CarFilterAndSelect(props: CarSearchAndSelectInterface) {
   const ITEM_PADDING_TOP = 8;
 
   const [options, _, __, { clearAllOptions }] = useCarSearchFilters(scope);
+
+  const nations = useLiveQuery(query.getAllNations);
+  const manufacturers = useLiveQuery(query.getAllManufacturers);
 
   return (
     <FlexBox sx={{ flexDirection: 'column', width: '100%' }}>
@@ -56,16 +65,16 @@ export default function CarFilterAndSelect(props: CarSearchAndSelectInterface) {
             paddingRight: doFinalSelect ? 0 : 1,
           }}
         >
-          <AutocompleteTextField
+          <AutocompleteNationTextField
             searchScope={scope}
             optionName="country"
-            values={COUNTRY}
+            values={nations || []}
             groupOptions
           />
-          <AutocompleteTextField
+          <AutocompleteManufacturerTextField
             searchScope={scope}
             optionName="manufacturer"
-            values={MANUFACTURER}
+            values={manufacturers || []}
             groupOptions
             limitTags={3}
           />

@@ -8,16 +8,17 @@ import Grid from '@mui/material/Unstable_Grid2';
 import { FlexBox } from '@/components/styled';
 import { Image } from '@/components/styled';
 import { CarInfo } from '@/types';
+import { CarInfo2 } from '@/types/car';
 
-function CarPreviewInfo({ carInfo }: { carInfo: CarInfo }) {
-  const MANUFACTURER = carInfo.manufacture;
-  const COUNRTY = carInfo.country;
-  const YEAR = carInfo.year;
-  const DRIVE_TRAIN = carInfo.driveTrain;
+function CarPreviewInfo({ carInfo }: { carInfo: CarInfo2 }) {
+  const MANUFACTURER = carInfo.manufacturer;
+  const COUNRTY = carInfo.nation.name_en;
+  const YEAR = carInfo.productionYear;
+  // const DRIVE_TRAIN = carInfo.driveTrain;
   const BODY_STYLE = carInfo.bodyStyle;
   // 인게임 스탯
-  const PI = carInfo.fh5.PI;
-  const DIVISION = carInfo.fh5.division;
+  const PI = carInfo.fh5_perf.PI;
+  const DIVISION = carInfo.fh5_meta.division;
 
   return (
     <FlexBox
@@ -29,7 +30,7 @@ function CarPreviewInfo({ carInfo }: { carInfo: CarInfo }) {
       }}
     >
       <Image
-        src={carInfo.image.main}
+        src={carInfo.image.first}
         sx={{
           width: '100%',
           objectFit: 'contain',
@@ -54,21 +55,21 @@ function CarPreviewInfo({ carInfo }: { carInfo: CarInfo }) {
   );
 }
 
-export default function CarPreviewCard({ carInfo }: { carInfo: CarInfo }) {
+export default function CarPreviewCard({ carInfo }: { carInfo: CarInfo2 }) {
   // 자동차 사진 + 이름, 클래스, 기본적인거 추가
 
   const W = 250;
   const H = 150;
 
-  const FULL_NAME = carInfo.name;
+  const FULL_NAME = carInfo.name_en;
 
-  const COUNRTY = carInfo.country;
-  const YEAR = carInfo.year;
-  const DRIVE_TRAIN = carInfo.driveTrain;
+  const COUNRTY = carInfo.nation.name_en;
+  const YEAR = carInfo.productionYear;
+  // const DRIVE_TRAIN = carInfo.;
   const BODY_STYLE = carInfo.bodyStyle;
   // 인게임 스탯
-  const PI = carInfo.fh5.PI;
-  const DIVISION = carInfo.fh5.division;
+  const PI = carInfo.fh5_perf.PI;
+  const DIVISION = carInfo.fh5_meta.division;
   // min 245 max 405
   return (
     <FlexBox sx={{ minWidth: 400, width: 'calc( 50% - 20px )', maxWidth: 560 }}>
@@ -91,7 +92,7 @@ export default function CarPreviewCard({ carInfo }: { carInfo: CarInfo }) {
           }}
         >
           <Image
-            src={carInfo.image.main}
+            src={carInfo.image.first}
             sx={{
               height: '100%',
               objectFit: 'contain',
