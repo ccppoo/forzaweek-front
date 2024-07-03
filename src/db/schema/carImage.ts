@@ -4,8 +4,11 @@ export interface CarImage {
   images: string[];
 }
 
-export interface CarImage2 {
-  id: string;
+export interface CarImageBase {
   first: string;
   images: string[];
+}
+
+export interface CarImage2 extends CarImageBase {
+  id: string;
 }

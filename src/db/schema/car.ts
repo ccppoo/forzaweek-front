@@ -18,6 +18,7 @@ export interface Car {
 export interface Car2 {
   id: string;
   manufacturer: string; // manufacturer schema ID
+  nation: string; // nation schema ID
 
   name_en: string;
   short_name_en: string;
