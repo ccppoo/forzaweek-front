@@ -32,7 +32,7 @@ export class ForzaWeekDB extends Dexie {
   car2!: Table<Car2>;
   carFH5!: Table<FH5_STAT>; // id -> car's ID
   car_FH5_meta!: Table<FH5_META>; // id -> car's ID
-  FH5_performance!: Table<FH5_Performance>; // id -> car's ID
+  car_FH5_performance!: Table<FH5_Performance>; // id -> car's ID
   carImage!: Table<CarImage>; // id -> car's ID
   carImage2!: Table<CarImage2>; // id -> car's ID
   track!: Table<Track>;
@@ -46,7 +46,7 @@ export class ForzaWeekDB extends Dexie {
       car: '++id,name, year, country,driveTrain,door,engine,manufacture,bodyStyle',
       car2: `&id, name_en,${i18nMapped('name').join(',')}, short_name_en, ${i18nMapped(
         'short_name',
-      ).join(',')}, productionYear, manufacturer,door,engineType,bodyStyle`,
+      ).join(',')}, productionYear, nation, manufacturer,door,engineType,bodyStyle`,
       carFH5: '&id,division,rarity,boost,PI',
       car_FH5_meta: `&id, division,rarity,boost,value`,
       car_FH5_performance: `&id, PI,speed,handling,acceleration,launch,braking,offroad`,
