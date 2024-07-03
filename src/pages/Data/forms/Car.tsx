@@ -84,11 +84,17 @@ export default function CarForm(props: dataTextInputIntf) {
   // console.log(`isEditMode :${isEditMode}`);
   const submit = async (data: CarEditSchema) => {
     if (isEditMode) {
-      await EditCar({ car: data });
+      const { code, msg } = await EditCar({ car: data });
+      if (code == 200) {
+        goBackToListPage();
+      }
       return;
     }
     if (!isEditMode) {
-      await AddNewCar({ car: data });
+      const { code, msg } = await AddNewCar({ car: data });
+      if (code == 200) {
+        goBackToListPage();
+      }
     }
   };
 

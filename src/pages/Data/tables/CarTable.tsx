@@ -251,7 +251,7 @@ export default function CarTable() {
         <Box
           sx={{
             display: 'grid',
-            gridTemplateRows: 'repeat(10, 200px)',
+            gridTemplateRows: 'repeat(auto-fill, 200px)',
             gridTemplateColumns: 'repeat(1, minmax(500px, 1fr))',
             rowGap: 1,
             columnGap: 2,

@@ -13,7 +13,8 @@ import type { DataStatus, DataType } from '@/api/data/types';
 import Meta from '@/components/Meta';
 import { FlexBox, FullSizeCenteredFlexBox } from '@/components/styled';
 import { Image } from '@/components/styled';
-import useAddDataDialog from '@/store/addDataDialog';
+
+// import useAddDataDialog from '@/store/addDataDialog';
 
 // const menu: DataType[] = ['nation' as DataType];
 
