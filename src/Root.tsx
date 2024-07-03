@@ -3,11 +3,12 @@ import { createRoot } from 'react-dom/client';
 import { HelmetProvider } from 'react-helmet-async';
 import { RecoilRoot } from 'recoil';
 
-// import { UseFullWebSocketProvider } from './socket';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
-import { echoSocketConfig, mainSocketConfig } from '@/api/globalSocket';
+import { mainSocketConfig } from '@/api/globalSocket';
 import ThemeProvider from '@/theme/Provider';
+
+import { UseFullWebSocketProvider } from './socket';
 
 const container = document.getElementById('root') as HTMLElement;
 const queryClient = new QueryClient();
@@ -18,15 +19,13 @@ function render(App: ComponentType) {
     <StrictMode>
       <RecoilRoot>
         <QueryClientProvider client={queryClient}>
-          {/* <UseFullWebSocketProvider config={mainSocketConfig(111)}>
-            <UseFullWebSocketProvider config={echoSocketConfig}> */}
+          {/* <UseFullWebSocketProvider config={mainSocketConfig}> */}
           <HelmetProvider>
             <ThemeProvider>
               <App />
             </ThemeProvider>
           </HelmetProvider>
-          {/* </UseFullWebSocketProvider>
-        </UseFullWebSocketProvider> */}
+          {/* </UseFullWebSocketProvider> */}
         </QueryClientProvider>
       </RecoilRoot>
     </StrictMode>,

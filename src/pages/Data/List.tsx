@@ -14,7 +14,7 @@ function Data() {
     nation: () => <Tables.NationTable />,
     manufacturer: () => <Tables.ManufacturerTable />,
     car: () => <Tables.CarTable />,
-    decal: () => <Tables.DecalTable />,
+    // decal: () => <Tables.DecalTable />,
     tag: () => <Tables.TagTable />,
   };
 
@@ -26,7 +26,6 @@ function Data() {
         sx={{ flexDirection: 'column', rowGap: 4, paddingTop: 1, paddingBottom: 2 }}
       >
         {/* 데이터 값 */}
-        <FlexBox sx={{ border: '1px black solid', borderRadius: 1 }}></FlexBox>
         {ListTables[dataType!]()}
       </FullSizeCenteredFlexBox>
     </Container>

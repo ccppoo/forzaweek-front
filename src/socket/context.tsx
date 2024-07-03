@@ -1,10 +1,9 @@
 import React, { ReactNode, createContext, useEffect } from 'react';
-
 import useWebSocket from 'react-use-websocket';
 
-import { useSubscriberQueue, usePublisherQueue } from './globalQueue';
-import { WebSocketMessageReceiver } from './receiver';
+import { usePublisherQueue, useSubscriberQueue } from './globalQueue';
 import { useGlobalWebSocketState } from './globalQueue';
+import { WebSocketMessageReceiver } from './receiver';
 import { WebSocketMessageSender } from './sender';
 import type { UseFullSocketConfig } from './types';
 
@@ -36,6 +35,8 @@ export const UseFullWebSocketProvider = ({
 
   const { setWebSocketState } = useGlobalWebSocketState({ WebSocket_URL: url });
 
+  const TIMEOUT_MS = 10000; // 10 seconds
+  const HEARTBEAT_MS = 60000; // 30 seconds
   const { readyState, sendJsonMessage } = useWebSocket(url, {
     onOpen: onOpen,
     onMessage: (event: MessageEvent<any>) => {

@@ -46,6 +46,7 @@ export async function AddNewCar({ car }: { car: CarEditSchema }) {
       'Content-Type': 'application/json',
     },
   });
+  return { code: resp.status, msg: resp.statusText };
 }
 
 export async function EditCar({ car }: { car: CarEditSchema }) {
@@ -70,6 +71,7 @@ export async function EditCar({ car }: { car: CarEditSchema }) {
   console.log(`resp.data : ${JSON.stringify(resp.data)}`);
 
   // return resp.data;
+  return { code: resp.status, msg: resp.statusText };
 }
 
 // TODO: pagination
