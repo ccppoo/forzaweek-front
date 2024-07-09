@@ -4,7 +4,6 @@ import Container from '@mui/material/Container';
 import IconButton from '@mui/material/IconButton';
 import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
-import { styled } from '@mui/material/styles';
 
 import { CarPreviewCard } from '@/components/Car';
 import { CarFilterAndSelect } from '@/components/Search';
@@ -12,7 +11,6 @@ import { CarAndTagSearch } from '@/components/Search';
 import { Image } from '@/components/styled';
 import { FlexBox, FullSizeCenteredFlexBox } from '@/components/styled';
 import { Manufacturer } from '@/db/schema';
-import { manufacturer } from '@/image';
 import useCarSearchFilters, { CarSearchOption } from '@/store/carSearchFilters';
 
 const sortedManufacutererSet = (manufacturerers: Manufacturer[]): Manufacturer[] => {

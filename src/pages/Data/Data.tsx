@@ -55,7 +55,7 @@ function DataItemCell(props: DataItemProps) {
 }
 
 function Data() {
-  const menu: DataType[] = ['nation', 'manufacturer', 'car', 'decal', 'tag'];
+  const menu: DataType[] = ['nation', 'manufacturer', 'car', 'decal', 'tag', 'tagkind'];
 
   const { data } = useQuery({
     queryKey: ['data_status'],
@@ -67,6 +67,7 @@ function Data() {
       car: undefined,
       decal: undefined,
       tag: undefined,
+      tagkind: undefined,
     },
   });
 
