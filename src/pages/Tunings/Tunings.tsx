@@ -33,7 +33,6 @@ import { YearCard } from '@/components/YearCard';
 import { FlexBox, FullSizeCenteredFlexBox } from '@/components/styled';
 import { Image } from '@/components/styled';
 import { tunings } from '@/data/tunings';
-import type { Tuning } from '@/data/tunings';
 import { getCarInfo } from '@/db/index';
 import useCarAndTagFilter from '@/store/carAndTagFilter';
 

@@ -3,35 +3,13 @@ import { useEffect, useMemo, useState } from 'react';
 import Autocomplete from '@mui/material/Autocomplete';
 import Box from '@mui/material/Box';
 import Chip from '@mui/material/Chip';
-import Paper from '@mui/material/Paper';
-import Select, { SelectChangeEvent } from '@mui/material/Select';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
-import { display } from '@mui/system';
 
-import { useQuery } from '@tanstack/react-query';
-import { useLiveQuery } from 'dexie-react-hooks';
-
-import * as image from '@/image';
-import { getCars } from '@/api/car';
 import { FlexBox } from '@/components/styled';
 import { Image } from '@/components/styled';
-// import { carInfoWithImage } from '@/data/cars';
-import { CarData, CarInfo } from '@/data/types';
 import { db } from '@/db';
-import {
-  Car,
-  Car2,
-  CarImage,
-  CarImage2,
-  DBState,
-  FH5_META,
-  FH5_Performance,
-  FH5_STAT,
-  Manufacturer,
-  Nation,
-  Track,
-} from '@/db/schema';
+import { Manufacturer, Nation, Track } from '@/db/schema';
 import useCarSearchFilters, { CarSearchOption } from '@/store/carSearchFilters';
 
 export default function AutocompleteTextField({

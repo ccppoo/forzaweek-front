@@ -19,7 +19,6 @@ import {
   TagAutocompleteTextField,
 } from '@/components/Search';
 import { FlexBox, FullSizeCenteredFlexBox } from '@/components/styled';
-import { tags } from '@/data/tags';
 import useCarAndTagFilter from '@/store/carAndTagFilter';
 
 interface CarAndTagSearchIterface {
@@ -108,7 +107,8 @@ export default function CarAndTagSearch(props: CarAndTagSearchIterface) {
         </AccordionSummary>
         <AccordionDetails>
           <FlexBox sx={{ flexDirection: 'column' }}>
-            <TagAutocompleteTextField searchScope={searchScope} values={tags} />
+            {/* FIXME: TagAutocompleteTextField - 태그 자동완성 컴포넌트  */}
+            {/* <TagAutocompleteTextField searchScope={searchScope} values={tags} /> */}
           </FlexBox>
         </AccordionDetails>
         <AccordionActions sx={{ paddingTop: 0 }}>

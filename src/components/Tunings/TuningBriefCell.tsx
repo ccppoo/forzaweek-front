@@ -28,7 +28,6 @@ import { PI_Card } from '@/components/PI';
 import TuningOptionFilter from '@/components/Tunings/TuningSearchFilter';
 import { FlexBox, FullSizeCenteredFlexBox } from '@/components/styled';
 import { Image } from '@/components/styled';
-import { tunings } from '@/data/tunings';
 import type { Tuning } from '@/data/tunings';
 
 function stringToColor(string: string) {

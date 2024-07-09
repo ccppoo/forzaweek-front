@@ -12,7 +12,6 @@ import Grid from '@mui/material/Unstable_Grid2';
 
 import { FlexBox, FullSizeCenteredFlexBox } from '@/components/styled';
 import { Image } from '@/components/styled';
-import { tunings } from '@/data/tunings';
 import type { Performance, TestReadings, Tuning } from '@/data/tunings';
 
 type TestReading = {

@@ -14,7 +14,6 @@ import { useQuery } from '@tanstack/react-query';
 import { useDebounce } from '@uidotdev/usehooks';
 
 import type { TagType } from '@/FormData/tag';
-// import type { TagSchemaTypeExtended } from '@/data/tags';
 import { GetAllTag, SearchTag } from '@/api/data/tag';
 import { FlexBox, FullSizeCenteredFlexBox, Image, VisuallyHiddenInput } from '@/components/styled';
 // import { TAGS } from '@/data/tags';

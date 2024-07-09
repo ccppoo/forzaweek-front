@@ -21,7 +21,6 @@ import { FlexBox, FullSizeCenteredFlexBox } from '@/components/styled';
 import { Image } from '@/components/styled';
 import { decalsWithImage } from '@/data/decals';
 import { tunings } from '@/data/tunings';
-import type { Tuning } from '@/data/tunings';
 
 export default function TuningDetail() {
   const navigate = useNavigate();
