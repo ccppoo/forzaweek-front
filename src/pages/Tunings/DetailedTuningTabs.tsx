@@ -49,7 +49,7 @@ type TuningOption =
   | 'Damping'
   | 'Aero'
   | 'Brake'
-  | 'Dirffrential';
+  | 'Diffrential';
 
 const TuningOptions: TuningOption[] = [
   'Tires',
@@ -60,7 +60,7 @@ const TuningOptions: TuningOption[] = [
   'Damping',
   'Aero',
   'Brake',
-  'Dirffrential',
+  'Diffrential',
 ];
 // interface SliderValueProp<FormType extends FieldValues > {
 //   name: string;
@@ -814,8 +814,8 @@ function BrakeOption() {
     </TabPanel>
   );
 }
-function DirffrentialOption() {
-  const tuningIndex: TuningOption = 'Dirffrential';
+function DiffrentialOption() {
+  const tuningIndex: TuningOption = 'Diffrential';
   const formPathBase = ['detailedTuning', 'diffrential'];
   const [notMyOption, setNotMyOption] = useState<boolean>(false);
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>, checked: boolean) => {
@@ -890,7 +890,7 @@ export default function DetailedTuningTabs() {
         <DampingOption />
         <AeroOption />
         <BrakeOption />
-        <DirffrentialOption />
+        <DiffrentialOption />
       </TabContext>
     </Box>
   );
