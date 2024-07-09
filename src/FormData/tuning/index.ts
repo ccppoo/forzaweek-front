@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-import { tagWrite } from '@/FormData/tag';
+import { Tag } from '@/FormData/tag';
 
 import { tuningDetailed, tuningDetailedDefault } from './detailed';
 import { tuningMajorParts, tuningMajorPartsDefault } from './majorParts';
@@ -14,7 +14,7 @@ export const tuningEditSchema = z.object({
   car: z.optional(z.string()), // 차 (id)
   creator: z.optional(z.string()), // 튜닝 제작자
 
-  tags: z.array(tagWrite), // 튜닝 태그
+  tags: z.array(z.string()), // 튜닝 태그
   pi: z.optional(z.number().min(100).max(999)),
   performance: tuningPerformance, // 성능 레이더 차트
   testReadings: tuningTestReading, // 성능 지표
@@ -44,7 +44,8 @@ export const tuningSchemaType = z.object({
   car: z.string(), // 차 (id)
   creator: z.string(), // 데칼 제작자
 
-  tags: z.array(tagWrite), // 튜닝 태그
+  tags: z.array(Tag.tagSchemaTypeExtended), // 튜닝 태그
+  // tuning stat
   pi: z.number(), // PI 성능 - 클래스는 값 범위에 따라서 보여줌
   performance: tuningPerformance, // 성능 레이더 차트
   testReadings: tuningTestReading, // 성능 지표

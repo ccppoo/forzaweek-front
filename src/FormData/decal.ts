@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-import { tagWrite } from '@/FormData/tag';
+import { Tag } from '@/FormData/tag';
 
 export const decalEditSchema = z.object({
   id: z.optional(z.string()), // 데칼 글 작성 자체 DocumnetID
@@ -12,7 +12,7 @@ export const decalEditSchema = z.object({
   imageURLs: z.array(z.string()), // 데칼 사진
   firstImage: z.optional(z.string()),
 
-  tags: z.array(tagWrite), // 데칼 태그
+  tags: z.array(z.string()), // 데칼 태그
 });
 
 // 태그는 최초 생성시 string으로 제공, 이후 서버에서 올 때는 무조건 general type으로 생성하고 반환됨
@@ -26,7 +26,7 @@ export const decalSchemaType = z.object({
   imageURLs: z.array(z.string()), // 데칼 사진
   firstImage: z.string(),
 
-  tags: z.array(z.string()), // 데칼 태그
+  tags: z.array(Tag.tagSchemaTypeExtended), // 데칼 태그
 });
 export type DecalSchemaType = z.infer<typeof decalSchemaType>;
 
