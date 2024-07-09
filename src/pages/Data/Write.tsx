@@ -44,6 +44,7 @@ function WriteData() {
     manufacturer: <Forms.ManufacturerForm />,
     car: <Forms.CarForm />,
     tag: <Forms.TagForm />,
+    tagkind: <Forms.TagKindForm />,
   };
 
   return (

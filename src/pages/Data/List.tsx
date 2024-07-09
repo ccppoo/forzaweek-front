@@ -16,6 +16,7 @@ function Data() {
     car: () => <Tables.CarTable />,
     // decal: () => <Tables.DecalTable />,
     tag: () => <Tables.TagTable />,
+    tagkind: () => <Tables.TagKindTable />,
   };
 
   // console.log(`dataType : ${dataType}`);

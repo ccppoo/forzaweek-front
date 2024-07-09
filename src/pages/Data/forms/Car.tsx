@@ -114,9 +114,7 @@ export default function CarForm(props: dataTextInputIntf) {
       const fileBlobURL = URL.createObjectURL(selectedFile);
       uploadingImages = [...uploadingImages, fileBlobURL];
     }
-    // console.log(`uploadingImages : ${uploadingImages}`);
     const uploaded_images = [...imagePreviews, ...uploadingImages];
-    // console.log(`uploaded_images : ${uploaded_images}`);
     setImagePreviews(uploaded_images);
     setValue('imageURLs', uploaded_images);
   };
@@ -248,7 +246,6 @@ export default function CarForm(props: dataTextInputIntf) {
                     </FlexBox>
                   );
                 })}
-                {/* {imagePreviews && <Image src={imagePreviews[0]} sx={{ objectFit: 'contain' }} />} */}
               </FlexBox>
               <FlexBox></FlexBox>
               <FlexBox sx={{ justifyContent: 'space-between', columnGap: 1, alignItems: 'center' }}>
@@ -310,7 +307,7 @@ export default function CarForm(props: dataTextInputIntf) {
               </FlexBox>
             </Box>
           </FlexBox>
-          {/* 제조사 소속 국가 */}
+          {/* 제조사 */}
           <Box
             sx={{
               display: 'grid',

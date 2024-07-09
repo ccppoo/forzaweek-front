@@ -51,6 +51,7 @@ function EditData() {
     manufacturer: (data) => <Forms.ManufacturerForm manufacturerEditSchema={data} />,
     car: (data) => <Forms.CarForm carEditSchema={data} />,
     tag: (data) => <Forms.TagForm tagEditSchema={data} />,
+    tagkind: (data) => <Forms.TagKindForm tagKindEditSchema={data} />,
   };
 
   console.log(`resp : ${JSON.stringify(data)}`);

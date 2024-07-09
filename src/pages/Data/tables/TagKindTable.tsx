@@ -12,16 +12,16 @@ import TableRow from '@mui/material/TableRow';
 
 import { useQuery } from '@tanstack/react-query';
 
-import type { TagType } from '@/FormData/tag';
-import { GetAllTag } from '@/api/data/tag';
+import type { TagKindType } from '@/FormData/tag';
+import { GetAllTagKind } from '@/api/data/tagKind';
 import DeleteItemPopUp from '@/components/Dialogs/DeletePopUp';
 import { TagKindItemCell } from '@/components/Tag';
 import { FlexBox, FullSizeCenteredFlexBox } from '@/components/styled';
 import { Image } from '@/components/styled';
 import { supportLangs } from '@/config/i18n';
 
-function TagRowItem({ tag }: { tag: TagType.TagSchemaType }) {
-  const DATA_TYPE = 'tag';
+function TagKindRowItem({ tagKind }: { tagKind: TagKindType.TagKindSchemaType }) {
+  const DATA_TYPE = 'tagkind';
 
   const navigate = useNavigate();
 
@@ -54,48 +54,34 @@ function TagRowItem({ tag }: { tag: TagType.TagSchemaType }) {
     navigate(`/data/${DATA_TYPE}/edit/${itemID}`);
   };
 
-  const descriptionProvided = tag.description.map(({ lang }) => lang);
+  const descriptionProvided = tagKind.description.map(({ lang }) => lang);
   const langNotProvided = [...supportLangs].filter((val) => !descriptionProvided.includes(val));
 
-  const tagNameSorted = tag.name.toSorted(({ lang: n1 }, { lang: n2 }) => (n1 > n2 ? 1 : -1));
-  const descriptionSorted = tag.description.toSorted(({ lang: d1 }, { lang: d2 }) =>
+  // console.log(`tag.imageURL : ${tag.imageURL}`);
+
+  const nameSorted = tagKind.name.toSorted(({ lang: n1 }, { lang: n2 }) => (n1 > n2 ? 1 : -1));
+  const descriptionSorted = tagKind.description.toSorted(({ lang: d1 }, { lang: d2 }) =>
     d1 > d2 ? 1 : -1,
   );
   return (
     <>
       <TableRow
-        key={`table-row-${tag.name_en}`}
+        key={`table-row-${tagKind.name_en}`}
         sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
       >
         <TableCell component="th" scope="row">
-          <FlexBox sx={{ alignItems: 'center', justifyContent: 'center' }}>
-            <TagKindItemCell tagKind={tag.kind} />
-          </FlexBox>
+          <TagKindItemCell tagKind={tagKind} />
         </TableCell>
-        {/* 태그 아이콘 */}
-        <TableCell>
-          <FlexBox sx={{ height: '40px', alignItems: 'center' }}>
-            <Image src={tag.imageURL} sx={{ objectFit: 'contain' }} />
-          </FlexBox>
-        </TableCell>
-        <TableCell align="center">
-          <FlexBox sx={{ flexDirection: 'column' }}>
-            {tagNameSorted.map(({ lang, value }) => {
-              return (
-                <Box
-                  sx={{ display: 'grid', gridTemplateColumns: '60px auto' }}
-                  key={`name-${lang}`}
-                >
-                  <Typography fontWeight={400}>{lang}</Typography>
-                  <Typography>{value}</Typography>
-                </Box>
-              );
-            })}
-          </FlexBox>
-        </TableCell>
+        {nameSorted.map(({ lang, value }) => {
+          return (
+            <TableCell align="center" key={`table-cell-${lang}`}>
+              {value}
+            </TableCell>
+          );
+        })}
         <TableCell align="center" key={`table-cell-description`}>
           <FlexBox sx={{ columnGap: 2, justifyContent: 'center' }}>
-            {tag.description.map(({ value, lang }, idx) => {
+            {descriptionSorted.map(({ value, lang }, idx) => {
               const toolTipSummerize = value ? '' : 'Not Provided';
               return (
                 <Tooltip title={toolTipSummerize} key={`tag-description-provided-${lang}-${idx}`}>
@@ -130,9 +116,14 @@ function TagRowItem({ tag }: { tag: TagType.TagSchemaType }) {
             })}
           </FlexBox>
         </TableCell>
-        <TableCell align="right" key={`table-cell-${tag.name_en}-action`} sx={{ width: 75 }}>
+        <TableCell align="right" key={`table-cell-${tagKind.name_en}-action`} sx={{ width: 75 }}>
           <FlexBox sx={{ columnGap: 1 }}>
-            <Button color="info" variant="outlined" size="small" onClick={() => editItem(tag.id)}>
+            <Button
+              color="info"
+              variant="outlined"
+              size="small"
+              onClick={() => editItem(tagKind.id)}
+            >
               Edit
             </Button>
             <Button color="error" variant="outlined" size="small" onClick={openDeletePopUp}>
@@ -143,7 +134,7 @@ function TagRowItem({ tag }: { tag: TagType.TagSchemaType }) {
             opened={deletePopUpOpened}
             onClose={closeDeletePopUp}
             dataType={DATA_TYPE}
-            itemID={tag.id}
+            itemID={tagKind.id}
           />
         </TableCell>
       </TableRow>
@@ -155,12 +146,12 @@ function TagRowItem({ tag }: { tag: TagType.TagSchemaType }) {
                 Descriptions
               </Typography>
               <FlexBox sx={{ paddingLeft: 2, flexDirection: 'column' }}>
-                {descriptionSorted.map(({ value, lang }) => {
+                {tagKind.description.map(({ value, lang }) => {
                   if (value)
                     return (
                       <FlexBox
                         sx={{ columnGap: 3, minHeight: 50, alignItems: 'center' }}
-                        key={`tag-description-open-${lang}`}
+                        key={`tag-kind-description-${tagKind.name_en}-${lang}`}
                       >
                         <Typography>{lang}</Typography>
 
@@ -179,15 +170,15 @@ function TagRowItem({ tag }: { tag: TagType.TagSchemaType }) {
   );
 }
 
-export default function TagTable() {
-  const DATA_TYPE = 'tag';
+export default function TagKindTable() {
+  const DATA_TYPE = 'tagkind';
 
   const navigate = useNavigate();
 
   // TODO: delete, edit 한 다음에 다시 부르기
   const { data } = useQuery({
-    queryKey: ['get tags', undefined],
-    queryFn: GetAllTag,
+    queryKey: ['get tags kinds', undefined],
+    queryFn: GetAllTagKind,
     staleTime: 10,
   });
 
@@ -201,7 +192,7 @@ export default function TagTable() {
     const columns = [...new Set([...data.flatMap((dat) => dat.name.map((lan) => lan.lang))])];
 
     return (
-      <FlexBox sx={{ width: '100%', minWidth: 900, flexDirection: 'column', rowGap: 2 }}>
+      <FlexBox sx={{ width: '100%', flexDirection: 'column', rowGap: 2 }}>
         {/* 데이터 추가 버튼 */}
         <FlexBox sx={{ justifyContent: 'end' }}>
           <Button variant="outlined" onClick={addItem}>
@@ -212,11 +203,14 @@ export default function TagTable() {
           <Table sx={{ minWidth: 650 }} aria-label="simple table">
             <TableHead>
               <TableRow>
-                <TableCell align="center">Tag Kind</TableCell>
-                <TableCell align="center">Tag Icon</TableCell>
-                <TableCell align="center" width={'fit-content'}>
-                  Name
-                </TableCell>
+                <TableCell>Tag Kind</TableCell>
+                {columns.map((col, idx) => {
+                  return (
+                    <TableCell align="center" key={`table-nation-column-${col}-${idx}`}>
+                      {col}
+                    </TableCell>
+                  );
+                })}
                 <TableCell align="center">Description</TableCell>
 
                 <TableCell align="center" colSpan={1}>
@@ -226,7 +220,7 @@ export default function TagTable() {
             </TableHead>
             <TableBody>
               {data.map((manu, idx) => (
-                <TagRowItem tag={manu} key={`tag-table-row-item-${manu.name_en}-${idx}`} />
+                <TagKindRowItem tagKind={manu} key={`tag-table-row-item-${manu.name_en}-${idx}`} />
               ))}
             </TableBody>
           </Table>
