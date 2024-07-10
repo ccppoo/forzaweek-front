@@ -66,7 +66,7 @@ export default function AutocompleteTextField({
               sx={{}}
             />
           )}
-          sx={{ width: '100%' }}
+          sx={{ width: '100%', overscrollBehavior: 'contain' }}
         />
       </FlexBox>
     </FlexBox>
@@ -170,7 +170,7 @@ export function AutocompleteNationTextField({
               sx={{}}
             />
           )}
-          sx={{ width: '100%' }}
+          sx={{ width: '100%', overscrollBehavior: 'contain' }}
         />
       </FlexBox>
     </FlexBox>
@@ -268,7 +268,7 @@ export function AutocompleteManufacturerTextField({
               sx={{}}
             />
           )}
-          sx={{ width: '100%' }}
+          sx={{ width: '100%', overscrollBehavior: 'contain' }}
         />
       </FlexBox>
     </FlexBox>

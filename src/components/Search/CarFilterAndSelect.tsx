@@ -6,8 +6,6 @@ import Divider from '@mui/material/Divider';
 import { useLiveQuery } from 'dexie-react-hooks';
 
 import * as query from '@/db/query';
-import * as image from '@/image';
-import { getCars } from '@/api/car';
 import { FlexBox } from '@/components/styled';
 import {
   BOOST,
@@ -23,9 +21,7 @@ import AutocompleteTextField, {
   AutocompleteManufacturerTextField,
   AutocompleteNationTextField,
 } from './AutoCompleteTextField';
-import AutocompleteCarSearchBar from './AutocompleteCarSearchBar';
 import FinalSelect from './FinalSelect';
-import CarSearchRecent from './Recent';
 
 interface CarSearchAndSelectInterface {
   scope: string;

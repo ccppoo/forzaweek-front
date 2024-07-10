@@ -5,18 +5,12 @@ import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 
-import { useQuery } from '@tanstack/react-query';
 import { useLiveQuery } from 'dexie-react-hooks';
 
 import { FlexBox } from '@/components/styled';
-import { db, getCarInfo, getCarInfoByID } from '@/db';
-import type { Car, CarImage, FH5_STAT } from '@/db/schema';
+import { getAllCarInfoSimple, getCar2 } from '@/db';
 import useCarAndTagFilter from '@/store/carAndTagFilter';
-import useCarSearchFilters, { CarSearchOption } from '@/store/carSearchFilters';
-
-async function getCarData(): Promise<Car[]> {
-  return await db.car.toArray();
-}
+import type { CarInfoSimple } from '@/types/car';
 
 export default function AutocompleteCarSearchBar({ searchScope }: { searchScope: string }) {
   // 직접 검색해서 찾을 수 있는 검색 바
@@ -28,10 +22,10 @@ export default function AutocompleteCarSearchBar({ searchScope }: { searchScope:
       car: { setCar, removeCar },
     },
   } = useCarAndTagFilter(searchScope);
-  const options = useLiveQuery(getCarData) || [];
-  const [selection, setSelection] = useState<Car | undefined>(undefined);
-  const submitToCarTagFilter = async (carID: number) => {
-    const car = await getCarInfoByID(carID);
+  const options = useLiveQuery<CarInfoSimple[]>(getAllCarInfoSimple) || [];
+  const [selection, setSelection] = useState<CarInfoSimple | undefined>(undefined);
+  const submitToCarTagFilter = async (carID: string) => {
+    const car = await getCar2(carID);
     setCar(car);
   };
   return (
@@ -45,17 +39,17 @@ export default function AutocompleteCarSearchBar({ searchScope }: { searchScope:
         options={options}
         filterOptions={(options, state) => {
           const displayOptions = options.filter((option) =>
-            option.name.toLowerCase().trim().includes(state.inputValue.toLowerCase().trim()),
+            option.name_en.toLowerCase().trim().includes(state.inputValue.toLowerCase().trim()),
           );
 
           return displayOptions;
         }}
-        groupBy={(option: Car) => option.manufacture}
-        getOptionLabel={(option: Car) => option.name}
+        groupBy={(car: CarInfoSimple) => car.manufacturer.id}
+        getOptionLabel={(option: CarInfoSimple) => option.name_en}
         defaultValue={null}
         // value={selection}
         filterSelectedOptions
-        onChange={(event: any, newValue: Car | null) => {
+        onChange={(event: any, newValue: CarInfoSimple | null) => {
           newValue || removeCar();
           setSelection(newValue || undefined);
           if (newValue?.id) {
@@ -63,7 +57,7 @@ export default function AutocompleteCarSearchBar({ searchScope }: { searchScope:
           }
         }}
         renderInput={(params) => <TextField {...params} placeholder={'Search car'} sx={{}} />}
-        sx={{ width: '60%' }}
+        sx={{ width: '60%', overscrollBehavior: 'contain' }}
       />
     </FlexBox>
   );

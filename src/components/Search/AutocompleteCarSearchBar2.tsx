@@ -3,22 +3,16 @@ import { useState } from 'react';
 import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
 import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
-import Typography from '@mui/material/Typography';
 
-import { useQuery } from '@tanstack/react-query';
 import { useLiveQuery } from 'dexie-react-hooks';
 
 import { FlexBox } from '@/components/styled';
-import { db, getCarInfo, getCarInfoByID } from '@/db';
 import { getAllCarEssential } from '@/db/query';
-import type { Car, CarImage, FH5_STAT } from '@/db/schema';
-import useCarAndTagFilter from '@/store/carAndTagFilter';
-import useCarSearchFilters, { CarSearchOption } from '@/store/carSearchFilters';
 import type { CarInfoEssential } from '@/types/car';
 
-async function getCarData(): Promise<Car[]> {
-  return await db.car.toArray();
-}
+/**
+ * NOTE: 이 자동완성은 튜닝, 데칼 글 작성할 때 차 선택하는 컴포넌트
+ */
 
 interface AutocompleteCarSearchBar2Intf {
   searchScope: string;
@@ -31,19 +25,9 @@ export default function AutocompleteCarSearchBar2(props: AutocompleteCarSearchBa
 
   const { searchScope, onSelect } = props;
 
-  const {
-    actions: {
-      car: { setCar },
-    },
-  } = useCarAndTagFilter(searchScope);
   const options = useLiveQuery(getAllCarEssential) || [];
   const [carValue, setCarValue] = useState<CarInfoEssential | undefined>(undefined);
   const [inputValue, setInputValue] = useState<string>('');
-
-  const submitToCarTagFilter = async (carID: number) => {
-    const car = await getCarInfoByID(carID);
-    setCar(car);
-  };
 
   return (
     <FlexBox sx={{ width: '100%', paddingY: 1, paddingX: 3, justifyContent: 'center' }}>
@@ -88,9 +72,9 @@ export default function AutocompleteCarSearchBar2(props: AutocompleteCarSearchBa
         }}
         inputValue={inputValue}
         onInputChange={(event, newInputValue, reason) => {
-          console.log(`4`);
+          // console.log(`4`);
           setInputValue(newInputValue);
-          console.log(`reason : ${reason}`);
+          // console.log(`reason : ${reason}`);
           if (reason == 'reset') {
             setInputValue('');
             setCarValue(undefined);

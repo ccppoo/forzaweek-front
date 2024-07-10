@@ -56,7 +56,7 @@ export default function CarAndTagSearch(props: CarAndTagSearchIterface) {
             sx={{ color: car?.name ? 'text.main' : 'text.first' }}
             fontWeight={car?.name ? 500 : 300}
           >
-            {car?.name || noCarSelected}
+            {car?.name_en || noCarSelected}
           </Typography>
         </AccordionSummary>
         <AccordionDetails>

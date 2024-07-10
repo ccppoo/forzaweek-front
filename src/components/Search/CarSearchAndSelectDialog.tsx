@@ -7,7 +7,6 @@ import DialogTitle from '@mui/material/DialogTitle';
 import AutocompleteCarSearchBar2 from '@/components/Search/AutocompleteCarSearchBar2';
 import { FlexBox, FullSizeCenteredFlexBox } from '@/components/styled';
 import { Image } from '@/components/styled';
-import type { Car } from '@/db/schema';
 import type { CarInfoEssential } from '@/types/car';
 
 interface CarSearchAndSelectDialogIntf {
