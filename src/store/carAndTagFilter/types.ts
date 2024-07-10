@@ -1,7 +1,9 @@
-import type { CarInfo, Tags } from '@/types';
+import type { Car2 } from '@/db/schema/car';
+import type { Tags } from '@/types';
+import type { CarInfo2 } from '@/types/car';
 
 export type CarActions = {
-  setCar: (car: CarInfo | undefined) => void;
+  setCar: (car: Car2 | undefined) => void;
   removeCar: () => void;
 };
 

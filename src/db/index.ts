@@ -1,7 +1,7 @@
 import Dexie, { Table } from 'dexie';
 
 import { supportLangs } from '@/config/i18n';
-import type { CarImages, CarInfo, FH5_info } from '@/types';
+import type { CarAndImage, CarImages, CarInfo, CarInfo2, CarInfoSimple } from '@/types/car';
 
 import {
   Car,
@@ -133,6 +133,22 @@ export async function getCarData(): Promise<CarInfo[]> {
   return results;
 }
 
+export async function getAllCar2(): Promise<Car2[]> {
+  const cars = await db.car2.offset(0).toArray();
+  return cars;
+}
+
+export async function getAllCarInfoSimple(): Promise<CarInfoSimple[]> {
+  const cars = await db.car2.offset(0).toArray();
+  const carInfoSimples = await Promise.all(
+    cars.map(async (car) => {
+      const manu = await db.manufacturer.get(car.manufacturer);
+      return { ...car, manufacturer: manu! };
+    }),
+  );
+  return carInfoSimples;
+}
+
 export async function getCarInfo(name: string): Promise<CarInfo | undefined> {
   const car = await db.car.where('name').equals(name).first();
 
@@ -161,4 +177,28 @@ export async function getCarInfoByID(carId: number): Promise<CarInfo | undefined
   const { id: _, ...resImage } = images!;
   const joined = { id: carID!, ...res, fh5: { ...resFH5 }, image: { ...resImage } };
   return joined;
+}
+
+export async function getCarAndImage2(carID: string): Promise<CarAndImage | undefined> {
+  const car = await db.car2.get(carID);
+  if (!car) return undefined;
+
+  const { id, ...carImages } = (await db.carImage2.get(carID))!;
+  const data = {
+    ...car,
+    image: carImages,
+  };
+  return data;
+}
+
+export async function getCar2(carID: string): Promise<Car2 | undefined> {
+  const car = await db.car2.get(carID);
+  if (!car) return undefined;
+  return car;
+}
+
+export async function getCarImage(carID: string): Promise<CarImage2 | undefined> {
+  const carImg = await db.carImage2.get(carID);
+  if (!carImg) return undefined;
+  return carImg;
 }

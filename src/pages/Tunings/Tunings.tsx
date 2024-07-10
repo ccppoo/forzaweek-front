@@ -33,7 +33,7 @@ import { YearCard } from '@/components/YearCard';
 import { FlexBox, FullSizeCenteredFlexBox } from '@/components/styled';
 import { Image } from '@/components/styled';
 import { tunings } from '@/data/tunings';
-import { getCarInfo } from '@/db/index';
+import { getCar2, getCarInfo } from '@/db/index';
 import useCarAndTagFilter from '@/store/carAndTagFilter';
 
 function TuningCellListingHeader() {
@@ -106,9 +106,9 @@ function TuningShowMore({ carName, searchScope }: { carName: string; searchScope
 
   const onClick = async () => {
     console.log(`show more - tuning`);
-    const carInfo = await getCarInfo(carName);
-    console.log(`carInfo : ${JSON.stringify(carInfo)}`);
-    setCar(carInfo);
+    const car2 = await getCar2(carName);
+    console.log(`carInfo : ${JSON.stringify(car2)}`);
+    setCar(car2);
   };
 
   return (

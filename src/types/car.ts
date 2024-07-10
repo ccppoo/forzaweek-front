@@ -36,6 +36,14 @@ export interface CarInfo2 extends Omit<Car2, 'manufacturer' | 'nation'> {
   fh5_perf: FH5_Performance_BASE;
 }
 
+export interface CarAndImage extends Car2 {
+  image: CarImageBase;
+}
+
+export interface CarInfoSimple extends Omit<Car2, 'manufacturer'> {
+  manufacturer: Manufacturer;
+}
+
 export interface CarInfoEssential extends Omit<Car2, 'manufacturer'> {
   manufacturer: Manufacturer;
   image: CarImageBase;
