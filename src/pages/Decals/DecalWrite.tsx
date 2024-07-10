@@ -13,6 +13,7 @@ import TextField from '@mui/material/TextField';
 
 import type { DecalEditSchema } from '@/FormData/decal';
 import { decalEditSchemaDefault } from '@/FormData/decal';
+import { AddNewDecal, EditDecal } from '@/api/data/fh5/decal';
 import CarSearchAndSelectDialog from '@/components/Search/CarSearchAndSelectDialog';
 import { TagItemCell } from '@/components/Tag';
 import { TagSearchCreateTextFeild } from '@/components/TagSearchCreate';
@@ -54,13 +55,13 @@ export default function DecalWrite(props: dataTextInputIntf) {
   const submit = async (data: DecalEditSchema) => {
     console.log(`data : ${JSON.stringify(data)}`);
 
-    // if (isEditMode) {
-    //   await EditDecal({ decal: data });
-    //   return;
-    // }
-    // if (!isEditMode) {
-    //   await AddNewDecal({ decal: data });
-    // }
+    if (isEditMode) {
+      await EditDecal({ decal: data });
+      return;
+    }
+    if (!isEditMode) {
+      await AddNewDecal({ decal: data });
+    }
 
     return;
   };
@@ -115,7 +116,7 @@ export default function DecalWrite(props: dataTextInputIntf) {
   const imageOrderToFront = (imgIdx: number) => {
     const imgIdxChanged = imgIdx - 1;
     changeImageOrder(imgIdx, -1);
-    console.log(`image to front - before idx : ${imgIdx} -> ${imgIdx - 1}`);
+    // console.log(`image to front - before idx : ${imgIdx} -> ${imgIdx - 1}`);
     setImagePreviewIdx(imgIdxChanged);
     smoothSlideImgPreview(imgIdxChanged);
   };
@@ -124,7 +125,7 @@ export default function DecalWrite(props: dataTextInputIntf) {
     const imgIdxChanged = imgIdx + 1;
 
     changeImageOrder(imgIdx, +1);
-    console.log(`image to front - before idx : ${imgIdx} -> ${imgIdx + 1}`);
+    // console.log(`image to front - before idx : ${imgIdx} -> ${imgIdx + 1}`);
     setImagePreviewIdx(imgIdxChanged);
     smoothSlideImgPreview(imgIdxChanged);
   };
@@ -149,6 +150,8 @@ export default function DecalWrite(props: dataTextInputIntf) {
 
   const closeCarSelectDialog = () => setCarSelectDialogOpened(false);
   const openCarSelectDialog = () => setCarSelectDialogOpened(true);
+
+  console.log(`imagePreviews : ${imagePreviews}`);
 
   return (
     <Container sx={{ paddingTop: 2 }}>
@@ -419,6 +422,7 @@ export default function DecalWrite(props: dataTextInputIntf) {
                                   e.stopPropagation();
                                   imageOrderToBack(idx);
                                 }}
+                                disabled={idx == imagePreviews.length - 1}
                               >
                                 <KeyboardArrowDownOutlinedIcon />
                               </IconButton>
@@ -430,7 +434,6 @@ export default function DecalWrite(props: dataTextInputIntf) {
                                   e.stopPropagation();
                                   removeImage(imgURL);
                                 }}
-                                disabled={idx == imagePreviews.length - 1}
                               >
                                 <CancelOutlinedIcon />
                               </IconButton>
