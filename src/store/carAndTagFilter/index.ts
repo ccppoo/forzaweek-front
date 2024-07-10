@@ -1,14 +1,17 @@
 import { atomFamily, useRecoilState } from 'recoil';
 
-import type { CarInfo, Tags } from '@/types';
+import type { Car2 } from '@/db/schema/car';
+import type { CarInfo2 } from '@/types/car';
+import type { CarAndImage } from '@/types/car';
+import type { Tags } from '@/types/tag';
 
 import { CarActions, TagActions } from './types';
 
 const tagsDefault: Tags = [];
-const carDefault: CarInfo | undefined = undefined;
+const carDefault: Car2 | undefined = undefined;
 type CarTagFilter = {
   tags: Tags;
-  car: CarInfo | undefined;
+  car: Car2 | undefined;
 };
 
 const carTagFilterDefault: CarTagFilter = {
@@ -22,7 +25,7 @@ const carTagFilterStateFamily = atomFamily<CarTagFilter, string>({
 });
 
 function useCarAndTagFilter(scope: string): {
-  filter: { car: CarInfo | undefined; tags: Tags };
+  filter: { car: Car2 | undefined; tags: Tags };
   actions: { car: CarActions; tag: TagActions };
 } {
   const carTagFilterState = carTagFilterStateFamily(scope);
@@ -64,7 +67,7 @@ function useCarAndTagFilter(scope: string): {
     });
   };
 
-  const setCar = async (name: CarInfo | undefined) => {
+  const setCar = async (name: Car2 | undefined) => {
     setCarTagFilterOptions((prev) => {
       return {
         ...prev,
