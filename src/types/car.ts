@@ -4,28 +4,9 @@ import type { FH5_META_BASE, FH5_Performance_BASE } from '@/db/schema/fh5';
 import type { Manufacturer } from '@/db/schema/manufacturer';
 import type { Nation } from '@/db/schema/nation';
 
-export type FH5_info = {
-  division: string;
-  PI: number;
-};
-
 export type CarImages = {
   main: string;
   images: string[];
-};
-
-export type CarInfo = {
-  id: number;
-  name: string;
-  year: number;
-  country: string;
-  driveTrain: string;
-  door: number;
-  engine: string;
-  manufacture: string;
-  bodyStyle: string;
-  fh5: FH5_info;
-  image: CarImages;
 };
 
 export interface CarInfo2 extends Omit<Car2, 'manufacturer' | 'nation'> {
@@ -49,18 +30,23 @@ export interface CarInfoEssential extends Omit<Car2, 'manufacturer'> {
   image: CarImageBase;
 }
 
+export type PerformanceTrait =
+  | 'acceleration'
+  | 'speed'
+  | 'braking'
+  | 'offroad'
+  | 'launch'
+  | 'handling';
 export type SuspensionType = 'drift' | 'race' | 'rally';
 export type TierType = 'normal' | 'snow' | 'rally' | 'offroad' | 'slick' | 'race' | 'drag';
 export type DrivingSystemType = 'FWD' | 'AWD' | 'RWD';
+export type EngineType = 'EV' | 'ICE' | 'HV';
 
-export type DriveTrainType = 'AWD' | 'FWD' | 'RWD';
-export type DoorNumberType = 1 | 2 | 3 | 4;
-export type BodyStyleType =
-  | 'sedan'
-  | 'hatchBack'
-  | 'coupe'
-  | 'wagon'
-  | 'ATV'
-  | 'limo'
-  | 'threeWheeler'
-  | 'convertible';
+export const performanceTraits: PerformanceTrait[] = [
+  'acceleration',
+  'speed',
+  'braking',
+  'offroad',
+  'launch',
+  'handling',
+];

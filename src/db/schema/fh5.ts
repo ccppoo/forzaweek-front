@@ -26,7 +26,7 @@ export interface FH5_META extends FH5_META_BASE {
 }
 
 export interface FH5_Performance_BASE {
-  PI: number;
+  pi: number;
   speed: number;
   handling: number;
   acceleration: number;

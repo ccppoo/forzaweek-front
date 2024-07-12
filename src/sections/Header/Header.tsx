@@ -21,17 +21,14 @@ import MenuItem from '@mui/material/MenuItem';
 import Toolbar from '@mui/material/Toolbar';
 import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
-import { alpha, styled } from '@mui/material/styles';
-import useScrollTrigger from '@mui/material/useScrollTrigger';
 
 import * as image from '@/image';
 import { FlexBox } from '@/components/styled';
 import { Image } from '@/components/styled';
-import { repository, title } from '@/config';
+import { title } from '@/config';
 import useHotKeysDialog from '@/store/hotkeys';
 import useLangaugeOption, { langLocale } from '@/store/language';
 import useNotifications from '@/store/notifications';
-import useSidebar from '@/store/sidebar';
 import useTheme from '@/store/theme';
 
 import MenuNavigation from './MenuNavigation';
@@ -88,7 +85,6 @@ function NavigationButton({ size, image, name }: { size: number; image: string; 
 }
 
 function Header() {
-  const [, sidebarActions] = useSidebar();
   const [theme, themeActions] = useTheme();
   const [, notificationsActions] = useNotifications();
   const [, hotKeysDialogActions] = useHotKeysDialog();

@@ -6,8 +6,6 @@ const title = 'ForzaWeek';
 
 const email = 'auther-email@gmail.com';
 
-const repository = 'https://github.com/suren-atoyan/react-pwa';
-
 const messages = {
   app: {
     crash: {
@@ -52,4 +50,4 @@ const defaultMetaTags = {
   description: 'Starter kit for modern web applications',
 };
 
-export { loader, notifications, dateFormat, messages, repository, email, title, defaultMetaTags };
+export { loader, notifications, dateFormat, messages, email, title, defaultMetaTags };

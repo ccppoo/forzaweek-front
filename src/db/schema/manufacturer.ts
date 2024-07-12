@@ -4,7 +4,7 @@ export interface ManufacturerBase {
   name: i18nMap;
   name_en: string;
   founded: number;
-  nation: string; // nation ID
+  origin: string; // nation ID
   imageURL: string;
 }
 

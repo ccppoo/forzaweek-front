@@ -4,9 +4,7 @@ import { useLiveQuery } from 'dexie-react-hooks';
 
 import { db } from '@/db';
 import type {
-  Car,
   Car2,
-  CarImage,
   CarImage2,
   FH5_META,
   FH5_Performance,
@@ -14,10 +12,6 @@ import type {
   Manufacturer,
   Nation,
 } from '@/db/schema';
-import type { CarImageBase } from '@/db/schema/carImage';
-import type { FH5_META_BASE, FH5_Performance_BASE } from '@/db/schema/fh5';
-import type { ManufacturerBase } from '@/db/schema/manufacturer';
-import type { CarImages, CarInfo, FH5_info } from '@/types';
 import { CarInfo2 } from '@/types/car';
 
 import {
@@ -145,7 +139,6 @@ export async function getCarData2({
     const cars = await db.car2.bulkGet(pks);
     const carManufacturers = cars.map((car) => car?.manufacturer); // manufacturer ID
     const carNations = cars.map((car) => car?.nation); // nation ID
-    console.log(`nations : ${JSON.stringify(carNations)}`);
     const [mans, nations, images, car_fh5_meta, car_fh5_perf] = await Promise.all([
       db.manufacturer.bulkGet(carManufacturers),
       db.nation.bulkGet(carNations),

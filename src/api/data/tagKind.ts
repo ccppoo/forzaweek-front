@@ -7,46 +7,6 @@ import type { API_NAME } from '@/api/types';
 
 import { API_HOST } from '../index';
 
-const a = {
-  name: [
-    { lang: 'en', value: 'animation' },
-    { lang: 'ko', value: '애니메이션' },
-  ],
-  imageURL: 'blob:https://localhost:5173/cebbcd72-7c44-40ee-ab49-0c44cac37850',
-  description: [
-    {
-      lang: 'en',
-      value:
-        'This tag means that there are objects related to animation characters, phrases, ect. for the classification of animation-related tags.',
-    },
-    {
-      lang: 'ko',
-      value:
-        '애니메이션과 관련된 태그 분류로 애니메이션 캐릭터, 문구 및 사물과 관련된 항목이 있는 것을 의미합니다',
-    },
-  ],
-};
-
-const ass = {
-  name: [
-    { lang: 'en', value: 'animation' },
-    { lang: 'ko', value: '애니메이션' },
-  ],
-  name_en: 'animation',
-  imageURL: 'blob:https://localhost:5173/cebbcd72-7c44-40ee-ab49-0c44cac37850',
-  description: [
-    {
-      lang: 'en',
-      value:
-        'This tag means that there are objects related to animation characters, phrases, ect. for the classification of animation-related tags.',
-    },
-    {
-      lang: 'ko',
-      value:
-        '애니메이션과 관련된 태그 분류로 애니메이션 캐릭터, 문구 및 사물과 관련된 항목이 있는 것을 의미합니다',
-    },
-  ],
-};
 export async function AddNewTagKind({ tagKind }: { tagKind: TagKind.TagKindEditSchema }) {
   const { value: name_en } = tagKind.name.filter((i18n) => i18n.lang == 'en')[0];
 

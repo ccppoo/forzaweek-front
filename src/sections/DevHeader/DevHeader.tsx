@@ -9,9 +9,6 @@ import Toolbar from '@mui/material/Toolbar';
 
 import { FlexBox } from '@/components/styled';
 import routes from '@/routes';
-import useHotKeysDialog from '@/store/hotkeys';
-import useNotifications from '@/store/notifications';
-import useSidebar from '@/store/sidebar';
 import useTheme from '@/store/theme';
 
 function LinkButton({ name, path }: { name: string; path: string }) {

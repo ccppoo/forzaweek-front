@@ -5,7 +5,6 @@ import type { Collection, Table } from 'dexie';
 // import { useQuery } from '@tanstack/react-query';
 import { useLiveQuery } from 'dexie-react-hooks';
 
-import { getCars } from '@/api/car';
 import { db } from '@/db';
 import type { Car, CarImage, FH5_STAT, Track } from '@/db/schema';
 import type { TrackInfo } from '@/types';
