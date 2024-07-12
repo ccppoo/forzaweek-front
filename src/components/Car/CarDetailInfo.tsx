@@ -1,25 +1,37 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 
-import { Box, Divider } from '@mui/material';
-import Container from '@mui/material/Container';
+import { SvgIconComponent } from '@mui/icons-material';
+import BoltOutlinedIcon from '@mui/icons-material/BoltOutlined';
+import LocalFireDepartmentOutlinedIcon from '@mui/icons-material/LocalFireDepartmentOutlined';
+import WaterDropOutlinedIcon from '@mui/icons-material/WaterDropOutlined';
+import { Box, Divider, Tooltip } from '@mui/material';
 import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Unstable_Grid2';
 
-import * as image from '@/image';
 import { FlexBox } from '@/components/styled';
 import { Image } from '@/components/styled';
+import type { CarInfo2, EngineType } from '@/types/car';
 
 function CarDetailInfoCell({
   title,
   value,
   image,
+  IconComponent,
 }: {
   title: string;
   value: string | number;
   image?: string;
+  IconComponent?: SvgIconComponent;
 }) {
+  const engineTypeToolTip: Record<EngineType, string> = {
+    HV: 'Hydrogen Vehicle',
+    EV: 'Electric Vehicle',
+    ICE: 'Internal Combustion engine',
+  };
+
+  const _value = value == 'ICE' ? 'IC Engine' : value;
+
   return (
     <Box
       sx={{
@@ -39,63 +51,62 @@ function CarDetailInfoCell({
           <FlexBox
             sx={{
               height: 50,
+              width: 'auto',
+              maxWidth: 100,
+              backgroundColor: 'white',
             }}
           >
             <Image
               src={image}
               sx={{
-                width: 'auto',
-                height: '100%',
-                // maxHeight: '100%',
+                backgroundColor: 'white',
+                objectFit: 'contain',
               }}
             />
           </FlexBox>
         )}
+        {IconComponent && <IconComponent />}
         <FlexBox sx={{ alignItems: 'center' }}>
-          <Typography sx={{ fontSize: 21, fontWeight: 400 }}>{value}</Typography>
+          {title == 'Engine Type' ? (
+            <Tooltip title={engineTypeToolTip[value as EngineType]} placement="top" arrow>
+              <Typography sx={{ fontSize: 21, fontWeight: 400 }}>{_value}</Typography>
+            </Tooltip>
+          ) : (
+            <Typography sx={{ fontSize: 21, fontWeight: 400 }}>{value}</Typography>
+          )}
         </FlexBox>
       </FlexBox>
     </Box>
   );
 }
 
-export default function CarDetailInfo() {
-  const WIDTH = '100%';
-  const HEIGHT = 100;
-  const manufacturer = 'Hyundai';
-  const country = 'Korea';
-  const division = 'Super Hot Hatch';
-  const prodYear = 2020;
-  const bodyStyle = 'Sedan';
-  // "engine": "ICE",
-  //   "division": "super hot hatch",
+export default function CarDetailInfo({ carInfo }: { carInfo: CarInfo2 }) {
+  const engineTypeIcon: Record<EngineType, SvgIconComponent> = {
+    EV: BoltOutlinedIcon,
+    HV: WaterDropOutlinedIcon,
+    ICE: LocalFireDepartmentOutlinedIcon,
+  };
 
   const detailInfo = [
     {
       title: 'Manufacturer',
-      value: manufacturer,
-      image: image.manufacturer.hyundai,
+      value: carInfo.manufacturer.name_en,
+      image: carInfo.manufacturer.imageURL,
     },
     {
-      title: 'Country',
-      value: country,
-      image: image.flags.korea,
+      title: 'Origin',
+      value: carInfo.nation.name_en,
+      image: carInfo.nation.imageURL,
     },
     {
       title: 'Production Year',
-      value: prodYear,
-      // image: image.manufacturer.hyundai,
+      value: carInfo.productionYear,
     },
     {
-      title: 'Division',
-      value: division,
-      // image: image.manufacturer.hyundai,
+      title: 'Engine Type',
+      value: carInfo.engineType,
+      IconComponent: engineTypeIcon[carInfo.engineType as EngineType],
     },
-    // {
-    //   title: 'Body Style',
-    //   value: bodyStyle,
-    //   // image: image.manufacturer.hyundai,
-    // },
   ];
 
   return (
@@ -109,7 +120,7 @@ export default function CarDetailInfo() {
       }}
     >
       {detailInfo.map((info) => {
-        return <CarDetailInfoCell {...info} />;
+        return <CarDetailInfoCell {...info} key={`car-detail-info-${info.value}`} />;
       })}
     </FlexBox>
   );

@@ -1,76 +1,79 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
+import { ScrollRestoration, useNavigate } from 'react-router-dom';
 
 import BuildOutlinedIcon from '@mui/icons-material/BuildOutlined';
 import ColorLensOutlinedIcon from '@mui/icons-material/ColorLensOutlined';
-import { Box, Divider, IconButton, Paper, Typography } from '@mui/material';
+import {
+  Box,
+  Button,
+  ButtonBase,
+  Divider,
+  IconButton,
+  Paper,
+  Typography,
+  styled,
+} from '@mui/material';
 import Grid from '@mui/material/Unstable_Grid2';
 
 import { FlexBox } from '@/components/styled';
 import { Image } from '@/components/styled';
-import { CarInfo } from '@/types';
+import { getCar2 } from '@/db';
+import useCarAndTagFilter from '@/store/carAndTagFilter';
 import { CarInfo2 } from '@/types/car';
 
-function CarPreviewInfo({ carInfo }: { carInfo: CarInfo2 }) {
-  const MANUFACTURER = carInfo.manufacturer;
-  const COUNRTY = carInfo.nation.name_en;
-  const YEAR = carInfo.productionYear;
-  // const DRIVE_TRAIN = carInfo.driveTrain;
-  const BODY_STYLE = carInfo.bodyStyle;
-  // 인게임 스탯
-  const PI = carInfo.fh5_perf.PI;
-  const DIVISION = carInfo.fh5_meta.division;
+const StyledLink = styled(Link)`
+  text-decoration: none;
+  color: inherit;
+  position: relative;
+  padding: 2px 6px 2px 6px;
+  border-radius: 4px;
+  &:hover,
+  &:focus {
+    background-color: rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s;
+  }
+`;
 
-  return (
-    <FlexBox
-      sx={{
-        maxWidth: '100%',
-        height: '100%',
-        justifyContent: 'center',
-        alignItems: 'center',
-      }}
-    >
-      <Image
-        src={carInfo.image.first}
-        sx={{
-          width: '100%',
-          objectFit: 'contain',
-        }}
-      />
-      <FlexBox sx={{ columnGap: 1, rowGap: 0.5, flexDirection: 'column' }}>
-        {/* 연도 */}
-        <Typography>{YEAR}</Typography>
-        {/* 줄넘김 없고, 길이가 한정된 것들 */}
-        <FlexBox sx={{ columnGap: 1, justifyContent: 'start' }}>
-          <FlexBox sx={{ border: '1px black solid', borderRadius: 0.8, paddingX: 0.5 }}>
-            {/* Body Style - 세단/왜건/해치백 */}
-            <Typography variant="body1">{BODY_STYLE}</Typography>
-          </FlexBox>
-          <FlexBox sx={{ border: '1px black solid', borderRadius: 0.8, paddingX: 0.5 }}>
-            {/* Division - 인게임  */}
-            <Typography variant="body1">{DIVISION}</Typography>
-          </FlexBox>
-        </FlexBox>
-      </FlexBox>
-    </FlexBox>
-  );
+function setFontSize(target: string): number {
+  if (target.length < 21) return 21;
+  if (target.length < 24) return 18;
+  if (target.length < 30) return 16;
+  return 15;
 }
 
 export default function CarPreviewCard({ carInfo }: { carInfo: CarInfo2 }) {
-  // 자동차 사진 + 이름, 클래스, 기본적인거 추가
-
-  const W = 250;
-  const H = 150;
-
   const FULL_NAME = carInfo.name_en;
-
-  const COUNRTY = carInfo.nation.name_en;
+  const NAME_FONT_SIZE = setFontSize(FULL_NAME);
   const YEAR = carInfo.productionYear;
-  // const DRIVE_TRAIN = carInfo.;
-  const BODY_STYLE = carInfo.bodyStyle;
-  // 인게임 스탯
-  const PI = carInfo.fh5_perf.PI;
+  const PI = carInfo.fh5_perf.pi;
   const DIVISION = carInfo.fh5_meta.division;
-  // min 245 max 405
+  const EngineType = carInfo.engineType;
+
+  const {
+    actions: {
+      car: { setCar: searchCarDecal },
+    },
+  } = useCarAndTagFilter('decal');
+  const {
+    actions: {
+      car: { setCar: searchCarTuning },
+    },
+  } = useCarAndTagFilter('tunings');
+  const navigate = useNavigate();
+
+  const goto = (relativePath: string) => navigate(relativePath);
+  const goSearchDecals = async () => {
+    const car2 = await getCar2(carInfo.id);
+    searchCarDecal(car2);
+    goto('/fh5/decal');
+  };
+  const goSearchTunings = async () => {
+    const car2 = await getCar2(carInfo.id);
+    searchCarTuning(car2);
+    goto('/fh5/tuning');
+  };
+
   return (
     <FlexBox sx={{ minWidth: 400, width: 'calc( 50% - 20px )', maxWidth: 560 }}>
       <Paper
@@ -114,7 +117,9 @@ export default function CarPreviewCard({ carInfo }: { carInfo: CarInfo2 }) {
         >
           {/* 차 이름 + 연식 */}
           <FlexBox sx={{ width: '100%', paddingY: 0.2, alignItems: 'baseline', columnGap: 1 }}>
-            <Typography variant="h6">{FULL_NAME}</Typography>
+            <StyledLink to={`/car/${carInfo.id}`}>
+              <Typography fontSize={NAME_FONT_SIZE}>{FULL_NAME}</Typography>
+            </StyledLink>
             <Typography variant="body2" sx={{ fontWeight: 200 }}>
               {YEAR}
             </Typography>
@@ -126,6 +131,7 @@ export default function CarPreviewCard({ carInfo }: { carInfo: CarInfo2 }) {
               justifyContent: 'start',
               height: '100%',
               paddingTop: 0.3,
+              paddingX: 0.5,
               flexDirection: 'column',
             }}
           >
@@ -149,16 +155,22 @@ export default function CarPreviewCard({ carInfo }: { carInfo: CarInfo2 }) {
                 justifyContent: 'end',
                 width: '100%',
                 height: '100%',
-                columnGap: 0.3,
+                columnGap: 0.8,
                 alignItems: 'end',
               }}
             >
               {/* TODO: click -> goto decal selected car */}
-              <IconButton sx={{ padding: 0.4, borderRadius: 1 }}>
+              <IconButton
+                sx={{ padding: 0.4, borderRadius: 1, columnGap: 0.2 }}
+                onClick={goSearchDecals}
+              >
                 <ColorLensOutlinedIcon fontSize="small" />
                 <Typography sx={{ fontSize: '15px' }}>Decal</Typography>
               </IconButton>
-              <IconButton sx={{ padding: 0.4, borderRadius: 1 }} size="small">
+              <IconButton
+                sx={{ padding: 0.4, borderRadius: 1, columnGap: 0.2 }}
+                onClick={goSearchTunings}
+              >
                 <BuildOutlinedIcon fontSize="small" />
                 <Typography sx={{ fontSize: '15px' }}>Tuning</Typography>
               </IconButton>
