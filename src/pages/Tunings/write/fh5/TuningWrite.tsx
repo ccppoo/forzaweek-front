@@ -15,9 +15,11 @@ import { TagSearchCreateTextFeild } from '@/components/TagSearchCreate';
 import { FlexBox, FullSizeCenteredFlexBox, Image } from '@/components/styled';
 import type { CarInfoEssential } from '@/types/car';
 
-import DetailedTuningTabs from './DetailedTuningTabs';
-import TuningPI from './TuningPI';
-import TuningPerformance from './TuningPerformance';
+import DetailedTuningTabs from './detailedTuning';
+import MajorParts from './majorPart';
+import TuningPerformance from './performance';
+import TuningPI from './pi';
+import TestReadingInput from './testReading';
 
 interface dataTextInputIntf {
   tuningEditSchema?: TuningEditSchema;
@@ -277,6 +279,39 @@ export default function TuningWrite(props: dataTextInputIntf) {
                   <TuningPerformance />
                 </FlexBox>
               </Box>
+              {/* 4. 튜닝 성능 입력 */}
+              <Box
+                sx={{
+                  width: '100%',
+                  display: 'grid',
+                  gridTemplateColumns: '175px auto',
+                  gridTemplateRows: 'auto',
+                }}
+              >
+                <FlexBox>
+                  <Typography>Tuning test readings</Typography>
+                </FlexBox>
+                <FlexBox sx={{ width: '100%', height: '100%', columnGap: 2 }}>
+                  <TestReadingInput />
+                </FlexBox>
+              </Box>
+              {/* 4. 튜닝 성능 입력 */}
+              <Box
+                sx={{
+                  width: '100%',
+                  display: 'grid',
+                  gridTemplateColumns: '175px auto',
+                  gridTemplateRows: 'auto',
+                }}
+              >
+                <FlexBox>
+                  <Typography>Tuning Major parts</Typography>
+                </FlexBox>
+                <FlexBox sx={{ width: '100%', height: '100%', columnGap: 2 }}>
+                  <MajorParts />
+                </FlexBox>
+              </Box>
+
               {/* 5. 세부 튜닝 입력 */}
               <Box
                 sx={{
