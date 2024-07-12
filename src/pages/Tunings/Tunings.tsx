@@ -1,39 +1,21 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlined';
-import FavoriteOutlinedIcon from '@mui/icons-material/FavoriteOutlined';
-import ModeCommentOutlinedIcon from '@mui/icons-material/ModeCommentOutlined';
-import Avatar from '@mui/material/Avatar';
-import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
-import Checkbox from '@mui/material/Checkbox';
-import Chip from '@mui/material/Chip';
 import Container from '@mui/material/Container';
-import FormControl from '@mui/material/FormControl';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import FormGroup from '@mui/material/FormGroup';
-import IconButton from '@mui/material/IconButton';
-import ListSubheader from '@mui/material/ListSubheader';
-import MenuItem from '@mui/material/MenuItem';
-import OutlinedInput from '@mui/material/OutlinedInput';
 import Pagination from '@mui/material/Pagination';
-import Paper from '@mui/material/Paper';
-import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Unstable_Grid2';
 
 import * as image from '@/image';
-import { PI_Card } from '@/components/PI';
-import { CarFilterAndSelect } from '@/components/Search';
 import { CarAndTagSearch } from '@/components/Search';
 import { TuningBriefCell } from '@/components/Tunings';
 import TuningOptionFilter from '@/components/Tunings/TuningSearchFilter';
-import { YearCard } from '@/components/YearCard';
 import { FlexBox, FullSizeCenteredFlexBox } from '@/components/styled';
 import { Image } from '@/components/styled';
 import { tunings } from '@/data/tunings';
-import { getCar2, getCarInfo } from '@/db/index';
+import { getCar2 } from '@/db/index';
+import ScrollToTop from '@/hooks/useResetScroll';
 import useCarAndTagFilter from '@/store/carAndTagFilter';
 
 function TuningCellListingHeader() {
@@ -206,6 +188,7 @@ export default function Tunings() {
         {/* if no car selected */}
         {car ? <SearchResultTunings /> : <RecommandedTunings />}
       </FullSizeCenteredFlexBox>
+      <ScrollToTop />
     </Container>
   );
 }

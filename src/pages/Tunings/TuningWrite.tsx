@@ -8,6 +8,7 @@ import TextField from '@mui/material/TextField';
 
 import type { TuningEditSchema } from '@/FormData/tuning';
 import { tuningEditSchemaDefault } from '@/FormData/tuning';
+import { AddNewTuning } from '@/api/data/fh5/tuning';
 import CarSearchAndSelectDialog from '@/components/Search/CarSearchAndSelectDialog';
 import { TagItemCell } from '@/components/Tag';
 import { TagSearchCreateTextFeild } from '@/components/TagSearchCreate';
@@ -45,6 +46,7 @@ export default function TuningWrite(props: dataTextInputIntf) {
   console.log(`isEditMode :${isEditMode}`);
   const submit = async (data: TuningEditSchema) => {
     console.log(`data : ${JSON.stringify(data)}`);
+    // AddNewTuning()
     // const values = getValues();
     // const queryKey = ['add_nation', data.i18n[0].value];
     return;
@@ -215,7 +217,7 @@ export default function TuningWrite(props: dataTextInputIntf) {
                 }}
               >
                 <FlexBox sx={{ alignItems: 'center', height: 60 }}>
-                  <Typography>Decal Tags</Typography>
+                  <Typography>Tuning Tags</Typography>
                 </FlexBox>
                 {/* 태그 자동완성 검색 -> 엔터누르면 완성되는 형식으로 */}
                 <FlexBox sx={{ width: '100%', flexDirection: 'column', rowGap: 1 }}>
@@ -236,7 +238,7 @@ export default function TuningWrite(props: dataTextInputIntf) {
                     ) : (
                       <FlexBox sx={{ alignItems: 'center', height: '100%' }}>
                         <Typography fontWeight={300}>
-                          Add tags that could describe this decal
+                          Add tags that could describe this tuning
                         </Typography>
                       </FlexBox>
                     )}

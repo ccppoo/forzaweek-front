@@ -1,10 +1,8 @@
 import { FocusEvent, useState } from 'react';
-import { Controller, FormProvider, useFieldArray, useForm, useFormContext } from 'react-hook-form';
-import type { FieldName, FieldValues } from 'react-hook-form';
+import { useFormContext } from 'react-hook-form';
 
 import { Button, Paper, Typography } from '@mui/material';
 import { ButtonBase } from '@mui/material';
-import FormControl from '@mui/material/FormControl';
 import Slider from '@mui/material/Slider';
 import TextField from '@mui/material/TextField';
 
@@ -32,7 +30,6 @@ function SliderValue(props: SliderValueProp) {
 
   const sliderMin = min;
   const sliderMax = max;
-  // const sliderMid = mid ? mid : Math.floor((sliderMin + sliderMax) / 2);
   const valueLabelFormatter = (value: number) => (unitChar ? `${value} ${unitChar}` : `${value}`);
 
   // TODO: type check? - like ... formPath as FieldName<TuningEditSchema>
@@ -127,6 +124,60 @@ function SliderValue(props: SliderValueProp) {
     } else {
       setTextValue(sliderVal.toString());
     }
+  };
+
+  const handleTextInputValueChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const originValue = event.target.value;
+    var value = event.target.value;
+    // console.log(`start value : ${value}`);
+    if (typeof value !== 'string') {
+      setTextValue('');
+    }
+    // 숫자 외 제거
+    if (!value.match(/^[0-9]+$/)) {
+      const replaced = value.replace(/[^0-9]/g, '');
+      setTextValue(replaced);
+      value = replaced;
+    }
+
+    // value = replaced;
+    // 숫자 처리
+    try {
+      const sliderVal = Number.parseFloat(value);
+
+      if (Number.isNaN(sliderVal)) {
+        // console.log(`sliderVal NaN : ${sliderVal}`);
+        setSliderValue(0);
+      }
+    } catch {
+      // console.log(`catch`);
+      // 소수점 입력 시작
+      if (value.endsWith('.')) {
+        const num = Number.parseFloat(value.substring(0, -1));
+        setSliderValue(num);
+      }
+    }
+    setTextValue(value);
+  };
+
+  const handleOnBlur = (e: FocusEvent<HTMLInputElement>) => {
+    e.stopPropagation();
+    e.preventDefault();
+    // 입력 다 마치고 슬라이더 값 업데이트
+    const completedInput = Number.parseInt(textValue);
+    if (!Number.isFinite(completedInput)) {
+      // 이상한 경우 기본값으로
+      setSliderTextfieldValue(800);
+    }
+
+    if (completedInput < sliderMin) {
+      setSliderTextfieldValue(sliderMin);
+    } else if (completedInput > sliderMax) {
+      setSliderTextfieldValue(sliderMax);
+    } else {
+      setSliderTextfieldValue(completedInput);
+    }
+    // console.log(`on blur`);
   };
 
   const PI_CARD_INPUT_HEIGHT = 50;
@@ -279,58 +330,8 @@ function SliderValue(props: SliderValueProp) {
                   },
                 },
               }}
-              onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                const originValue = event.target.value;
-                var value = event.target.value;
-                // console.log(`start value : ${value}`);
-                if (typeof value !== 'string') {
-                  setTextValue('');
-                }
-                // 숫자 외 제거
-                if (!value.match(/^[0-9]+$/)) {
-                  const replaced = value.replace(/[^0-9]/g, '');
-                  setTextValue(replaced);
-                  value = replaced;
-                }
-
-                // value = replaced;
-                // 숫자 처리
-                try {
-                  const sliderVal = Number.parseFloat(value);
-
-                  if (Number.isNaN(sliderVal)) {
-                    // console.log(`sliderVal NaN : ${sliderVal}`);
-                    setSliderValue(0);
-                  }
-                } catch {
-                  // console.log(`catch`);
-                  // 소수점 입력 시작
-                  if (value.endsWith('.')) {
-                    const num = Number.parseFloat(value.substring(0, -1));
-                    setSliderValue(num);
-                  }
-                }
-                setTextValue(value);
-              }}
-              onBlur={(e: FocusEvent<HTMLInputElement>) => {
-                e.stopPropagation();
-                e.preventDefault();
-                // 입력 다 마치고 슬라이더 값 업데이트
-                const completedInput = Number.parseInt(textValue);
-                if (!Number.isFinite(completedInput)) {
-                  // 이상한 경우 기본값으로
-                  setSliderTextfieldValue(800);
-                }
-
-                if (completedInput < sliderMin) {
-                  setSliderTextfieldValue(sliderMin);
-                } else if (completedInput > sliderMax) {
-                  setSliderTextfieldValue(sliderMax);
-                } else {
-                  setSliderTextfieldValue(completedInput);
-                }
-                // console.log(`on blur`);
-              }}
+              onChange={handleTextInputValueChange}
+              onBlur={handleOnBlur}
             />
           </FlexBox>
           {/* PI -1, +1 버튼 */}
@@ -354,31 +355,6 @@ function SliderValue(props: SliderValueProp) {
 }
 
 function TuningPIInput() {
-  type PerformanceTrait = 'acceleration' | 'speed' | 'braking' | 'offroad' | 'launch' | 'handling';
-  const performanceTraits: PerformanceTrait[] = [
-    'acceleration',
-    'speed',
-    'braking',
-    'offroad',
-    'launch',
-    'handling',
-  ];
-
-  const { control, watch, getValues } = useFormContext<TuningEditSchema>();
-  const formPathBase = ['performance'];
-
-  const performanceValue = performanceTraits.map(
-    (perfName) => watch('performance')[perfName],
-  ) as number[];
-
-  // TODO: more graceful way?
-  const series = [
-    {
-      name: 'performance',
-      data: [...performanceValue],
-    },
-  ];
-
   const PI_MAX = 999;
   const PI_MIN = 100;
   const PI_STEP = 1;

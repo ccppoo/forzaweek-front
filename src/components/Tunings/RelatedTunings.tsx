@@ -1,159 +1,48 @@
 import { useState } from 'react';
-import ReactApexChart from 'react-apexcharts';
+import { useNavigate } from 'react-router-dom';
 
 import Button from '@mui/material/Button';
 import ButtonBase from '@mui/material/ButtonBase';
-import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Unstable_Grid2';
 
 import { PI_Card } from '@/components/PI';
-import { FlexBox, FullSizeCenteredFlexBox } from '@/components/styled';
+import { FlexBox } from '@/components/styled';
 import { tunings } from '@/data/tunings';
-import type { Tuning } from '@/data/tunings';
+import { getCar2 } from '@/db';
+import useCarAndTagFilter from '@/store/carAndTagFilter';
 
 import TuningBriefCell from './TuningBriefCell';
-import { smallChartOptions } from './chartOption';
 
-function ShareCode({ shareCode }: { shareCode: string }) {
-  const share_code3 = [
-    shareCode.substring(0, 3),
-    shareCode.substring(3, 6),
-    shareCode.substring(6, 9),
-  ];
-
-  return (
-    <FlexBox
-      sx={{
-        width: '100%',
-        justifyContent: 'center',
-      }}
-    >
-      <FlexBox
-        sx={{
-          width: 180,
-
-          alignItems: 'center',
-          justifyContent: 'center',
-          columnGap: 1,
-          borderRadius: 2,
-          backgroundColor: '#d1d1d1',
-        }}
-      >
-        {share_code3.map((code_peice) => {
-          return (
-            <Typography variant="h6" key={`share-code-piece-${code_peice}`}>
-              {code_peice}
-            </Typography>
-          );
-        })}
-      </FlexBox>
-    </FlexBox>
-  );
-}
-
-function TuningBreifInfo({ tuning }: { tuning: Tuning }) {
-  const tuningTitle = 'good tuning';
-  const creator = tuning.creater.club
-    ? `[${tuning.creater.club}] ${tuning.creater.id}`
-    : tuning.creater.id;
-  // TODO: 이쁘게
-  return (
-    <Grid xs={6} sx={{ display: 'flex', flexDirection: 'column' }}>
-      <FlexBox sx={{ width: '100%' }}>
-        <Typography>{tuningTitle}</Typography>
-      </FlexBox>
-      <FlexBox>
-        <Typography>creator : {creator}</Typography>
-      </FlexBox>
-
-      <FlexBox>
-        <Typography>tags : grip</Typography>
-      </FlexBox>
-
-      <FlexBox>
-        <Typography>suspension : {tuning.suspension}</Typography>
-      </FlexBox>
-      <FlexBox>
-        <Typography>tier : {tuning.tier}</Typography>
-      </FlexBox>
-      <FlexBox>
-        <Typography>driving system : {tuning.driving_system}</Typography>
-      </FlexBox>
-      <ShareCode shareCode={tuning.share_code} />
-    </Grid>
-  );
-}
-
-function RelatedTuning({ tuning }: { tuning: Tuning }) {
-  const series = [
-    {
-      name: 'performance',
-      data: [
-        tuning.performance.acceleration,
-        tuning.performance.speed,
-        tuning.performance.braking,
-        tuning.performance.offroad,
-        tuning.performance.launch,
-        tuning.performance.handling,
-      ],
+function TuningsShowMore({ carID }: { carID: string }) {
+  const {
+    actions: {
+      car: { setCar: searchCarTuning },
     },
-  ];
+  } = useCarAndTagFilter('tunings');
+  const navigate = useNavigate();
 
-  return (
-    <Grid xs={6} sx={{ display: 'flex', flexDirection: 'column', padding: 1 }}>
-      <Paper sx={{ display: 'flex', width: '100%', height: '100%' }} elevation={4}>
-        <FlexBox sx={{ width: 0, position: 'static', paddingTop: 1, paddingLeft: 1 }}>
-          <PI_Card pi_number={tuning.PI} height={30} />
-        </FlexBox>
-        <Grid container sx={{ width: '100%' }}>
-          {/* 성능 그래프 */}
-          <Grid xs={6} sx={{ aspectRatio: '1/1' }}>
-            <ReactApexChart
-              series={series}
-              options={smallChartOptions}
-              width={'100%'}
-              height={'100%'}
-              type="radar"
-              id={`radar-chart-${tuning.share_code}`}
-            />
-          </Grid>
-          {/* 튜닝 간단 정보 */}
-          <TuningBreifInfo tuning={tuning} />
-        </Grid>
-      </Paper>
-    </Grid>
-  );
-}
+  const goto = (relativePath: string) => navigate(relativePath);
 
-function TuningsShowMore() {
-  // TODO:  처음부터 Car DB의 ID로 받아서 DB 쿼리 안하고 바로 세팅할 수 있도록
-
-  // const {
-  //   actions: {
-  //     car: { setCar },
-  //   },
-  // } = useCarAndTagFilter(searchScope);
-
-  // more -> search filter 보여주고 있는 차로 세팅 -> 재검색
-
+  const goSearchTunings = async () => {
+    const car2 = await getCar2(carID);
+    searchCarTuning(car2);
+    goto('/fh5/tuning');
+  };
   const onClick = async () => {
-    console.log(`show more - tuning`);
-    // const carInfo = await getCarInfo(carName);
-    // console.log(`carInfo : ${JSON.stringify(carInfo)}`);
-    // setCar(carInfo);
+    await goSearchTunings();
   };
 
   return (
     <FlexBox sx={{ justifyContent: 'end', paddingX: 1, paddingTop: 1 }}>
       <FlexBox sx={{ justifyContent: 'center', alignItems: 'center', marginX: 1 }}>
-        <Button onClick={onClick}>show more</Button>
+        <Button onClick={onClick}>show more tunings</Button>
       </FlexBox>
     </FlexBox>
   );
 }
 
-export default function RelatedTunings() {
+export default function RelatedTunings({ carID }: { carID: string }) {
   const TUNING_CLASSES = ['D', 'C', 'B', 'A', 'S1', 'S2', 'X'];
   const TUNING_NUM = {
     D: 500,
@@ -242,11 +131,7 @@ export default function RelatedTunings() {
             })}
         </Grid>
       </FlexBox>
-      <TuningsShowMore />
-      {/* Pagination */}
-      {/* <FlexBox sx={{ alignItems: 'center', justifyContent: 'center', paddingTop: 3 }}>
-        <Pagination count={10} page={page} onChange={handleChange} size="large" />
-      </FlexBox> */}
+      <TuningsShowMore carID={carID} />
     </FlexBox>
   );
 }

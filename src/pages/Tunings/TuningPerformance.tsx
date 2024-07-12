@@ -1,8 +1,7 @@
 import { SyntheticEvent, useEffect, useMemo, useState } from 'react';
 import ReactApexChart from 'react-apexcharts';
-import { Controller, FormProvider, useFieldArray, useForm, useFormContext } from 'react-hook-form';
-import type { SubmitErrorHandler } from 'react-hook-form';
-import type { FieldName, FieldValues } from 'react-hook-form';
+import { useFormContext } from 'react-hook-form';
+import type { FieldName } from 'react-hook-form';
 
 import {
   Box,
@@ -22,6 +21,7 @@ import TextField from '@mui/material/TextField';
 
 import type { TuningEditSchema } from '@/FormData/tuning';
 import { FlexBox } from '@/components/styled';
+import type { PerformanceTrait } from '@/types/car';
 import { getPrecision } from '@/utils/math';
 
 import { chartOptions } from './charOption';
@@ -45,6 +45,9 @@ function SliderValue(props: SliderValueProp) {
   const { name, min, max, unitChar, minMaxReverse, step, formPath } = props;
 
   const { getValues, setValue } = useFormContext<TuningEditSchema>();
+
+  // @ts-expect-error NOTE: 동적으로 hook-forms field name을 가져오는 방법? 'detailedTunings.tier.presssure.front'
+  const setFormValue = (newValue: number) => setValue(formPath, newValue);
 
   const sliderMin = min;
   const sliderMax = max;
@@ -78,6 +81,74 @@ function SliderValue(props: SliderValueProp) {
     } else {
       setTextValue(sliderVal.toString());
     }
+  };
+
+  const handleTextInputValueChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const originValue = event.target.value;
+    var value = event.target.value;
+    // console.log(`start value : ${value}`);
+    if (typeof value !== 'string') {
+      setTextValue('');
+    }
+    value = value.replaceAll(/\.{2,}/g, '.');
+    // 숫자, -, . 제외 제거
+    if (!value.match(/^[0-9.-]+$/)) {
+      const replaced = value.replace(/[^0-9.-]/g, '');
+      setTextValue(replaced);
+      value = replaced;
+    }
+
+    // value = replaced;
+    // 숫자 처리
+    try {
+      const sliderVal = Number.parseFloat(value);
+      // console.log(`sliderVal : ${sliderVal}`);
+      if (Number.isFinite(sliderVal)) {
+        if (!minMaxReverse) {
+          if (sliderVal < sliderMin) {
+            setSliderValue(sliderMin);
+            setFormValue(sliderMin);
+            value = sliderMin.toString();
+          } else if (sliderVal > sliderMax) {
+            setSliderValue(sliderMax);
+            setFormValue(sliderMax);
+            value = sliderMax.toString();
+          } else {
+            setSliderValue(sliderVal);
+            setFormValue(sliderVal);
+          }
+        }
+        if (minMaxReverse) {
+          if (sliderVal < sliderMax) {
+            setSliderValue(sliderMax);
+            setFormValue(sliderMax);
+
+            value = sliderMax.toString();
+          } else if (sliderVal > sliderMin) {
+            setSliderValue(sliderMin);
+            setFormValue(sliderMin);
+            value = sliderMin.toString();
+          } else {
+            setSliderValue(sliderMin - sliderVal);
+            setFormValue(sliderMin - sliderVal);
+          }
+        }
+      }
+      if (Number.isNaN(sliderVal)) {
+        // console.log(`sliderVal NaN : ${sliderVal}`);
+        setSliderValue(0);
+        setFormValue(0);
+      }
+    } catch {
+      // console.log(`catch`);
+      // 소수점 입력 시작
+      if (value.endsWith('.')) {
+        const num = Number.parseFloat(value.substring(0, -1));
+        setSliderValue(num);
+        setFormValue(num);
+      }
+    }
+    setTextValue(value);
   };
 
   return (
@@ -138,7 +209,6 @@ function SliderValue(props: SliderValueProp) {
           autoComplete="off"
           value={textValue}
           sx={{ width: 80 }}
-          // fullWidth
           inputProps={{
             sx: {
               textAlign: 'right',
@@ -147,64 +217,7 @@ function SliderValue(props: SliderValueProp) {
               },
             },
           }}
-          onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-            const originValue = event.target.value;
-            var value = event.target.value;
-            console.log(`start value : ${value}`);
-            if (typeof value !== 'string') {
-              setTextValue('');
-            }
-            value = value.replaceAll(/\.{2,}/g, '.');
-            // 숫자, -, . 제외 제거
-            if (!value.match(/^[0-9.-]+$/)) {
-              const replaced = value.replace(/[^0-9.-]/g, '');
-              setTextValue(replaced);
-              value = replaced;
-            }
-
-            // value = replaced;
-            // 숫자 처리
-            try {
-              const sliderVal = Number.parseFloat(value);
-              // console.log(`sliderVal : ${sliderVal}`);
-              if (Number.isFinite(sliderVal)) {
-                if (!minMaxReverse) {
-                  if (sliderVal < sliderMin) {
-                    setSliderValue(sliderMin);
-                    value = sliderMin.toString();
-                  } else if (sliderVal > sliderMax) {
-                    setSliderValue(sliderMax);
-                    value = sliderMax.toString();
-                  } else {
-                    setSliderValue(sliderVal);
-                  }
-                }
-                if (minMaxReverse) {
-                  if (sliderVal < sliderMax) {
-                    setSliderValue(sliderMax);
-                    value = sliderMax.toString();
-                  } else if (sliderVal > sliderMin) {
-                    setSliderValue(sliderMin);
-                    value = sliderMin.toString();
-                  } else {
-                    setSliderValue(sliderMin - sliderVal);
-                  }
-                }
-              }
-              if (Number.isNaN(sliderVal)) {
-                // console.log(`sliderVal NaN : ${sliderVal}`);
-                setSliderValue(0);
-              }
-            } catch {
-              // console.log(`catch`);
-              // 소수점 입력 시작
-              if (value.endsWith('.')) {
-                const num = Number.parseFloat(value.substring(0, -1));
-                setSliderValue(num);
-              }
-            }
-            setTextValue(value);
-          }}
+          onChange={handleTextInputValueChange}
         />
         {unitChar && unitChar.length < 2 && (
           <FlexBox sx={{ paddingRight: 0.5 }}>
@@ -217,7 +230,6 @@ function SliderValue(props: SliderValueProp) {
 }
 
 function PerformaceChartInput() {
-  type PerformanceTrait = 'acceleration' | 'speed' | 'braking' | 'offroad' | 'launch' | 'handling';
   const performanceTraits: PerformanceTrait[] = [
     'acceleration',
     'speed',

@@ -314,7 +314,7 @@ function TiresOption() {
 
   const formPathBase = ['detailedTuning', 'tiers'];
 
-  const [notMyOption, setNotMyOption] = useState<boolean>(false);
+  const [notMyOption, setNotMyOption] = useState<boolean>(true);
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>, checked: boolean) => {
     setNotMyOption(!event.target.checked);
   };
@@ -383,7 +383,7 @@ function GearingOption() {
   };
   const ordinal = ['1st', '2nd', '3rd'];
 
-  const [notMyOption, setNotMyOption] = useState<boolean>(false);
+  const [notMyOption, setNotMyOption] = useState<boolean>(true);
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>, checked: boolean) => {
     setNotMyOption(!event.target.checked);
   };
@@ -464,7 +464,7 @@ function AlignmentOption() {
   const tuningIndex: TuningOption = 'Alignment';
 
   const formPathBase = ['detailedTuning', 'alignment'];
-  const [notMyOption, setNotMyOption] = useState<boolean>(false);
+  const [notMyOption, setNotMyOption] = useState<boolean>(true);
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>, checked: boolean) => {
     setNotMyOption(!event.target.checked);
   };
@@ -536,7 +536,7 @@ function AlignmentOption() {
 function AntirollBarsOption() {
   const tuningIndex: TuningOption = 'Antiroll Bars';
   const formPathBase = ['detailedTuning', 'antirollBars'];
-  const [notMyOption, setNotMyOption] = useState<boolean>(false);
+  const [notMyOption, setNotMyOption] = useState<boolean>(true);
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>, checked: boolean) => {
     setNotMyOption(!event.target.checked);
   };
@@ -585,7 +585,7 @@ function SpringsOption() {
   const formPathBase = ['detailedTuning', 'springs'];
 
   const unitName = 'LB/IN';
-  const [notMyOption, setNotMyOption] = useState<boolean>(false);
+  const [notMyOption, setNotMyOption] = useState<boolean>(true);
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>, checked: boolean) => {
     setNotMyOption(!event.target.checked);
   };
@@ -652,7 +652,7 @@ function SpringsOption() {
 function DampingOption() {
   const tuningIndex: TuningOption = 'Damping';
   const formPathBase = ['detailedTuning', 'damping'];
-  const [notMyOption, setNotMyOption] = useState<boolean>(false);
+  const [notMyOption, setNotMyOption] = useState<boolean>(true);
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>, checked: boolean) => {
     setNotMyOption(!event.target.checked);
   };
@@ -715,7 +715,7 @@ function AeroOption() {
   const tuningIndex: TuningOption = 'Aero';
   // FIXME: 최소/최대 값이 다름
   const formPathBase = ['detailedTuning', 'aero'];
-  const [notMyOption, setNotMyOption] = useState<boolean>(false);
+  const [notMyOption, setNotMyOption] = useState<boolean>(true);
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>, checked: boolean) => {
     setNotMyOption(!event.target.checked);
   };
@@ -764,7 +764,7 @@ function AeroOption() {
 function BrakeOption() {
   const tuningIndex: TuningOption = 'Brake';
   const formPathBase = ['detailedTuning', 'brake'];
-  const [notMyOption, setNotMyOption] = useState<boolean>(false);
+  const [notMyOption, setNotMyOption] = useState<boolean>(true);
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>, checked: boolean) => {
     setNotMyOption(!event.target.checked);
   };
@@ -817,7 +817,7 @@ function BrakeOption() {
 function DiffrentialOption() {
   const tuningIndex: TuningOption = 'Diffrential';
   const formPathBase = ['detailedTuning', 'diffrential'];
-  const [notMyOption, setNotMyOption] = useState<boolean>(false);
+  const [notMyOption, setNotMyOption] = useState<boolean>(true);
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>, checked: boolean) => {
     setNotMyOption(!event.target.checked);
   };
@@ -864,7 +864,7 @@ function DiffrentialOption() {
   );
 }
 
-export default function DetailedTuningTabs() {
+export default function DetailedTuningTabs({}: {}) {
   const [tuningTab, setTuningTab] = useState<TuningOption>('Tires');
 
   const changeTuningTabIndex = (event: SyntheticEvent, index: TuningOption) => {
@@ -872,26 +872,51 @@ export default function DetailedTuningTabs() {
   };
   // TODO: 튜닝에 해당 없을 경우(~단 기어 추가 옵션) disable하기
   // disable된 튜닝 Tab 페이지는 서버로 보낼 때, 지우고 보내기
+
+  const [createDetailedOption, setCreateDetailedOption] = useState<boolean>(false);
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>, checked: boolean) => {
+    setCreateDetailedOption(event.target.checked);
+  };
+
+  // FIXME: 여기서 튜닝 데이터 입력여부 관리하기
+
   return (
-    <Box sx={{ width: '100%', height: '100%', typography: 'body1' }} component={Paper}>
-      <TabContext value={tuningTab}>
-        <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-          <TabList onChange={changeTuningTabIndex} aria-label="tabs">
-            {TuningOptions.map((opt, idx) => (
-              <Tab label={opt} value={opt} key={`tuning-option-tab-${opt}-${idx}`} />
-            ))}
-          </TabList>
-        </Box>
-        <TiresOption />
-        <GearingOption />
-        <AlignmentOption />
-        <AntirollBarsOption />
-        <SpringsOption />
-        <DampingOption />
-        <AeroOption />
-        <BrakeOption />
-        <DiffrentialOption />
-      </TabContext>
-    </Box>
+    <FlexBox sx={{ flexDirection: 'column', width: '100%' }}>
+      <FormControlLabel
+        // @ts-ignore
+        control={<Switch checked={createDetailedOption} onClick={handleChange} color="info" />}
+        label="Add Detailed Tuning settings"
+        sx={{ '& .MuiFormControlLabel-label': { fontWeight: 200 } }}
+      />
+      <Box
+        sx={{
+          width: '100%',
+          height: '100%',
+          typography: 'body1',
+          opacity: !createDetailedOption ? 0.4 : 1,
+          pointerEvents: !createDetailedOption ? 'none' : 'auto',
+        }}
+        component={Paper}
+      >
+        <TabContext value={tuningTab}>
+          <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+            <TabList onChange={changeTuningTabIndex} aria-label="tabs">
+              {TuningOptions.map((opt, idx) => (
+                <Tab label={opt} value={opt} key={`tuning-option-tab-${opt}-${idx}`} />
+              ))}
+            </TabList>
+          </Box>
+          <TiresOption />
+          <GearingOption />
+          <AlignmentOption />
+          <AntirollBarsOption />
+          <SpringsOption />
+          <DampingOption />
+          <AeroOption />
+          <BrakeOption />
+          <DiffrentialOption />
+        </TabContext>
+      </Box>
+    </FlexBox>
   );
 }
