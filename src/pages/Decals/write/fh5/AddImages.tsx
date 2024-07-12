@@ -15,7 +15,7 @@ import { FlexBox, Image, VisuallyHiddenInput } from '@/components/styled';
 export default function AddImages() {
   const { setValue, getValues, control, trigger } = useFormContext<DecalEditSchema>();
 
-  const [imagePreviews, setImagePreviews] = useState<string[]>(getValues('imageURLs')); // Blob URL
+  const [imagePreviews, setImagePreviews] = useState<string[]>(getValues('imageURLs') || []); // Blob URL
   const imageUploadMax = 20;
 
   const [imagePreviewIdx, setImagePreviewIdx] = useState<number>(0);
@@ -53,7 +53,9 @@ export default function AddImages() {
 
   const changeImageOrder = (idx: number, shift: number) => {
     // shift : +1 : 더 뒤로 , -1 : 더 앞으로
-    const prevImage = getValues('imageURLs');
+    // const prevImage = getValues('imageURLs');
+    const prevImage = imagePreviews;
+
     const [imgTarget, imgSwap] = [prevImage[idx], prevImage[idx + shift]];
     prevImage[idx + shift] = imgTarget;
     prevImage[idx] = imgSwap;
@@ -85,7 +87,9 @@ export default function AddImages() {
   };
 
   const removeImage = (imageUrl: string) => {
-    const prevImage = getValues('imageURLs');
+    // const prevImage = getValues('imageURLs');
+    const prevImage = imagePreviews;
+
     const removed = prevImage.filter((val) => val != imageUrl);
     setValue('imageURLs', removed);
     setImagePreviews(removed);

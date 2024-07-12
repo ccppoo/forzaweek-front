@@ -7,6 +7,8 @@ import TextField from '@mui/material/TextField';
 import type { DecalEditSchema } from '@/FormData/decal';
 import { decalEditSchemaDefault } from '@/FormData/decal';
 import { AddNewDecal, EditDecal } from '@/api/data/fh5/decal';
+import CreatorUsernameInput from '@/components/FormInputs/CreatorUsername';
+import ShareCodeInput from '@/components/FormInputs/ShareCode';
 import { FlexBox, FullSizeCenteredFlexBox, Image } from '@/components/styled';
 
 import AddImages from './AddImages';
@@ -71,20 +73,7 @@ export default function DecalWrite(props: dataTextInputIntf) {
                 <FlexBox sx={{ alignItems: 'center' }}>
                   <Typography>Creator username</Typography>
                 </FlexBox>
-                <FlexBox sx={{ alignItems: 'center' }}>
-                  <TextField
-                    fullWidth
-                    label=""
-                    defaultValue={methods.getValues('creator') || ''}
-                    inputProps={methods.register('creator', {
-                      required: 'Please input creator of decal',
-                    })}
-                    error={!!methods.formState.errors.share_code}
-                    helperText={methods.formState.errors.share_code?.message}
-                    SelectProps={{ MenuProps: { sx: { maxHeight: 450 } } }}
-                    size="small"
-                  />
-                </FlexBox>
+                <CreatorUsernameInput />
               </Box>
               {/* 2. 공유 코드 입력 */}
               <Box
@@ -98,21 +87,7 @@ export default function DecalWrite(props: dataTextInputIntf) {
                 <FlexBox sx={{ alignItems: 'center' }}>
                   <Typography>Share code</Typography>
                 </FlexBox>
-                {/* 3개로 나눠서 보기 편하게 */}
-                <FlexBox sx={{ alignItems: 'center' }}>
-                  <TextField
-                    fullWidth
-                    label="e.g) 1234567890"
-                    defaultValue={methods.getValues('share_code') || ''}
-                    inputProps={methods.register('share_code', {
-                      required: 'Please input share code',
-                    })}
-                    error={!!methods.formState.errors.share_code}
-                    helperText={methods.formState.errors.share_code?.message}
-                    SelectProps={{ MenuProps: { sx: { maxHeight: 450 } } }}
-                    size="small"
-                  />
-                </FlexBox>
+                <ShareCodeInput />
               </Box>
               {/* 3. 태그 붙이기 */}
               <Box
