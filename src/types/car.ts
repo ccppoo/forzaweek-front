@@ -50,3 +50,26 @@ export const performanceTraits: PerformanceTrait[] = [
   'launch',
   'handling',
 ];
+
+export type TuningOption =
+  | 'Tires'
+  | 'Gearing'
+  | 'Alignment'
+  | 'Antiroll Bars'
+  | 'Springs'
+  | 'Damping'
+  | 'Aero'
+  | 'Brake'
+  | 'Diffrential';
+
+export const TuningOptions: TuningOption[] = [
+  'Tires',
+  'Gearing',
+  'Alignment',
+  'Antiroll Bars',
+  'Springs',
+  'Damping',
+  'Aero',
+  'Brake',
+  'Diffrential',
+];

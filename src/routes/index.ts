@@ -38,7 +38,7 @@ const routes: Routes = {
     icon: HomeIcon,
   },
   [Pages.DecalWrite]: {
-    component: asyncComponentLoader(() => import('@/pages/Decals/DecalWrite')),
+    component: asyncComponentLoader(() => import('@/pages/Decals/write/fh5')),
     path: '/fh5/decal/write',
     title: 'decal write',
     devUrl: '/fh5/decal/write',
@@ -72,7 +72,7 @@ const routes: Routes = {
   },
 
   [Pages.TuningWrite]: {
-    component: asyncComponentLoader(() => import('@/pages/Tunings/TuningWrite')),
+    component: asyncComponentLoader(() => import('@/pages/Tunings/write/fh5')),
     path: '/fh5/tuning/write',
     title: 'tuning write',
     icon: HomeIcon,
