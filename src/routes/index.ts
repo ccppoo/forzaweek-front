@@ -20,28 +20,28 @@ const routes: Routes = {
   [Pages.CarDetail]: {
     component: asyncComponentLoader(() => import('@/pages/Cars/CarDetail')),
     path: '/car/:carID',
-    devUrl: '/car/1',
+    devUrl: '/car/6684cbca6b755b09a74f84fc',
     title: 'car detail',
     icon: HomeIcon,
   },
   [Pages.Decals]: {
     component: asyncComponentLoader(() => import('@/pages/Decals/Decals')),
-    path: '/decal',
+    path: '/fh5/decal',
     title: 'Decals',
     icon: HomeIcon,
   },
   [Pages.DecalDetail]: {
     component: asyncComponentLoader(() => import('@/pages/Decals/DecalDetail')),
-    path: '/decal/:decalID',
-    title: 'decal detail',
-    devUrl: '/decal/1',
+    path: '/fh5/decal/:decalID',
+    title: 'fh5 decal detail',
+    devUrl: '/fh5/decal/668e43139fea9e1931a55e8d',
     icon: HomeIcon,
   },
   [Pages.DecalWrite]: {
     component: asyncComponentLoader(() => import('@/pages/Decals/DecalWrite')),
-    path: '/decal/write',
+    path: '/fh5/decal/write',
     title: 'decal write',
-    devUrl: '/decal/write',
+    devUrl: '/fh5/decal/write',
     icon: HomeIcon,
   },
   [Pages.Tracks]: {
@@ -59,21 +59,21 @@ const routes: Routes = {
   },
   [Pages.Tunings]: {
     component: asyncComponentLoader(() => import('@/pages/Tunings/Tunings')),
-    path: '/tuning',
+    path: '/fh5/tuning',
     title: 'Tunings',
     icon: HomeIcon,
   },
   [Pages.TuningDetail]: {
     component: asyncComponentLoader(() => import('@/pages/Tunings/TuningDetail')),
-    path: '/tuning/:tuningID',
-    devUrl: '/tuning/1',
+    path: '/fh5/tuning/:tuningID',
+    devUrl: '/fh5/tuning/1',
     title: 'tuning detail',
     icon: HomeIcon,
   },
 
   [Pages.TuningWrite]: {
     component: asyncComponentLoader(() => import('@/pages/Tunings/TuningWrite')),
-    path: '/tuning/write',
+    path: '/fh5/tuning/write',
     title: 'tuning write',
     icon: HomeIcon,
   },
@@ -104,9 +104,8 @@ const routes: Routes = {
   [Pages.DataWrite]: {
     component: asyncComponentLoader(() => import('@/pages/Data/Write')),
     path: '/data/:dataType/write',
-    devUrl: '/data/tag/write',
+    devUrl: '/data/tagkind/write',
     // devHide: true,
-
     title: 'write data',
     icon: HomeIcon,
   },

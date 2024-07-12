@@ -85,6 +85,27 @@ const tagEditSchemaDefault: TagEditSchema = {
   mergedFrom: undefined,
 };
 
-export { tagEditSchema, tagSchemaType, tagEditSchemaDefault, tagSchemaTypeExtended };
+// 읽기 전용으로 불러올 때
+const tagSimpleSchemaType = z.object({
+  id: z.string(),
+  kind: tagKindSchemaType,
+  imageURL: z.string(),
+  name: z.array(i18nTextFieldSchema),
+  name_en: z.string(),
+  description: z.array(i18nTextFieldSchema),
+  // management
+  parentTag: z.optional(z.string()),
+  childrenTag: z.optional(z.string()),
+});
 
-export type { TagWrite, TagSchemaType, TagEditSchema, TagSchemaTypeExtended };
+type TagSimpleSchemaType = z.infer<typeof tagSimpleSchemaType>;
+
+export {
+  tagEditSchema,
+  tagSchemaType,
+  tagEditSchemaDefault,
+  tagSchemaTypeExtended,
+  tagSimpleSchemaType,
+};
+
+export type { TagWrite, TagSchemaType, TagEditSchema, TagSchemaTypeExtended, TagSimpleSchemaType };

@@ -6,6 +6,7 @@ import { DecalCellListing } from '@/components/Decals';
 import PostListMenu from '@/components/Post/PostListMenu';
 import { CarAndTagSearch } from '@/components/Search';
 import { FlexBox, FullSizeCenteredFlexBox } from '@/components/styled';
+import ScrollToTop from '@/hooks/useResetScroll';
 
 export default function Decals() {
   const searchScope = 'decal';
@@ -23,6 +24,7 @@ export default function Decals() {
         <DecalCellListing />
         <DecalCellListing />
       </FullSizeCenteredFlexBox>
+      <ScrollToTop />
     </Container>
   );
 }

@@ -9,7 +9,7 @@ import Typography from '@mui/material/Typography';
 
 import * as image from '@/image';
 import Comments from '@/components/Comment';
-import { ImageShowHorizontal } from '@/components/ImageList';
+import { ImageShowHorizontal } from '@/components/ImageList/Horizontal2';
 import { BriefData } from '@/components/Track';
 import { RelatedTunings } from '@/components/Tunings';
 import { RelatedVideos } from '@/components/Videos';

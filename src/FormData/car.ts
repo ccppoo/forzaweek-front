@@ -3,7 +3,7 @@ import { z } from 'zod';
 import { supportLangs } from '@/config/i18n';
 
 import { i18nTextFieldSchema } from './i18n';
-import { manufacturerSchemaType } from './manufacturer';
+import { manufacturerSchemaType, manufacturerSimpleSchemaType } from './manufacturer';
 import { _FH5PerformanceSchemaType, tuningPerformance } from './tuning/performance';
 
 // NOTE: 시리즈 추가 지원시 필드 항목에 추가 (FM : ..., FH4 : ...,)
@@ -119,3 +119,14 @@ export const carEditSchemaDefault: CarEditSchema = {
     pi: 700,
   },
 };
+
+export const carSimpleSchemaType = z.object({
+  id: z.string(), // 차 자체 DocumnetID
+  production_year: z.number().gte(1900).lte(2554),
+  name_en: z.string(),
+  name: z.array(i18nTextFieldSchema), // 원래 이름
+  first_image: z.string(),
+
+  manufacturer: manufacturerSimpleSchemaType, // 제조사 간단 버전
+});
+export type CarSimpleSchemaType = z.infer<typeof carSimpleSchemaType>;

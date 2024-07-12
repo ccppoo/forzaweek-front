@@ -15,9 +15,6 @@ import {
   Paper,
   Typography,
 } from '@mui/material';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Radio from '@mui/material/Radio';
-import RadioGroup from '@mui/material/RadioGroup';
 import TextField from '@mui/material/TextField';
 
 import { useQuery } from '@tanstack/react-query';
@@ -115,6 +112,7 @@ export default function TagForm(props: dataTextInputIntf) {
 
   if (tagKindList) {
     const sortedTagKindList = tagKindList.toSorted((t1, t2) => (t1.name_en > t2.name_en ? 1 : -1));
+    console.log(`sortedTagKindList ; ${JSON.stringify(sortedTagKindList)}`);
     return (
       <FlexBox sx={{ flexDirection: 'column', paddingX: 2 }}>
         <form noValidate onSubmit={handleSubmit(submit)}>
@@ -150,7 +148,7 @@ export default function TagForm(props: dataTextInputIntf) {
                   >
                     {sortedTagKindList.map((tagKind) => (
                       <MenuItem key={`${tagKind.name_en}-${tagKind.id}`} value={tagKind.id}>
-                        <TagKindItemCell tag={tagKind} />
+                        <TagKindItemCell tagKind={tagKind} />
                       </MenuItem>
                     ))}
                   </TextField>

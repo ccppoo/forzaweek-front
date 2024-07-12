@@ -7,7 +7,7 @@ import Container from '@mui/material/Container';
 import { useQuery } from '@tanstack/react-query';
 
 import { GetSchemaForEdit } from '@/api/data/edit';
-import { FlexBox, FullSizeCenteredFlexBox, VisuallyHiddenInput } from '@/components/styled';
+import { FlexBox, FullSizeCenteredFlexBox } from '@/components/styled';
 
 import * as Forms from './forms';
 

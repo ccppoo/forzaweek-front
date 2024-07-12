@@ -1,31 +1,17 @@
 import { ChangeEvent, useEffect, useState } from 'react';
-import { Controller, FormProvider, useFieldArray, useForm } from 'react-hook-form';
+import { Controller, useFieldArray, useForm } from 'react-hook-form';
 import type { SubmitErrorHandler } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 
 import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
 import FileUploadOutlined from '@mui/icons-material/FileUploadOutlined';
-import {
-  Box,
-  Button,
-  Checkbox,
-  IconButton,
-  List,
-  MenuItem,
-  Paper,
-  Typography,
-} from '@mui/material';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Radio from '@mui/material/Radio';
-import RadioGroup from '@mui/material/RadioGroup';
+import { Box, Button, Typography } from '@mui/material';
 import TextField from '@mui/material/TextField';
-
-import { useQuery } from '@tanstack/react-query';
 
 import type { TagKindType } from '@/FormData/tag';
 import { TagKind } from '@/FormData/tag';
-import { AddNewTagKind, EditTagKind, GetAllTagKind } from '@/api/data/tagKind';
-import { FlexBox, FullSizeCenteredFlexBox, VisuallyHiddenInput } from '@/components/styled';
+import { AddNewTagKind, EditTagKind } from '@/api/data/tagKind';
+import { FlexBox, VisuallyHiddenInput } from '@/components/styled';
 import { Image } from '@/components/styled';
 
 interface dataTextInputIntf {

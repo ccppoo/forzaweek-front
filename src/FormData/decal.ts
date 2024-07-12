@@ -1,5 +1,6 @@
 import { z } from 'zod';
 
+import { carSimpleSchemaType } from '@/FormData/car';
 import { Tag } from '@/FormData/tag';
 
 export const decalEditSchema = z.object({
@@ -41,3 +42,18 @@ export const decalEditSchemaDefault: DecalEditSchema = {
   firstImage: undefined,
   tags: [], // 데칼 태그
 };
+
+export const decalSchemaReadType = z.object({
+  id: z.string(), // 데칼 문서 id
+  share_code: z.string(), // 공유코드
+  creator: z.string(), // 데칼 제작자
+  imageURLs: z.array(z.string()), // 데칼 사진
+  firstImage: z.string(), // 데칼 대문 사진(의미는 없음)
+
+  first_uploaded: z.string().datetime(),
+  last_edited: z.optional(z.string().datetime()),
+
+  car: carSimpleSchemaType, // 차 정보 간단버전
+  tags: z.array(Tag.tagSimpleSchemaType), // 데칼 태그
+});
+export type DecalSchemaReadType = z.infer<typeof decalSchemaReadType>;

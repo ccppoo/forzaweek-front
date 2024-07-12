@@ -3,7 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 
 import Container from '@mui/material/Container';
 
-import { FlexBox, FullSizeCenteredFlexBox } from '@/components/styled';
+import { FullSizeCenteredFlexBox } from '@/components/styled';
 
 import * as Tables from './tables';
 

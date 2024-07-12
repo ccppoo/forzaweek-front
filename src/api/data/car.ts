@@ -86,3 +86,19 @@ export async function GetAllCar({ queryKey }: { queryKey: [API_NAME] }): Promise
 
   return resp.data;
 }
+
+export async function GetCar({
+  queryKey,
+}: {
+  queryKey: [API_NAME, string];
+}): Promise<CarSchemaType[]> {
+  const [_, game_scope] = queryKey;
+
+  const path_ = `car`;
+
+  const url = `${API_HOST}/${path_}`;
+
+  const resp = await axios.get(url, {});
+
+  return resp.data;
+}

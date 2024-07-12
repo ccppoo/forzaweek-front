@@ -15,7 +15,6 @@ import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Unstable_Grid2';
 
 import * as image from '@/image';
-import { ImageShowHorizontal } from '@/components/ImageList';
 import { FlexBox, FullSizeCenteredFlexBox } from '@/components/styled';
 import { Image } from '@/components/styled';
 import { decalsWithImage } from '@/data/decals';

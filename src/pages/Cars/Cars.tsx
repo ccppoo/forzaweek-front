@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom';
+import { ScrollRestoration, useNavigate } from 'react-router-dom';
 
 import Container from '@mui/material/Container';
 import IconButton from '@mui/material/IconButton';

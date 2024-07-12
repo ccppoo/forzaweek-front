@@ -7,16 +7,9 @@ import Container from '@mui/material/Container';
 
 import { useQuery } from '@tanstack/react-query';
 
-import * as image from '@/image';
 import { GetDataStatus } from '@/api/data/status';
 import type { DataStatus, DataType } from '@/api/data/types';
-import Meta from '@/components/Meta';
 import { FlexBox, FullSizeCenteredFlexBox } from '@/components/styled';
-import { Image } from '@/components/styled';
-
-// import useAddDataDialog from '@/store/addDataDialog';
-
-// const menu: DataType[] = ['nation' as DataType];
 
 interface DataItemProps {
   name: string;

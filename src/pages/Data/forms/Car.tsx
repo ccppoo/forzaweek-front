@@ -5,7 +5,6 @@ import { useNavigate } from 'react-router-dom';
 
 import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
 import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
-import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import FileUploadOutlined from '@mui/icons-material/FileUploadOutlined';
 import {
   Box,
@@ -27,21 +26,16 @@ import { useQuery } from '@tanstack/react-query';
 import type { CarEditSchema } from '@/FormData/car';
 import { carEditSchemaDefault } from '@/FormData/car';
 import { AddNewCar, EditCar } from '@/api/data/car';
-import { UploadTempImage } from '@/api/data/image';
 import { GetAllManufacturer } from '@/api/data/manufacturer';
 import { FlexBox, FullSizeCenteredFlexBox, VisuallyHiddenInput } from '@/components/styled';
 import { Image } from '@/components/styled';
 import { BODY_STYLE, BOOST, DIVISIONS, ENGINE_TYPE, RARITY } from '@/data/values';
+import { performanceTraits } from '@/types/car';
 import { get_pi_class, get_pi_color, get_pi_color_by_class } from '@/utils/car';
 
 interface dataTextInputIntf {
   carEditSchema?: CarEditSchema;
 }
-
-type ImageItem = {
-  name: string;
-  url: string;
-};
 
 export default function CarForm(props: dataTextInputIntf) {
   const { carEditSchema } = props;
@@ -137,16 +131,6 @@ export default function CarForm(props: dataTextInputIntf) {
   };
 
   const BoostSelectRequired = watch('fh5.meta.rarity') == 'Forza Edition';
-
-  type PerformanceName = 'speed' | 'handling' | 'acceleration' | 'launch' | 'braking' | 'offroad';
-  const perfomnaces: PerformanceName[] = [
-    'speed',
-    'handling',
-    'acceleration',
-    'launch',
-    'braking',
-    'offroad',
-  ];
 
   const [sliderValue, setSliderValue] = useState<number>(getValues('fh5.pi') as number);
   const [textValue, setTextValue] = useState<string>(
@@ -861,7 +845,7 @@ export default function CarForm(props: dataTextInputIntf) {
               rowGap: 0,
             }}
           >
-            {perfomnaces.map((perfName) => (
+            {performanceTraits.map((perfName) => (
               <FlexBox
                 key={`car-default-performnace-input-${perfName}`}
                 sx={{ width: '100%', alignItems: 'center', justifyContent: 'space-between' }}

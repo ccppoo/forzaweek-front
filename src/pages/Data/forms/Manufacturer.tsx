@@ -23,7 +23,7 @@ import { manufacturerEditSchemaDefault } from '@/FormData/manufacturer';
 import { UploadTempImage } from '@/api/data/image';
 import { AddNewManufacturer, EditManufacturer } from '@/api/data/manufacturer';
 import { GetAllNation } from '@/api/data/nation';
-import { FlexBox, FullSizeCenteredFlexBox, VisuallyHiddenInput } from '@/components/styled';
+import { FlexBox, VisuallyHiddenInput } from '@/components/styled';
 import { Image } from '@/components/styled';
 
 interface dataTextInputIntf {

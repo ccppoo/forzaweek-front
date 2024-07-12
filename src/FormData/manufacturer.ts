@@ -35,3 +35,12 @@ export const manufacturerEditSchemaDefault: ManufacturerEditSchema = {
     return { lang: langDefault, value: '' };
   }),
 };
+
+export const manufacturerSimpleSchemaType = z.object({
+  id: z.string(),
+  name: z.array(i18nTextFieldSchema),
+  name_en: z.string(),
+  imageURL: z.string(),
+});
+
+export type ManufacturerSimpleSchemaType = z.infer<typeof manufacturerSimpleSchemaType>;

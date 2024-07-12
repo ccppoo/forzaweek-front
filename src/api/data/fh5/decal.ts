@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-import type { DecalEditSchema, DecalSchemaType } from '@/FormData/decal';
+import type { DecalEditSchema, DecalSchemaReadType, DecalSchemaType } from '@/FormData/decal';
 import { UploadImage } from '@/api/data/image';
 import { API_HOST } from '@/api/index';
 import type { API_NAME } from '@/api/types';
@@ -67,6 +67,22 @@ export async function GetAllDecal({
   const path_ = `decal`;
 
   const url = `${API_HOST}/${path_}`;
+
+  const resp = await axios.get(url, {});
+
+  return resp.data;
+}
+
+export async function GetDecal({
+  queryKey,
+}: {
+  queryKey: [API_NAME, string];
+}): Promise<DecalSchemaReadType> {
+  const [_, decalID] = queryKey;
+
+  const path_ = `decal`;
+
+  const url = `${API_HOST}/fh5/${path_}/${decalID}`;
 
   const resp = await axios.get(url, {});
 

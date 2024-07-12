@@ -53,7 +53,7 @@ export default function TuningDetail() {
           {/* 관련 영상 */}
           <RelatedVideos />
           {/* 관련 다른 튜닝들 */}
-          <RelatedTunings />
+          <RelatedTunings carID={'asd'} />
         </FlexBox>
       </FullSizeCenteredFlexBox>
     </Container>

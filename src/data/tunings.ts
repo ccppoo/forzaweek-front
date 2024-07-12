@@ -1,5 +1,4 @@
-type DrivingSystem = 'AWD' | 'FWD' | 'RWD';
-type TierType = 'basic';
+import type { DrivingSystemType } from '@/types';
 
 export type TestReadings = {
   maxspeed: number | null;
@@ -36,7 +35,7 @@ export type Tuning = {
   performance: Performance;
   suspension: string;
   tier: string;
-  driving_system: DrivingSystem;
+  driving_system: DrivingSystemType;
 };
 
 export const tunings: Tuning[] = [

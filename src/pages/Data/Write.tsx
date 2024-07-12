@@ -3,7 +3,6 @@ import { Route, Routes, useParams } from 'react-router-dom';
 
 import { Box, Button, Checkbox, IconButton, List, Paper, Typography } from '@mui/material';
 import Container from '@mui/material/Container';
-import TextField from '@mui/material/TextField';
 
 import { FlexBox, FullSizeCenteredFlexBox, VisuallyHiddenInput } from '@/components/styled';
 

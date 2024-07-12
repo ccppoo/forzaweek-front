@@ -1,26 +1,27 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlined';
 import FavoriteOutlinedIcon from '@mui/icons-material/FavoriteOutlined';
 import ModeCommentOutlinedIcon from '@mui/icons-material/ModeCommentOutlined';
-import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Chip from '@mui/material/Chip';
 import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
-import Pagination from '@mui/material/Pagination';
 import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Unstable_Grid2';
 import { styled } from '@mui/material/styles';
 
-import * as image from '@/image';
-import Comments from '@/components/Comment';
+import { useQuery } from '@tanstack/react-query';
+
 import { FlexBox, FullSizeCenteredFlexBox } from '@/components/styled';
 import { Image } from '@/components/styled';
 import { decalsWithImage } from '@/data/decals';
 import type { DecalData } from '@/data/decals';
+import { getCar2 } from '@/db';
+import useCarAndTagFilter from '@/store/carAndTagFilter';
 
 function RelatedDecal({ decalData }: { decalData: DecalData }) {
   const creator = decalData.club ? `[${decalData.club}] ${decalData.creater}` : decalData.creater;
@@ -135,38 +136,41 @@ function RelatedDecal({ decalData }: { decalData: DecalData }) {
   );
 }
 
-function DecalsShowMore() {
-  // TODO:  처음부터 Car DB의 ID로 받아서 DB 쿼리 안하고 바로 세팅할 수 있도록
+function DecalsShowMore({ carID }: { carID: string }) {
+  const {
+    actions: {
+      car: { setCar: searchCarDecal },
+    },
+  } = useCarAndTagFilter('decal');
 
-  // const {
-  //   actions: {
-  //     car: { setCar },
-  //   },
-  // } = useCarAndTagFilter(searchScope);
+  const navigate = useNavigate();
 
-  // more -> search filter 보여주고 있는 차로 세팅 -> 재검색
+  const goto = (relativePath: string) => navigate(relativePath);
+  const goSearchDecals = async () => {
+    const car2 = await getCar2(carID);
+    searchCarDecal(car2);
+    goto('/fh5/decal');
+  };
 
   const onClick = async () => {
-    console.log(`show more - tuning`);
-    // const carInfo = await getCarInfo(carName);
-    // console.log(`carInfo : ${JSON.stringify(carInfo)}`);
-    // setCar(carInfo);
+    await goSearchDecals();
   };
 
   return (
     <FlexBox sx={{ justifyContent: 'end', paddingX: 1, paddingTop: 1 }}>
       <FlexBox sx={{ justifyContent: 'center', alignItems: 'center', marginX: 1 }}>
-        <Button onClick={onClick}>show more</Button>
+        <Button onClick={onClick}>show more decals</Button>
       </FlexBox>
     </FlexBox>
   );
 }
 
-export default function RelatedDecals() {
+export default function RelatedDecals({ carID }: { carID: string }) {
   const [page, setPage] = useState(1);
   const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
     setPage(value);
   };
+  // useQuery()
 
   return (
     <FlexBox
@@ -187,11 +191,7 @@ export default function RelatedDecals() {
           ))}
         </Grid>
       </FlexBox>
-      <DecalsShowMore />
-      {/* Pagination */}
-      {/* <FlexBox sx={{ alignItems: 'center', justifyContent: 'center', paddingTop: 3 }}>
-        <Pagination count={10} page={page} onChange={handleChange} size="large" />
-      </FlexBox> */}
+      <DecalsShowMore carID={carID} />
     </FlexBox>
   );
 }

@@ -11,7 +11,7 @@ import type { NationEditSchema } from '@/FormData/nation';
 import { nationEditSchemaDefault } from '@/FormData/nation';
 import { UploadTempImage } from '@/api/data/image';
 import { AddNewNation, EditNation } from '@/api/data/nation';
-import { FlexBox, FullSizeCenteredFlexBox, VisuallyHiddenInput } from '@/components/styled';
+import { FlexBox, VisuallyHiddenInput } from '@/components/styled';
 import { Image } from '@/components/styled';
 
 interface dataTextInputIntf {

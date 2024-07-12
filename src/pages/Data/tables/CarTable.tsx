@@ -14,7 +14,7 @@ import { useQuery } from '@tanstack/react-query';
 import type { CarSchemaType, FH5CarMetaSchemaType } from '@/FormData/car';
 import { GetAllCar } from '@/api/data/car';
 import DeleteItemPopUp from '@/components/Dialogs/DeletePopUp';
-import { ImageShowHorizontal } from '@/components/ImageList';
+import { ImageShowHorizontal } from '@/components/ImageList/Horizontal2';
 import { FlexBox, FullSizeCenteredFlexBox } from '@/components/styled';
 import { Image } from '@/components/styled';
 
