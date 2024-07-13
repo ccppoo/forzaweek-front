@@ -10,3 +10,7 @@ export const multipleImages = z.object({
   imageURLs: z.optional(z.array(z.string())),
   firstImage: z.optional(z.string()),
 });
+
+export type SingleImageDependentCreation = z.infer<typeof singleImage>;
+
+export type MultipleImagesDependentCreation = z.infer<typeof multipleImages>;

@@ -4,3 +4,5 @@ import { z } from 'zod';
 export const carDependent = z.object({
   car: z.optional(z.string()), // 차 (id)
 });
+
+export type CarDependentCreation = z.infer<typeof carDependent>;

@@ -4,3 +4,5 @@ import { z } from 'zod';
 export const tagDependent = z.object({
   tags: z.array(z.string()),
 });
+
+export type TagDependentCreation = z.infer<typeof tagDependent>;
