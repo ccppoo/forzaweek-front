@@ -14,8 +14,10 @@ import { FlexBox } from '@/components/styled';
 export default function CreatorUsernameInput<T extends SharingCreation>() {
   const { getValues, formState, register } = useFormContext<T>();
 
-  const formPath = 'share_code' as FieldPath<T>;
-  const helperText = formState.errors.share_code?.message ? 'Please input share code' : undefined;
+  const formPath = 'creator' as FieldPath<T>;
+  const helperText = formState.errors.creator?.message
+    ? 'Please input creator username'
+    : undefined;
 
   return (
     <FlexBox sx={{ alignItems: 'center' }}>
