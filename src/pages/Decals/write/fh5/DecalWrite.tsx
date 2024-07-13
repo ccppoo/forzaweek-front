@@ -2,18 +2,16 @@ import { FormProvider, useForm } from 'react-hook-form';
 
 import { Box, Button, Paper, Typography } from '@mui/material';
 import Container from '@mui/material/Container';
-import TextField from '@mui/material/TextField';
 
 import type { DecalEditSchema } from '@/FormData/decal';
 import { decalEditSchemaDefault } from '@/FormData/decal';
 import { AddNewDecal, EditDecal } from '@/api/data/fh5/decal';
+import AddMultipleImages from '@/components/FormInputs/AddMultipleImages';
+import AddTags from '@/components/FormInputs/AddTags';
+import SelectCar from '@/components/FormInputs/CarSelect';
 import CreatorUsernameInput from '@/components/FormInputs/CreatorUsername';
 import ShareCodeInput from '@/components/FormInputs/ShareCode';
 import { FlexBox, FullSizeCenteredFlexBox, Image } from '@/components/styled';
-
-import AddImages from './AddImages';
-import AddTags from './AddTags';
-import SelectCar from './SelectCar';
 
 interface dataTextInputIntf {
   decalEditSchema?: DecalEditSchema;
@@ -21,6 +19,9 @@ interface dataTextInputIntf {
 
 export default function DecalWrite(props: dataTextInputIntf) {
   const { decalEditSchema } = props;
+
+  const selectScope = 'decal-post-create';
+
   const methods = useForm<DecalEditSchema>({
     defaultValues: decalEditSchema || decalEditSchemaDefault,
     mode: 'onChange',
@@ -30,13 +31,13 @@ export default function DecalWrite(props: dataTextInputIntf) {
   const submit = async (data: DecalEditSchema) => {
     console.log(`data : ${JSON.stringify(data)}`);
 
-    if (isEditMode) {
-      await EditDecal({ decal: data });
-      return;
-    }
-    if (!isEditMode) {
-      await AddNewDecal({ decal: data });
-    }
+    // if (isEditMode) {
+    //   await EditDecal({ decal: data });
+    //   return;
+    // }
+    // if (!isEditMode) {
+    //   await AddNewDecal({ decal: data });
+    // }
     return;
   };
 
@@ -59,7 +60,7 @@ export default function DecalWrite(props: dataTextInputIntf) {
                 <FlexBox sx={{ alignItems: 'center', height: '100%' }}>
                   <Typography>Base Car</Typography>
                 </FlexBox>
-                <SelectCar />
+                <SelectCar selectScope={selectScope} />
               </Box>
               {/* 1. 원본 제작자 이름 */}
               <Box
@@ -101,7 +102,7 @@ export default function DecalWrite(props: dataTextInputIntf) {
                 <FlexBox sx={{ alignItems: 'center', height: 60 }}>
                   <Typography>Decal Tags</Typography>
                 </FlexBox>
-                <AddTags />
+                <AddTags selectScope={selectScope} postType="decal" />
               </Box>
               {/* 4. 이미지 올리기 */}
               <Box
@@ -115,7 +116,7 @@ export default function DecalWrite(props: dataTextInputIntf) {
                 <FlexBox>
                   <Typography>Decal Images</Typography>
                 </FlexBox>
-                <AddImages />
+                <AddMultipleImages postType="decal upload" />
               </Box>
               <FlexBox sx={{ width: '100%', justifyContent: 'end' }}>
                 <Button type="submit" variant="outlined">
