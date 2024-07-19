@@ -23,7 +23,7 @@ import type {
   DrivingSystemOption,
   PIClassOption,
   SuspensionOption,
-  TierOption,
+  TireOption,
 } from '@/store/tuningSearchFilters/types';
 import type { PIClass } from '@/types';
 import { sortPIClass } from '@/utils';
@@ -177,36 +177,36 @@ function TuningOptionDrivingSystem() {
   );
 }
 
-function TuningOptionTier() {
-  type TierType = 'normal' | 'snow' | 'rally' | 'offroad' | 'slick' | 'race' | 'drag';
+function TuningOptionTire() {
+  type TireType = 'normal' | 'snow' | 'rally' | 'offroad' | 'slick' | 'race' | 'drag';
 
-  const tierTypes: TierType[] = ['normal', 'snow', 'rally', 'offroad', 'slick', 'race', 'drag'];
+  const tireTypes: TireType[] = ['normal', 'snow', 'rally', 'offroad', 'slick', 'race', 'drag'];
 
   const [tuningOption, { toggleOption, toggleAllSingleOption }] = useTuningSearchFilters();
-  const options = tuningOption.tier;
-  const toggleOption_ = (val: TierType) => toggleOption(val, 'tier');
+  const options = tuningOption.tire;
+  const toggleOption_ = (val: TireType) => toggleOption(val, 'tire');
   return (
     <FlexBox sx={{ width: '100%', paddingLeft: 1 }}>
       <FlexBox sx={{ alignItems: 'center' }}>
         <FlexBox sx={{ width: 160 }}>
           <Button
             sx={{ color: 'black', minWidth: 0 }}
-            onClick={() => toggleAllSingleOption('tier')}
+            onClick={() => toggleAllSingleOption('tire')}
           >
-            <Typography variant="body1">Tier</Typography>
+            <Typography variant="body1">Tire</Typography>
           </Button>
         </FlexBox>
         <FlexBox>
           <FormGroup sx={{ flexDirection: 'row' }}>
-            {tierTypes.map((val: string) => {
+            {tireTypes.map((val: string) => {
               return (
                 <FormControlLabel
-                  key={`formcontrol-tuning-tier-check-${val}`}
+                  key={`formcontrol-tuning-tire-check-${val}`}
                   control={
                     <Checkbox
-                      checked={options[val as TierType]}
+                      checked={options[val as TireType]}
                       onChange={() => {
-                        toggleOption_(val as TierType);
+                        toggleOption_(val as TireType);
                       }}
                       // sx={{
                       //   color: PI_COLOR[val as SuspensionType],
@@ -236,7 +236,7 @@ function TuningOptionSummaryDisplay({
   Component,
 }: {
   name: string;
-  option: PIClassOption | SuspensionOption | TierOption | DrivingSystemOption;
+  option: PIClassOption | SuspensionOption | TireOption | DrivingSystemOption;
   sort?: (val1: [string, boolean], val2: [string, boolean]) => number;
   Component: FC<TuningOptionSummaryProps>;
 }) {
@@ -317,8 +317,8 @@ export default function TuningOptionFilter() {
               />
               <Divider orientation="vertical" flexItem />
               <TuningOptionSummaryDisplay
-                name="Tier"
-                option={tuningOption.tier}
+                name="Tire"
+                option={tuningOption.tire}
                 Component={TuningOptionSummarySmall}
               />
               <Divider orientation="vertical" flexItem />
@@ -334,7 +334,7 @@ export default function TuningOptionFilter() {
               {/* 서스펜션 */}
               <TuningOptionSuspension />
               {/* 타이어 */}
-              <TuningOptionTier />
+              <TuningOptionTire />
               {/* 구동 방식 */}
               <TuningOptionDrivingSystem />
             </AccordionDetails>

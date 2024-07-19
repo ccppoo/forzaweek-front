@@ -1,17 +1,17 @@
-import type { DrivingSystemType, PIClass, SuspensionType, TierType } from '@/types';
+import type { DrivingSystemType, PIClass, SuspensionType, TireType } from '@/types';
 
 type PIClassOption = Record<PIClass, boolean>;
 type SuspensionOption = Record<SuspensionType, boolean>;
-type TierOption = Record<TierType, boolean>;
+type TireOption = Record<TireType, boolean>;
 type DrivingSystemOption = Record<DrivingSystemType, boolean>;
 
-type TuningSearchOptionChoice = PIClassOption | SuspensionOption | TierOption | DrivingSystemOption;
+type TuningSearchOptionChoice = PIClassOption | SuspensionOption | TireOption | DrivingSystemOption;
 
-type TuningSearchOption = 'PI' | 'suspension' | 'tier' | 'drivingSystem';
+type TuningSearchOption = 'PI' | 'suspension' | 'tire' | 'drivingSystem';
 type TuningSearchOptions = {
   PI: PIClassOption;
   suspension: SuspensionOption;
-  tier: TierOption;
+  tire: TireOption;
   drivingSystem: DrivingSystemOption;
 };
 
@@ -25,7 +25,7 @@ type Actions = {
 export type {
   PIClassOption,
   SuspensionOption,
-  TierOption,
+  TireOption,
   DrivingSystemOption,
   TuningSearchOption,
   TuningSearchOptions,

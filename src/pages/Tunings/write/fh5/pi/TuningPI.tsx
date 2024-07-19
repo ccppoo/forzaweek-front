@@ -34,7 +34,7 @@ function SliderValue(props: SliderValueProp) {
 
   // TODO: type check? - like ... formPath as FieldName<TuningEditSchema>
   // FIXME: type check?
-  // @ts-expect-error NOTE: 동적으로 hook-forms field name을 가져오는 방법? 'detailedTunings.tier.presssure.front'
+  // @ts-expect-error NOTE: 동적으로 hook-forms field name을 가져오는 방법? 'detailedTunings.tire.presssure.front'
   const defaultValue = getValues(formPath) as number;
 
   const [sliderValue, setSliderValue] = useState<number>(defaultValue as number);
@@ -115,7 +115,7 @@ function SliderValue(props: SliderValueProp) {
     // TODO: limit min, max number
     const newvalue = newValue as number;
     setSliderValue(newvalue);
-    // @ts-expect-error NOTE: 동적으로 hook-forms field name을 가져오는 방법? 'detailedTunings.tier.presssure.front'
+    // @ts-expect-error NOTE: 동적으로 hook-forms field name을 가져오는 방법? 'detailedTunings.tire.presssure.front'
     setValue(formPath, newvalue);
     const sliderVal = minMaxReverse ? min - (newValue as number) : (newValue as number);
     if (step && (step >= 10 || step < 1)) {

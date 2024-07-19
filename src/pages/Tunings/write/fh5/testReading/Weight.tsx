@@ -6,15 +6,15 @@ import TextField from '@mui/material/TextField';
 
 import type { TuningEditSchema } from '@/FormData/tuning';
 import { FlexBox } from '@/components/styled';
+import { WeightUnits } from '@/types/units';
 
 export default function TestReadingWeight() {
-  const { control, watch, getValues, formState } = useFormContext<TuningEditSchema>();
+  const { control, getValues, formState } = useFormContext<TuningEditSchema>();
 
   const formPathUnit = `testReadings.weight.unit`;
   const formPathValue = `testReadings.weight.value`;
   const unitChoiceWidth = 100;
   const Name = 'Weight';
-  const units = ['kg', 'lb'];
 
   return (
     <FlexBox sx={{ columnGap: 2 }}>
@@ -65,7 +65,7 @@ export default function TestReadingWeight() {
               fullWidth
               size="small"
             >
-              {units.map((tUnit) => (
+              {WeightUnits.map((tUnit) => (
                 <MenuItem key={`test-reading-unit-${Name}-unit-${tUnit}`} value={tUnit}>
                   <FlexBox>
                     <FlexBox sx={{ alignItems: 'center', paddingX: 2 }}>

@@ -4,7 +4,7 @@ import { FlexBox } from '@/components/styled';
 
 import TuningMajorPartsDrivingSystem from './DrivingSystem';
 import TuningMajorPartsSuspension from './Suspension';
-import TuningMajorPartsTier from './Tire';
+import TuningMajorPartsTire from './Tire';
 
 export default function MajorParts() {
   return (
@@ -23,7 +23,7 @@ export default function MajorParts() {
         }}
         component={Paper}
       >
-        <TuningMajorPartsTier />
+        <TuningMajorPartsTire />
         <TuningMajorPartsSuspension />
         <TuningMajorPartsDrivingSystem />
       </Box>

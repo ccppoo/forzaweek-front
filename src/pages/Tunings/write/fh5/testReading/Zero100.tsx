@@ -6,15 +6,15 @@ import TextField from '@mui/material/TextField';
 
 import type { TuningEditSchema } from '@/FormData/tuning';
 import { FlexBox } from '@/components/styled';
+import { SpeedUnits } from '@/types/units';
 
 export default function TestReadingZero100() {
-  const { control, watch, getValues, formState } = useFormContext<TuningEditSchema>();
+  const { control, getValues, formState } = useFormContext<TuningEditSchema>();
 
   const formPathUnit = `testReadings.zero100.unit`;
   const formPathValue = `testReadings.zero100.value`;
   const unitChoiceWidth = 100;
   const Name = '0-100';
-  const units = ['km/h', 'mph'];
 
   return (
     <FlexBox sx={{ columnGap: 2 }}>
@@ -44,7 +44,7 @@ export default function TestReadingZero100() {
             fullWidth
             size="small"
           >
-            {units.map((tUnit) => (
+            {SpeedUnits.map((tUnit) => (
               <MenuItem key={`test-reading-unit-${Name}-unit-${tUnit}`} value={tUnit}>
                 <FlexBox>
                   <FlexBox sx={{ alignItems: 'center', paddingX: 2 }}>

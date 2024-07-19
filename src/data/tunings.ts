@@ -3,7 +3,7 @@ import type { DrivingSystemType } from '@/types';
 export type TestReadings = {
   maxspeed: number | null;
   zero100: number;
-  tork: number;
+  torque: number;
   output: number;
   weight: number;
   skid_pad: number;
@@ -34,7 +34,7 @@ export type Tuning = {
   test_reading: TestReadings;
   performance: Performance;
   suspension: string;
-  tier: string;
+  tire: string;
   driving_system: DrivingSystemType;
 };
 
@@ -55,7 +55,7 @@ export const tunings: Tuning[] = [
     test_reading: {
       maxspeed: 340.1,
       zero100: 3.525,
-      tork: 133,
+      torque: 133,
       output: 1297,
       weight: 1231,
       skid_pad: 1.68,
@@ -69,7 +69,7 @@ export const tunings: Tuning[] = [
       offroad: 4.9,
     },
     suspension: 'drift',
-    tier: 'basic',
+    tire: 'basic',
     driving_system: 'AWD',
   },
   {
@@ -90,7 +90,7 @@ export const tunings: Tuning[] = [
       maxspeed: 401.1,
       zero100: 3.369,
       output: 1375,
-      tork: 141,
+      torque: 141,
       weight: 1259,
       skid_pad: 1.65,
     },
@@ -103,7 +103,7 @@ export const tunings: Tuning[] = [
       offroad: 4.7,
     },
     suspension: 'race',
-    tier: 'basic',
+    tire: 'basic',
     driving_system: 'AWD',
   },
   {
@@ -124,7 +124,7 @@ export const tunings: Tuning[] = [
       maxspeed: 298.5,
       zero100: 5.765,
       output: 655,
-      tork: 79,
+      torque: 79,
       weight: 1409,
       skid_pad: 1.64,
     },
@@ -137,7 +137,7 @@ export const tunings: Tuning[] = [
       offroad: 5.2,
     },
     suspension: 'race',
-    tier: 'basic',
+    tire: 'basic',
     driving_system: 'AWD',
   },
   {
@@ -157,7 +157,7 @@ export const tunings: Tuning[] = [
     test_reading: {
       maxspeed: 297.3,
       zero100: 6.112,
-      tork: 76,
+      torque: 76,
       output: 629,
       weight: 1291,
       skid_pad: 1.31,
@@ -171,7 +171,7 @@ export const tunings: Tuning[] = [
       offroad: 5.4,
     },
     suspension: 'race',
-    tier: 'race',
+    tire: 'race',
     driving_system: 'AWD',
   },
   {
@@ -190,7 +190,7 @@ export const tunings: Tuning[] = [
     test_reading: {
       maxspeed: 371.2,
       zero100: 3.473,
-      tork: 141,
+      torque: 141,
       output: 1375,
       weight: 1257,
       skid_pad: 1.69,
@@ -204,7 +204,7 @@ export const tunings: Tuning[] = [
       offroad: 4.1,
     },
     suspension: 'race',
-    tier: 'basic',
+    tire: 'basic',
     driving_system: 'AWD',
   },
   {
@@ -223,7 +223,7 @@ export const tunings: Tuning[] = [
     test_reading: {
       maxspeed: 395.3,
       zero100: 5.782,
-      tork: 133,
+      torque: 133,
       output: 1297,
       weight: 1178,
       skid_pad: 1.65,
@@ -237,7 +237,7 @@ export const tunings: Tuning[] = [
       offroad: 4.4,
     },
     suspension: 'drift',
-    tier: 'basic',
+    tire: 'basic',
     driving_system: 'RWD',
   },
   {
@@ -256,7 +256,7 @@ export const tunings: Tuning[] = [
     test_reading: {
       maxspeed: null,
       zero100: 8.248,
-      tork: 126,
+      torque: 126,
       output: 1222,
       weight: 1538,
       skid_pad: 1.03,
@@ -270,7 +270,7 @@ export const tunings: Tuning[] = [
       offroad: 4.8,
     },
     suspension: 'drift',
-    tier: 'snow',
+    tire: 'snow',
     driving_system: 'AWD',
   },
   {
@@ -289,7 +289,7 @@ export const tunings: Tuning[] = [
     test_reading: {
       maxspeed: 234.7,
       zero100: 10.974,
-      tork: 46,
+      torque: 46,
       output: 355,
       weight: 1360,
       skid_pad: 1.63,
@@ -303,7 +303,7 @@ export const tunings: Tuning[] = [
       offroad: 5.1,
     },
     suspension: 'race',
-    tier: 'basic',
+    tire: 'basic',
     driving_system: 'FWD',
   },
   {
@@ -322,7 +322,7 @@ export const tunings: Tuning[] = [
     test_reading: {
       maxspeed: 383.7,
       zero100: 6.842,
-      tork: 141,
+      torque: 141,
       output: 1375,
       weight: 1215,
       skid_pad: 1.68,
@@ -336,7 +336,7 @@ export const tunings: Tuning[] = [
       offroad: 4.3,
     },
     suspension: 'drift',
-    tier: 'basic',
+    tire: 'basic',
     driving_system: 'FWD',
   },
   {
@@ -355,7 +355,7 @@ export const tunings: Tuning[] = [
     test_reading: {
       maxspeed: 295.5,
       zero100: 5.591,
-      tork: 66,
+      torque: 66,
       output: 545,
       weight: 1164,
       skid_pad: 1.66,
@@ -369,7 +369,7 @@ export const tunings: Tuning[] = [
       offroad: 5.3,
     },
     suspension: 'race',
-    tier: 'basic',
+    tire: 'basic',
     driving_system: 'AWD',
   },
   {
@@ -389,7 +389,7 @@ export const tunings: Tuning[] = [
     test_reading: {
       maxspeed: 415.5,
       zero100: 3.334,
-      tork: 141,
+      torque: 141,
       output: 1375,
       weight: 1258,
       skid_pad: 1.63,
@@ -403,7 +403,7 @@ export const tunings: Tuning[] = [
       offroad: 4.8,
     },
     suspension: 'race',
-    tier: 'basic',
+    tire: 'basic',
     driving_system: 'AWD',
   },
   {
@@ -422,7 +422,7 @@ export const tunings: Tuning[] = [
     test_reading: {
       maxspeed: 269.1,
       zero100: 8.925,
-      tork: 53,
+      torque: 53,
       output: 407,
       weight: 1400,
       skid_pad: 1.4,
@@ -436,7 +436,7 @@ export const tunings: Tuning[] = [
       offroad: 6.7,
     },
     suspension: 'race',
-    tier: 'rally',
+    tire: 'rally',
     driving_system: 'AWD',
   },
   {
@@ -455,7 +455,7 @@ export const tunings: Tuning[] = [
     test_reading: {
       maxspeed: 416.5,
       zero100: 3.664,
-      tork: 141,
+      torque: 141,
       output: 1375,
       weight: 1257,
       skid_pad: 1.62,
@@ -469,7 +469,7 @@ export const tunings: Tuning[] = [
       offroad: 6.5,
     },
     suspension: 'rally',
-    tier: 'basic',
+    tire: 'basic',
     driving_system: 'AWD',
   },
   {
@@ -488,7 +488,7 @@ export const tunings: Tuning[] = [
     test_reading: {
       maxspeed: 414.5,
       zero100: 3.386,
-      tork: 141,
+      torque: 141,
       output: 1375,
       weight: 1257,
       skid_pad: 1.62,
@@ -502,7 +502,7 @@ export const tunings: Tuning[] = [
       offroad: 4.8,
     },
     suspension: 'race',
-    tier: 'basic',
+    tire: 'basic',
     driving_system: 'AWD',
   },
   {
@@ -521,7 +521,7 @@ export const tunings: Tuning[] = [
     test_reading: {
       maxspeed: 370.6,
       zero100: 3.456,
-      tork: 141,
+      torque: 141,
       output: 1375,
       weight: 1261,
       skid_pad: 1.7,
@@ -535,7 +535,7 @@ export const tunings: Tuning[] = [
       offroad: 4.6,
     },
     suspension: 'race',
-    tier: 'basic',
+    tire: 'basic',
     driving_system: 'AWD',
   },
   {
@@ -554,7 +554,7 @@ export const tunings: Tuning[] = [
     test_reading: {
       maxspeed: 239.1,
       zero100: 11.009,
-      tork: 46,
+      torque: 46,
       output: 355,
       weight: 1139,
       skid_pad: 1.28,
@@ -568,7 +568,7 @@ export const tunings: Tuning[] = [
       offroad: 6.2,
     },
     suspension: 'race',
-    tier: 'rally',
+    tire: 'rally',
     driving_system: 'FWD',
   },
   {
@@ -587,7 +587,7 @@ export const tunings: Tuning[] = [
     test_reading: {
       maxspeed: 371.3,
       zero100: 3.629,
-      tork: 141,
+      torque: 141,
       output: 1375,
       weight: 1259,
       skid_pad: 1.7,
@@ -601,7 +601,7 @@ export const tunings: Tuning[] = [
       offroad: 4.7,
     },
     suspension: 'race',
-    tier: 'basic',
+    tire: 'basic',
     driving_system: 'AWD',
   },
   {
@@ -620,7 +620,7 @@ export const tunings: Tuning[] = [
     test_reading: {
       maxspeed: 274.5,
       zero100: 8.891,
-      tork: 54,
+      torque: 54,
       output: 417,
       weight: 1433,
       skid_pad: 1.21,
@@ -634,7 +634,7 @@ export const tunings: Tuning[] = [
       offroad: 6.7,
     },
     suspension: 'race',
-    tier: 'rally',
+    tire: 'rally',
     driving_system: 'AWD',
   },
 ];

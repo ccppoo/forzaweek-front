@@ -1,4 +1,4 @@
-import { CarImages, DrivingSystemType, EngineType, SuspensionType, TierType } from './car';
+import { CarImages, DrivingSystemType, EngineType, SuspensionType, TireType } from './car';
 import { Tags } from './tag';
 import { TrackInfo } from './track';
 
@@ -14,5 +14,5 @@ export type {
   PIClass,
   DrivingSystemType,
   SuspensionType,
-  TierType,
+  TireType,
 };

@@ -1,4 +1,4 @@
-import { SyntheticEvent, useState } from 'react';
+import { useContext, useState } from 'react';
 
 import TabPanel from '@mui/lab/TabPanel';
 import { Box, Divider, Typography } from '@mui/material';
@@ -6,19 +6,22 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
 
 import { FlexBox } from '@/components/styled';
+import DetailedTuningChoiceContext from '@/context/DetailedTuningChoiceContext';
 import type { TuningOption } from '@/types/car';
+import { getFormPath } from '@/utils/FormInput';
 
 import { SliderTitle, SliderValue } from './sliderComponents';
-import { getFormPath } from './utils';
+import SliderValueInput from './sliderComponents/SliderValueInput';
 
 export default function TiresOption() {
   const tuningIndex: TuningOption = 'Tires';
 
-  const formPathBase = ['detailedTuning', 'tiers'];
+  const formPathBase = ['detailedTuning', 'tires'];
+  const { detailedTuningChoices, setDetailedTuning } = useContext(DetailedTuningChoiceContext);
 
-  const [notMyOption, setNotMyOption] = useState<boolean>(true);
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>, checked: boolean) => {
-    setNotMyOption(!event.target.checked);
+  const optionActivated = detailedTuningChoices.tires;
+  const handleChange = () => {
+    setDetailedTuning('tires', !optionActivated);
   };
 
   return (
@@ -26,7 +29,7 @@ export default function TiresOption() {
       <FlexBox sx={{ width: '100%', justifyContent: 'end', alignItems: 'center' }}>
         <FormControlLabel
           // @ts-ignore
-          control={<Switch checked={!notMyOption} onClick={handleChange} color="info" />}
+          control={<Switch checked={optionActivated} onClick={handleChange} color="info" />}
           label="I have this option activated"
           sx={{ '& .MuiFormControlLabel-label': { fontWeight: 200 } }}
         />
@@ -37,22 +40,22 @@ export default function TiresOption() {
           width: '100%',
           height: '100%',
           rowGap: 2,
-          opacity: notMyOption ? 0.4 : 1,
-          pointerEvents: notMyOption ? 'none' : 'auto',
+          opacity: !optionActivated ? 0.4 : 1,
+          pointerEvents: !optionActivated ? 'none' : 'auto',
         }}
       >
         <Divider flexItem />
-        <SliderTitle name="Tier Pressure" LeftName={'LOW'} RightName={'HIGH'} unitName={'PSI'} />
-        <SliderValue
+        <SliderTitle name="Tire Pressure" LeftName={'LOW'} RightName={'HIGH'} unitName={'PSI'} />
+        <SliderValueInput
           name="FRONT"
-          formPath={getFormPath(formPathBase, ['tierPressure', 'front'])}
+          formPath={getFormPath(formPathBase, ['tirePressure', 'front'])}
           min={15}
           max={55}
           step={0.1}
         />
-        <SliderValue
+        <SliderValueInput
           name="REAR"
-          formPath={getFormPath(formPathBase, ['tierPressure', 'rear'])}
+          formPath={getFormPath(formPathBase, ['tirePressure', 'rear'])}
           min={15}
           max={55}
           step={0.1}

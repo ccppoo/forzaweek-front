@@ -6,15 +6,15 @@ import TextField from '@mui/material/TextField';
 
 import type { TuningEditSchema } from '@/FormData/tuning';
 import { FlexBox } from '@/components/styled';
+import { TorqueUnits } from '@/types/units';
 
-export default function TestReadingTork() {
-  const { control, watch, getValues, formState } = useFormContext<TuningEditSchema>();
+export default function TestReadingTorque() {
+  const { control, getValues, formState } = useFormContext<TuningEditSchema>();
 
-  const formPathUnit = `testReadings.tork.unit`;
-  const formPathValue = `testReadings.tork.value`;
+  const formPathUnit = `testReadings.torque.unit`;
+  const formPathValue = `testReadings.torque.value`;
   const unitChoiceWidth = 100;
-  const Name = 'Tork';
-  const units = ['kg·m'];
+  const Name = 'Torque';
 
   return (
     <FlexBox sx={{ columnGap: 2 }}>
@@ -65,7 +65,7 @@ export default function TestReadingTork() {
               fullWidth
               size="small"
             >
-              {units.map((tUnit) => (
+              {TorqueUnits.map((tUnit) => (
                 <MenuItem key={`test-reading-unit-${Name}-unit-${tUnit}`} value={tUnit}>
                   <FlexBox>
                     <FlexBox sx={{ alignItems: 'center', paddingX: 2 }}>

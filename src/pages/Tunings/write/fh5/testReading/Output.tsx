@@ -6,6 +6,7 @@ import TextField from '@mui/material/TextField';
 
 import type { TuningEditSchema } from '@/FormData/tuning';
 import { FlexBox } from '@/components/styled';
+import { PowerUnits } from '@/types/units';
 
 export default function TestReadingOutput() {
   const { control, watch, getValues, formState } = useFormContext<TuningEditSchema>();
@@ -14,7 +15,6 @@ export default function TestReadingOutput() {
   const formPathValue = `testReadings.output.value`;
   const unitChoiceWidth = 100;
   const Name = 'Output';
-  const units = ['ps', 'hp'];
 
   return (
     <FlexBox sx={{ columnGap: 2 }}>
@@ -73,7 +73,7 @@ export default function TestReadingOutput() {
               fullWidth
               size="small"
             >
-              {units.map((tUnit) => (
+              {PowerUnits.map((tUnit) => (
                 <MenuItem key={`test-reading-unit-${Name}-unit-${tUnit}`} value={tUnit}>
                   <FlexBox>
                     <FlexBox sx={{ alignItems: 'center', paddingX: 2 }}>

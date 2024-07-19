@@ -38,7 +38,7 @@ export type PerformanceTrait =
   | 'launch'
   | 'handling';
 export type SuspensionType = 'drift' | 'race' | 'rally';
-export type TierType = 'normal' | 'snow' | 'rally' | 'offroad' | 'slick' | 'race' | 'drag';
+export type TireType = 'normal' | 'snow' | 'rally' | 'offroad' | 'slick' | 'race' | 'drag';
 export type DrivingSystemType = 'FWD' | 'AWD' | 'RWD';
 export type EngineType = 'EV' | 'ICE' | 'HV';
 
@@ -61,6 +61,17 @@ export type TuningOption =
   | 'Aero'
   | 'Brake'
   | 'Diffrential';
+
+export type TuningOptionName =
+  | 'tires'
+  | 'gearing'
+  | 'alignment'
+  | 'antirollBars'
+  | 'springs'
+  | 'damping'
+  | 'aero'
+  | 'brake'
+  | 'diffrential';
 
 export const TuningOptions: TuningOption[] = [
   'Tires',

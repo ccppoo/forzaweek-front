@@ -6,6 +6,7 @@ import TextField from '@mui/material/TextField';
 
 import type { TuningEditSchema } from '@/FormData/tuning';
 import { FlexBox } from '@/components/styled';
+import { SkidPadUnits } from '@/types/units';
 
 export default function TestReadingSkidPad() {
   const { control, watch, getValues, formState } = useFormContext<TuningEditSchema>();
@@ -14,7 +15,7 @@ export default function TestReadingSkidPad() {
   const formPathValue = `testReadings.skid_pad.value`;
   const unitChoiceWidth = 100;
   const Name = 'Skid pad';
-  const units = ['Gs'];
+  const units = SkidPadUnits;
 
   return (
     <FlexBox sx={{ columnGap: 2 }}>

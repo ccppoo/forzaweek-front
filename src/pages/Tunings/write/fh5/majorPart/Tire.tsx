@@ -7,12 +7,12 @@ import TextField from '@mui/material/TextField';
 import type { TuningEditSchema } from '@/FormData/tuning';
 import { FlexBox } from '@/components/styled';
 
-export default function TuningMajorPartsTier() {
+export default function TuningMajorPartsTire() {
   const { control, getValues, formState } = useFormContext<TuningEditSchema>();
 
-  const formPathValue = `tuningMajorParts.tier`;
+  const formPathValue = `tuningMajorParts.tire`;
   const unitChoiceWidth = 150;
-  const Name = 'Tier';
+  const Name = 'Tire';
   const choies = ['normal', 'drift', 'rally', 'offroad', 'drag'];
 
   return (

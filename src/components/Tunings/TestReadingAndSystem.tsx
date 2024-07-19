@@ -63,7 +63,7 @@ function SystemRow({ system }: { system: CarSystem }) {
 }
 
 export default function TestReadingAndSystem({ tuning }: { tuning: Tuning }) {
-  const { test_reading, suspension, tier, driving_system } = tuning;
+  const { test_reading, suspension, tire, driving_system } = tuning;
 
   const testReadings: TestReading[] = [
     {
@@ -83,7 +83,7 @@ export default function TestReadingAndSystem({ tuning }: { tuning: Tuning }) {
     },
     {
       name: '토크',
-      value: test_reading.tork,
+      value: test_reading.torque,
       unit: 'kg·m',
     },
     {
@@ -104,7 +104,7 @@ export default function TestReadingAndSystem({ tuning }: { tuning: Tuning }) {
     },
     {
       name: '타이어',
-      value: tier,
+      value: tire,
     },
     {
       name: '구동방식',

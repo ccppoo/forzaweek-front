@@ -5,7 +5,7 @@ import { FlexBox } from '@/components/styled';
 import TestReadingMaxSpeed from './MaxSpeed';
 import TestReadingOutput from './Output';
 import TestReadingSkidPad from './SkidPad';
-import TestReadingTork from './Tork';
+import TestReadingTorque from './Torque';
 import TestReadingWeight from './Weight';
 import TestReadingZero100 from './Zero100';
 
@@ -30,7 +30,7 @@ export default function TestReadingInput() {
         <TestReadingMaxSpeed />
         <TestReadingZero100 />
         <TestReadingOutput />
-        <TestReadingTork />
+        <TestReadingTorque />
         <TestReadingWeight />
         <TestReadingSkidPad />
       </Box>

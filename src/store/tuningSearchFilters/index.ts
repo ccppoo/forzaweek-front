@@ -1,6 +1,6 @@
 import { atom, useRecoilState } from 'recoil';
 
-import type { DrivingSystemType, PIClass, SuspensionType, TierType } from '@/types';
+import type { DrivingSystemType, PIClass, SuspensionType, TireType } from '@/types';
 
 import type { Actions, TuningSearchOption, TuningSearchOptions } from './types';
 
@@ -24,7 +24,7 @@ const tuningSearchOptionDefault: TuningSearchOptions = {
     race: true,
     rally: true,
   },
-  tier: {
+  tire: {
     drag: true,
     normal: true,
     offroad: true,
@@ -78,10 +78,10 @@ function useTuningSearchFilters(): [TuningSearchOptions, Actions] {
           };
         }
 
-        case 'tier': {
+        case 'tire': {
           const newOption = {
             ...curVal[option],
-            [name as TierType]: !curVal[option][name as TierType],
+            [name as TireType]: !curVal[option][name as TireType],
           };
           return {
             ...curVal,
@@ -136,11 +136,11 @@ function useTuningSearchFilters(): [TuningSearchOptions, Actions] {
           };
         }
 
-        case 'tier': {
+        case 'tire': {
           const newVal = { ...tuningSearchOptionDefault[option] };
 
           Object.keys(newVal).reduce((obj, x) => {
-            obj[x as TierType] = !anyChoice;
+            obj[x as TireType] = !anyChoice;
             return obj;
           }, newVal);
 
@@ -195,11 +195,11 @@ function useTuningSearchFilters(): [TuningSearchOptions, Actions] {
           };
         }
 
-        case 'tier': {
+        case 'tire': {
           const newVal = { ...tuningSearchOptionDefault[option] };
 
           Object.keys(newVal).reduce((obj, x) => {
-            obj[x as TierType] = false;
+            obj[x as TireType] = false;
             return obj;
           }, newVal);
 

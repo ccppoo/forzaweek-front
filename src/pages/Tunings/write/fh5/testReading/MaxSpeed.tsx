@@ -6,6 +6,7 @@ import TextField from '@mui/material/TextField';
 
 import type { TuningEditSchema } from '@/FormData/tuning';
 import { FlexBox } from '@/components/styled';
+import { SpeedUnits } from '@/types/units';
 
 export default function TestReadingMaxSpeed() {
   const { control, watch, getValues, formState } = useFormContext<TuningEditSchema>();
@@ -14,7 +15,6 @@ export default function TestReadingMaxSpeed() {
   const formPathValue = `testReadings.maxspeed.value`;
   const unitChoiceWidth = 100;
   const Name = 'Max Speed';
-  const units = ['km/h', 'mph'];
 
   return (
     <FlexBox sx={{ columnGap: 2 }}>
@@ -72,7 +72,7 @@ export default function TestReadingMaxSpeed() {
               sx={{ padding: 0 }}
               size="small"
             >
-              {units.map((tUnit) => (
+              {SpeedUnits.map((tUnit) => (
                 <MenuItem key={`test-reading-unit-${Name}-unit-${tUnit}`} value={tUnit}>
                   <FlexBox>
                     <FlexBox sx={{ alignItems: 'center', paddingX: 2 }}>
