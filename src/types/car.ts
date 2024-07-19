@@ -84,3 +84,5 @@ export const TuningOptions: TuningOption[] = [
   'Brake',
   'Diffrential',
 ];
+
+export const DrivingSystemTypes: DrivingSystemType[] = ['FWD', 'AWD', 'RWD'];

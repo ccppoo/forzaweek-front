@@ -1,8 +1,9 @@
 import { z } from 'zod';
 
-export const DrivingSystemTypeSchema = z.union([
-  z.literal('AWD'),
-  z.literal('RWD'),
-  z.literal('FWD'),
-]);
+import { DrivingSystemTypes } from '@/types/car';
+
+const literalToZod = (literalType: any[]) => z.custom<string>((val) => literalType.includes(val));
+const drivingSystems = literalToZod(DrivingSystemTypes);
+
+export const DrivingSystemTypeSchema = drivingSystems;
 export type DrivingSystemType = z.infer<typeof DrivingSystemTypeSchema>;
