@@ -1,38 +1,33 @@
-import { useContext, useState } from 'react';
+import { useContext } from 'react';
 
 import TabPanel from '@mui/lab/TabPanel';
-import { Box, Divider, Typography } from '@mui/material';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Switch from '@mui/material/Switch';
+import { Divider } from '@mui/material';
 
+import { DetailedTuningActivateSwitch } from '@/components/FormInputs/Tunings';
 import { FlexBox } from '@/components/styled';
 import DetailedTuningChoiceContext from '@/context/DetailedTuningChoiceContext';
 import type { TuningOption } from '@/types/car';
+import { PressureUnits } from '@/types/units';
 import { getFormPath } from '@/utils/FormInput';
 
-import { SliderTitle, SliderValue } from './sliderComponents';
+import { detailedTuningsContextKey } from './detailedTuningContext';
+import { SliderTitle } from './sliderComponents';
 import SliderValueInput from './sliderComponents/SliderValueInput';
 
 export default function TiresOption() {
   const tuningIndex: TuningOption = 'Tires';
 
   const formPathBase = ['detailedTuning', 'tires'];
-  const { detailedTuningChoices, setDetailedTuning } = useContext(DetailedTuningChoiceContext);
+  const contextFieldName = detailedTuningsContextKey[tuningIndex];
 
-  const optionActivated = detailedTuningChoices.tires;
-  const handleChange = () => {
-    setDetailedTuning('tires', !optionActivated);
-  };
+  const {
+    detailedTuningChoices: { tires: activated },
+  } = useContext(DetailedTuningChoiceContext);
 
   return (
     <TabPanel value={tuningIndex} sx={{ paddingX: 0.5 }}>
       <FlexBox sx={{ width: '100%', justifyContent: 'end', alignItems: 'center' }}>
-        <FormControlLabel
-          // @ts-ignore
-          control={<Switch checked={optionActivated} onClick={handleChange} color="info" />}
-          label="I have this option activated"
-          sx={{ '& .MuiFormControlLabel-label': { fontWeight: 200 } }}
-        />
+        <DetailedTuningActivateSwitch tuningName={contextFieldName} />
       </FlexBox>
       <FlexBox
         sx={{
@@ -40,12 +35,18 @@ export default function TiresOption() {
           width: '100%',
           height: '100%',
           rowGap: 2,
-          opacity: !optionActivated ? 0.4 : 1,
-          pointerEvents: !optionActivated ? 'none' : 'auto',
+          opacity: !activated ? 0.4 : 1,
+          pointerEvents: !activated ? 'none' : 'auto',
         }}
       >
         <Divider flexItem />
-        <SliderTitle name="Tire Pressure" LeftName={'LOW'} RightName={'HIGH'} unitName={'PSI'} />
+        <SliderTitle
+          name="Tire Pressure"
+          LeftName={'LOW'}
+          RightName={'HIGH'}
+          unitNames={PressureUnits}
+          formPath={getFormPath(formPathBase, ['tirePressure', 'unit'])}
+        />
         <SliderValueInput
           name="FRONT"
           formPath={getFormPath(formPathBase, ['tirePressure', 'front'])}

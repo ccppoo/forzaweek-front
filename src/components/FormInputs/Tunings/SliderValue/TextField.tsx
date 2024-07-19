@@ -73,7 +73,7 @@ export default function SliderValueTextField(props: SliderValueProp) {
         width: '100%',
         alignItems: 'center',
         justifyContent: 'center',
-        paddingRight: 1,
+        // paddingRight: 1,
         columnGap: 1,
       }}
     >

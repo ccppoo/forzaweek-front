@@ -3,16 +3,16 @@ import { useContext, useState } from 'react';
 import AddCircleOutlineOutlinedIcon from '@mui/icons-material/AddCircleOutlineOutlined';
 import RemoveCircleOutlineOutlinedIcon from '@mui/icons-material/RemoveCircleOutlineOutlined';
 import TabPanel from '@mui/lab/TabPanel';
-import { Box, Button, Divider } from '@mui/material';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Switch from '@mui/material/Switch';
+import { Button, Divider } from '@mui/material';
 
+import { DetailedTuningActivateSwitch } from '@/components/FormInputs/Tunings';
 import { FlexBox } from '@/components/styled';
 import DetailedTuningChoiceContext from '@/context/DetailedTuningChoiceContext';
 import type { TuningOption } from '@/types/car';
 import { range } from '@/utils';
 import { getFormPath } from '@/utils/FormInput';
 
+import { detailedTuningsContextKey } from './detailedTuningContext';
 import { SliderTitle, SliderValue } from './sliderComponents';
 
 export default function GearingOption() {
@@ -38,22 +38,16 @@ export default function GearingOption() {
   };
   const ordinal = ['1st', '2nd', '3rd'];
 
-  const { detailedTuningChoices, setDetailedTuning } = useContext(DetailedTuningChoiceContext);
+  const contextFieldName = detailedTuningsContextKey[tuningIndex];
 
-  const optionActivated = detailedTuningChoices.gearing;
-  const handleChange = () => {
-    setDetailedTuning('gearing', !optionActivated);
-  };
+  const {
+    detailedTuningChoices: { gearing: activated },
+  } = useContext(DetailedTuningChoiceContext);
 
   return (
     <TabPanel value={tuningIndex} sx={{ paddingX: 0 }}>
       <FlexBox sx={{ width: '100%', justifyContent: 'end', alignItems: 'center' }}>
-        <FormControlLabel
-          // @ts-ignore
-          control={<Switch checked={optionActivated} onClick={handleChange} color="info" />}
-          label="I have this option activated"
-          sx={{ '& .MuiFormControlLabel-label': { fontWeight: 200 } }}
-        />
+        <DetailedTuningActivateSwitch tuningName={contextFieldName} />
       </FlexBox>
       <FlexBox
         sx={{
@@ -61,8 +55,8 @@ export default function GearingOption() {
           width: '100%',
           height: '100%',
           rowGap: 2,
-          opacity: !optionActivated ? 0.4 : 1,
-          pointerEvents: !optionActivated ? 'none' : 'auto',
+          opacity: !activated ? 0.4 : 1,
+          pointerEvents: !activated ? 'none' : 'auto',
         }}
       >
         <Divider flexItem />

@@ -1,6 +1,6 @@
 import { Box, Typography } from '@mui/material';
 
-import { SliderValue, SliderValueTextField } from '@/components/FormInputs/TuningSlider';
+import { SliderValue, SliderValueTextField } from '@/components/FormInputs/Tunings';
 import { FlexBox } from '@/components/styled';
 
 interface SliderValueProp {
@@ -23,7 +23,7 @@ export default function SliderValueInput(props: SliderValueProp) {
         width: '100%',
         display: 'grid',
         height: SliderHeight || 60,
-        gridTemplateColumns: '5fr 4fr 80px',
+        gridTemplateColumns: '5fr 4fr 150px',
       }}
     >
       <FlexBox

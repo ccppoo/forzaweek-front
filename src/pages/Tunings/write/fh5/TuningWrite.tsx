@@ -1,13 +1,12 @@
-import { useEffect, useReducer, useState } from 'react';
+import { useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import type { SubmitErrorHandler } from 'react-hook-form';
 
-import { Box, Button, Paper, Typography } from '@mui/material';
-import Container from '@mui/material/Container';
+import { Box, Button, Container, Typography } from '@mui/material';
 
 import type { TuningEditSchema } from '@/FormData/tuning';
 import { tuningEditSchemaDefault } from '@/FormData/tuning';
-import { AddNewTuning, EditTuning } from '@/api/data/fh5/tuning';
+import { createTuningFH5 } from '@/api/fh5/tuning';
 import AddTags from '@/components/FormInputs/AddTags';
 import SelectCar from '@/components/FormInputs/CarSelect';
 import CreatorUsernameInput from '@/components/FormInputs/CreatorUsername';
@@ -39,8 +38,6 @@ const filterOptionalTuning = (
   }
   const { nothing, ..._choices } = choices;
 
-  // const NotGivenOptions = Object.entries(_choices).map(([key, value])=>!value && key)
-
   const map = {};
   for (const [key, value] of Object.entries(_choices)) {
     // @ts-ignore
@@ -49,8 +46,10 @@ const filterOptionalTuning = (
 
   return {
     ..._data,
-    ...detailedTuning,
-    ...map,
+    detailedTuning: {
+      ...detailedTuning,
+      ...map,
+    },
   };
 };
 
@@ -69,18 +68,22 @@ export default function TuningWrite(props: dataTextInputIntf) {
 
   console.log(`isEditMode :${isEditMode}`);
   const submit = async (data: TuningEditSchema) => {
-    console.log(`data : ${JSON.stringify(data)}`);
-    console.log(`detailedTuningChoices : ${JSON.stringify(detailedTuningChoices)}`);
+    // console.log(`data : ${JSON.stringify(data)}`);
+    // console.log(`detailedTuningChoices : ${JSON.stringify(detailedTuningChoices)}`);
     const _data = filterOptionalTuning(data, detailedTuningChoices);
     console.log(`_data : ${JSON.stringify(_data)}`);
+    const path = 'fh5/tuning';
 
-    // if (isEditMode) {
-    //   await EditTuning({ tuning: data });
-    //   return;
-    // }
-    // if (!isEditMode) {
-    //   await AddNewTuning({ tuning: data });
-    // }
+    if (isEditMode) {
+      // await EditTuning({ tuning: data });
+      return;
+    }
+
+    if (!isEditMode) {
+      const resp = await createTuningFH5({ data: _data, path });
+      console.log(`resp : ${JSON.stringify(resp)}`);
+      // await AddNewTuning({ tuning: data });
+    }
 
     return;
   };
@@ -95,11 +98,6 @@ export default function TuningWrite(props: dataTextInputIntf) {
         [tuningOptionName]: value,
       };
     });
-  };
-
-  const handleOnError = (errors: SubmitErrorHandler<TuningEditSchema>) => {
-    console.log(errors);
-    // console.log(`errors : ${JSON.stringify(errors)}`);
   };
 
   return (

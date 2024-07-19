@@ -1,38 +1,32 @@
-import { useContext, useState } from 'react';
+import { useContext } from 'react';
 
 import TabPanel from '@mui/lab/TabPanel';
-import { Box, Divider, Typography } from '@mui/material';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Switch from '@mui/material/Switch';
+import { Divider } from '@mui/material';
 
+import { DetailedTuningActivateSwitch } from '@/components/FormInputs/Tunings';
 import { FlexBox } from '@/components/styled';
 import DetailedTuningChoiceContext from '@/context/DetailedTuningChoiceContext';
 import type { TuningOption } from '@/types/car';
+import { DownForceUnits } from '@/types/units';
 import { getFormPath } from '@/utils/FormInput';
 
+import { detailedTuningsContextKey } from './detailedTuningContext';
 import { SliderTitle, SliderValue } from './sliderComponents';
-
-// import
 
 export default function AeroOption() {
   const tuningIndex: TuningOption = 'Aero';
   // FIXME: 최소/최대 값이 다름
   const formPathBase = ['detailedTuning', 'aero'];
-  const { detailedTuningChoices, setDetailedTuning } = useContext(DetailedTuningChoiceContext);
 
-  const optionActivated = detailedTuningChoices.aero;
-  const handleChange = () => {
-    setDetailedTuning('aero', !optionActivated);
-  };
+  const contextFieldName = detailedTuningsContextKey[tuningIndex];
+
+  const {
+    detailedTuningChoices: { aero: activated },
+  } = useContext(DetailedTuningChoiceContext);
   return (
     <TabPanel value={tuningIndex} sx={{ paddingX: 0 }}>
       <FlexBox sx={{ width: '100%', justifyContent: 'end', alignItems: 'center' }}>
-        <FormControlLabel
-          // @ts-ignore
-          control={<Switch checked={optionActivated} onClick={handleChange} color="info" />}
-          label="I have this option activated"
-          sx={{ '& .MuiFormControlLabel-label': { fontWeight: 200 } }}
-        />
+        <DetailedTuningActivateSwitch tuningName={contextFieldName} />
       </FlexBox>
       <FlexBox
         sx={{
@@ -40,12 +34,18 @@ export default function AeroOption() {
           width: '100%',
           height: '100%',
           rowGap: 2,
-          opacity: !optionActivated ? 0.4 : 1,
-          pointerEvents: !optionActivated ? 'none' : 'auto',
+          opacity: !activated ? 0.4 : 1,
+          pointerEvents: !activated ? 'none' : 'auto',
         }}
       >
         <Divider flexItem />
-        <SliderTitle name={'Downforce'} LeftName={'Speed'} RightName={'Cornering'} unitName="LB" />
+        <SliderTitle
+          name={'Downforce'}
+          LeftName={'Speed'}
+          RightName={'Cornering'}
+          unitNames={DownForceUnits}
+          formPath={getFormPath(formPathBase, ['downforce', 'unit'])}
+        />
         <SliderValue
           name="Front"
           min={231}

@@ -1,15 +1,15 @@
-import { useContext, useState } from 'react';
+import { useContext } from 'react';
 
 import TabPanel from '@mui/lab/TabPanel';
 import { Divider } from '@mui/material';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Switch from '@mui/material/Switch';
 
+import { DetailedTuningActivateSwitch } from '@/components/FormInputs/Tunings';
 import { FlexBox } from '@/components/styled';
 import DetailedTuningChoiceContext from '@/context/DetailedTuningChoiceContext';
 import type { TuningOption } from '@/types/car';
 import { getFormPath } from '@/utils/FormInput';
 
+import { detailedTuningsContextKey } from './detailedTuningContext';
 import { SliderTitle, SliderValue } from './sliderComponents';
 
 export default function DiffrentialOption() {
@@ -22,15 +22,17 @@ export default function DiffrentialOption() {
   const handleChange = () => {
     setDetailedTuning('diffrential', !optionActivated);
   };
+
+  const contextFieldName = detailedTuningsContextKey[tuningIndex];
+
+  const {
+    detailedTuningChoices: { diffrential: activated },
+  } = useContext(DetailedTuningChoiceContext);
+
   return (
     <TabPanel value={tuningIndex} sx={{ paddingX: 0 }}>
       <FlexBox sx={{ width: '100%', justifyContent: 'end', alignItems: 'center' }}>
-        <FormControlLabel
-          // @ts-ignore
-          control={<Switch checked={optionActivated} onClick={handleChange} color="info" />}
-          label="I have this option activated"
-          sx={{ '& .MuiFormControlLabel-label': { fontWeight: 200 } }}
-        />
+        <DetailedTuningActivateSwitch tuningName={contextFieldName} />
       </FlexBox>
       <FlexBox
         sx={{

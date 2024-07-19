@@ -1,36 +1,31 @@
-import { useContext, useState } from 'react';
+import { useContext } from 'react';
 
 import TabPanel from '@mui/lab/TabPanel';
-import { Box, Divider, Typography } from '@mui/material';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Switch from '@mui/material/Switch';
+import { Divider } from '@mui/material';
 
+import { DetailedTuningActivateSwitch } from '@/components/FormInputs/Tunings';
 import { FlexBox } from '@/components/styled';
 import DetailedTuningChoiceContext from '@/context/DetailedTuningChoiceContext';
 import type { TuningOption } from '@/types/car';
 import { getFormPath } from '@/utils/FormInput';
 
+import { detailedTuningsContextKey } from './detailedTuningContext';
 import { SliderTitle, SliderValue } from './sliderComponents';
 
 export default function DampingOption() {
   const tuningIndex: TuningOption = 'Damping';
   const formPathBase = ['detailedTuning', 'damping'];
 
-  const { detailedTuningChoices, setDetailedTuning } = useContext(DetailedTuningChoiceContext);
+  const contextFieldName = detailedTuningsContextKey[tuningIndex];
 
-  const optionActivated = detailedTuningChoices.damping;
-  const handleChange = () => {
-    setDetailedTuning('damping', !optionActivated);
-  };
+  const {
+    detailedTuningChoices: { damping: activated },
+  } = useContext(DetailedTuningChoiceContext);
 
   return (
     <TabPanel value={tuningIndex} sx={{ paddingX: 0 }}>
       <FlexBox sx={{ width: '100%', justifyContent: 'end', alignItems: 'center' }}>
-        <FormControlLabel
-          control={<Switch checked={optionActivated} onClick={handleChange} color="info" />}
-          label="I have this option activated"
-          sx={{ '& .MuiFormControlLabel-label': { fontWeight: 200 } }}
-        />
+        <DetailedTuningActivateSwitch tuningName={contextFieldName} />
       </FlexBox>
       <FlexBox
         sx={{
@@ -38,8 +33,8 @@ export default function DampingOption() {
           width: '100%',
           height: '100%',
           rowGap: 2,
-          opacity: !optionActivated ? 0.4 : 1,
-          pointerEvents: !optionActivated ? 'none' : 'auto',
+          opacity: !activated ? 0.4 : 1,
+          pointerEvents: !activated ? 'none' : 'auto',
         }}
       >
         <Divider flexItem />
