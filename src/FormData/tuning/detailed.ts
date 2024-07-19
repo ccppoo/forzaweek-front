@@ -1,9 +1,19 @@
 import { z } from 'zod';
 
+import { DownForceUnits, PressureUnits, SpringHeightUnits, SpringUnits } from '@/types/units';
+
+const unitToZod = (literalType: any[]) => z.custom<string>((val) => literalType.includes(val));
+
+const pressureUnit = unitToZod(PressureUnits);
+const springHeightUnit = unitToZod(SpringHeightUnits);
+const springUnit = unitToZod(SpringUnits);
+const downforceUnit = unitToZod(DownForceUnits);
+
 const TireTuning = z.object({
   tirePressure: z.object({
     front: z.number().min(0).max(100),
     rear: z.number().min(0).max(100),
+    unit: pressureUnit,
   }),
 });
 
@@ -39,12 +49,12 @@ const SpringsTuning = z.object({
   springs: z.object({
     front: z.number().min(0).max(9000),
     rear: z.number().min(0).max(9000),
-    unit: z.string(),
+    unit: springUnit,
   }),
   rideHeight: z.object({
     front: z.number().min(0).max(100),
     rear: z.number().min(0).max(100),
-    unit: z.string(),
+    unit: springHeightUnit,
   }),
 });
 
@@ -63,7 +73,7 @@ const AeroTuning = z.object({
   downforce: z.object({
     front: z.number().min(0).max(1000),
     rear: z.number().min(0).max(1000),
-    unit: z.string(),
+    unit: downforceUnit,
   }),
 });
 
@@ -96,13 +106,12 @@ export const tuningDetailed = z.object({
 
 export type TuningDetailedType = z.infer<typeof tuningDetailed>;
 
-// TODO: unit에 따라 기본값 추가하기
-// TODO: add default values varying by units(e.g, kg <-> lb, kg/cm <-> lb/in)
 export const tuningDetailedDefault: TuningDetailedType = {
   tires: {
     tirePressure: {
       front: 35,
       rear: 35,
+      unit: 'bar',
     },
   },
   gearing: {
@@ -130,16 +139,17 @@ export const tuningDetailedDefault: TuningDetailedType = {
       rear: 33,
     },
   },
+
   springs: {
     springs: {
       front: 1100,
       rear: 1100,
-      unit: 'LB/IN',
+      unit: 'N/Mm',
     },
     rideHeight: {
       front: 5,
       rear: 5,
-      unit: 'IN',
+      unit: 'CM',
     },
   },
   damping: {
@@ -156,7 +166,7 @@ export const tuningDetailedDefault: TuningDetailedType = {
     downforce: {
       front: 333,
       rear: 333,
-      unit: 'LB',
+      unit: 'KGF',
     },
   },
   brake: {
