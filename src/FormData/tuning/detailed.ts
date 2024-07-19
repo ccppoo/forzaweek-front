@@ -1,94 +1,106 @@
 import { z } from 'zod';
 
-import { getPropertyPaths } from '@/utils/zod';
+const TireTuning = z.object({
+  tirePressure: z.object({
+    front: z.number().min(0).max(100),
+    rear: z.number().min(0).max(100),
+  }),
+});
+
+const GearingTuning = z.object({
+  gearing: z.object({
+    finalDrive: z.number().min(0).max(10),
+    stages: z.array(z.number().min(0).max(10)),
+  }),
+});
+
+const AlignmentTuning = z.object({
+  camber: z.object({
+    front: z.number().min(-100).max(100),
+    rear: z.number().min(-100).max(100),
+  }),
+  toe: z.object({
+    front: z.number().min(-100).max(100),
+    rear: z.number().min(-100).max(100),
+  }),
+  frontCaster: z.object({
+    angle: z.number().min(-100).max(100),
+  }),
+});
+
+const AntirollBarsTuning = z.object({
+  antirollBars: z.object({
+    front: z.number().min(0).max(100),
+    rear: z.number().min(0).max(100),
+  }),
+});
+
+const SpringsTuning = z.object({
+  springs: z.object({
+    front: z.number().min(0).max(9000),
+    rear: z.number().min(0).max(9000),
+    unit: z.string(),
+  }),
+  rideHeight: z.object({
+    front: z.number().min(0).max(100),
+    rear: z.number().min(0).max(100),
+    unit: z.string(),
+  }),
+});
+
+const DampingTuning = z.object({
+  reboundStiffness: z.object({
+    front: z.number().min(0).max(50),
+    rear: z.number().min(0).max(50),
+  }),
+  bumpStiffness: z.object({
+    front: z.number().min(0).max(50),
+    rear: z.number().min(0).max(50),
+  }),
+});
+
+const AeroTuning = z.object({
+  downforce: z.object({
+    front: z.number().min(0).max(1000),
+    rear: z.number().min(0).max(1000),
+    unit: z.string(),
+  }),
+});
+
+const BrakeTuning = z.object({
+  breakingForce: z.object({
+    balance: z.number().min(0).max(100),
+    pressure: z.number().min(0).max(200),
+  }),
+});
+
+const DiffrentialTuning = z.object({
+  rear: z.object({
+    acceleration: z.number().min(0).max(100),
+    deceleration: z.number().min(0).max(100),
+  }),
+});
 
 // NOTE: grearing은 ~단 기어에 따라 개수를 조절해야함 (gear -> 9단이 최고?)
 export const tuningDetailed = z.object({
-  tiers: z.object({
-    tierPressure: z.object({
-      front: z.number().min(0).max(100),
-      rear: z.number().min(0).max(100),
-    }),
-  }),
-  gearing: z.object({
-    gearing: z.object({
-      finalDrive: z.number().min(0).max(10),
-      stages: z.array(z.number().min(0).max(10)),
-    }),
-  }),
-  alignment: z.object({
-    camber: z.object({
-      front: z.number().min(-100).max(100),
-      rear: z.number().min(-100).max(100),
-    }),
-    toe: z.object({
-      front: z.number().min(-100).max(100),
-      rear: z.number().min(-100).max(100),
-    }),
-    frontCaster: z.object({
-      angle: z.number().min(-100).max(100),
-    }),
-  }),
-  antirollBars: z.object({
-    antirollBars: z.object({
-      front: z.number().min(0).max(100),
-      rear: z.number().min(0).max(100),
-    }),
-  }),
-  springs: z.object({
-    springs: z.object({
-      front: z.number().min(0).max(9000),
-      rear: z.number().min(0).max(9000),
-      unit: z.string(),
-    }),
-    rideHeight: z.object({
-      front: z.number().min(0).max(100),
-      rear: z.number().min(0).max(100),
-      unit: z.string(),
-    }),
-  }),
-  damping: z.object({
-    reboundStiffness: z.object({
-      front: z.number().min(0).max(50),
-      rear: z.number().min(0).max(50),
-    }),
-    bumpStiffness: z.object({
-      front: z.number().min(0).max(50),
-      rear: z.number().min(0).max(50),
-    }),
-  }),
-  aero: z.object({
-    downforce: z.object({
-      front: z.number().min(0).max(1000),
-      rear: z.number().min(0).max(1000),
-      unit: z.string(),
-    }),
-  }),
-  brake: z.object({
-    breakingForce: z.object({
-      balance: z.number().min(0).max(100),
-      pressure: z.number().min(0).max(200),
-    }),
-  }),
-  diffrential: z.object({
-    rear: z.object({
-      acceleration: z.number().min(0).max(100),
-      deceleration: z.number().min(0).max(100),
-    }),
-  }),
+  tires: z.optional(TireTuning),
+  gearing: z.optional(GearingTuning),
+  alignment: z.optional(AlignmentTuning),
+  antirollBars: z.optional(AntirollBarsTuning),
+  springs: z.optional(SpringsTuning),
+  damping: z.optional(DampingTuning),
+  aero: z.optional(AeroTuning),
+  brake: z.optional(BrakeTuning),
+  diffrential: z.optional(DiffrentialTuning),
 });
 
 export type TuningDetailedType = z.infer<typeof tuningDetailed>;
 
-// const _TuningDetailedPaths = getPropertyPaths(tuningDetailed);
-// type TuningDetailedPaths = typeof _TuningDetailedPaths;
-// export type TuningDetailedPath = Readonly<typeof _TuningDetailedPaths>;
-
 // TODO: unit에 따라 기본값 추가하기
 // TODO: add default values varying by units(e.g, kg <-> lb, kg/cm <-> lb/in)
 export const tuningDetailedDefault: TuningDetailedType = {
-  tiers: {
-    tierPressure: {
+  tires: {
+    tirePressure: {
       front: 35,
       rear: 35,
     },

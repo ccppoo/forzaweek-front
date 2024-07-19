@@ -19,7 +19,7 @@ export const tuningEditSchema = z.object({
   performance: tuningPerformance, // 성능 레이더 차트
   testReadings: tuningTestReading, // 성능 지표
   tuningMajorParts: tuningMajorParts,
-  detailedTuning: tuningDetailed, // 세부 튜닝
+  detailedTuning: z.optional(tuningDetailed), // 세부 튜닝
 });
 export type TuningEditSchema = z.infer<typeof tuningEditSchema>;
 

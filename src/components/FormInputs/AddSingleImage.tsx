@@ -7,7 +7,7 @@ import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
 import FileUploadOutlined from '@mui/icons-material/FileUploadOutlined';
 import { Button, Typography } from '@mui/material';
 
-import type { SingleImageDependentCreation } from '@/FormData/post/sharingCreation';
+import type { SingleImageDependentCreation } from '@/FormData/post/image';
 import { FlexBox, VisuallyHiddenInput } from '@/components/styled';
 import { Image } from '@/components/styled';
 

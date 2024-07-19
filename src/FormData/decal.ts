@@ -4,7 +4,8 @@ import { carSimpleSchemaType } from '@/FormData/car';
 import { Tag } from '@/FormData/tag';
 
 import { documentBase } from './base';
-import { car, image, sharingCreation, tag, track } from './post/sharingCreation';
+import { image, tag } from './post';
+import { car, sharingCreation, track } from './post/sharingCreation';
 
 export const decalEditSchema = documentBase
   .merge(sharingCreation)
@@ -13,18 +14,29 @@ export const decalEditSchema = documentBase
   .merge(tag.tagDependent);
 
 // 태그는 최초 생성시 string으로 제공, 이후 서버에서 올 때는 무조건 general type으로 생성하고 반환됨
-export const decalSchemaType = z.object({
-  id: z.string(), // 차 자체 DocumnetID
+// export const decalSchemaType = z.object({
+//   id: z.string(), // 차 자체 DocumnetID
 
-  share_code: z.string(), // 공유코드
-  car: z.string(), // 차 (id)
-  creator: z.string(), // 데칼 제작자
+//   share_code: z.string(), // 공유코드
+//   car: z.string(), // 차 (id)
+//   creator: z.string(), // 데칼 제작자
 
-  imageURLs: z.array(z.string()), // 데칼 사진
-  firstImage: z.string(),
+//   imageURLs: z.array(z.string()), // 데칼 사진
+//   firstImage: z.string(),
 
-  tags: z.array(Tag.tagSchemaTypeExtended), // 데칼 태그
+//   tags: z.array(Tag.tagSchemaTypeExtended), // 데칼 태그
+// });
+
+export const decalSchemaType = decalEditSchema.required({
+  id: true,
+  car: true,
+  creator: true,
+  firstImage: true,
+  imageURLs: true,
+  share_code: true,
+  tags: true,
 });
+
 export type DecalSchemaType = z.infer<typeof decalSchemaType>;
 
 export type DecalEditSchema = z.infer<typeof decalEditSchema>;

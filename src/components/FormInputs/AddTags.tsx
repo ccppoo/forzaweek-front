@@ -3,7 +3,7 @@ import type { FieldPath, PathValue } from 'react-hook-form';
 
 import { Paper, Typography } from '@mui/material';
 
-import type { TagDependentCreation } from '@/FormData/post/sharingCreation';
+import type { TagDependentCreation } from '@/FormData/post/tag';
 import { TagItemCell } from '@/components/Tag';
 import { TagSearchCreateTextFeild } from '@/components/TagSearchCreate';
 import { FlexBox, Image } from '@/components/styled';

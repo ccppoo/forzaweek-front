@@ -10,7 +10,7 @@ import KeyboardArrowUpOutlinedIcon from '@mui/icons-material/KeyboardArrowUpOutl
 import { Box, Button, Paper, Typography } from '@mui/material';
 import IconButton from '@mui/material/IconButton';
 
-import type { MultipleImagesDependentCreation } from '@/FormData/post/sharingCreation';
+import type { MultipleImagesDependentCreation } from '@/FormData/post/image';
 import { FlexBox, Image, VisuallyHiddenInput } from '@/components/styled';
 
 type MultipleImagesDepenednt = 'decal upload';
