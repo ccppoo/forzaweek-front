@@ -1,6 +1,6 @@
 import { ApexOptions } from 'apexcharts';
 
-export const chartOptions: ApexOptions = {
+export const chartOption2: ApexOptions = {
   chart: {
     type: 'radar',
     toolbar: {
