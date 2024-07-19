@@ -3,6 +3,7 @@ env/
 
 # images
 *.webp
+/public/map/
 
 # Logs
 logs
