@@ -1,4 +1,4 @@
-import { SyntheticEvent, useState } from 'react';
+import { useContext, useState } from 'react';
 
 import AddCircleOutlineOutlinedIcon from '@mui/icons-material/AddCircleOutlineOutlined';
 import RemoveCircleOutlineOutlinedIcon from '@mui/icons-material/RemoveCircleOutlineOutlined';
@@ -8,11 +8,12 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
 
 import { FlexBox } from '@/components/styled';
+import DetailedTuningChoiceContext from '@/context/DetailedTuningChoiceContext';
 import type { TuningOption } from '@/types/car';
 import { range } from '@/utils';
+import { getFormPath } from '@/utils/FormInput';
 
 import { SliderTitle, SliderValue } from './sliderComponents';
-import { getFormPath } from './utils';
 
 export default function GearingOption() {
   const tuningIndex: TuningOption = 'Gearing';
@@ -37,9 +38,11 @@ export default function GearingOption() {
   };
   const ordinal = ['1st', '2nd', '3rd'];
 
-  const [notMyOption, setNotMyOption] = useState<boolean>(true);
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>, checked: boolean) => {
-    setNotMyOption(!event.target.checked);
+  const { detailedTuningChoices, setDetailedTuning } = useContext(DetailedTuningChoiceContext);
+
+  const optionActivated = detailedTuningChoices.gearing;
+  const handleChange = () => {
+    setDetailedTuning('gearing', !optionActivated);
   };
 
   return (
@@ -47,7 +50,7 @@ export default function GearingOption() {
       <FlexBox sx={{ width: '100%', justifyContent: 'end', alignItems: 'center' }}>
         <FormControlLabel
           // @ts-ignore
-          control={<Switch checked={!notMyOption} onClick={handleChange} color="info" />}
+          control={<Switch checked={optionActivated} onClick={handleChange} color="info" />}
           label="I have this option activated"
           sx={{ '& .MuiFormControlLabel-label': { fontWeight: 200 } }}
         />
@@ -58,8 +61,8 @@ export default function GearingOption() {
           width: '100%',
           height: '100%',
           rowGap: 2,
-          opacity: notMyOption ? 0.4 : 1,
-          pointerEvents: notMyOption ? 'none' : 'auto',
+          opacity: !optionActivated ? 0.4 : 1,
+          pointerEvents: !optionActivated ? 'none' : 'auto',
         }}
       >
         <Divider flexItem />

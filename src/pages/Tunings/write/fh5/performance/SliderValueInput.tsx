@@ -1,16 +1,21 @@
 import { Box, Typography } from '@mui/material';
 
+import { SliderValue, SliderValueTextField } from '@/components/FormInputs/TuningSlider';
 import { FlexBox } from '@/components/styled';
 
-interface SliderTitleProp {
+interface SliderValueProp {
   name: string;
-  LeftName: string;
-  RightName: string;
-  unitName?: string;
+  min: number;
+  max: number;
+  formPath: string;
+  step?: number;
+  minMaxReverse?: boolean;
+  unitChar?: string;
 }
 
-export default function SliderTitle(props: SliderTitleProp) {
-  const { name, LeftName, RightName, unitName } = props;
+export default function SliderValueInput(props: SliderValueProp) {
+  const { name, ...sliderProps } = props;
+
   return (
     <Box
       sx={{
@@ -18,7 +23,8 @@ export default function SliderTitle(props: SliderTitleProp) {
         display: 'grid',
         minHeight: 60,
         height: '100%',
-        gridTemplateColumns: '5fr 4fr 1fr',
+        gridTemplateColumns: '125px 1fr 50px',
+        paddingRight: 1,
       }}
     >
       <FlexBox
@@ -28,7 +34,9 @@ export default function SliderTitle(props: SliderTitleProp) {
           paddingX: 1,
         }}
       >
-        <Typography variant="h5">{name}</Typography>
+        <Typography variant="h6" fontSize={18}>
+          {name}
+        </Typography>
       </FlexBox>
       <FlexBox
         sx={{
@@ -38,18 +46,9 @@ export default function SliderTitle(props: SliderTitleProp) {
           paddingX: 2,
         }}
       >
-        <Typography>{LeftName}</Typography>
-        <Typography>{RightName}</Typography>
+        <SliderValue {...sliderProps} />
       </FlexBox>
-      <FlexBox
-        sx={{
-          width: '100%',
-          alignItems: 'center',
-          justifyContent: 'center',
-        }}
-      >
-        <Typography>{unitName && unitName}</Typography>
-      </FlexBox>
+      <SliderValueTextField {...sliderProps} />
     </Box>
   );
 }

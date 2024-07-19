@@ -1,4 +1,4 @@
-import SliderValue from './slider';
+import SliderValue from './SliderValueInput';
 import SliderTitle from './title';
 
 export { SliderValue, SliderTitle };
