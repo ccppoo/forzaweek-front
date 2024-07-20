@@ -54,78 +54,6 @@ const trackIcon: Record<TrackType, any> = {
   },
 };
 
-function TrackInfoSummary() {
-  const name = 'Arch of Mulegé Circuit';
-  const road_type = 'road';
-  const track_type = 'circuit';
-  const description = 'design of Hyundai elantra, its my style';
-  const maker = 'DecalMaster';
-  const share_code = '123 123 123';
-
-  const Tags = [];
-
-  return (
-    <FlexBox sx={{ width: '30%', height: '100%', padding: 1 }}>
-      <Paper sx={{ display: 'flex' }} elevation={3}>
-        <FlexBox sx={{ flexDirection: 'column', paddingX: 1, paddingTop: 1 }}>
-          {/* 자동차 사진 */}
-          <FlexBox>
-            <Image src={image.track.molehach} sx={{ objectFit: 'contain' }} />
-          </FlexBox>
-          {/* 자동차 이름, 간단 설명 + 제작자 / 공유 코드 */}
-          <FlexBox
-            sx={{
-              height: '100%',
-              flexDirection: 'column',
-              justifyContent: 'space-between',
-            }}
-          >
-            <FlexBox sx={{ flexDirection: 'column' }}>
-              <Typography variant="h6">{name}</Typography>
-              <Typography>
-                {road_type} {track_type}
-              </Typography>
-            </FlexBox>
-            <FlexBox>
-              <Typography>{description}</Typography>
-            </FlexBox>
-            <FlexBox sx={{ flexDirection: 'column' }}>
-              <Typography variant="h6">{maker}</Typography>
-              <Typography variant="h6">{share_code}</Typography>
-            </FlexBox>
-          </FlexBox>
-        </FlexBox>
-      </Paper>
-    </FlexBox>
-  );
-}
-
-function TrackTitle() {
-  const name = 'Arch of Mulegé Circuit';
-  const road_type = 'road';
-  const track_type = 'circuit';
-  const laps = 3;
-  const description = 'design of Hyundai elantra, its my style';
-  const maker = 'DecalMaster';
-  const share_code = '123 123 123';
-  const height = 75;
-  return (
-    <FlexBox sx={{ width: '100%', columnGap: 1, height: height, paddingLeft: 1, paddingTop: 1 }}>
-      <FlexBox sx={{ aspectRatio: '1/1' }}>
-        <Image src={image.track_icon.road_track} sx={{ objectFit: 'contain' }} />
-      </FlexBox>
-      <FlexBox sx={{ flexDirection: 'column', justifyContent: 'center' }}>
-        <Typography variant="h5">{name}</Typography>
-        <FlexBox sx={{ columnGap: 2 }}>
-          <Typography variant="h6">{road_type}</Typography>
-          <Typography variant="h6">{track_type}</Typography>
-          <Typography variant="h6">{laps} laps</Typography>
-        </FlexBox>
-      </FlexBox>
-    </FlexBox>
-  );
-}
-
 function TrackPreview() {
   return (
     <FlexBox
@@ -138,19 +66,6 @@ function TrackPreview() {
       <Image src={image.track.molehach} sx={{ objectFit: 'contain' }} />
     </FlexBox>
   );
-}
-
-function TrackStory() {
-  return (
-    <FlexBox sx={{ flexDirection: 'column' }}>
-      <Typography variant="h6">story</Typography>
-      <Typography variant="body2">run track !!</Typography>
-    </FlexBox>
-  );
-}
-
-function TrackTags() {
-  return;
 }
 
 function TrackRowItem({ track }: { track: TrackInfo }) {
@@ -207,14 +122,24 @@ export default function Tracks() {
   const navigate = useNavigate();
   const [_, tracks] = useTrackSearchFilters();
 
+  const MAP_HEIGHT = 600;
+  const MAP_WIDTH = 1100;
+
   return (
-    <Container sx={{ paddingTop: 2, minWidth: 1340 }}>
+    <Container sx={{ paddingTop: 2, width: '100%' }}>
       <FullSizeCenteredFlexBox sx={{ flexDirection: 'column' }}>
-        <FlexBox sx={{ width: 1336, height: 800 }}>
-          <Map />
-        </FlexBox>
+        {/* <FlexBox sx={{}}>
+          <Map height={MAP_HEIGHT} width={MAP_WIDTH} />
+        </FlexBox> */}
         <FlexBox
-          sx={{ height: '100%', width: '100%', flexDirection: 'column', rowGap: 1, paddingTop: 2 }}
+          sx={{
+            height: '100%',
+            width: '100%',
+            flexDirection: 'column',
+            alignItems: 'center',
+            rowGap: 1,
+            paddingTop: 2,
+          }}
         >
           {tracks.map((track: TrackInfo) => {
             return <TrackRowItem track={track} key={`track-info-track=${track.name_en}`} />;
