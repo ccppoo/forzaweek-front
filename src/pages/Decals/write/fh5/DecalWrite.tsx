@@ -1,7 +1,6 @@
 import { FormProvider, useForm } from 'react-hook-form';
 
-import { Box, Button, Paper, Typography } from '@mui/material';
-import Container from '@mui/material/Container';
+import { Box, Button, Container, Paper, Typography } from '@mui/material';
 
 import type { DecalEditSchema } from '@/FormData/decal';
 import { decalEditSchemaDefault } from '@/FormData/decal';

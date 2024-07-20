@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
-import type { SubmitErrorHandler } from 'react-hook-form';
 
 import { Box, Button, Container, Typography } from '@mui/material';
 
@@ -161,7 +160,7 @@ export default function TuningWrite(props: dataTextInputIntf) {
                 </FlexBox>
                 <AddTags selectScope={selectScope} postType="tuning" />
               </Box>
-              {/* 3. 튜닝 성능 입력(PI) */}
+              {/* 4. 튜닝 성능 입력(PI) */}
               <Box
                 sx={{
                   width: '100%',
@@ -177,7 +176,7 @@ export default function TuningWrite(props: dataTextInputIntf) {
                   <TuningPI />
                 </FlexBox>
               </Box>
-              {/* 4. 튜닝 성능 입력 */}
+              {/* 5. 튜닝 성능 입력 */}
               <Box
                 sx={{
                   width: '100%',
@@ -193,7 +192,7 @@ export default function TuningWrite(props: dataTextInputIntf) {
                   <TuningPerformance />
                 </FlexBox>
               </Box>
-              {/* 5. 튜닝 측정치 */}
+              {/* 6. 튜닝 측정치 */}
               <Box
                 sx={{
                   width: '100%',
@@ -209,7 +208,7 @@ export default function TuningWrite(props: dataTextInputIntf) {
                   <TestReadingInput />
                 </FlexBox>
               </Box>
-              {/* 6. 주요부품 */}
+              {/* 7. 주요부품 */}
               <Box
                 sx={{
                   width: '100%',
@@ -225,8 +224,7 @@ export default function TuningWrite(props: dataTextInputIntf) {
                   <MajorParts />
                 </FlexBox>
               </Box>
-
-              {/* 7. 세부 튜닝 */}
+              {/* 8. 세부 튜닝 */}
               <DetailedTuningChoiceContext.Provider
                 value={{
                   detailedTuningChoices: detailedTuningChoices,
