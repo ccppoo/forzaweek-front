@@ -46,15 +46,22 @@ const routes: Routes = {
   },
   [Pages.Tracks]: {
     component: asyncComponentLoader(() => import('@/pages/Tracks/Tracks')),
-    path: '/track',
+    path: '/fh5/track',
     title: 'Tracks',
     icon: HomeIcon,
   },
   [Pages.TrackDetail]: {
     component: asyncComponentLoader(() => import('@/pages/Tracks/TrackDetail')),
-    path: '/track/:trackID',
+    path: '/fh5/track/:trackID',
     title: 'Track detail',
-    devUrl: '/track/1',
+    devUrl: '/fh5/track/1',
+    icon: HomeIcon,
+  },
+  [Pages.TrackWrite]: {
+    component: asyncComponentLoader(() => import('@/pages/Tracks/write/fh5')),
+    path: '/fh5/track/write',
+    title: 'Track write',
+    devUrl: '/fh5/track/write',
     icon: HomeIcon,
   },
   [Pages.Tunings]: {

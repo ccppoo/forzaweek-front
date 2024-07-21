@@ -13,6 +13,7 @@ enum Pages {
   DecalWrite,
   Tracks,
   TrackDetail,
+  TrackWrite,
   Tunings,
   TuningDetail,
   TuningWrite,
