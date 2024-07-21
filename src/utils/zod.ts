@@ -25,3 +25,6 @@ export const getPropertyPaths = (schema: Zod.ZodType): string[] => {
   // return empty array
   return [];
 };
+
+export const toZodLiteral = (literalType: any[]) =>
+  Zod.custom<string>((val) => literalType.includes(val));
