@@ -1,9 +1,9 @@
 import { z } from 'zod';
 
 import { DrivingSystemTypes } from '@/types/car';
+import { toZodLiteral } from '@/utils/zod';
 
-const literalToZod = (literalType: any[]) => z.custom<string>((val) => literalType.includes(val));
-const drivingSystems = literalToZod(DrivingSystemTypes);
+const drivingSystems = toZodLiteral(DrivingSystemTypes);
 
 export const DrivingSystemTypeSchema = drivingSystems;
 export type DrivingSystemType = z.infer<typeof DrivingSystemTypeSchema>;

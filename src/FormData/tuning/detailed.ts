@@ -1,13 +1,12 @@
 import { z } from 'zod';
 
 import { DownForceUnits, PressureUnits, SpringHeightUnits, SpringUnits } from '@/types/units';
+import { toZodLiteral } from '@/utils/zod';
 
-const unitToZod = (literalType: any[]) => z.custom<string>((val) => literalType.includes(val));
-
-const pressureUnit = unitToZod(PressureUnits);
-const springHeightUnit = unitToZod(SpringHeightUnits);
-const springUnit = unitToZod(SpringUnits);
-const downforceUnit = unitToZod(DownForceUnits);
+const pressureUnit = toZodLiteral(PressureUnits);
+const springHeightUnit = toZodLiteral(SpringHeightUnits);
+const springUnit = toZodLiteral(SpringUnits);
+const downforceUnit = toZodLiteral(DownForceUnits);
 
 const TireTuning = z.object({
   tirePressure: z.object({
