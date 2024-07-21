@@ -2,7 +2,7 @@ import { z } from 'zod';
 
 import { supportLangs } from '@/config/i18n';
 
-import { i18nTextFieldSchema } from './i18n';
+import * as i18n from './i18n';
 import { manufacturerSchemaType, manufacturerSimpleSchemaType } from './manufacturer';
 import { _FH5PerformanceSchemaType, tuningPerformance } from './tuning/performance';
 
@@ -29,9 +29,9 @@ export const carEditSchema = z.object({
   manufacturer: z.optional(z.string()), // 제조사 DocumentID
 
   name_en: z.optional(z.string()),
-  name: z.array(i18nTextFieldSchema), // 원래 이름
+  name: z.array(i18n.i18nTextFieldSchema), // 원래 이름
   short_name_en: z.optional(z.string()),
-  short_name: z.array(i18nTextFieldSchema), // 짧은 이름
+  short_name: z.array(i18n.i18nTextFieldSchema), // 짧은 이름
 
   imageURLs: z.array(z.string()),
   firstImage: z.optional(z.string()),
@@ -56,9 +56,9 @@ export const carSchemaType = z.object({
   manufacturer: manufacturerSchemaType, // 제조사 DocumentID
 
   name_en: z.string(),
-  name: z.array(i18nTextFieldSchema), // 원래 이름
+  name: z.array(i18n.i18nTextFieldSchema), // 원래 이름
   short_name_en: z.string(),
-  short_name: z.array(i18nTextFieldSchema), // 짧은 이름
+  short_name: z.array(i18n.i18nTextFieldSchema), // 짧은 이름
 
   imageURLs: z.array(z.string()),
   firstImage: z.string(),
@@ -93,13 +93,9 @@ export const carEditSchemaDefault: CarEditSchema = {
   door: 0,
 
   name_en: undefined,
-  name: [...supportLangs].map((langDefault) => {
-    return { lang: langDefault, value: '' };
-  }),
+  name: i18n.i18nDefaultValue,
   short_name_en: undefined,
-  short_name: [...supportLangs].map((langDefault) => {
-    return { lang: langDefault, value: '' };
-  }),
+  short_name: i18n.i18nDefaultValue,
 
   fh5: {
     meta: {
@@ -124,7 +120,7 @@ export const carSimpleSchemaType = z.object({
   id: z.string(), // 차 자체 DocumnetID
   production_year: z.number().gte(1900).lte(2554),
   name_en: z.string(),
-  name: z.array(i18nTextFieldSchema), // 원래 이름
+  name: z.array(i18n.i18nTextFieldSchema), // 원래 이름
   first_image: z.string(),
 
   manufacturer: manufacturerSimpleSchemaType, // 제조사 간단 버전

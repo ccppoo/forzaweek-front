@@ -1,15 +1,13 @@
 import { z } from 'zod';
 
-import { supportLangs } from '@/config/i18n';
-
-import { i18nTextFieldSchema } from './i18n';
+import * as i18n from './i18n';
 
 export const manufacturerEditSchema = z.object({
   id: z.optional(z.string()),
   imageURL: z.optional(z.string()),
   origin: z.optional(z.string()),
   founded: z.optional(z.number()),
-  i18n: z.array(i18nTextFieldSchema),
+  i18n: z.array(i18n.i18nTextFieldSchema),
   name_en: z.optional(z.string()),
 });
 
@@ -18,7 +16,7 @@ export const manufacturerSchemaType = z.object({
   imageURL: z.string(),
   origin: z.string(),
   founded: z.number(),
-  i18n: z.array(i18nTextFieldSchema),
+  i18n: z.array(i18n.i18nTextFieldSchema),
   name_en: z.string(),
 });
 
@@ -31,14 +29,12 @@ export const manufacturerEditSchemaDefault: ManufacturerEditSchema = {
   name_en: undefined,
   origin: undefined,
   founded: undefined,
-  i18n: [...supportLangs].map((langDefault) => {
-    return { lang: langDefault, value: '' };
-  }),
+  i18n: i18n.i18nDefaultValue,
 };
 
 export const manufacturerSimpleSchemaType = z.object({
   id: z.string(),
-  name: z.array(i18nTextFieldSchema),
+  name: z.array(i18n.i18nTextFieldSchema),
   name_en: z.string(),
   imageURL: z.string(),
 });
