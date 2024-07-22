@@ -1,0 +1,11 @@
+import { z } from 'zod';
+
+// 이미지 하나만 필요한 요소 -> nation, tag, 등
+export const fullPathImage = z.object({
+  fullPathImage: z.object({
+    large: z.optional(z.string()),
+    small: z.optional(z.string()),
+  }),
+});
+
+export type FullPathImage = z.infer<typeof fullPathImage>;

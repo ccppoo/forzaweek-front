@@ -8,7 +8,6 @@ const trackFormatTopologies = toZodLiteral(TrackFormatTopologies);
 
 export const trackFormat = z.object({
   format: z.optional(trackFormats),
-  format_topology: z.optional(trackFormatTopologies),
   laps: z.optional(z.number().gte(1)),
 });
 
