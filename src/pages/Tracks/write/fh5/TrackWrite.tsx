@@ -7,6 +7,8 @@ import { trackEditSchemaDefault } from '@/FormData/tracks/fh5';
 import { AddNewDecal, EditDecal } from '@/api/data/fh5/decal';
 import AddMultipleImages from '@/components/FormInputs/AddMultipleImages';
 import SelectCar from '@/components/FormInputs/CarSelect';
+import TrackFormatInput from '@/components/FormInputs/Tracks/TrackFormatInput';
+import AddFullPathImage from '@/components/FormInputs/Tracks/TrackFullPathImage';
 import TrackWorldInput from '@/components/FormInputs/Tracks/TrackWorldInput';
 import I18nTextInput from '@/components/FormInputs/i18n/I18nTextInput';
 import { FlexBox, FullSizeCenteredFlexBox, Image } from '@/components/styled';
@@ -40,15 +42,96 @@ export default function TrackWrite(props: dataTextInputIntf) {
   };
 
   console.log(`isEditMode :${isEditMode}`);
-
+  // category: 'road',
+  // format: 'circuit',
+  // format_topology: 'circular',
+  // laps: 1,
+  // tags: [], // 데칼 태그
   return (
     <Container sx={{ paddingTop: 2 }}>
-      <FullSizeCenteredFlexBox sx={{ width: '100%', paddingBottom: 10, paddingTop: 4 }}>
+      <FullSizeCenteredFlexBox
+        sx={{
+          width: '100%',
+
+          addingBottom: 10,
+          paddingTop: 4,
+        }}
+      >
         <FormProvider {...methods}>
           <form onSubmit={methods.handleSubmit(submit)} style={{ width: '100%' }}>
-            <FlexBox sx={{ flexDirection: 'column', rowGap: 2, width: '100%' }}>
-              {/* 1. 이미지 올리기 */}
-              {/* <Box
+            <FlexBox
+              sx={{
+                flexDirection: 'column',
+                rowGap: 2,
+                width: '100%',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+            >
+              {/* 2. 트랙 월드 선택 */}
+              <TrackWorldInput />
+              {/* 3. 트랙 포맷 */}
+              <TrackFormatInput />
+              {/* 4. 트랙 이름 */}
+              <Box
+                sx={{
+                  width: '100%',
+                  display: 'grid',
+                  gridTemplateColumns: '150px auto',
+                  gridTemplateRows: 'auto',
+                }}
+              >
+                <FlexBox>
+                  <Typography>Track Name</Typography>
+                </FlexBox>
+                <I18nTextInput basePath="name" required />
+              </Box>
+
+              {/* 5. 트랙 의역(선택) */}
+              <Box
+                sx={{
+                  width: '100%',
+                  display: 'grid',
+                  gridTemplateColumns: '150px auto',
+                  gridTemplateRows: 'auto',
+                }}
+              >
+                <FlexBox>
+                  <Typography>Track Name liberal translation (Optional)</Typography>
+                </FlexBox>
+                <I18nTextInput basePath="liberal_translation" />
+              </Box>
+              {/* 6-1. 트랙 전체 경로 사진 올리기 */}
+              <Box
+                sx={{
+                  width: '100%',
+                  display: 'grid',
+                  gridTemplateColumns: '150px auto',
+                  gridTemplateRows: 'auto',
+                }}
+              >
+                <FlexBox>
+                  <Typography>Track full path image - large</Typography>
+                </FlexBox>
+                <AddFullPathImage size="large" postType="track-full-path" />
+              </Box>
+              {/* 6-2. 트랙 전체 경로 사진 올리기 */}
+              <Box
+                sx={{
+                  width: '100%',
+                  display: 'grid',
+                  gridTemplateColumns: '150px auto',
+                  gridTemplateRows: 'auto',
+                }}
+              >
+                <FlexBox>
+                  <Typography>Track full path image - small (optional)</Typography>
+                </FlexBox>
+                <AddFullPathImage size="small" postType="track-full-path" />
+              </Box>
+
+              {/* 7. 트랙 이미지 올리기 */}
+              <Box
                 sx={{
                   width: '100%',
                   display: 'grid',
@@ -60,14 +143,7 @@ export default function TrackWrite(props: dataTextInputIntf) {
                   <Typography>Track Images</Typography>
                 </FlexBox>
                 <AddMultipleImages postType="decal upload" />
-              </Box> */}
-              {/* 2. 트랙 월드 선택 */}
-              <TrackWorldInput />
-              {/* 3. 트랙 이름 */}
-              <I18nTextInput basePath="name" />
-              {/* 4. 트랙 의역(선택) */}
-              <I18nTextInput basePath="liberal_translation" />
-
+              </Box>
               <FlexBox sx={{ width: '100%', justifyContent: 'end' }}>
                 <Button type="submit" variant="outlined">
                   Post
