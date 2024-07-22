@@ -15,14 +15,15 @@ import { FlexBox, Image, VisuallyHiddenInput } from '@/components/styled';
 
 type MultipleImagesDepenednt = 'decal upload';
 
-type AddMultipleImagesFormInput = {
+interface AddMultipleImagesFormInputIntf {
   postType: MultipleImagesDepenednt;
-};
+  required?: boolean;
+}
 
 export default function AddMultipleImages<T extends MultipleImagesDependentCreation>(
-  props: AddMultipleImagesFormInput,
+  props: AddMultipleImagesFormInputIntf,
 ) {
-  const { postType } = props;
+  const { postType, required } = props;
 
   const { setValue, getValues, control, trigger } = useFormContext<T>();
 
@@ -245,7 +246,7 @@ export default function AddMultipleImages<T extends MultipleImagesDependentCreat
             control={control}
             rules={{
               required: {
-                value: true,
+                value: !!required,
                 message: 'you sould provide image',
               },
             }}
