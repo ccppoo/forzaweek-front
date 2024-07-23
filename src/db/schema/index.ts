@@ -4,7 +4,7 @@ import { DBState } from './dbState';
 import { FH5_META, FH5_Performance, FH5_STAT } from './fh5';
 import { Manufacturer } from './manufacturer';
 import { Nation } from './nation';
-import { Track } from './track';
+import { Track, Track2, TrackImage } from './track';
 
 export type {
   Car,
@@ -18,4 +18,6 @@ export type {
   Nation,
   Manufacturer,
   DBState,
+  Track2,
+  TrackImage,
 };

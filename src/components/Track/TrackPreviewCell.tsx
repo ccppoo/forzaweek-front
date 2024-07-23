@@ -21,22 +21,26 @@ import Paper from '@mui/material/Paper';
 import Grid from '@mui/material/Unstable_Grid2';
 import { styled } from '@mui/material/styles';
 
+import { useLiveQuery } from 'dexie-react-hooks';
+
 import * as image from '@/image';
 import { FlexBox, FullSizeCenteredFlexBox } from '@/components/styled';
 import { Image } from '@/components/styled';
+import { getTrackImage } from '@/db/index';
+// import type { TrackInfo } from '@/types';
+import type { Track2, TrackImage } from '@/db/schema';
 import useTrackSearchFilters from '@/store/trackSearchFilters';
-import type { TrackInfo } from '@/types';
 
-type TrackType = 'road racing' | 'dirt racing' | 'cross country' | 'street racing' | 'drag racing';
+type TrackType = 'road' | 'off-road' | 'cross country' | 'street' | 'drag';
 
 const trackIcon: Record<TrackType, any> = {
-  'road racing': {
+  road: {
     circuit: image.track_icon.road_track,
     sprint: image.track_icon.road_sprint,
     goliath: image.track_icon.goliath,
     colossus: image.track_icon.colossus,
   },
-  'dirt racing': {
+  'off-road': {
     trail: image.track_icon.offroad_track,
     scramble: image.track_icon.offroad_sprint,
     gauntlet: image.track_icon.gauntlet,
@@ -47,17 +51,17 @@ const trackIcon: Record<TrackType, any> = {
     juggernaut: image.track_icon.juggernaut,
     titan: image.track_icon.titan,
   },
-  'street racing': {
+  street: {
     'street racing': image.track_icon.street_racing,
     marathon: image.track_icon.marathon,
   },
-  'drag racing': {
+  drag: {
     'drag racing': image.track_icon.drag_racing,
   },
 };
 
-function TrackName({ track }: { track: TrackInfo }) {
-  const trackicon = trackIcon[track.trackType as TrackType][track.courseType];
+function TrackName({ track }: { track: Track2 }) {
+  const trackicon = trackIcon[track.category as TrackType][track.format];
 
   return (
     <FlexBox
@@ -84,7 +88,7 @@ function TrackName({ track }: { track: TrackInfo }) {
           />
         </Box>
         <FlexBox sx={{ flexDirection: 'column' }}>
-          <Typography variant="h5">{track.name}</Typography>
+          <Typography variant="h5">{track.name.en}</Typography>
         </FlexBox>
       </FlexBox>
       {/* 맵 특징 태그,  */}
@@ -95,7 +99,7 @@ function TrackName({ track }: { track: TrackInfo }) {
   );
 }
 
-function TrackPreview() {
+function TrackPreview({ trackImage }: { trackImage: TrackImage }) {
   return (
     <FlexBox
       sx={{
@@ -108,7 +112,7 @@ function TrackPreview() {
       }}
     >
       <Image
-        src={image.track.molehach}
+        src={trackImage.fullPathImage.zoom_out}
         // sx={{ objectFit: 'contain', borderTopLeftRadius: 4, borderBottomLeftRadius: 4 }}
         sx={{ objectFit: 'fill', borderTopLeftRadius: 4, borderBottomLeftRadius: 4 }}
       />
@@ -116,9 +120,13 @@ function TrackPreview() {
   );
 }
 
-export default function TrackPreviewCell({ track }: { track: TrackInfo }) {
+export default function TrackPreviewCell({ track }: { track: Track2 }) {
   const WIDTH = '100%';
   const HEIGHT = 200;
+
+  const trackImage: TrackImage | undefined = useLiveQuery(
+    async () => await getTrackImage(track.id!),
+  );
 
   return (
     <FlexBox
@@ -131,7 +139,7 @@ export default function TrackPreviewCell({ track }: { track: TrackInfo }) {
       }}
       component={Paper}
     >
-      <TrackPreview />
+      {trackImage && <TrackPreview trackImage={trackImage} />}
       <TrackName track={track} />
     </FlexBox>
   );

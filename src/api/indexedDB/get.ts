@@ -5,7 +5,16 @@ import { UploadImage } from '@/api/data/image';
 import { API_HOST } from '@/api/index';
 import type { API_NAME } from '@/api/types';
 import { dbTableUpsert } from '@/db/index';
-import { Car2, CarImage2, FH5_META, FH5_Performance, Manufacturer, Nation } from '@/db/schema';
+import {
+  Car2,
+  CarImage2,
+  FH5_META,
+  FH5_Performance,
+  Manufacturer,
+  Nation,
+  Track2,
+  TrackImage,
+} from '@/db/schema';
 
 interface GetIndexedDB {
   table: string;
@@ -49,3 +58,8 @@ export const updateCar_FH5_meta = async () =>
 
 export const updateCar_FH5_performance = async () =>
   updateIndexedDB<FH5_Performance>({ table: 'car_FH5_performance', path: 'car2/fh5/performance' });
+
+export const updateTrack = async () => updateIndexedDB<Track2>({ table: 'track2', path: 'track2' });
+
+export const updateTrackImage = async () =>
+  updateIndexedDB<TrackImage>({ table: 'trackImage', path: 'track2/image' });

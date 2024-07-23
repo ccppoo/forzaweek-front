@@ -16,6 +16,8 @@ import {
   Manufacturer,
   Nation,
   Track,
+  Track2,
+  TrackImage,
 } from './schema';
 
 /**
@@ -37,6 +39,8 @@ export class ForzaWeekDB extends Dexie {
   carImage!: Table<CarImage>; // id -> car's ID
   carImage2!: Table<CarImage2>; // id -> car's ID
   track!: Table<Track>;
+  track2!: Table<Track2>;
+  trackImage!: Table<TrackImage>;
   manufacturer!: Table<Manufacturer>;
   nation!: Table<Nation>;
 
@@ -54,6 +58,10 @@ export class ForzaWeekDB extends Dexie {
       carImage: '&id',
       carImage2: '&id',
       track: '++id, name, name_en,ko_sound,en_sound,ko_trans,en_trans,trackType,courseType',
+      track2: `&id, game,category,format,laps,world, ${i18nMapped('name').join(',')}, ${i18nMapped(
+        'liberal_translation',
+      ).join(',')}`,
+      trackImage: '&id',
       manufacturer: `&id, name, ${i18nMapped('name').join(',')}, founded, origin`,
       nation: `&id, name, ${i18nMapped('name').join(',')}`,
     });
@@ -109,31 +117,6 @@ export async function dbTableInsert<TableSchema>(
   const dbState = await db.table(table);
 }
 
-// export async function getCarData(): Promise<CarInfo[]> {
-//   const cars = await db.car.where('year').above(2000).toArray();
-//   const results = await Promise.all(
-//     cars.map(async (car) => {
-//       const { id: carID, ...res } = car;
-//       // 자동차 FH5 스탯 가져오기
-//       // console.log(`carID : ${carID}`);
-//       const [fh5, images] = await Promise.all([
-//         await db.carFH5.where('id').equals(carID!).first(),
-//         await db.carImage.where('id').equals(carID!).first(),
-//       ]);
-//       // const fh5 = await db.carFH5.where('id').equals(carID!).first();
-//       // const images = await db.carImage.where('id').equals(carID!).first();
-
-//       // console.log(`fh5 : ${JSON.stringify(fh5)}`);
-//       const { id, ...resFH5 } = fh5!;
-//       const { id: _, ...resImage } = images!;
-//       const joined = { id: carID!, ...res, fh5: { ...resFH5 }, image: { ...resImage } };
-//       return joined;
-//     }),
-//   );
-//   // console.log(`results : ${JSON.stringify(results)}`);
-//   return results;
-// }
-
 export async function getAllCar2(): Promise<Car2[]> {
   const cars = await db.car2.offset(0).toArray();
   return cars;
@@ -149,21 +132,6 @@ export async function getAllCarInfoSimple(): Promise<CarInfoSimple[]> {
   );
   return carInfoSimples;
 }
-
-// export async function getCarInfo(name: string): Promise<CarInfo | undefined> {
-//   const car = await db.car.where('name').equals(name).first();
-
-//   if (!car) return undefined;
-//   const { id: carID, ...res } = car;
-//   const [fh5, images] = await Promise.all([
-//     await db.carFH5.where('id').equals(carID!).first(),
-//     await db.carImage.where('id').equals(carID!).first(),
-//   ]);
-//   const { id, ...resFH5 } = fh5!;
-//   const { id: _, ...resImage } = images!;
-//   const joined = { id: carID!, ...res, fh5: { ...resFH5 }, image: { ...resImage } };
-//   return joined;
-// }
 
 export async function getCarAndImage2(carID: string): Promise<CarAndImage | undefined> {
   const car = await db.car2.get(carID);
@@ -231,4 +199,10 @@ export async function getCarImage(carID: string): Promise<CarImage2 | undefined>
   const carImg = await db.carImage2.get(carID);
   if (!carImg) return undefined;
   return carImg;
+}
+
+export async function getTrackImage(trackID: string): Promise<TrackImage | undefined> {
+  const trackImage = await db.trackImage.get(trackID);
+  if (!trackImage) return undefined;
+  return trackImage;
 }

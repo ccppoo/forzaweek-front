@@ -14,7 +14,7 @@ import { Image } from '@/components/styled';
 
 type AddSingleImageFormInput = {
   postType: string;
-  size: 'small' | 'large';
+  size: 'zoom_out' | 'zoom_in';
 };
 
 export default function AddFullPathImage<T extends FullPathImage>(props: AddSingleImageFormInput) {

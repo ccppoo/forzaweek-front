@@ -11,6 +11,8 @@ import {
   updateCar_FH5_performance,
   updateManufacturerDB,
   updateNationDB,
+  updateTrack,
+  updateTrackImage,
 } from '@/api/indexedDB/get';
 import Meta from '@/components/Meta';
 import { FlexBox, FullSizeCenteredFlexBox } from '@/components/styled';
@@ -43,6 +45,14 @@ function Dev() {
       }
       case 'car_image': {
         await updateCarImage();
+        return;
+      }
+      case 'track': {
+        await updateTrack();
+        return;
+      }
+      case 'track_image': {
+        await updateTrackImage();
         return;
       }
     }
@@ -87,6 +97,16 @@ function Dev() {
               <Grid xs={4}>
                 <Button variant="outlined" onClick={() => insertDB2('car_image')}>
                   car images
+                </Button>
+              </Grid>
+              <Grid xs={4}>
+                <Button variant="outlined" onClick={() => insertDB2('track')}>
+                  track
+                </Button>
+              </Grid>
+              <Grid xs={4}>
+                <Button variant="outlined" onClick={() => insertDB2('track_image')}>
+                  track images
                 </Button>
               </Grid>
             </Grid>
