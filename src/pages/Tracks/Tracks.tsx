@@ -21,10 +21,11 @@ import TrackAndTagSearch from '@/components/Search/TrackAndTagSearch';
 import TrackPreviewCell from '@/components/Track/TrackPreviewCell';
 import { FlexBox, FullSizeCenteredFlexBox } from '@/components/styled';
 import { Image } from '@/components/styled';
+import type { Track2, TrackImage } from '@/db/schema';
 import useTrackSearchFilters from '@/store/trackSearchFilters';
 import type { TrackInfo } from '@/types';
 
-import Map from './Map';
+// import Map from './Map';
 
 export default function Tracks() {
   const navigate = useNavigate();
@@ -33,6 +34,8 @@ export default function Tracks() {
   const searchScope = 'track-browse';
   const MAP_HEIGHT = 600;
   const MAP_WIDTH = 1100;
+
+  console.log(`tracks : ${JSON.stringify(tracks)}`);
 
   return (
     <Container sx={{ paddingTop: 2, width: '100%' }}>
@@ -53,8 +56,8 @@ export default function Tracks() {
             flexDirection: 'column',
           }}
         >
-          {tracks.toSpliced(0, 4).map((track: TrackInfo) => {
-            return <TrackPreviewCell track={track} key={`track-info-track=${track.name_en}`} />;
+          {tracks.map((track: Track2) => {
+            return <TrackPreviewCell track={track} key={`track-info-track=${track.name.en}`} />;
           })}
         </FlexBox>
       </FullSizeCenteredFlexBox>

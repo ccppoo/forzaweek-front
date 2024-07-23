@@ -6,7 +6,7 @@ import type { Collection, Table } from 'dexie';
 import { useLiveQuery } from 'dexie-react-hooks';
 
 import { db } from '@/db';
-import type { Car, CarImage, FH5_STAT, Track } from '@/db/schema';
+import type { Track2, TrackImage } from '@/db/schema';
 import type { TrackInfo } from '@/types';
 
 // import type { Actions } from './types';
@@ -20,23 +20,22 @@ import {
   RARITY,
 } from './values';
 
-export type CarSearchOption =
-  | 'division'
-  | 'productionYear'
-  | 'manufacturer'
-  | 'rarity'
-  | 'country'
-  | 'boost';
+export type TrackSearchOption = 'game' | 'category' | 'format' | 'laps' | 'world';
 
-type CarSearchOptions = Record<CarSearchOption, string[]>;
+type TrackSearchOptions = {
+  game: string;
+  world: string[];
+  category: string[];
+  format: string[];
+  laps: number;
+};
 
-const carSearchOptionDefault: CarSearchOptions = {
-  division: [],
-  productionYear: [],
-  manufacturer: [],
-  boost: [],
-  country: [],
-  rarity: [],
+const trackSearchOptionDefault: TrackSearchOptions = {
+  game: 'FH5',
+  world: [],
+  category: [],
+  format: [],
+  laps: -1,
 };
 
 export const searchOptionMaxLength = {
@@ -48,149 +47,46 @@ export const searchOptionMaxLength = {
   rarity: RARITY.length,
 };
 
-const carSearchOptionState = atom<CarSearchOptions>({
+const trackSearchOptionState = atom<TrackSearchOptions>({
   key: 'track-search-option-state',
-  default: carSearchOptionDefault,
+  default: trackSearchOptionDefault,
 });
 
 type Actions = {
-  setOption: (name: string[], option: CarSearchOption) => void;
+  setOption: (value: string | string[] | number, option: TrackSearchOption) => void;
 };
 
-interface GetCarDataIntf {
-  division: string[];
-  productionYear: string[];
-  manufacturer: string[];
-  boost: string[];
-  country: string[];
-  rarity: string[];
-}
-
-function numberRange(start: number, end: number) {
-  return new Array(end - start).fill(0).map((d, i) => i + start);
-}
-
-function* zip<T, K, G>(cars: T[], fh5: K[], images: G[]): Generator<[T, K, G]> {
-  // Create an array of tuples
-  const len = cars.length;
-  let cnt = 0;
-  while (cnt < len) {
-    yield [cars[cnt], fh5[cnt], images[cnt]];
-    cnt++;
-  }
-}
-
-function zipCar(cars: Car[], fh5s: FH5_STAT[], images: CarImage[]) {
-  // Create an array of tuples
-  const vals = [];
-  const len = cars.length;
-  let cnt = 0;
-  while (cnt < len) {
-    const { id: carID, ...res } = cars[cnt];
-    const { id, ...resFH5 } = fh5s[cnt];
-    const { id: _, ...resImage } = images[cnt];
-    const joined = { ...res, fh5: { ...resFH5 }, image: { ...resImage } };
-    vals.push(joined);
-    cnt++;
-  }
-  return vals;
-}
-
-export async function getTrackData(): Promise<TrackInfo[]> {
+export async function getTrackData(): Promise<Track2[]> {
   // 옵션 선택 없는 경우 전체 반환
-  return await db.track.limit(20).toArray();
-
-  // if (![man, con, years, div, boo, rar].some((x) => x)) {
-  //   const pks = await db.car.limit(50).primaryKeys();
-  //   const [carss, carfh5, carimgs] = await Promise.all([
-  //     db.car.bulkGet(pks),
-  //     db.carFH5.bulkGet(pks),
-  //     db.carImage.bulkGet(pks),
-  //   ]);
-
-  //   return zipCar(carss as Car[], carfh5 as FH5_STAT[], carimgs as CarImage[]);
-  // }
-
-  // const productionYearNum = productionYear.map((yearString) =>
-  //   parseInt(yearString.replace('s', '')),
-  // );
-  // const pdYear = productionYearNum.reduce(
-  //   (years: number[], year: number) => [...years, ...numberRange(year, year + 10)],
-  //   [],
-  // );
-
-  // let searchResultKeys: number[] = [];
-  // if (man || con || years) {
-  //   const carSearchQueries = [];
-  //   if (man)
-  //     carSearchQueries.push(
-  //       db.car.where('manufacture').anyOfIgnoreCase(manufacturer).primaryKeys(),
-  //     );
-  //   if (con) carSearchQueries.push(db.car.where('country').anyOfIgnoreCase(country).primaryKeys());
-  //   if (years) carSearchQueries.push(db.car.where('year').anyOf(pdYear).primaryKeys());
-  //   const pks = await Promise.all(carSearchQueries);
-  //   // pks.map((ks) => console.log(`ks : ${ks}`));
-  //   // console.log(`pks : ${pks} / qq len : ${qq.length}`);
-  //   const smallestArray = pks.reduce((a, b) => (a.length <= b.length ? a : b));
-  //   const allKeys = smallestArray.filter((k) => pks.map((ks) => ks.includes(k)).every((x) => x));
-  //   // console.log(`allKeys : ${allKeys}`);
-  //   searchResultKeys = [...allKeys];
-  // } else {
-  //   searchResultKeys = await db.car.offset(0).primaryKeys();
-  // }
-  // if (div || boo || rar) {
-  //   const fh5_query = [];
-  //   if (div) fh5_query.push(db.carFH5.where('division').anyOfIgnoreCase(division).primaryKeys());
-  //   if (boo) fh5_query.push(db.carFH5.where('boost').anyOfIgnoreCase(boost).primaryKeys());
-  //   if (rar) fh5_query.push(db.carFH5.where('rarity').anyOfIgnoreCase(rarity).primaryKeys());
-
-  //   const pks2 = await Promise.all(fh5_query);
-  //   const smallestArray2 = pks2.reduce((a, b) => (a.length <= b.length ? a : b));
-  //   const allKeys2 = smallestArray2.filter((k) => pks2.map((ks) => ks.includes(k)).every((x) => x));
-  //   // console.log(`allKeys2 : ${allKeys2}`);
-  //   searchResultKeys = searchResultKeys.filter((x) => allKeys2.includes(x));
-  // }
-
-  // if (!(searchResultKeys.length > 0)) {
-  //   return [];
-  // }
-  // const [carss, carfh5, carimgs] = await Promise.all([
-  //   db.car.bulkGet(searchResultKeys),
-  //   db.carFH5.bulkGet(searchResultKeys),
-  //   db.carImage.bulkGet(searchResultKeys),
-  // ]);
-
-  // return zipCar(carss as Car[], carfh5 as FH5_STAT[], carimgs as CarImage[]);
+  const a = await db.track2.limit(20).toArray();
+  console.log(`a : ${JSON.stringify(a)}`);
+  return await db.track2.limit(20).toArray();
 }
 
-function useTrackSearchFilters(): [CarSearchOptions, TrackInfo[], boolean, Actions] {
-  const [carSearchOptions, setCarSearchOptions] = useRecoilState(carSearchOptionState);
+function useTrackSearchFilters(): [TrackSearchOptions, Track2[], Actions] {
+  const [trackSearchOptions, setTrackSearchOptions] = useRecoilState(trackSearchOptionState);
 
-  const searchResults: TrackInfo[] | undefined = useLiveQuery(
+  const searchResults: Track2[] | undefined = useLiveQuery(
     () => getTrackData(),
-    // [
-    //   carSearchOptions.boost,
-    //   carSearchOptions.country,
-    //   carSearchOptions.division,
-    //   carSearchOptions.manufacturer,
-    //   carSearchOptions.productionYear,
-    //   carSearchOptions.rarity,
-    // ],
+    [
+      trackSearchOptions.game,
+      trackSearchOptions.world,
+      trackSearchOptions.category,
+      trackSearchOptions.format,
+      trackSearchOptions.laps,
+    ],
   );
 
-  const isSearchOptionEmpty =
-    Object.values(carSearchOptions).reduce((totalOpts, opts) => totalOpts + opts.length, 0) == 0;
-
-  const setOption = (name: string[], option: CarSearchOption) => {
-    setCarSearchOptions((curVal) => {
+  const setOption = (value: string | string[] | number, option: TrackSearchOption) => {
+    setTrackSearchOptions((curVal) => {
       return {
         ...curVal,
-        [option]: [...name].toSorted(),
+        [option]: value,
       };
     });
   };
 
-  return [carSearchOptions, searchResults || [], isSearchOptionEmpty, { setOption }];
+  return [trackSearchOptions, searchResults || [], { setOption }];
 }
 
 export default useTrackSearchFilters;

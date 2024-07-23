@@ -4,7 +4,7 @@ import { Box, Button, Container, Paper, Typography } from '@mui/material';
 
 import type { TrackEditSchema as TrackEditSchema_FH5 } from '@/FormData/tracks/fh5';
 import { trackEditSchemaDefault } from '@/FormData/tracks/fh5';
-import { AddNewDecal, EditDecal } from '@/api/data/fh5/decal';
+import { AddNewTrack } from '@/api/data/track';
 import AddMultipleImages from '@/components/FormInputs/AddMultipleImages';
 import SelectCar from '@/components/FormInputs/CarSelect';
 import TrackFormatInput from '@/components/FormInputs/Tracks/TrackFormatInput';
@@ -35,9 +35,9 @@ export default function TrackWrite(props: dataTextInputIntf) {
     //   await EditDecal({ decal: data });
     //   return;
     // }
-    // if (!isEditMode) {
-    //   await AddNewDecal({ decal: data });
-    // }
+    if (!isEditMode) {
+      await AddNewTrack({ track: data });
+    }
     return;
   };
 
@@ -113,7 +113,7 @@ export default function TrackWrite(props: dataTextInputIntf) {
                 <FlexBox>
                   <Typography>Track full path image - large</Typography>
                 </FlexBox>
-                <AddFullPathImage size="large" postType="track-full-path" />
+                <AddFullPathImage size="zoom_out" postType="track-full-path" />
               </Box>
               {/* 6-2. 트랙 전체 경로 사진 올리기 */}
               <Box
@@ -127,7 +127,7 @@ export default function TrackWrite(props: dataTextInputIntf) {
                 <FlexBox>
                   <Typography>Track full path image - small (optional)</Typography>
                 </FlexBox>
-                <AddFullPathImage size="small" postType="track-full-path" />
+                <AddFullPathImage size="zoom_in" postType="track-full-path" />
               </Box>
 
               {/* 7. 트랙 이미지 올리기 */}
