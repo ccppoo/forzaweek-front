@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { Box, Button, Typography } from '@mui/material';
+import { Box, Button, ButtonBase, Typography } from '@mui/material';
 import { styled } from '@mui/material';
 import Chip from '@mui/material/Chip';
 import Collapse from '@mui/material/Collapse';
@@ -9,15 +9,29 @@ import Container from '@mui/material/Container';
 import Stack from '@mui/material/Stack';
 import { blue, green, orange, pink, purple } from '@mui/material/colors';
 
-import {
-  AutocompleteCarSearchBar,
-  CarFilterAndSelect,
-  TagAutocompleteTextField,
-} from '@/components/Search';
 import { FlexBox, Image } from '@/components/styled';
 import { trackIcons } from '@/image/track_icon';
 import useTrackAndTagFilter from '@/store/trackAndTagFilter';
+import useTrackSearchFilters from '@/store/trackSearchFilters';
+import type { TrackCategory, TrackFormat, TrackFormatTopology } from '@/types/fh5';
+import {
+  CircularFormats,
+  CrossCountryFormats,
+  DragFormats,
+  LinearFormats,
+  OffRoadFormats,
+  RoadFormats,
+  StreetFormats,
+  TrackFormatTopologies,
+} from '@/types/fh5';
 
+const TEMP: Record<TrackCategory, TrackFormat[]> = {
+  road: RoadFormats,
+  crossCountry: CrossCountryFormats,
+  street: StreetFormats,
+  offRoad: OffRoadFormats,
+  drag: DragFormats,
+};
 interface TrackAndTagSearchIterface {
   searchScope: string;
   doFinalSelect?: boolean;
@@ -57,234 +71,285 @@ const TRACK_COLOR: TRACK_COLOR_TYPE = {
 };
 
 type TrackTypeFormat = {
-  name: string;
+  format: TrackFormat;
   icon: string;
 };
 
-type TrackTypeItem = {
-  formats: TrackTypeFormat[];
-  eventTrack: TrackTypeFormat[];
-};
-
-// type TrackCategory = 'crossCountry' | "offRoad" | "road" | "street" | "drag"
-type TrackCategory = 'crossCountry' | 'offRoad' | 'road' | 'street' | 'drag';
-
+type TrackTypeItem = Record<TrackFormatTopology, TrackTypeFormat[]>;
 type Tracks = Record<TrackCategory, TrackTypeItem>;
 
 const tracks: Tracks = {
   road: {
-    formats: [
+    circular: [
       {
-        name: 'circuit',
+        format: 'circuit',
         icon: trackIcons.road_track,
       },
       {
-        name: 'sprint',
-        icon: trackIcons.road_sprint,
-      },
-    ],
-    eventTrack: [
-      {
-        name: 'goliath',
+        format: 'goliath',
         icon: trackIcons.event.goliath,
       },
+    ],
+    linear: [
       {
-        name: 'colossus',
+        format: 'sprint',
+        icon: trackIcons.road_sprint,
+      },
+      {
+        format: 'colossus',
         icon: trackIcons.event.colossus,
       },
     ],
   },
   crossCountry: {
-    formats: [
+    circular: [
       {
-        name: 'cross country',
-        icon: trackIcons.crosscountry_sprint,
-      },
-      {
-        name: 'circuit',
+        format: 'crossCountryCircuit',
         icon: trackIcons.crosscountry_track,
       },
     ],
-    eventTrack: [
+    linear: [
       {
-        name: 'titan',
+        format: 'crossCountry',
+        icon: trackIcons.crosscountry_sprint,
+      },
+      {
+        format: 'titan',
         icon: trackIcons.event.titan,
       },
     ],
   },
   offRoad: {
-    formats: [
+    circular: [
       {
-        name: 'trail',
-        icon: trackIcons.offroad_sprint,
-      },
-      {
-        name: 'scramble',
+        format: 'scramble',
         icon: trackIcons.offroad_track,
       },
     ],
-    eventTrack: [
+    linear: [
       {
-        name: 'gauntlet',
+        format: 'trail',
+        icon: trackIcons.offroad_sprint,
+      },
+      {
+        format: 'gauntlet',
         icon: trackIcons.event.gauntlet,
       },
       {
-        name: 'juggernaut',
+        format: 'juggernaut',
         icon: trackIcons.event.juggernaut,
       },
     ],
   },
   street: {
-    formats: [
+    circular: [],
+    linear: [
       {
-        name: 'street',
+        format: 'street',
         icon: trackIcons.street_racing,
       },
-    ],
-    eventTrack: [
       {
-        name: 'marathon',
+        format: 'marathon',
         icon: trackIcons.event.marathon,
       },
     ],
   },
   drag: {
-    formats: [
+    circular: [],
+    linear: [
       {
-        name: 'drag',
+        format: 'drag',
         icon: trackIcons.drag_racing,
       },
     ],
-    eventTrack: [],
   },
 };
 
 interface TrackTypeFormatItemIntf {
-  trackType: TrackCategory;
-  trackFormat: TrackTypeFormat;
-  event?: boolean;
+  category: TrackCategory;
+  format: TrackFormat;
+  icon: string;
 }
 
 const TrackTypeRowGrid = styled(Box)((props) => ({
   display: 'grid',
-  gridTemplateColumns: 'minmax(150px, 15%) repeat(3, minmax(100px ,30%))',
-  // gap: '1px',
+  gridTemplateColumns: 'minmax(150px, 15%) repeat(2, minmax(100px ,45%))',
+  gridTemplateRows: '75px',
+  justifyItems: 'center',
+  border: '1px black solid',
+}));
+
+const TrackTypeDragRowGrid = styled(Box)((props) => ({
+  display: 'grid',
+  gridTemplateColumns: 'minmax(150px, 15%) 1fr',
+  gridTemplateRows: '75px',
+  justifyItems: 'center',
+  border: '1px black solid',
 }));
 
 function TrackTypeFormatItem(props: TrackTypeFormatItemIntf) {
-  const { trackType, trackFormat, event } = props;
+  const [
+    searchOptions,
+    _,
+    {
+      format: { toggleTrackFormat },
+    },
+  ] = useTrackSearchFilters();
+
+  const { category, icon, format } = props;
+  const selected = searchOptions.format[format];
+  // console.log(
+  //   `${category} : ${searchOptions.category[category]}, ${format} : ${searchOptions.format[format]},  selected : ${selected}`,
+  // );
+
+  const toggleFormatOption = () => toggleTrackFormat(format);
+
   return (
-    <FlexBox
+    <ButtonBase
       sx={{
-        width: '100%',
+        display: 'flex',
         height: '100%',
         borderRadius: 2,
         alignItems: 'center',
-        justifyContent: 'space-around',
+        justifyContent: 'center',
         paddingY: 0.5,
+        aspectRatio: '1/1',
+        ':only-child': {
+          margin: '0 auto',
+        },
+        backgroundColor: selected ? 'green' : 'yellow',
       }}
+      onClick={toggleFormatOption}
     >
-      <FlexBox sx={{ height: '100%', aspectRatio: '1/1' }}>
-        <Image src={trackFormat.icon} sx={{ objectFit: 'contain', aspectRatio: '1/1' }} />
-      </FlexBox>
-      {/* {!event && (
-        <FlexBox>
-          <Typography color={'white'} fontSize={21}>
-            {trackFormat.name}
-          </Typography>
-        </FlexBox>
-      )} */}
-    </FlexBox>
+      <Image src={icon} sx={{ objectFit: 'contain', aspectRatio: '1/1' }} />
+    </ButtonBase>
   );
 }
 
-function TrackTypeSelectionsHeader() {
+function TrackFormatTopologySelectionButton({
+  formats,
+  topology,
+}: {
+  topology: TrackFormatTopology;
+  formats: TrackFormat[];
+}) {
+  // formats.map((fmt) => console.log(`${fmt} : ${searchOptions.format[fmt]}`));
+
+  const toggleOptions = (bool: boolean) => formats.reduce((a, v) => ({ ...a, [v]: bool }), {});
+
+  return (
+    <Button variant={'outlined'} onClick={() => {}}>
+      <Typography>{topology}</Typography>
+    </Button>
+  );
+}
+
+function TrackFormatTopologySelectionHeader() {
+  const TEMP: Record<TrackFormatTopology, TrackFormat[]> = {
+    linear: LinearFormats,
+    circular: CircularFormats,
+  };
+
   return (
     <TrackTypeRowGrid
       sx={{
         gridTemplateRows: '50px',
       }}
     >
-      <Box></Box>
-      <FlexBox sx={{ alignItems: 'center', justifyContent: 'center' }}>
-        <Typography>circuit</Typography>
-      </FlexBox>
-      <FlexBox sx={{ alignItems: 'center', justifyContent: 'center' }}>
-        <Typography>Linear</Typography>
-      </FlexBox>
-      <FlexBox sx={{ alignItems: 'center', justifyContent: 'center' }}>
-        <Typography>event</Typography>
-      </FlexBox>
+      <FlexBox>{/* TODO: 이거 클릭하면 전부 클릭 되는 것 */}</FlexBox>
+      {TrackFormatTopologies.toSorted((a1, a2) => (a1 > a2 ? 1 : -1)).map((topology) => (
+        <FlexBox
+          sx={{ alignItems: 'center', justifyContent: 'center' }}
+          key={`track-format-topology-header-${topology}`}
+        >
+          <TrackFormatTopologySelectionButton topology={topology} formats={TEMP[topology]} />
+        </FlexBox>
+      ))}
     </TrackTypeRowGrid>
   );
 }
 
-function TrackTypeSelection({ trackType }: { trackType: TrackCategory }) {
-  const BackgroundColor = TRACK_COLOR[trackType].main;
-  // TEMP
-  const isOne = tracks[trackType].formats.length == 1;
+function TrackTypeSelection({ trackCategory }: { trackCategory: TrackCategory }) {
+  const [
+    searchOptions,
+    _,
+    {
+      format: { setTrackFormat },
+      category: { setTrackCategory },
+    },
+  ] = useTrackSearchFilters();
+
+  const ICON_W = 67;
+  const MIN_WIDTH = (ICON_W + 20) * 3;
+  const ICON_LISTING_WIDTH = '70%';
+
+  // console.log(`searchOptions.format : ${searchOptions.format}`);
+
+  const allChecked = TEMP[trackCategory].map((fmt) => searchOptions.format[fmt]).every((v) => !!v);
+  const toggleOptions = (bool: boolean) =>
+    TEMP[trackCategory].reduce((a, v) => ({ ...a, [v]: bool }), {});
+
+  // console.log(`toggleOptions(!allChecked) : ${JSON.stringify(toggleOptions(!allChecked))}`);
+
+  const toggleOption = () => {
+    // console.log(`toggleOptions(!allChecked) : ${JSON.stringify(toggleOptions(!allChecked))}`);
+    const aa = {
+      ...searchOptions.format,
+      ...toggleOptions(!allChecked),
+    };
+    // console.log(`aa : ${JSON.stringify(aa)}`);
+    setTrackFormat(aa);
+
+    // const { [trackCategory]: prevVal, ...res } = searchOptions.category;
+    // const aaa = {
+    //   ...res,
+    //   [trackCategory]: !prevVal,
+    // };
+
+    // setTrackCategory(aaa as Record<TrackCategory, boolean>);
+  };
+  const BackgroundColor = allChecked
+    ? TRACK_COLOR[trackCategory].main
+    : TRACK_COLOR[trackCategory].sub1;
+
   return (
-    <TrackTypeRowGrid
-      sx={{
-        gridTemplateRows: '75px',
-        columnGap: 1,
-        border: '1px black solid',
-      }}
-    >
+    <TrackTypeRowGrid sx={{}}>
       {/* row */}
-      <FlexBox
+      <ButtonBase
         sx={{
+          display: 'flex',
           height: '100%',
           width: '100%',
           alignItems: 'center',
           justifyContent: 'center',
           backgroundColor: BackgroundColor,
         }}
+        onClick={toggleOption}
       >
         <Typography color={'white'} fontSize={21}>
-          {trackType}
+          {trackCategory}
         </Typography>
-      </FlexBox>
-      {isOne && <FlexBox sx={{}}></FlexBox>}
-
-      {/* 질주형 */}
-      {tracks[trackType].formats
-        .toSorted((f1, f2) => (f1.name > f2.name ? 1 : -1))
-        .map((trackTypeFormat) => (
-          <FlexBox
-            key={`select-${trackType}-${trackTypeFormat.name}`}
-            sx={{
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}
-          >
+      </ButtonBase>
+      {TrackFormatTopologies.toSorted((a1, a2) => (a1 > a2 ? 1 : -1)).map((topology) => (
+        <FlexBox
+          sx={{
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            minWidth: MIN_WIDTH,
+            width: ICON_LISTING_WIDTH,
+          }}
+          key={`track-format-topology-${topology}`}
+        >
+          {tracks[trackCategory][topology].map((trackCategoryFormat) => (
             <TrackTypeFormatItem
-              trackFormat={trackTypeFormat}
-              trackType={trackType}
-              // key={`select-${trackType}-${trackTypeFormat.name}`}
+              format={trackCategoryFormat.format}
+              category={trackCategory}
+              icon={trackCategoryFormat.icon}
+              key={`select-${topology}-${trackCategory}-${trackCategoryFormat.format}`}
             />
-          </FlexBox>
-        ))}
-      {/* 이벤트 트랙 */}
-      <FlexBox
-        sx={{
-          width: '100%',
-          height: '100%',
-          paddingX: 1,
-          columnGap: 1,
-          alignItems: 'center',
-          justifyContent: 'center',
-        }}
-      >
-        {tracks[trackType].eventTrack.map((trackTypeFormat) => (
-          <TrackTypeFormatItem
-            trackFormat={trackTypeFormat}
-            trackType={trackType}
-            event
-            key={`select-${trackType}-${trackTypeFormat.name}`}
-          />
-        ))}
-      </FlexBox>
+          ))}
+        </FlexBox>
+      ))}
     </TrackTypeRowGrid>
   );
 }
@@ -295,14 +360,7 @@ function TrackTypeSelectionDrag() {
   const BackgroundColor = TRACK_COLOR[DRAG].main;
 
   return (
-    <Box
-      sx={{
-        display: 'grid',
-        gridTemplateColumns: 'minmax(150px, 15%) minmax(200px ,60%) auto',
-        gridTemplateRows: '75px',
-        border: '1px black solid',
-      }}
-    >
+    <TrackTypeDragRowGrid>
       <FlexBox
         sx={{
           height: '100%',
@@ -328,8 +386,7 @@ function TrackTypeSelectionDrag() {
           <Image src={trackIcons.drag_racing} sx={{ objectFit: 'contain', aspectRatio: '1/1' }} />
         </FlexBox>
       </FlexBox>
-      <FlexBox></FlexBox>
-    </Box>
+    </TrackTypeDragRowGrid>
   );
 }
 
@@ -355,11 +412,11 @@ export default function TrackTypeSelections() {
           gridTemplateRows: '50px repeat(4, 75px)',
         }}
       >
-        <TrackTypeSelectionsHeader />
-        <TrackTypeSelection trackType="road" />
-        <TrackTypeSelection trackType="street" />
-        <TrackTypeSelection trackType="offRoad" />
-        <TrackTypeSelection trackType="crossCountry" />
+        <TrackFormatTopologySelectionHeader />
+        <TrackTypeSelection trackCategory="road" />
+        <TrackTypeSelection trackCategory="street" />
+        <TrackTypeSelection trackCategory="offRoad" />
+        <TrackTypeSelection trackCategory="crossCountry" />
       </Box>
       <Box sx={{ minWidth: 450, maxWidth: 850, height: '100%', width: '100%' }}>
         <TrackTypeSelectionDrag />

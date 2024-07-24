@@ -27,7 +27,7 @@ export async function AddNewDecal({ decal }: { decal: DecalEditSchema }) {
   console.log(`처리된 data : ${JSON.stringify(data)}`);
 
   const path_ = `decal`;
-  const url = `${API_HOST}/fh5/${path_}`;
+  const url = `${API_HOST}/FH5/${path_}`;
   const resp = await axios.post(url, data, {
     headers: {
       'Content-Type': 'application/json',
@@ -82,7 +82,7 @@ export async function GetDecal({
 
   const path_ = `decal`;
 
-  const url = `${API_HOST}/fh5/${path_}/${decalID}`;
+  const url = `${API_HOST}/FH5/${path_}/${decalID}`;
 
   const resp = await axios.get(url, {});
 

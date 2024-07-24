@@ -1,5 +1,3 @@
-import { useNavigate } from 'react-router-dom';
-
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import {
   Accordion,
@@ -8,12 +6,12 @@ import {
   AccordionSummary,
   Box,
   Button,
+  ButtonBase,
   Chip,
   Stack,
   Typography,
 } from '@mui/material';
 import Avatar from '@mui/material/Avatar';
-import ButtonBase from '@mui/material/ButtonBase';
 import Container from '@mui/material/Container';
 import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
@@ -24,6 +22,7 @@ import { styled } from '@mui/material/styles';
 import { useLiveQuery } from 'dexie-react-hooks';
 
 import * as image from '@/image';
+import { RouterLinkWrapper } from '@/components/Routing/LinkWrapper';
 import { FlexBox, FullSizeCenteredFlexBox } from '@/components/styled';
 import { Image } from '@/components/styled';
 import { getTrackImage } from '@/db/index';
@@ -31,7 +30,7 @@ import { getTrackImage } from '@/db/index';
 import type { Track2, TrackImage } from '@/db/schema';
 import useTrackSearchFilters from '@/store/trackSearchFilters';
 
-type TrackType = 'road' | 'off-road' | 'cross country' | 'street' | 'drag';
+type TrackType = 'road' | 'offRoad' | 'crossCountry' | 'street' | 'drag';
 
 const trackIcon: Record<TrackType, any> = {
   road: {
@@ -40,23 +39,23 @@ const trackIcon: Record<TrackType, any> = {
     goliath: image.track_icon.goliath,
     colossus: image.track_icon.colossus,
   },
-  'off-road': {
+  offRoad: {
     trail: image.track_icon.offroad_track,
     scramble: image.track_icon.offroad_sprint,
     gauntlet: image.track_icon.gauntlet,
   },
-  'cross country': {
-    'cross country': image.track_icon.offroad_sprint,
-    circuit: image.track_icon.offroad_track,
+  crossCountry: {
+    crossCountry: image.track_icon.crosscounrty_sprint,
+    crossCountryCircuit: image.track_icon.crosscounrty_track,
     juggernaut: image.track_icon.juggernaut,
     titan: image.track_icon.titan,
   },
   street: {
-    'street racing': image.track_icon.street_racing,
+    street: image.track_icon.street_racing,
     marathon: image.track_icon.marathon,
   },
   drag: {
-    'drag racing': image.track_icon.drag_racing,
+    drag: image.track_icon.drag_racing,
   },
 };
 
@@ -128,8 +127,11 @@ export default function TrackPreviewCell({ track }: { track: Track2 }) {
     async () => await getTrackImage(track.id!),
   );
 
+  const game = 'FH5';
+  const track_name_ = track.name.en.replaceAll(' ', '_');
+  const track_href = `/${game}/track/${track_name_}`;
   return (
-    <FlexBox
+    <Paper
       sx={{
         width: WIDTH,
         maxWidth: 1200,
@@ -137,10 +139,13 @@ export default function TrackPreviewCell({ track }: { track: Track2 }) {
         borderTopLeftRadius: 4,
         borderBottomLeftRadius: 4,
       }}
-      component={Paper}
     >
-      {trackImage && <TrackPreview trackImage={trackImage} />}
-      <TrackName track={track} />
-    </FlexBox>
+      <RouterLinkWrapper to={track_href}>
+        <FlexBox sx={{ display: 'flex', width: '100%', height: '100%' }}>
+          {trackImage && <TrackPreview trackImage={trackImage} />}
+          <TrackName track={track} />
+        </FlexBox>
+      </RouterLinkWrapper>
+    </Paper>
   );
 }

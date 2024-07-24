@@ -8,7 +8,7 @@ export async function AddNewTuning({ tuning }: { tuning: TuningEditSchema }) {
   // console.log(`처리된 data : ${JSON.stringify(data)}`);
   const data = { ...tuning };
   const path_ = `tuning`;
-  const url = `${API_HOST}/fh5/${path_}`;
+  const url = `${API_HOST}/FH5/${path_}`;
   const resp = await axios.post(url, data, {
     headers: {
       'Content-Type': 'application/json',
@@ -25,7 +25,7 @@ export async function EditTuning({ tuning }: { tuning: TuningEditSchema }) {
   console.log(`data : ${JSON.stringify(data)}`);
 
   const path_ = `tuning/edit/${docID}`;
-  const url = `${API_HOST}/fh5/${path_}`;
+  const url = `${API_HOST}/FH5/${path_}`;
   const resp = await axios.post(url, data, {
     headers: {
       'Content-Type': 'application/json',
@@ -47,7 +47,7 @@ export async function GetAllTuning({
 
   const path_ = `tuning`;
 
-  const url = `${API_HOST}/fh5/${path_}`;
+  const url = `${API_HOST}/FH5/${path_}`;
 
   const resp = await axios.get(url, {});
 

@@ -248,6 +248,11 @@ function Comment() {
 
 const comments = [{}, {}, {}];
 
+interface CommentsIntf {
+  page: string;
+  id: string;
+}
+
 export default function Comments() {
   type CommentSortOption = 'Date' | 'Score' | 'Replies';
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);

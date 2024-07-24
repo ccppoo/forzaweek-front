@@ -1,9 +1,11 @@
 import axios from 'axios';
 
 import type { TrackEditSchema } from '@/FormData/tracks/fh5';
+import type { TrackSchemaType } from '@/FormData/tracks/fh5';
 import { UploadImage } from '@/api/data/image';
 import { API_HOST } from '@/api/index';
 import type { API_NAME } from '@/api/types';
+import type { GAME } from '@/types';
 
 export async function AddNewTrack({ track }: { track: TrackEditSchema }) {
   const { value: name_en } = track.name.filter((i18n) => i18n.lang == 'en')[0];
@@ -44,7 +46,7 @@ export async function AddNewTrack({ track }: { track: TrackEditSchema }) {
 
   console.log(`처리된 data : ${JSON.stringify(data)}`);
 
-  const path_ = `fh5/track`;
+  const path_ = `FH5/track`;
   const url = `${API_HOST}/${path_}`;
   const resp = await axios.post(url, data, {
     headers: {
@@ -52,4 +54,21 @@ export async function AddNewTrack({ track }: { track: TrackEditSchema }) {
     },
   });
   return { code: resp.status, msg: resp.statusText };
+}
+
+export async function GetTrack({
+  queryKey,
+}: {
+  queryKey: [API_NAME, GAME, string];
+}): Promise<TrackSchemaType> {
+  const [_, game, trackID] = queryKey;
+
+  const trackPath = 'track';
+  const path_ = `${game}/${trackPath}/${trackID}`;
+
+  const url = `${API_HOST}/${path_}`;
+
+  const resp = await axios.get<TrackSchemaType>(url);
+
+  return resp.data;
 }

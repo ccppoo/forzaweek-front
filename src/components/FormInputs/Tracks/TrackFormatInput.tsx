@@ -39,13 +39,13 @@ const Mexico = [
     laps: 0,
   },
   {
-    category: 'off-road',
+    category: 'offRoad',
     name: 'scramble',
     icon: trackIcons.offroad_track,
     laps: 1,
   },
   {
-    category: 'off-road',
+    category: 'offRoad',
     name: 'trail',
     icon: trackIcons.offroad_sprint,
     laps: 0,
@@ -58,7 +58,7 @@ const Mexico = [
   },
   {
     category: 'crossCountry',
-    name: 'cross country',
+    name: 'crossCountry',
     icon: trackIcons.crosscountry_sprint,
     laps: 0,
   },
