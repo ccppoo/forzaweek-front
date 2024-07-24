@@ -1,6 +1,22 @@
 import { z } from 'zod';
 
+import type { SupportLang } from '@/config/i18n';
 import { supportLangs } from '@/config/i18n';
+
+// FIXME: 이런식으로 동적으로 만들면 Zod, TS에서 타입추론을 못함
+// const i18nMap_Zod = supportLangs.reduce((a, v) => ({ ...a, [v]: z.string() }), {});
+// export const i18nMapName = z.object({
+//   name: z.object(i18nMap_Zod),
+// });
+
+export const i18nMapName = z.object({
+  name: z.optional(
+    z.object({
+      en: z.string(),
+      ko: z.string(),
+    }),
+  ),
+});
 
 export const i18nDefaultValue = [...supportLangs].map((langDefault) => {
   return { lang: langDefault, value: '' };

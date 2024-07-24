@@ -10,6 +10,7 @@ import { trackFormat } from './format';
 import { fullPathImage } from './fullPathImage';
 import { trackWorld } from './world';
 
+// import type {i18nMap} from '@/FormData/i18n'
 export const trackEditSchema = documentBase
   .merge(FH5_Base)
   .merge(trackCategory)
@@ -21,9 +22,9 @@ export const trackEditSchema = documentBase
   .merge(image.multipleImages)
   .merge(tag.tagDependent);
 
-export const trackSchemaType = trackEditSchema.required({
+export const trackSchemaType = trackEditSchema.merge(i18n.i18nMapName).required({
   id: true,
-
+  name: true,
   fullPathImage: true,
   imageURLs: true,
   category: true,
@@ -40,14 +41,24 @@ export type TrackEditSchema = z.infer<typeof trackEditSchema>;
 const tempNameDefault = [
   {
     lang: 'en',
-    value: 'Horizon Mexico Circuit',
+    value: 'Arch of Mulege Circuit',
   },
   {
     lang: 'ko',
-    value: '호라이즌 멕시코 서킷',
+    value: '물레헤 아치 서킷',
   },
 ];
 
+const tempLiberalDefault = [
+  {
+    lang: 'en',
+    value: 'Arch of Mulege Circuit',
+  },
+  {
+    lang: 'ko',
+    value: '물레헤 아치 서킷',
+  },
+];
 export const trackEditSchemaDefault: TrackEditSchema = {
   game: 'FH5',
   category: 'road',
@@ -55,12 +66,12 @@ export const trackEditSchemaDefault: TrackEditSchema = {
   laps: 3,
   world: 'Mexico',
   fullPathImage: {
-    large: undefined,
-    small: undefined,
+    zoom_out: undefined,
+    zoom_in: undefined,
   },
   imageURLs: [], // 데칼 사진
   firstImage: undefined,
   name: tempNameDefault,
-  liberal_translation: i18n.i18nDefaultValue,
+  liberal_translation: tempLiberalDefault,
   tags: [], // 데칼 태그
 };
