@@ -27,7 +27,7 @@ function TuningsShowMore({ carID }: { carID: string }) {
   const goSearchTunings = async () => {
     const car2 = await getCar2(carID);
     searchCarTuning(car2);
-    goto('/fh5/tuning');
+    goto('/FH5/tuning');
   };
   const onClick = async () => {
     await goSearchTunings();
@@ -42,7 +42,15 @@ function TuningsShowMore({ carID }: { carID: string }) {
   );
 }
 
-export default function RelatedTunings({ carID }: { carID: string }) {
+interface RelatedTuningsIntf {
+  carID?: string;
+  trackID?: string;
+}
+
+export default function RelatedTunings(props: RelatedTuningsIntf) {
+  // 관련 튜닝 -> 태그, 차, 트랙 : 태그로 변경, PI
+  const { carID, trackID } = props;
+
   const TUNING_CLASSES = ['D', 'C', 'B', 'A', 'S1', 'S2', 'X'];
   const TUNING_NUM = {
     D: 500,
@@ -81,7 +89,7 @@ export default function RelatedTunings({ carID }: { carID: string }) {
     setTuningSearchRange([floorPI(currPI), ceilPI(currPI)]);
   };
 
-  console.log(`tuningSearchRange : ${JSON.stringify(tuningSearchRange)}`);
+  // console.log(`tuningSearchRange : ${JSON.stringify(tuningSearchRange)}`);
 
   return (
     <FlexBox
@@ -131,7 +139,7 @@ export default function RelatedTunings({ carID }: { carID: string }) {
             })}
         </Grid>
       </FlexBox>
-      <TuningsShowMore carID={carID} />
+      <TuningsShowMore carID={carID!} />
     </FlexBox>
   );
 }
