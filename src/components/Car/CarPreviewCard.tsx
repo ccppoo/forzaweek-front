@@ -66,12 +66,12 @@ export default function CarPreviewCard({ carInfo }: { carInfo: CarInfo2 }) {
   const goSearchDecals = async () => {
     const car2 = await getCar2(carInfo.id);
     searchCarDecal(car2);
-    goto('/fh5/decal');
+    goto('/FH5/decal');
   };
   const goSearchTunings = async () => {
     const car2 = await getCar2(carInfo.id);
     searchCarTuning(car2);
-    goto('/fh5/tuning');
+    goto('/FH5/tuning');
   };
 
   return (

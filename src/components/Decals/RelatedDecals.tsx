@@ -149,7 +149,7 @@ function DecalsShowMore({ carID }: { carID: string }) {
   const goSearchDecals = async () => {
     const car2 = await getCar2(carID);
     searchCarDecal(car2);
-    goto('/fh5/decal');
+    goto('/FH5/decal');
   };
 
   const onClick = async () => {

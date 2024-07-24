@@ -35,7 +35,7 @@ export default function Tracks() {
   const MAP_HEIGHT = 600;
   const MAP_WIDTH = 1100;
 
-  console.log(`tracks : ${JSON.stringify(tracks)}`);
+  // console.log(`tracks : ${JSON.stringify(tracks)}`);
 
   return (
     <Container sx={{ paddingTop: 2, width: '100%' }}>

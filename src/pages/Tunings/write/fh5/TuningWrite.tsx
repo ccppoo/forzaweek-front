@@ -71,7 +71,7 @@ export default function TuningWrite(props: dataTextInputIntf) {
     // console.log(`detailedTuningChoices : ${JSON.stringify(detailedTuningChoices)}`);
     const _data = filterOptionalTuning(data, detailedTuningChoices);
     console.log(`_data : ${JSON.stringify(_data)}`);
-    const path = 'fh5/tuning';
+    const path = 'FH5/tuning';
 
     if (isEditMode) {
       // await EditTuning({ tuning: data });
