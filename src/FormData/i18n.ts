@@ -9,6 +9,11 @@ import { supportLangs } from '@/config/i18n';
 //   name: z.object(i18nMap_Zod),
 // });
 
+export const i18nMap = z.object({
+  en: z.string(),
+  ko: z.string(),
+});
+
 export const i18nMapName = z.object({
   name: z.optional(
     z.object({

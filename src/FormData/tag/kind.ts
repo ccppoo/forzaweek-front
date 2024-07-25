@@ -1,6 +1,9 @@
 import { z } from 'zod';
 
+import { documentBase } from '@/FormData/base';
 import { i18nTextFieldSchema } from '@/FormData/i18n';
+import { i18nMap, i18nMapName, i18nName } from '@/FormData/i18n';
+import { image, tag } from '@/FormData/post';
 import { supportLangs } from '@/config/i18n';
 
 const tagKindEditSchema = z.object({
@@ -10,6 +13,8 @@ const tagKindEditSchema = z.object({
   imageURL: z.optional(z.string()),
   description: z.array(i18nTextFieldSchema),
 });
+
+export const tagKindReadType = documentBase.merge(i18nName).merge(image.singleImage);
 
 const tagKindSchemaType = z.object({
   id: z.string(),

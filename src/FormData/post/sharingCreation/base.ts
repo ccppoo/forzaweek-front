@@ -7,3 +7,10 @@ export const sharingCreation = z.object({
 });
 
 export type SharingCreation = z.infer<typeof sharingCreation>;
+
+export const sharingCreationReq = sharingCreation.required({
+  share_code: true,
+  creator: true,
+});
+
+export type SharingCreationReq = z.infer<typeof sharingCreationReq>;

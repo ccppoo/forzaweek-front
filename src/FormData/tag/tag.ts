@@ -1,10 +1,13 @@
 import { z } from 'zod';
 
+import { documentBase } from '@/FormData/base';
 import { i18nTextFieldSchema } from '@/FormData/i18n';
+import { i18nMap, i18nMapName, i18nName } from '@/FormData/i18n';
+import { image, tag } from '@/FormData/post';
 import { tagKindGeneralID } from '@/config/api';
 import { supportLangs } from '@/config/i18n';
 
-import { tagKindSchemaType } from './kind';
+import { tagKindReadType, tagKindSchemaType } from './kind';
 
 const tagEditSchema = z.object({
   id: z.optional(z.string()),
@@ -59,6 +62,14 @@ const tagWrite = z.object({
   name_en: z.string(),
   kind: z.string(),
 });
+
+export const tagReadType = documentBase
+  .merge(i18nMapName.required({ name: true }))
+  .merge(z.object({ description: i18nMap }))
+  .merge(image.singleImage)
+  .merge(z.object({ kind: tagKindReadType }));
+
+export type TagReadType = z.infer<typeof tagReadType>;
 
 type TagWrite = z.infer<typeof tagWrite>;
 
