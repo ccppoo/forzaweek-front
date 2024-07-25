@@ -6,13 +6,6 @@ import type { API_NAME } from '@/api/types';
 
 import { API_HOST } from '../index';
 
-type GetCar = {
-  id: string;
-  name_en: string;
-  founded: number;
-  imageURL: string;
-};
-
 export async function AddNewTuning({ tuning }: { tuning: TuningEditSchema }) {
   // console.log(`처리된 data : ${JSON.stringify(data)}`);
   const data = { ...tuning };
@@ -57,6 +50,50 @@ export async function GetAllTuning({
   const path_ = `tuning`;
 
   const url = `${API_HOST}/${path_}`;
+
+  const resp = await axios.get(url, {});
+
+  return resp.data;
+}
+
+type CarID = string | undefined;
+type TuningID = string;
+type Page = number;
+type Limit = number;
+
+export async function SearchTunings({
+  queryKey,
+}: {
+  queryKey: [API_NAME, CarID, Page, Limit];
+}): Promise<TuningSchemaType[]> {
+  const [_, carID, page, itemLimit] = queryKey;
+
+  let path_ = `FH5/tuning`;
+
+  let queryParams = `page=${page}&limit=${itemLimit}`;
+  if (carID) path_ = `${path_}/${carID}`;
+
+  // if(queryParams) queryParams=`${queryParams}&`
+
+  // TODO: query param -> 튜닝 검색 조건
+  const url = `${API_HOST}/${path_}?${queryParams}`;
+
+  const resp = await axios.get(url, {});
+
+  return resp.data;
+}
+
+export async function GetTuning({
+  queryKey,
+}: {
+  queryKey: [API_NAME, CarID, TuningID];
+}): Promise<TuningSchemaType> {
+  const [_, carID, tuningID] = queryKey;
+
+  const path_ = `FH5/tuning`;
+
+  //
+  const url = `${API_HOST}/${path_}/${carID}/${tuningID}`;
 
   const resp = await axios.get(url, {});
 

@@ -1,6 +1,7 @@
 import axios from 'axios';
 
 import type { TagType } from '@/FormData/tag';
+import type { TagReadType } from '@/FormData/tag/tag';
 import { UploadImage } from '@/api/data/image';
 import type { API_NAME } from '@/api/types';
 
@@ -87,7 +88,7 @@ export async function GetTagByID({
   queryKey,
 }: {
   queryKey: [API_NAME, string];
-}): Promise<TagType.TagSchemaType> {
+}): Promise<TagReadType> {
   const [_, tagID] = queryKey;
 
   const path_ = `tag`;

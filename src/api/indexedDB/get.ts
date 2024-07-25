@@ -54,10 +54,10 @@ export const updateCarImage = async () =>
   updateIndexedDB<CarImage2>({ table: 'carImage2', path: 'car2/image' });
 
 export const updateCar_FH5_meta = async () =>
-  updateIndexedDB<FH5_META>({ table: 'car_FH5_meta', path: 'car2/fh5/meta' });
+  updateIndexedDB<FH5_META>({ table: 'car_FH5_meta', path: 'car2/FH5/meta' });
 
 export const updateCar_FH5_performance = async () =>
-  updateIndexedDB<FH5_Performance>({ table: 'car_FH5_performance', path: 'car2/fh5/performance' });
+  updateIndexedDB<FH5_Performance>({ table: 'car_FH5_performance', path: 'car2/FH5/performance' });
 
 export const updateTrack = async () => updateIndexedDB<Track2>({ table: 'track2', path: 'track2' });
 
