@@ -6,9 +6,11 @@ import ButtonBase from '@mui/material/ButtonBase';
 import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Unstable_Grid2';
 
+import { useQuery } from '@tanstack/react-query';
+
+import { GetTuning, SearchTunings } from '@/api/data/tuning';
 import { PI_Card } from '@/components/PI';
 import { FlexBox } from '@/components/styled';
-import { tunings } from '@/data/tunings';
 import { getCar2 } from '@/db';
 import useCarAndTagFilter from '@/store/carAndTagFilter';
 
@@ -88,58 +90,62 @@ export default function RelatedTunings(props: RelatedTuningsIntf) {
   const setTuningSearchClass = (currPI: number) => {
     setTuningSearchRange([floorPI(currPI), ceilPI(currPI)]);
   };
+  const [itemLimit, setItemLimit] = useState<number>(10);
 
   // console.log(`tuningSearchRange : ${JSON.stringify(tuningSearchRange)}`);
 
-  return (
-    <FlexBox
-      sx={{
-        width: '100%',
-        height: '100%',
-        flexDirection: 'column',
-      }}
-    >
-      <FlexBox>
-        <Typography variant="h5">Tunings</Typography>
-      </FlexBox>
-      <FlexBox sx={{ width: '100%', flexDirection: 'column', rowGap: 1 }}>
-        {/* Tuning class */}
-        <FlexBox
-          sx={{
-            height: 60,
-            backgroundColor: '#cfcccc',
-            justifyContent: 'center',
-            alignItems: 'center',
-            columnGap: 5,
-          }}
-        >
-          {Object.values(TUNING_NUM).map((val) => {
-            return (
-              <ButtonBase
-                onClick={() => setTuningSearchClass(val)}
-                key={`pi-card-val-${val}-button`}
-              >
-                <PI_Card pi_number={val} height={40} />
-              </ButtonBase>
-            );
-          })}
-        </FlexBox>
+  const { data } = useQuery({
+    queryKey: ['tuning-search', carID, page, itemLimit],
+    queryFn: SearchTunings,
+    enabled: !!carID,
+  });
 
-        {/* 선택된 클래스에 있는 튜닝들 */}
-        <Grid container spacing={2}>
-          {tunings
-            .filter(
-              (tuning) => tuning.PI > tuningSearchRange[0] && tuning.PI <= tuningSearchRange[1],
-            )
-            .slice(0, 6)
-            .map((tuning) => {
+  if (data) {
+    return (
+      <FlexBox
+        sx={{
+          width: '100%',
+          height: '100%',
+          flexDirection: 'column',
+        }}
+      >
+        <FlexBox>
+          <Typography variant="h5">Tunings</Typography>
+        </FlexBox>
+        <FlexBox sx={{ width: '100%', flexDirection: 'column', rowGap: 1 }}>
+          {/* Tuning class */}
+          <FlexBox
+            sx={{
+              height: 60,
+              backgroundColor: '#cfcccc',
+              justifyContent: 'center',
+              alignItems: 'center',
+              columnGap: 5,
+            }}
+          >
+            {Object.values(TUNING_NUM).map((val) => {
               return (
-                <TuningBriefCell tuning={tuning} key={`tuning-${tuning.PI}-${tuning.share_code}`} />
+                <ButtonBase
+                  onClick={() => setTuningSearchClass(val)}
+                  key={`pi-card-val-${val}-button`}
+                >
+                  <PI_Card pi_number={val} height={40} />
+                </ButtonBase>
               );
             })}
-        </Grid>
+          </FlexBox>
+
+          {/* 선택된 클래스에 있는 튜닝들 */}
+          <Grid container spacing={2}>
+            {data.map((tuning) => {
+              return (
+                <TuningBriefCell tuning={tuning} key={`tuning-${carID}-${tuning.share_code}`} />
+              );
+            })}
+          </Grid>
+        </FlexBox>
+        <TuningsShowMore carID={carID!} />
       </FlexBox>
-      <TuningsShowMore carID={carID!} />
-    </FlexBox>
-  );
+    );
+  }
 }

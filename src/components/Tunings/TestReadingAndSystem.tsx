@@ -10,9 +10,9 @@ import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Unstable_Grid2';
 
+import type { TuningEditSchema, TuningSchemaType } from '@/FormData/tuning';
 import { FlexBox, FullSizeCenteredFlexBox } from '@/components/styled';
 import { Image } from '@/components/styled';
-import type { Performance, TestReadings, Tuning } from '@/data/tunings';
 
 type TestReading = {
   name: string;
@@ -62,53 +62,54 @@ function SystemRow({ system }: { system: CarSystem }) {
   );
 }
 
-export default function TestReadingAndSystem({ tuning }: { tuning: Tuning }) {
-  const { test_reading, suspension, tire, driving_system } = tuning;
+export default function TestReadingAndSystem({ tuning }: { tuning: TuningSchemaType }) {
+  const { testReadings, tuningMajorParts } = tuning;
 
-  const testReadings: TestReading[] = [
+  const testReadings_: TestReading[] = [
     {
       name: '최고속도',
-      value: test_reading.maxspeed,
-      unit: 'km/h',
+      value: testReadings.maxspeed.value!,
+      unit: testReadings.maxspeed.unit!,
     },
     {
       name: '0-100km/h',
-      value: test_reading.zero100,
-      unit: '초',
+      value: testReadings.zero100.value!,
+      unit: testReadings.zero100.unit,
     },
     {
       name: '출력',
-      value: test_reading.output,
-      unit: 'ps',
+      value: testReadings.output.value!,
+      unit: testReadings.output.unit,
     },
     {
       name: '토크',
-      value: test_reading.torque,
-      unit: 'kg·m',
+      value: testReadings.torque.value!,
+      unit: testReadings.torque.unit,
     },
     {
       name: '중량',
-      value: test_reading.weight,
-      unit: 'kg',
+      value: testReadings.weight.value!,
+      unit: testReadings.weight.unit!,
     },
     {
       name: '횡Gs',
-      value: test_reading.skid_pad,
+      value: testReadings.skid_pad.value!,
+      unit: testReadings.skid_pad.unit,
     },
   ];
 
   const systems: CarSystem[] = [
     {
       name: '서스펜션',
-      value: suspension,
+      value: tuningMajorParts.suspension!,
     },
     {
       name: '타이어',
-      value: tire,
+      value: tuningMajorParts.tire!,
     },
     {
       name: '구동방식',
-      value: driving_system,
+      value: tuningMajorParts.drivingSystem,
     },
   ];
   return (
@@ -122,7 +123,7 @@ export default function TestReadingAndSystem({ tuning }: { tuning: Tuning }) {
         backgroundColor: '#898a7b',
       }}
     >
-      {testReadings.map((testReading) => {
+      {testReadings_.map((testReading) => {
         return (
           <TestReadingRow
             testReading={testReading}

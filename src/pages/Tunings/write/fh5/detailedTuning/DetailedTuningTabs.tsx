@@ -39,8 +39,8 @@ export default function DetailedTuningTabs({}: {}) {
           width: '100%',
           height: '100%',
           typography: 'body1',
-          opacity: activated ? 0.4 : 1,
-          pointerEvents: activated ? 'none' : 'auto',
+          opacity: activated ? 1 : 0.4,
+          pointerEvents: activated ? 'auto' : 'none',
         }}
         component={Paper}
       >

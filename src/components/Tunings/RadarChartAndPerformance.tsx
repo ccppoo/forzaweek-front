@@ -10,6 +10,7 @@ import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Unstable_Grid2';
 
+import type { TuningEditSchema, TuningSchemaType } from '@/FormData/tuning';
 import { PI_Card } from '@/components/PI';
 import { FlexBox, FullSizeCenteredFlexBox } from '@/components/styled';
 import type { Tuning } from '@/data/tunings';
@@ -17,20 +18,22 @@ import type { Tuning } from '@/data/tunings';
 import TestReadingAndSystem from './TestReadingAndSystem';
 import { chartOptions } from './chartOption';
 
-export default function RadarChartAndPerformance({ tuning }: { tuning: Tuning }) {
+export default function RadarChartAndPerformance({ tuning }: { tuning: TuningSchemaType }) {
   const series = [
     {
       name: 'performance',
       data: [
-        tuning.performance.acceleration,
-        tuning.performance.speed,
-        tuning.performance.braking,
-        tuning.performance.offroad,
-        tuning.performance.launch,
-        tuning.performance.handling,
+        tuning.performance.acceleration!,
+        tuning.performance.speed!,
+        tuning.performance.braking!,
+        tuning.performance.offroad!,
+        tuning.performance.launch!,
+        tuning.performance.handling!,
       ],
     },
   ];
+
+  console.log(`tuning pi : ${tuning.pi}`);
 
   return (
     <FlexBox
@@ -43,7 +46,7 @@ export default function RadarChartAndPerformance({ tuning }: { tuning: Tuning })
       <FlexBox sx={{ height: 400, aspectRatio: '1/1', border: '1px black solid' }}>
         {/* 성능 육각형 레이더 그래프 */}
         <FlexBox sx={{ width: 0, position: 'static', paddingTop: 1, paddingLeft: 1 }}>
-          <PI_Card height={30} pi_number={tuning.PI} />
+          <PI_Card height={30} pi_number={tuning.pi} />
         </FlexBox>
         <ReactApexChart
           series={series}

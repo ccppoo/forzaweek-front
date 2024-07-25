@@ -24,11 +24,17 @@ import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Unstable_Grid2';
 
 import * as image from '@/image';
+import type { TuningEditSchema, TuningSchemaType } from '@/FormData/tuning';
 import { PI_Card } from '@/components/PI';
+import CommentsButton from '@/components/Post/CommentsButton';
+import FavsButton from '@/components/Post/FavsButton';
+import { TagChip } from '@/components/Post/Tags';
+import DrivingSystem from '@/components/Tunings/MajorParts/DrivingSystem';
+import Suspension from '@/components/Tunings/MajorParts/Suspension';
+import Tire from '@/components/Tunings/MajorParts/Tire';
 import TuningOptionFilter from '@/components/Tunings/TuningSearchFilter';
 import { FlexBox, FullSizeCenteredFlexBox } from '@/components/styled';
 import { Image } from '@/components/styled';
-import type { Tuning } from '@/data/tunings';
 
 function stringToColor(string: string) {
   let hash = 0;
@@ -59,41 +65,24 @@ function stringAvatar(name: string) {
   };
 }
 
-export default function TuningBriefCell({ tuning }: { tuning: Tuning }) {
+export default function TuningBriefCell({ tuning }: { tuning: TuningSchemaType }) {
   const carName = '#98 Bryan Herta Autosport Elantra N';
   const manufacturer = 'Hyundai';
   const year = 2021;
   const WIDTH = '33%';
   const HEIGHT = 180;
-  const series = [
-    {
-      name: 'performance',
-      data: [
-        tuning.performance.acceleration,
-        tuning.performance.speed,
-        tuning.performance.braking,
-        tuning.performance.offroad,
-        tuning.performance.launch,
-        tuning.performance.handling,
-      ],
-    },
-  ];
+  const creator = tuning.creator;
 
-  const creator = tuning.creater.club
-    ? `[${tuning.creater.club}] ${tuning.creater.id}`
-    : tuning.creater.id;
+  const FAV_COUNT = 123;
+  const FAV_CHECKED = true;
 
-  const share_code3 = [
-    tuning.share_code.substring(0, 3),
-    tuning.share_code.substring(3, 6),
-    tuning.share_code.substring(6, 9),
-  ];
+  const PI_DS_S_Tire_H = 30;
 
   return (
     <Grid xs={4}>
       <Paper
         sx={{
-          // width: '100%',
+          width: '100%',
           height: HEIGHT,
           display: 'flex',
           flexDirection: 'column',
@@ -101,104 +90,66 @@ export default function TuningBriefCell({ tuning }: { tuning: Tuning }) {
           paddingX: 0.5,
         }}
       >
-        <Box
-          sx={{
-            display: 'grid',
-            paddingY: 1,
-            gridTemplateColumns: 'auto 75px',
-            gridTemplateRows: '35px',
-          }}
-        >
-          {/* 만든사람 */}
-          <FlexBox sx={{ alignItems: 'center', columnGap: 1 }}>
-            <Avatar {...stringAvatar(tuning.creater.id)} sx={{ width: 25, height: 25 }} />
-            <Typography variant="h6" sx={{ fontWeight: 300 }}>
-              {creator}
-            </Typography>
-          </FlexBox>
-          {/* PI Card */}
-          <FlexBox sx={{ alignItems: 'center' }}>
-            <PI_Card height={30} pi_number={tuning.PI} />
-          </FlexBox>
-        </Box>
-        {/* 본문 */}
+        {/* 만든사람 */}
+        <FlexBox sx={{ alignItems: 'center', columnGap: 1 }}>
+          <Avatar {...stringAvatar(creator)} sx={{ width: 25, height: 25 }} />
+          <Typography variant="h6" sx={{ fontWeight: 300 }}>
+            {creator}
+          </Typography>
+        </FlexBox>
+        {/* PI / DrivingSystem / Tire / Suspension */}
         <FlexBox
           sx={{
-            flexDirection: 'column',
             width: '100%',
-            height: '100%',
-            paddingX: 1,
-            paddingY: 0.5,
-            rowGap: 2,
-            justifyContent: 'space-between',
+            alignItems: 'center',
+            paddingY: 1,
+            columnGap: 1,
           }}
         >
-          {/* 태그 */}
-          <FlexBox sx={{ flexDirection: 'column' }}>
-            <FlexBox
-              sx={{
-                height: '100%',
-                flexWrap: 'wrap',
-                columnGap: 0.2,
-                rowGap: 0.5,
-                justifyContent: 'start',
-                alignItems: 'flex-start',
-              }}
-            >
-              {tuning.tags.map((tag) => (
-                <Chip label={tag} key={`decal-tag-${tuning.share_code}-${tag}`} />
-              ))}
-            </FlexBox>
-          </FlexBox>
+          <PI_Card height={PI_DS_S_Tire_H} pi_number={tuning.pi} />
+          <DrivingSystem
+            height={PI_DS_S_Tire_H}
+            drivingSystem={tuning.tuningMajorParts.drivingSystem}
+          />
+          <Suspension
+            height={PI_DS_S_Tire_H}
+            suspension={tuning.tuningMajorParts.suspension || ''}
+          />
+          <Tire height={PI_DS_S_Tire_H} tire={tuning.tuningMajorParts.tire || ''} />
+        </FlexBox>
+        {/* 태그 */}
+        <FlexBox
+          sx={{
+            flexDirection: 'row',
+            width: '100%',
+            height: '100%',
+            paddingX: 0.25,
+            paddingY: 0.5,
+            flexWrap: 'wrap',
+            columnGap: 0.5,
+            rowGap: 0.5,
+            justifyContent: 'start',
+            alignItems: 'flex-start',
+          }}
+        >
+          {tuning.tags.map((tag, idx) => (
+            <TagChip tagID={tag} key={`tuning-brief-tag-${tuning.share_code}-${tag}-${idx}`} />
+          ))}
+        </FlexBox>
 
-          {/* 공유코드 + 댓글 + 좋아요 */}
-          <Box
-            sx={{
-              display: 'grid',
-              height: 35,
-              width: '100%',
-              gridTemplateColumns: 'auto 50px 50px',
-            }}
-          >
-            <FlexBox
-              sx={{
-                justifyContent: 'center',
-                alignItems: 'center',
-              }}
-            ></FlexBox>
-            <FlexBox sx={{ alignItems: 'center' }}>
-              <IconButton sx={{ borderRadius: 1, paddingY: `2px`, paddingX: `4px` }}>
-                <ModeCommentOutlinedIcon sx={{ fontSize: 15 }} />
-                <FlexBox
-                  sx={{
-                    width: 30,
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    paddingLeft: 0.5,
-                  }}
-                >
-                  <Typography>{tuning.fav.count}</Typography>
-                </FlexBox>
-              </IconButton>
-              <IconButton sx={{ borderRadius: 1, paddingY: `2px`, paddingX: `4px` }}>
-                {tuning.fav.checked ? (
-                  <FavoriteOutlinedIcon sx={{ fontSize: 15 }} />
-                ) : (
-                  <FavoriteBorderOutlinedIcon sx={{ fontSize: 15 }} />
-                )}
-                <FlexBox
-                  sx={{
-                    width: 30,
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    paddingLeft: 0.5,
-                  }}
-                >
-                  <Typography>{tuning.fav.count}</Typography>
-                </FlexBox>
-              </IconButton>
-            </FlexBox>
-          </Box>
+        {/* 공유코드 + 댓글 + 좋아요 */}
+        <FlexBox
+          sx={{
+            height: 35,
+            width: '100%',
+            alignItems: 'end',
+            justifyContent: 'end',
+          }}
+        >
+          <FlexBox sx={{ alignItems: 'center' }}>
+            <CommentsButton comments={FAV_COUNT} displayOnly />
+            <FavsButton favs={FAV_COUNT} faved={FAV_CHECKED} displayOnly />
+          </FlexBox>
         </FlexBox>
       </Paper>
     </Grid>

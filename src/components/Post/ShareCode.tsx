@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import ReactApexChart from 'react-apexcharts';
 import { useNavigate } from 'react-router-dom';
 
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
@@ -9,75 +8,27 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import ButtonBase from '@mui/material/ButtonBase';
 import Chip from '@mui/material/Chip';
-import Container from '@mui/material/Container';
 import Divider from '@mui/material/Divider';
-import Pagination from '@mui/material/Pagination';
 import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
-import Grid from '@mui/material/Unstable_Grid2';
 import { styled } from '@mui/material/styles';
 
-import { ApexOptions } from 'apexcharts';
-
-import * as image from '@/image';
+import type { SharingCreationReq } from '@/FormData/post/sharingCreation/base';
 import type { TuningEditSchema, TuningSchemaType } from '@/FormData/tuning';
 import { FlexBox, FullSizeCenteredFlexBox } from '@/components/styled';
 import { Image } from '@/components/styled';
 
-// import type { Tuning } from '@/data/tunings';
-
-function stringToColor(string: string) {
-  let hash = 0;
-  let i;
-
-  /* eslint-disable no-bitwise */
-  for (i = 0; i < string.length; i += 1) {
-    hash = string.charCodeAt(i) + ((hash << 5) - hash);
-  }
-
-  let color = '#';
-
-  for (i = 0; i < 3; i += 1) {
-    const value = (hash >> (i * 8)) & 0xff;
-    color += `00${value.toString(16)}`.slice(-2);
-  }
-  /* eslint-enable no-bitwise */
-
-  return color;
-}
-
-function stringAvatar(name: string) {
-  return {
-    sx: {
-      bgcolor: stringToColor(name),
-    },
-    children: `${name[0].toUpperCase()}`,
-  };
-}
-
-export default function TuningInfo({ tuning }: { tuning: TuningSchemaType }) {
-  const creator = tuning.creator;
+export default function ShareCode(data: SharingCreationReq) {
+  const { share_code } = data;
 
   const share_code3 = [
-    tuning.share_code.substring(0, 3),
-    tuning.share_code.substring(3, 6),
-    tuning.share_code.substring(6, 9),
+    share_code.substring(0, 3),
+    share_code.substring(3, 6),
+    share_code.substring(6, 9),
   ];
 
   return (
     <FlexBox sx={{ flexDirection: 'column', width: '100%', rowGap: 2 }}>
-      {/* 제작자 */}
-      <FlexBox sx={{ alignItems: 'center', columnGap: 1 }}>
-        <Avatar {...stringAvatar(tuning.creator)} sx={{ width: 35, height: 35 }} />
-        <Typography variant="h5">{creator}</Typography>
-      </FlexBox>
-      {/* 태그 */}
-      <FlexBox sx={{ columnGap: 0.5, alignContent: 'flex-start' }}>
-        {tuning.tags.map((tag) => {
-          return <Chip label={tag} variant="outlined" key={`tuning-tag-${tag}`} />;
-        })}
-      </FlexBox>
-      {/* 공유 코드 */}
       <FlexBox
         sx={{
           justifyContent: 'start',

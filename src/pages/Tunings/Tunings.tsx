@@ -7,13 +7,15 @@ import Pagination from '@mui/material/Pagination';
 import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Unstable_Grid2';
 
+import { useQuery } from '@tanstack/react-query';
+
 import * as image from '@/image';
+import { GetTuning, SearchTunings } from '@/api/data/tuning';
 import { CarAndTagSearch } from '@/components/Search';
 import { TuningBriefCell } from '@/components/Tunings';
 import TuningOptionFilter from '@/components/Tunings/TuningSearchFilter';
 import { FlexBox, FullSizeCenteredFlexBox } from '@/components/styled';
 import { Image } from '@/components/styled';
-import { tunings } from '@/data/tunings';
 import { getCar2 } from '@/db/index';
 import ScrollToTop from '@/hooks/useResetScroll';
 import useCarAndTagFilter from '@/store/carAndTagFilter';
@@ -115,9 +117,9 @@ function TuningCellListing(props: TuningCellListingInterface) {
     <FlexBox sx={{ width: '100%', flexDirection: 'column', paddingBottom: 1 }}>
       <TuningCellListingHeader />
       <Grid container sx={{ width: '100%' }} spacing={2}>
-        {[...tunings.slice(0, 6)].map((tuning) => (
+        {/* {[...tunings.slice(0, 6)].map((tuning) => (
           <TuningBriefCell tuning={tuning} key={`tuning-cell-${tuning.share_code}`} />
-        ))}
+        ))} */}
       </Grid>
       {/* Show More Tunings */}
       {showMore && <TuningShowMore carName={carName} searchScope={searchScope} />}
@@ -131,43 +133,59 @@ function RecommandedTunings() {
   return (
     <FlexBox sx={{ flexDirection: 'column' }}>
       <TuningCellListing searchScope={searchScope} carName={carName} showMore />
-      <TuningCellListing searchScope={searchScope} carName={carName} showMore />
-      <TuningCellListing searchScope={searchScope} carName={carName} showMore />
+      {/* <TuningCellListing searchScope={searchScope} carName={carName} showMore />
+      <TuningCellListing searchScope={searchScope} carName={carName} showMore /> */}
     </FlexBox>
   );
 }
 
 function TuningsSearchResults() {
-  const [page, setPage] = useState(1);
+  const searchScope = 'tunings';
+
+  const {
+    filter: { car, tags },
+  } = useCarAndTagFilter(searchScope);
+
+  // pagination
+  const [page, setPage] = useState<number>(1);
+
+  // Item limit
+  const [itemLimit, setItemLimit] = useState<number>(10);
 
   const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
     setPage(value);
   };
-  return (
-    <FlexBox sx={{ width: '100%', flexDirection: 'column', paddingBottom: 1 }}>
-      <Grid container sx={{ width: '100%' }} spacing={2}>
-        {[...tunings.slice(0, 6)].map((tuning) => (
-          <TuningBriefCell tuning={tuning} key={`tuning-cell-${tuning.share_code}`} />
-        ))}
-      </Grid>
-      {/* Pagination */}
-      <FlexBox sx={{ alignItems: 'center', justifyContent: 'center', paddingTop: 3 }}>
-        <Pagination count={10} page={page} onChange={handleChange} size="large" />
+
+  const { data } = useQuery({
+    queryKey: ['tuning-search', car ? car.id : '', page, itemLimit],
+    queryFn: SearchTunings,
+    enabled: !!car,
+  });
+
+  console.log(`data : ${JSON.stringify(data)}`);
+
+  if (data) {
+    return (
+      <FlexBox sx={{ flexDirection: 'column', width: '100%', paddingTop: 3 }}>
+        <FlexBox>
+          <Typography variant="h6">Search results</Typography>
+        </FlexBox>
+        <FlexBox sx={{ width: '100%', flexDirection: 'column', paddingBottom: 1 }}>
+          <Grid container sx={{ width: '100%' }} spacing={2}>
+            {data.map((tuning) => {
+              return <TuningBriefCell tuning={tuning} key={`tuning-cell-${tuning.share_code}`} />;
+            })}
+            {/* {[...tunings.slice(0, 6)].map((tuning) => (
+            ))} */}
+          </Grid>
+          {/* Pagination */}
+          <FlexBox sx={{ alignItems: 'center', justifyContent: 'center', paddingTop: 3 }}>
+            <Pagination count={10} page={page} onChange={handleChange} size="large" />
+          </FlexBox>
+        </FlexBox>
       </FlexBox>
-    </FlexBox>
-  );
-}
-function SearchResultTunings() {
-  const searchScope = 'tunings';
-  const carName = '#98 Elantra';
-  return (
-    <FlexBox sx={{ flexDirection: 'column', paddingTop: 3 }}>
-      <FlexBox>
-        <Typography variant="h6">Search results</Typography>
-      </FlexBox>
-      <TuningsSearchResults />
-    </FlexBox>
-  );
+    );
+  }
 }
 
 export default function Tunings() {
@@ -186,7 +204,7 @@ export default function Tunings() {
         <CarAndTagSearch searchScope={searchScope} doFinalSelect />
         <TuningOptionFilter />
         {/* if no car selected */}
-        {car ? <SearchResultTunings /> : <RecommandedTunings />}
+        {car ? <TuningsSearchResults /> : <RecommandedTunings />}
       </FullSizeCenteredFlexBox>
       <ScrollToTop />
     </Container>
