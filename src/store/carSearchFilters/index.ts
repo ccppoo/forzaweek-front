@@ -2,6 +2,15 @@ import { atomFamily, useRecoilState } from 'recoil';
 
 import { useLiveQuery } from 'dexie-react-hooks';
 
+import {
+  BOOST,
+  COUNTRY,
+  DIVISIONS,
+  MANUFACTURER,
+  PRODUCTION_YEAR,
+  PRODUCTION_YEARs,
+  RARITY,
+} from '@/data/values';
 import { db } from '@/db';
 import type {
   Car2,
@@ -13,16 +22,6 @@ import type {
   Nation,
 } from '@/db/schema';
 import { CarInfo2 } from '@/types/car';
-
-import {
-  BOOST,
-  COUNTRY,
-  DIVISIONS,
-  MANUFACTURER,
-  PRODUCTION_YEAR,
-  PRODUCTION_YEARs,
-  RARITY,
-} from './values';
 
 export type CarSearchOption =
   | 'division'

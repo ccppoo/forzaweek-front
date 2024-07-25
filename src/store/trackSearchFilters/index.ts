@@ -1,25 +1,12 @@
 import { useCallback, useMemo } from 'react';
 import { atom, useRecoilState } from 'recoil';
 
-import type { Collection, Table } from 'dexie';
-// import { useQuery } from '@tanstack/react-query';
 import { useLiveQuery } from 'dexie-react-hooks';
 
 import { db } from '@/db';
-import type { Track2, TrackImage } from '@/db/schema';
-import type { GAME, TrackInfo } from '@/types';
+import type { Track2 } from '@/db/schema';
+import type { GAME } from '@/types';
 import type { TrackCategory, TrackFormat, TrackFormatTopology, World } from '@/types/fh5';
-
-// import type { Actions } from './types';
-import {
-  BOOST,
-  COUNTRY,
-  DIVISIONS,
-  MANUFACTURER,
-  PRODUCTION_YEAR,
-  PRODUCTION_YEARs,
-  RARITY,
-} from './values';
 
 export type TrackSearchOption = 'game' | 'category' | 'format' | 'laps' | 'world';
 
@@ -99,15 +86,10 @@ export async function getTrackData(options: TrackSearchOptions): Promise<Track2[
   const tracks = await db.track2
     .where('game')
     .equals(options.game)
-    // .and((x) => cats.includes(x.category))
     .and((x) => formats.includes(x.format))
     .toArray();
   // db.track2.where('category').equals()
-  // options.game
   return tracks;
-
-  // console.log(`a : ${JSON.stringify(a)}`);
-  // return await db.track2.limit(20).toArray();
 }
 
 type Actions = {
@@ -143,7 +125,7 @@ function useTrackSearchFilters(): [TrackSearchOptions, Track2[], Actions] {
     ],
   );
 
-  console.log(`trackSearchOptions.format :${JSON.stringify(trackSearchOptions.format)}`);
+  // console.log(`trackSearchOptions.format :${JSON.stringify(trackSearchOptions.format)}`);
 
   const setOption = (value: string | string[] | number, option: TrackSearchOption) => {
     setTrackSearchOptions((curVal) => {
