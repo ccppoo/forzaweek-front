@@ -23,6 +23,9 @@ enum Pages {
   DataWrite,
   DataEdit,
   NotFound,
+
+  Login,
+  CallBack,
 }
 
 type PathRouteCustomProps = {

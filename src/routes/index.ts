@@ -123,6 +123,18 @@ const routes: Routes = {
 
     icon: HomeIcon,
   },
+  [Pages.Login]: {
+    component: asyncComponentLoader(() => import('@/pages/Auth')),
+    path: '/login',
+    title: 'login',
+    icon: HomeIcon,
+  },
+  [Pages.CallBack]: {
+    component: asyncComponentLoader(() => import('@/pages/Auth/CallBack')),
+    path: '/auth/callback',
+    title: 'auth call back',
+    icon: HomeIcon,
+  },
   [Pages.NotFound]: {
     component: asyncComponentLoader(() => import('@/pages/NotFound')),
     path: '*',

@@ -217,7 +217,7 @@ function Header() {
               </Tooltip>
             </FlexBox>
             <FlexBox>
-              <Button variant="contained" size="small" sx={{ height: 28 }}>
+              <Button variant="contained" size="small" sx={{ height: 28 }} href={'/login'}>
                 로그인
               </Button>
             </FlexBox>
