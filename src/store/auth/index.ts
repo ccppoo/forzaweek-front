@@ -39,9 +39,6 @@ const AuthState = atom<AuthTokenType>({
   default: default_auth_state,
 });
 
-// 사용자 닉네임,
-type UserInfo = {};
-
 type Actions = {
   setAuthTokens: (authInfo: AuthTokenType) => void;
   clearAuthInfo: () => void;
@@ -53,6 +50,7 @@ type AuthState = {
 
 export default function useAuthState(): [AuthTokenType, AuthState, Actions] {
   const [authInfo, setAuthInfo] = useRecoilState(AuthState);
+
   const setAuthTokens = (authInfo: AuthTokenType) => {
     setAuthInfo(authInfo as AuthTokenType);
   };

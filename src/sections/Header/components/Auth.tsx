@@ -18,6 +18,7 @@ import { RouterLinkWrapper } from '@/components/Routing/LinkWrapper';
 import { FlexBox } from '@/components/styled';
 import { Image } from '@/components/styled';
 import useAuthState from '@/store/auth';
+import useUserProfile from '@/store/user';
 
 import './border.css';
 
@@ -116,11 +117,12 @@ function PopoverProfilePortal({ closeMenu }: { closeMenu: () => void }) {
 
 function UserState() {
   const [authInfo, state, action] = useAuthState();
+  const profile = useUserProfile();
 
-  const userName = 'optims1873';
-  const userIcon = '';
+  const userName = profile.gamerTag;
+  const userIcon = profile.profileImage;
 
-  const avatarSize = 24;
+  const avatarSize = 36;
   const size = { width: avatarSize, height: avatarSize };
 
   const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
@@ -155,7 +157,7 @@ function UserState() {
         onClick={handleOpenUserMenu}
       >
         <Typography>{userName}</Typography>
-        <Avatar alt={userName} sx={{ ...size }} />
+        <Avatar alt={userName} src={userIcon} sx={{ ...size }} />
       </FlexBox>
       <Popover
         id="menu-appbar"
