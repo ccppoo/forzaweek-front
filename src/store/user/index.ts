@@ -3,8 +3,8 @@ import { atom, useRecoilState } from 'recoil';
 
 import { useQuery } from '@tanstack/react-query';
 
-import { get_user_profile } from '@/api/auth/user';
-import useAuthState from '@/store/auth';
+import { get_user_profile2 } from '@/api/auth/user';
+import type { AuthTokenType } from '@/store/auth/types';
 
 // 사용자 닉네임,
 type UserProfile = {
@@ -20,20 +20,51 @@ const UserProfileState = atom<UserProfile>({
   },
 });
 
-function useUserProfile() {
-  const [authInfo, state] = useAuthState();
-  const [userProfile, setUserProfile] = useRecoilState(UserProfileState);
-
-  const { data, isSuccess } = useQuery({
-    queryKey: ['get user info', authInfo.id_token!],
-    queryFn: get_user_profile,
-    staleTime: Infinity,
-    enabled: !!authInfo.id_token,
+const useLocalStorageValue = <T>(key: string) => {
+  const [data, setData] = useState<T | null>(() => {
+    let item = localStorage.getItem(key);
+    if (item === null) return null;
+    return JSON.parse(item) as T;
   });
 
-  if (isSuccess) {
-    setUserProfile(data);
-  }
+  useEffect(() => {
+    const handleStorageChange = () => {
+      let item = localStorage.getItem(key);
+      if (item === null) {
+        setData(null);
+        return;
+      }
+      setData(JSON.parse(item) as T);
+    };
+
+    window.addEventListener('storage', handleStorageChange);
+
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+    };
+  }, []);
+
+  return data;
+};
+
+function useUserProfile() {
+  const authInfo = useLocalStorageValue<AuthTokenType>('user_auth');
+  const [userProfile, setUserProfile] = useRecoilState(UserProfileState);
+  // FIXME: localstorage change listen -> hook
+
+  const { data, isSuccess } = useQuery({
+    queryKey: ['get user info', !!authInfo ? authInfo.id_token : ''],
+    queryFn: get_user_profile2,
+    staleTime: Infinity,
+    enabled: !!authInfo,
+  });
+
+  useEffect(() => {
+    if (isSuccess && data) {
+      // console.log(`data : ${JSON.stringify(data)}`);
+      setUserProfile(data);
+    }
+  }, [data]);
 
   return userProfile;
 }

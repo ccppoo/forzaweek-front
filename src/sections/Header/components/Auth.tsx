@@ -115,8 +115,7 @@ function PopoverProfilePortal({ closeMenu }: { closeMenu: () => void }) {
   );
 }
 
-function UserState() {
-  const [authInfo, state, action] = useAuthState();
+function UserProfileHeader() {
   const profile = useUserProfile();
 
   const userName = profile.gamerTag;
@@ -194,7 +193,5 @@ function UserState() {
 export default function AuthHeader() {
   const [authInfo, state, action] = useAuthState();
 
-  useEffect(() => {}, [state.loggedIn]);
-
-  return <FlexBox>{state.loggedIn ? <UserState /> : <LogginButton />}</FlexBox>;
+  return <FlexBox>{state.loggedIn ? <UserProfileHeader /> : <LogginButton />}</FlexBox>;
 }

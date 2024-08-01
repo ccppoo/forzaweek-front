@@ -4,12 +4,12 @@ type Actions = {
   open: () => void;
 };
 type AuthTokenType = {
-  token_type: string | undefined;
+  token_type: string;
   expires_in: number;
-  scope: string | undefined;
-  access_token: string | undefined;
-  id_token: string | undefined;
-  refresh_token: string | undefined;
+  scope: string;
+  access_token: string;
+  id_token: string;
+  refresh_token: string;
   issued: number;
 };
 
