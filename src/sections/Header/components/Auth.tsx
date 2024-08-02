@@ -90,9 +90,13 @@ function PopoverLogout({ closeMenu }: { closeMenu: () => void }) {
 }
 
 function PopoverProfilePortal({ closeMenu }: { closeMenu: () => void }) {
+  const profile = useUserProfile();
+
+  const userName = profile.gamerTag;
+  const userIcon = profile.profileImage;
   const avatarSize = 75;
+
   const size = { width: avatarSize, height: avatarSize };
-  const userName = 'optims1873';
 
   return (
     <Box
@@ -102,7 +106,7 @@ function PopoverProfilePortal({ closeMenu }: { closeMenu: () => void }) {
       }}
     >
       <FlexBox sx={{ width: '100%', height: 110, alignItems: 'center', justifyContent: 'center' }}>
-        <Avatar alt={userName} sx={{ ...size }} />
+        <Avatar alt={userName} src={userIcon} sx={{ ...size }} />
       </FlexBox>
       <FlexBox sx={{ flexDirection: 'column', paddingY: 1 }}>
         <Typography variant="subtitle1" fontWeight={500}>

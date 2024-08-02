@@ -3,7 +3,7 @@ import { atom, useRecoilState } from 'recoil';
 
 import { useQuery } from '@tanstack/react-query';
 
-import { get_user_profile2 } from '@/api/auth/user';
+import { getUserProfile } from '@/api/user/profile';
 import type { AuthTokenType } from '@/store/auth/types';
 
 // 사용자 닉네임,
@@ -53,11 +53,13 @@ function useUserProfile() {
   // FIXME: localstorage change listen -> hook
 
   const { data, isSuccess } = useQuery({
-    queryKey: ['get user info', !!authInfo ? authInfo.id_token : ''],
-    queryFn: get_user_profile2,
+    queryKey: ['get user info', 'me', !!authInfo ? authInfo.id_token : ''],
+    queryFn: getUserProfile,
     staleTime: Infinity,
     enabled: !!authInfo,
   });
+
+  console.log(`userProfile : ${JSON.stringify(userProfile)}`);
 
   useEffect(() => {
     if (isSuccess && data) {
