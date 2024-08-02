@@ -123,6 +123,13 @@ const routes: Routes = {
 
     icon: HomeIcon,
   },
+  [Pages.UserProfile]: {
+    component: asyncComponentLoader(() => import('@/pages/User/Profile')),
+    path: '/profile/:userID',
+    devUrl: '/profile/c786e13e-eeb8-5299-b6cc-4b9811101061',
+    title: 'user profile',
+    icon: HomeIcon,
+  },
   [Pages.Login]: {
     component: asyncComponentLoader(() => import('@/pages/Auth')),
     path: '/login',
