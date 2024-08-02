@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 import { Box, Button, ButtonBase, Paper, Typography } from '@mui/material';
 import Container from '@mui/material/Container';
 
-import * as xbox from '@/api/auth/xbox';
+import { xbox } from '@/api/auth/oauth';
 import { FlexBox, FullSizeCenteredFlexBox, Image } from '@/components/styled';
 import xboxIcon from '@/image/xbox.png';
 import useAuthState from '@/store/auth';

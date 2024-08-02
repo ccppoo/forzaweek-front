@@ -6,7 +6,7 @@ import Container from '@mui/material/Container';
 
 import { useQuery } from '@tanstack/react-query';
 
-import * as xbox from '@/api/auth/xbox';
+import { xbox } from '@/api/auth/oauth';
 import { FlexBox, FullSizeCenteredFlexBox, Image } from '@/components/styled';
 import useAuthState from '@/store/auth';
 
@@ -44,9 +44,9 @@ export default function CallBack() {
 
   // 할 것 - 백엔드에서 Token 또는 인증 성공시 탭 닫기 (원래 이전에 있던 창으로 돌아가기)
   if (isSuccess && data) {
-    console.log(`isSuccess`);
+    // console.log(`isSuccess`);
     setAuthTokens(data);
-    // closeThisTab();
+    closeThisTab();
   }
 
   return (
