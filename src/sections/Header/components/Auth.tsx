@@ -112,8 +112,9 @@ function PopoverProfilePortal({ closeMenu }: { closeMenu: () => void }) {
         <Typography variant="subtitle1" fontWeight={500}>
           {userName}
         </Typography>
-        <Typography>내 프로필</Typography>
-        <Typography>내 프로필2</Typography>
+        <RouterLinkWrapper to={'/profile/me'}>
+          <Typography>내 프로필</Typography>
+        </RouterLinkWrapper>
       </FlexBox>
     </Box>
   );

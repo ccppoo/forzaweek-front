@@ -52,7 +52,7 @@ function useUserProfile() {
   const [userProfile, setUserProfile] = useRecoilState(UserProfileState);
   // FIXME: localstorage change listen -> hook
 
-  const { data, isSuccess } = useQuery({
+  const { data, isSuccess, isError } = useQuery({
     queryKey: ['get user info', 'me', !!authInfo ? authInfo.id_token : ''],
     queryFn: getUserProfile,
     staleTime: Infinity,
