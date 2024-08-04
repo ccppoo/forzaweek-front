@@ -6,11 +6,17 @@ import type { API_NAME } from '@/api/types';
 type USER_ID = string;
 type AUTH_TOKEN = string;
 
+type UserProfile = {
+  gamerTag: string;
+
+  profileImage: string;
+};
+
 export async function getUserProfile({
   queryKey,
 }: {
   queryKey: [API_NAME, USER_ID, AUTH_TOKEN | undefined];
-}) {
+}): Promise<UserProfile> {
   // 다른 사람
 
   const [_, userID, token] = queryKey;
