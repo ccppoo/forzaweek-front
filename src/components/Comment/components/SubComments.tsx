@@ -7,9 +7,9 @@ import Typography from '@mui/material/Typography';
 import { FlexBox } from '@/components/styled';
 
 import { SubCommentActions } from './CommentAction';
+import CommentBody from './CommentBody';
 import CommentCreateTextArea from './CommentCreateTextArea';
 import CommentUserProfile from './CommentUserProfile';
-import CommentValue from './CommentValue';
 
 function SubComment() {
   const name = 'someone';
@@ -27,7 +27,7 @@ function SubComment() {
         toggleCommentDisplay={toggleCommentDisplay}
       />
       <Collapse in={!commentFolded} unmountOnExit sx={{ paddingLeft: '36px' }}>
-        <CommentValue value={comment} />
+        <CommentBody value={comment} />
         <SubCommentActions />
       </Collapse>
     </FlexBox>

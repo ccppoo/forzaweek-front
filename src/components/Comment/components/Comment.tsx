@@ -6,8 +6,8 @@ import { FlexBox } from '@/components/styled';
 
 import { CommentContext } from '../context';
 import { CommentActions } from './CommentAction';
+import CommentBody from './CommentBody';
 import CommentUserProfile from './CommentUserProfile';
-import CommentValue from './CommentValue';
 import SubComments from './SubComments';
 
 interface CommentIntf {
@@ -46,7 +46,7 @@ export default function Comment(props: CommentIntf) {
       <CommentUserProfile toggleCommentDisplay={toggleCommentDisplay} name={name} time={time} />
       <Collapse in={!commentFolded} unmountOnExit>
         <FlexBox sx={{ paddingLeft: '36px', flexDirection: 'column' }}>
-          <CommentValue value={comment} />
+          <CommentBody value={comment} />
           <CommentActions commentReplies={comment_replies} openSubComments={toggleSubComment} />
           <SubComments isOpen={open} />
         </FlexBox>
