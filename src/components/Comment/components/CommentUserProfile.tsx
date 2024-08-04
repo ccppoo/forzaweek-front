@@ -5,6 +5,9 @@ import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 
+import { useQuery } from '@tanstack/react-query';
+
+import { getUserProfile } from '@/api/user/profile';
 import { FlexBox, FullSizeCenteredFlexBox } from '@/components/styled';
 
 function stringToColor(string: string) {
@@ -37,32 +40,42 @@ function stringAvatar(name: string) {
 }
 
 interface CommentUserProfileIntf {
-  name: string;
-  time: string;
-  isSubComment?: boolean;
+  user_id: string;
+  comment_created: Date;
   toggleCommentDisplay?: () => void;
 }
 
 export default function CommentUserProfile(props: CommentUserProfileIntf) {
-  const { toggleCommentDisplay, isSubComment, name, time } = props;
+  const { toggleCommentDisplay, user_id, comment_created } = props;
 
-  return (
-    <Box
-      sx={{
-        display: 'grid',
-        gridTemplateColumns: '35px auto',
-        gridTemplateRows: '35px',
-        paddingX: 0,
-      }}
-      onClick={toggleCommentDisplay}
-    >
-      <FlexBox sx={{ justifyContent: 'center', alignItems: 'center' }}>
-        <Avatar {...stringAvatar(name)} sx={{ width: 25, height: 25 }} />
-      </FlexBox>
-      <FlexBox sx={{ alignItems: 'center', columnGap: 1 }}>
-        <Typography variant="h6">{name}</Typography>
-        <Typography variant="subtitle1">{time}</Typography>
-      </FlexBox>
-    </Box>
-  );
+  const { data } = useQuery({
+    queryKey: ['get comment user profile', user_id, undefined],
+    queryFn: getUserProfile,
+  });
+
+  const created = comment_created.toLocaleString();
+
+  if (data) {
+    const userGamerTag = data.gamerTag;
+    const userProfileImage = data.profileImage;
+    return (
+      <Box
+        sx={{
+          display: 'grid',
+          gridTemplateColumns: '35px auto',
+          gridTemplateRows: '35px',
+          paddingX: 0,
+        }}
+        onClick={toggleCommentDisplay}
+      >
+        <FlexBox sx={{ justifyContent: 'center', alignItems: 'center' }}>
+          <Avatar alt={userGamerTag} src={userProfileImage} sx={{ width: 25, height: 25 }} />
+        </FlexBox>
+        <FlexBox sx={{ alignItems: 'center', columnGap: 1 }}>
+          <Typography variant="h6">{userGamerTag}</Typography>
+          <Typography variant="subtitle1">{created}</Typography>
+        </FlexBox>
+      </Box>
+    );
+  }
 }

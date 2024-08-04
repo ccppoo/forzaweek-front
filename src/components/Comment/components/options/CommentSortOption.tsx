@@ -64,13 +64,13 @@ export default function CommentOptionSort() {
         }}
       >
         <MenuList dense>
-          <MenuItem onClick={() => selectCommentSortOption('Date')}>
+          <MenuItem onClick={() => selectCommentSortOption('date')}>
             <ListItemText>{'Date'}</ListItemText>
           </MenuItem>
-          <MenuItem onClick={() => selectCommentSortOption('Score')}>
+          <MenuItem onClick={() => selectCommentSortOption('score')}>
             <ListItemText>{'Score'}</ListItemText>
           </MenuItem>
-          <MenuItem onClick={() => selectCommentSortOption('Replies')}>
+          <MenuItem onClick={() => selectCommentSortOption('replies')}>
             <ListItemText>{'Replies'}</ListItemText>
           </MenuItem>
         </MenuList>

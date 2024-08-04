@@ -1,1 +1,1 @@
-export type CommentSortOption = 'Date' | 'Score' | 'Replies';
+export type CommentSortOption = 'date' | 'score' | 'replies';

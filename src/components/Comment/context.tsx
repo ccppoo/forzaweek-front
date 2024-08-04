@@ -19,7 +19,7 @@ export type CommentReadOptionsContext = {
 export const commentReadOptionsDefault: CommentReadOptions = {
   subject_id: undefined,
   page: 1,
-  order: 'Date' as CommentSortOption,
+  order: 'date' as CommentSortOption,
 };
 
 export const CommentContext = createContext<CommentReadOptionsContext>({
