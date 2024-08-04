@@ -18,7 +18,7 @@ export default function CallBack() {
   const [searchParams] = useSearchParams();
   const oauth_code = searchParams.get('code'); //
 
-  const [_, state, { setAuthTokens }] = useAuthState();
+  const [_, __, { setAuthTokens }] = useAuthState();
 
   const { data, isLoading, isSuccess, isError } = useQuery({
     queryKey: ['oauth callback', oauth_code!],
@@ -28,7 +28,7 @@ export default function CallBack() {
     staleTime: Infinity,
   });
 
-  console.log(`data : ${JSON.stringify(data)}`);
+  // console.log(`data : ${JSON.stringify(data)}`);
 
   if (isLoading) {
     return (

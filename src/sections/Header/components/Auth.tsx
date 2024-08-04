@@ -90,8 +90,7 @@ function PopoverLogout({ closeMenu }: { closeMenu: () => void }) {
 }
 
 function PopoverProfilePortal({ closeMenu }: { closeMenu: () => void }) {
-  const profile = useUserProfile();
-
+  const profile = useUserProfile()!;
   const userName = profile.gamerTag;
   const userIcon = profile.profileImage;
   const avatarSize = 75;
@@ -121,7 +120,7 @@ function PopoverProfilePortal({ closeMenu }: { closeMenu: () => void }) {
 }
 
 function UserProfileHeader() {
-  const profile = useUserProfile();
+  const profile = useUserProfile()!;
 
   const userName = profile.gamerTag;
   const userIcon = profile.profileImage;
@@ -196,7 +195,9 @@ function UserProfileHeader() {
 }
 
 export default function AuthHeader() {
-  const [authInfo, state, action] = useAuthState();
+  const profile = useUserProfile();
 
-  return <FlexBox>{state.loggedIn ? <UserProfileHeader /> : <LogginButton />}</FlexBox>;
+  const profileLoaded = !!profile;
+
+  return <FlexBox>{profileLoaded ? <UserProfileHeader /> : <LogginButton />}</FlexBox>;
 }

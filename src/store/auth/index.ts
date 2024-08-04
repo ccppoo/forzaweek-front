@@ -1,8 +1,6 @@
-import { useEffect } from 'react';
+import { useCookies } from 'react-cookie';
 import { atom, useRecoilState } from 'recoil';
 import type { AtomEffect } from 'recoil';
-
-import { utc_now } from '@/utils/time';
 
 import type { AuthTokenType } from './types';
 
@@ -15,8 +13,7 @@ const localStorageEffect: AtomEffect<AuthTokenType | null> = ({ setSelf, onSet }
     setSelf(null);
   }
   if (savedValue != null) {
-    // console.log(`savedValue : ${savedValue}`);
-    // setSelf(JSON.parse(JSON.parse(savedValue)) as AuthTokenType);
+    console.log(`savedValue : ${savedValue}`);
     setSelf(JSON.parse(savedValue) as AuthTokenType);
   }
   onSet((newValue, _, isReset) => {
@@ -26,7 +23,7 @@ const localStorageEffect: AtomEffect<AuthTokenType | null> = ({ setSelf, onSet }
   });
 };
 
-const AuthState = atom<AuthTokenType | null>({
+export const AuthState = atom<AuthTokenType | null>({
   key: 'auth-token-state',
   effects: [localStorageEffect],
   default: null,
@@ -38,39 +35,56 @@ type Actions = {
 };
 
 type AuthState = {
-  loggedIn: boolean;
+  isLoggedIn: boolean;
 };
 
-export default function useAuthState(): [AuthTokenType | null, AuthState, Actions] {
-  const [authInfo, setAuthInfo] = useRecoilState(AuthState);
+type AuthTokens = {
+  access_token: string | undefined;
+  id_token: string | undefined;
+  refresh_token: string | undefined;
+};
+export default function useAuthState(): [AuthTokens, AuthState, Actions] {
+  const COOKIE_KEY = ['id_token', 'expires_in', 'issued', 'access_token', 'refresh_token'] as const;
 
+  const [cookies, setCookie, removeCookie] = useCookies([
+    'id_token',
+    'expires_in',
+    'issued',
+    'access_token',
+    'refresh_token',
+  ]);
+  type sameSiteType = boolean | 'none' | 'lax' | 'strict' | undefined;
+  const cookieOption = { sameSite: 'none' as sameSiteType, secure: true, httpOnly: false };
   const setAuthTokens = (authInfo: AuthTokenType) => {
-    setAuthInfo(authInfo as AuthTokenType);
+    const _cookieOption = { ...cookieOption, maxAge: authInfo.expires_in };
+    console.log(`_cookieOption : ${JSON.stringify(_cookieOption)}`);
+    setCookie('expires_in', authInfo.expires_in, _cookieOption);
+    setCookie('issued', authInfo.issued, _cookieOption);
+    setCookie('access_token', authInfo.access_token, _cookieOption);
+    setCookie('id_token', authInfo.id_token, _cookieOption);
+    setCookie('refresh_token', authInfo.refresh_token, _cookieOption);
   };
-
-  // FIXME: localstorage change listen -> hook
 
   const clearAuthInfo = () => {
-    setAuthInfo(null);
-    localStorage.removeItem(AUTH_LOCAL_STORAGE);
+    removeCookie('expires_in');
+    removeCookie('issued');
+    removeCookie('access_token');
+    removeCookie('id_token');
+    removeCookie('refresh_token');
   };
 
+  const isLoggedIn = cookies && cookies.id_token;
+
   // TODO: token 유효기간 임박하면 refresh
-
-  // TODO: token 유효기간 지나면 삭제
-
-  // useEffect(() => {
-  //   if (authInfo && authInfo.expires_in < utc_now()) {
-  //     setAuthInfo(null);
-  //   }
-  // }, [authInfo?.expires_in]);
   // FIXME: setTimeout으로 주기적으로 확인해야하는가?,
-  if (authInfo && authInfo.expires_in < utc_now()) {
-    setAuthInfo(null);
-  }
+
   return [
-    authInfo,
-    { loggedIn: !!authInfo && !!authInfo.id_token },
+    {
+      access_token: cookies.access_token,
+      id_token: cookies.id_token,
+      refresh_token: cookies.refresh_token,
+    },
+    { isLoggedIn },
     { setAuthTokens, clearAuthInfo },
   ];
 }

@@ -29,3 +29,13 @@ export async function getUserProfile({
 
   return resp.data;
 }
+
+export async function getProfile({ token }: { token: string }) {
+  const url = `${API_HOST}/user/profile`;
+
+  const authHeaders = token ? AuthHeaders(token) : {};
+
+  const resp = await axios.get(url, { headers: { ...authHeaders }, withCredentials: true });
+
+  return resp.data;
+}
