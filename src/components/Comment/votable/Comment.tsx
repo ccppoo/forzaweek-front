@@ -6,6 +6,7 @@ import { useQuery } from '@tanstack/react-query';
 
 import type { VotableMainCommentType } from '@/FormData/comments/types';
 import { getComment } from '@/api/comment';
+import { castCommentVote } from '@/api/comment/vote';
 import {
   CommentBody,
   CommentUserProfile,
@@ -34,9 +35,23 @@ export default function VotableComment(props: CommentIntf) {
     setOpen((prev) => !prev);
   };
 
-  // commentReadOptions.subject_id -> 이 댓글이 속한 Comments ID
-  // useQuery :: get Comment by ID, page + limit + order
-  const { data } = useQuery({
+  const _clickVote = async (vote: 'up' | 'down') => {
+    if (!auth.id_token) {
+      return;
+    }
+    const resp = await castCommentVote({
+      token: auth.id_token,
+      comment_id: commentID,
+      subject_id: SUBJECT_ID,
+      subComment_id: undefined,
+      vote,
+    });
+    if (resp.status == 200) {
+      await refetch();
+    }
+  };
+
+  const { data, refetch } = useQuery({
     queryKey: ['get comment', auth.id_token, SUBJECT_ID, commentID],
     queryFn: getComment<VotableMainCommentType>,
   });
@@ -51,6 +66,7 @@ export default function VotableComment(props: CommentIntf) {
     const subcomments = data.subComments;
     const creator = data.creator;
     const comment_created = data.created_at;
+    const voted = data.voted;
 
     return (
       <FlexBox sx={{ flexDirection: 'column' }}>
@@ -68,6 +84,10 @@ export default function VotableComment(props: CommentIntf) {
               openSubComments={toggleSubComment}
               upVotes={up_votes}
               downVotes={down_votes}
+              subject_id={SUBJECT_ID}
+              comment_id={commentID}
+              voted={voted}
+              clickVote={_clickVote}
             />
             <VotableSubComments isOpen={open} commentID={commentID} subCommentIDs={subcomments} />
           </FlexBox>

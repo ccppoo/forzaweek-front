@@ -10,39 +10,13 @@ import { getProfile, getUserProfile } from '@/api/user/profile';
 type UserProfile = {
   gamerTag: string;
   profileImage: string;
+  userID: string;
 };
 
 const UserProfileState = atom<UserProfile | undefined>({
   key: 'user-profile-token-state',
   default: undefined,
 });
-
-const useLocalStorageValue = <T>(key: string) => {
-  const [data, setData] = useState<T | null>(() => {
-    let item = localStorage.getItem(key);
-    if (item === null) return null;
-    return JSON.parse(item) as T;
-  });
-
-  useEffect(() => {
-    const handleStorageChange = () => {
-      let item = localStorage.getItem(key);
-      if (item === null) {
-        setData(null);
-        return;
-      }
-      setData(JSON.parse(item) as T);
-    };
-
-    window.addEventListener('storage', handleStorageChange);
-
-    return () => {
-      window.removeEventListener('storage', handleStorageChange);
-    };
-  }, []);
-
-  return data;
-};
 
 function useUserProfile() {
   const [userProfile, setUserProfile] = useRecoilState(UserProfileState);

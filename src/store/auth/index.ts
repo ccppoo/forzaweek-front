@@ -46,13 +46,10 @@ type AuthTokens = {
 export default function useAuthState(): [AuthTokens, AuthState, Actions] {
   const COOKIE_KEY = ['id_token', 'expires_in', 'issued', 'access_token', 'refresh_token'] as const;
 
-  const [cookies, setCookie, removeCookie] = useCookies([
-    'id_token',
-    'expires_in',
-    'issued',
-    'access_token',
-    'refresh_token',
-  ]);
+  const [cookies, setCookie, removeCookie] = useCookies(
+    ['id_token', 'expires_in', 'issued', 'access_token', 'refresh_token'],
+    { doNotParse: true },
+  );
   type sameSiteType = boolean | 'none' | 'lax' | 'strict' | undefined;
   const cookieOption = { sameSite: 'none' as sameSiteType, secure: true, httpOnly: false };
   const setAuthTokens = (authInfo: AuthTokenType) => {

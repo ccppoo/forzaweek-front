@@ -1,10 +1,6 @@
 import axios from 'axios';
 
-import type {
-  CommentsType,
-  VotableMainCommentType,
-  VotableSubCommentType,
-} from '@/FormData/comments/types';
+import type { CommentsType } from '@/FormData/comments/types';
 import { API_HOST, AuthHeaders } from '@/api/index';
 import type { API_NAME } from '@/api/types';
 

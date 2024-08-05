@@ -2,14 +2,19 @@ import { useContext, useRef, useState } from 'react';
 
 import MoreHorizOutlinedIcon from '@mui/icons-material/MoreHorizOutlined';
 import SmsOutlinedIcon from '@mui/icons-material/SmsOutlined';
+import ThumbDownAltIcon from '@mui/icons-material/ThumbDownAlt';
 import ThumbDownAltOutlinedIcon from '@mui/icons-material/ThumbDownAltOutlined';
+import ThumbUpAltIcon from '@mui/icons-material/ThumbUpAlt';
 import ThumbUpAltOutlinedIcon from '@mui/icons-material/ThumbUpAltOutlined';
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
 
+import type { VotedUserType } from '@/FormData/comments/types';
 import { FlexBox } from '@/components/styled';
+import useAuthState from '@/store/auth';
+import useUserProfile from '@/store/user';
 
 import { CommentContext } from '../context';
 
@@ -21,11 +26,26 @@ interface CommentReplyUtilProps {
 interface VotableCommentAction {
   upVotes: number;
   downVotes: number;
+  comment_id: string;
+  subject_id: string;
+  voted: VotedUserType;
+  clickVote: (target: 'up' | 'down') => void;
 }
 
 function CommentVoteAction(props: VotableCommentAction) {
-  const { upVotes, downVotes } = props;
-  const comment_score = upVotes + downVotes;
+  const { commentReadOptions } = useContext(CommentContext);
+  const [auth] = useAuthState();
+  const userProfile = useUserProfile();
+  const { upVotes, downVotes, comment_id, subject_id, voted, clickVote } = props;
+  const comment_score = upVotes - downVotes;
+
+  const voteDisabled = !auth.id_token;
+
+  const down_voted = userProfile?.userID ? voted.down.includes(userProfile?.userID) : false;
+  const up_voted = userProfile?.userID ? voted.up.includes(userProfile?.userID) : false;
+
+  const clickUpVote = async () => clickVote('up');
+  const clickDownVote = async () => clickVote('down');
 
   return (
     <FlexBox
@@ -34,14 +54,42 @@ function CommentVoteAction(props: VotableCommentAction) {
       }}
     >
       <Tooltip arrow title={upVotes} placement="top">
-        <IconButton aria-label="score up" size="small">
-          <ThumbUpAltOutlinedIcon fontSize="small" />
+        <IconButton
+          aria-label="score up"
+          size="small"
+          onClick={clickUpVote}
+          disabled={voteDisabled}
+        >
+          {up_voted ? (
+            <ThumbUpAltIcon fontSize="small" />
+          ) : (
+            <ThumbUpAltOutlinedIcon fontSize="small" />
+          )}
         </IconButton>
       </Tooltip>
-      <Typography>{comment_score}</Typography>
+      <FlexBox
+        sx={{
+          cursor: 'default',
+          paddingX: 1,
+          minWidth: 40,
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
+      >
+        <Typography>{comment_score}</Typography>
+      </FlexBox>
       <Tooltip arrow title={downVotes} placement="top">
-        <IconButton aria-label="score down" size="small">
-          <ThumbDownAltOutlinedIcon fontSize="small" />
+        <IconButton
+          aria-label="score down"
+          size="small"
+          onClick={clickDownVote}
+          disabled={voteDisabled}
+        >
+          {down_voted ? (
+            <ThumbDownAltIcon fontSize="small" />
+          ) : (
+            <ThumbDownAltOutlinedIcon fontSize="small" />
+          )}
         </IconButton>
       </Tooltip>
     </FlexBox>
@@ -125,8 +173,8 @@ export function TaggableCommentActions() {
 
 export function VotableCommentActions(props: CommentReplyUtilProps & VotableCommentAction) {
   const { commentReadOptions } = useContext(CommentContext);
-
-  const { commentReplies, openSubComments, downVotes, upVotes } = props;
+  // downVotes, upVotes, comment_id, subject_id, voted, clickVote
+  const { commentReplies, openSubComments, ...voteActionProps } = props;
 
   return (
     <FlexBox
@@ -138,7 +186,7 @@ export function VotableCommentActions(props: CommentReplyUtilProps & VotableComm
         gridRow: '2/3',
       }}
     >
-      <CommentVoteAction downVotes={downVotes} upVotes={upVotes} />
+      <CommentVoteAction {...voteActionProps} />
       <Button
         startIcon={<SmsOutlinedIcon fontSize="small" />}
         size={'small'}

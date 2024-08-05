@@ -10,6 +10,7 @@ type UserProfile = {
   gamerTag: string;
 
   profileImage: string;
+  userID: string;
 };
 
 export async function getUserProfile({
