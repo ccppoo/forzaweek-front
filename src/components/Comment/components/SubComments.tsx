@@ -4,117 +4,91 @@ import Collapse from '@mui/material/Collapse';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 
-import type { VotableComment } from '@/FormData/comments/base';
-import { FlexBox } from '@/components/styled';
+import { useQuery } from '@tanstack/react-query';
 
-import { SubCommentActions } from './CommentAction';
+import type { VotableSubCommentType } from '@/FormData/comments/base';
+import { getSubComment } from '@/api/comment';
+import { FlexBox } from '@/components/styled';
+import useAuthState from '@/store/auth';
+
+import { CommentContext } from '../context';
+import {
+  SubCommentActions,
+  VotableCommentActions,
+  VotableSubCommentActions,
+} from './CommentAction';
 import CommentBody from './CommentBody';
 import CommentCreateTextArea from './CommentCreateTextArea';
 import CommentUserProfile from './CommentUserProfile';
 
-interface SubCommentsIntf {
-  isOpen: boolean;
-  comments: VotableComment[];
-}
-
 interface VotableSubCommentsIntf {
   isOpen: boolean;
-  subComments: VotableComment[];
+  commentID: string;
+  subCommentIDs: string[];
 }
 
 interface VotableSubCommentIntf {
-  comment: VotableComment;
+  commentID: string;
+  subCommentID: string;
 }
-
-function SubComment() {
-  const name = 'someone';
-  const time = '2024-05-29';
-  const comment = 'Mario Kart Wii be like';
-  const [commentFolded, setCommentFolded] = useState<boolean>(false);
-  const toggleCommentDisplay = () => setCommentFolded((val) => !val);
+export function VotableSubComments(props: VotableSubCommentsIntf) {
+  const { isOpen, commentID, subCommentIDs } = props;
 
   return (
-    <FlexBox sx={{ flexDirection: 'column' }}>
-      <CommentUserProfile
-        name={name}
-        time={time}
-        isSubComment
-        toggleCommentDisplay={toggleCommentDisplay}
-      />
-      <Collapse in={!commentFolded} unmountOnExit sx={{ paddingLeft: '36px' }}>
-        <CommentBody value={comment} />
-        <SubCommentActions />
-      </Collapse>
-    </FlexBox>
+    <Collapse in={isOpen} timeout="auto" unmountOnExit sx={{ flexDirection: 'column' }}>
+      <FlexBox
+        sx={{
+          flexDirection: 'column',
+        }}
+      >
+        {/* 댓글 */}
+        {subCommentIDs.map((scmtID, idx) => {
+          return (
+            <VotableSubComment
+              commentID={commentID}
+              subCommentID={scmtID}
+              key={`reply-${scmtID}`}
+            />
+          );
+        })}
+      </FlexBox>
+      <CommentCreateTextArea placeHolder="reply" />
+    </Collapse>
   );
 }
 
 function VotableSubComment(props: VotableSubCommentIntf) {
-  const { comment } = props;
-  const creator_id = comment.creator;
+  const { commentReadOptions } = useContext(CommentContext);
+  const SUBJECT_ID = commentReadOptions.subject_id!;
+  const { commentID, subCommentID } = props;
+  const [auth] = useAuthState();
 
-  const created = comment.created_at;
-  // const comment = 'Mario Kart Wii be like';
-  const value = comment.value;
   const [commentFolded, setCommentFolded] = useState<boolean>(false);
   const toggleCommentDisplay = () => setCommentFolded((val) => !val);
 
-  return (
-    <FlexBox sx={{ flexDirection: 'column' }}>
-      <CommentUserProfile
-        user_id={creator_id}
-        comment_created={created}
-        toggleCommentDisplay={toggleCommentDisplay}
-      />
-      <Collapse in={!commentFolded} unmountOnExit sx={{ paddingLeft: '36px' }}>
-        <CommentBody value={value} />
-        <SubCommentActions />
-      </Collapse>
-    </FlexBox>
-  );
-}
-
-export default function SubComments(props: SubCommentsIntf) {
-  const { isOpen, comments } = props;
-  // const replyListItems = [{}, {}, {}];
-  const replyListItems = [{}];
-
-  return (
-    <Collapse in={isOpen} timeout="auto" unmountOnExit sx={{ flexDirection: 'column' }}>
-      <FlexBox
-        sx={{
-          flexDirection: 'column',
-        }}
-      >
-        {/* 댓글 */}
-        {comments.map((rply, idx) => {
-          return <SubComment key={`reply-${idx}`} />;
-        })}
-        {/* <AddReply /> */}
+  const { data } = useQuery({
+    queryKey: ['get sub comment', auth.id_token, SUBJECT_ID, commentID, subCommentID],
+    queryFn: getSubComment<VotableSubCommentType>,
+  });
+  // TODO: Place holder - https://mui.com/material-ui/react-skeleton/
+  if (data) {
+    const creator_id = data.creator;
+    const created = data.created_at;
+    const upVotes = data.up_votes;
+    const downVotes = data.down_votes;
+    const value = data.value;
+    return (
+      <FlexBox sx={{ flexDirection: 'column' }}>
+        <CommentUserProfile
+          user_id={creator_id}
+          comment_created={created}
+          toggleCommentDisplay={toggleCommentDisplay}
+        />
+        <Collapse in={!commentFolded} unmountOnExit sx={{ paddingLeft: '36px' }}>
+          <CommentBody value={value} />
+          <VotableSubCommentActions downVotes={downVotes} upVotes={upVotes} />
+        </Collapse>
       </FlexBox>
-      <CommentCreateTextArea placeHolder="reply" />
-    </Collapse>
-  );
-}
-
-export function VotableSubComments(props: VotableSubCommentsIntf) {
-  const { isOpen, subComments } = props;
-  // const replyListItems = [{}, {}, {}];
-  const replyListItems = [{}];
-
-  return (
-    <Collapse in={isOpen} timeout="auto" unmountOnExit sx={{ flexDirection: 'column' }}>
-      <FlexBox
-        sx={{
-          flexDirection: 'column',
-        }}
-      >
-        {/* 댓글 */}
-        {subComments.map((cmt, idx) => {
-          return <VotableSubComment comment={cmt} key={`reply-${idx}`} />;
-        })}
-      </FlexBox>
-      <CommentCreateTextArea placeHolder="reply" />
-    </Collapse>
-  );
+    );
+  }
 }

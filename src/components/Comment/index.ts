@@ -1,6 +1,13 @@
-import Comments from './Comments';
-import VotableComments from './VotableComments';
+import taggable from './taggable';
+import { TempTaggableComments } from './taggable';
+import votable from './votable';
+import { TempVotableComments } from './votable';
 
-export default Comments;
-
-export { VotableComments };
+export default {
+  temp: {
+    TempTaggableComments,
+    TempVotableComments,
+  },
+  ...taggable,
+  ...votable,
+};

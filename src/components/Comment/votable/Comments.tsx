@@ -5,14 +5,14 @@ import Pagination from '@mui/material/Pagination';
 import { useQuery } from '@tanstack/react-query';
 
 import { getComments } from '@/api/comment';
+import { CommentCreateTextArea, CommentOption } from '@/components/Comment/components';
+import { CommentContext, commentReadOptionsDefault } from '@/components/Comment/context';
+import type { CommentReadOptions, CommentReadOptionsContext } from '@/components/Comment/context';
+import type { CommentSortOption } from '@/components/Comment/types';
 import { FlexBox } from '@/components/styled';
 import useAuthState from '@/store/auth';
 
-import VotableComment from './VotableComment';
-import { CommentCreateTextArea, CommentOption } from './components';
-import { CommentContext, commentReadOptionsDefault } from './context';
-import type { CommentReadOptions, CommentReadOptionsContext } from './context';
-import type { CommentSortOption } from './types';
+import VotableComment from './Comment';
 
 function CommentDisplayOptions() {
   return (
@@ -110,4 +110,8 @@ export default function VotableComments({ subject_to }: { subject_to: string }) 
       </FlexBox>
     </CommentContext.Provider>
   );
+}
+
+export function TempVotableComments() {
+  return <VotableComments subject_to="66a1bd93c0c2a9311e907246" />;
 }

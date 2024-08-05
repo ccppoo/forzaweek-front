@@ -8,7 +8,8 @@ import { CommentContext } from '../context';
 import { CommentActions } from './CommentAction';
 import CommentBody from './CommentBody';
 import CommentUserProfile from './CommentUserProfile';
-import SubComments from './SubComments';
+
+// import SubComments from './SubComments';
 
 interface CommentIntf {
   commentID: string;
@@ -39,7 +40,6 @@ export default function Comment(props: CommentIntf) {
 
   const toggleCommentDisplay = () => setSubCommentFolded((val) => !val);
 
-  const reply = [{}, {}, {}];
   return (
     <FlexBox sx={{ flexDirection: 'column' }}>
       {/* 아바타 + 이름 */}
@@ -48,7 +48,7 @@ export default function Comment(props: CommentIntf) {
         <FlexBox sx={{ paddingLeft: '36px', flexDirection: 'column' }}>
           <CommentBody value={comment} />
           <CommentActions commentReplies={comment_replies} openSubComments={toggleSubComment} />
-          <SubComments isOpen={open} />
+          {/* <SubComments isOpen={open} /> */}
         </FlexBox>
       </Collapse>
     </FlexBox>

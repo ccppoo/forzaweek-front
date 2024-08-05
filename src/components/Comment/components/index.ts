@@ -1,10 +1,9 @@
 import * as CommentOption from './options';
 import Comment from './Comment';
-import { CommentActions, VotableCommentActions } from './CommentAction';
+import { CommentActions, TaggableCommentActions, VotableCommentActions } from './CommentAction';
 import CommentBody from './CommentBody';
 import CommentCreateTextArea from './CommentCreateTextArea';
 import CommentUserProfile from './CommentUserProfile';
-import SubComments from './SubComments';
 import { VotableSubComments } from './SubComments';
 
 export {
@@ -14,7 +13,7 @@ export {
   CommentBody,
   CommentActions,
   VotableCommentActions,
-  SubComments,
+  TaggableCommentActions,
   CommentOption,
   VotableSubComments,
 };

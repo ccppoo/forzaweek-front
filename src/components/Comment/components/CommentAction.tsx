@@ -58,10 +58,10 @@ function CommentMoreMenu() {
   );
 }
 
-export function CommentActions(props: CommentReplyUtilProps) {
+export function CommentActions() {
   const { commentReadOptions } = useContext(CommentContext);
 
-  const { commentReplies, openSubComments } = props;
+  // const { commentReplies, openSubComments } = props;
 
   return (
     <FlexBox
@@ -73,13 +73,51 @@ export function CommentActions(props: CommentReplyUtilProps) {
         gridRow: '2/3',
       }}
     >
-      <Button
+      {/* <Button
         startIcon={<SmsOutlinedIcon fontSize="small" />}
         size={'small'}
         onClick={openSubComments}
       >
         Show Reply ({commentReplies})
-      </Button>
+      </Button> */}
+      <CommentMoreMenu />
+    </FlexBox>
+  );
+}
+
+export function SubCommentActions() {
+  return (
+    <FlexBox
+      sx={{
+        justifyContent: 'start',
+        alignItems: 'center',
+        columnGap: 1,
+        gridColumn: '2/3',
+        gridRow: '2/3',
+      }}
+    >
+      <CommentMoreMenu />
+    </FlexBox>
+  );
+}
+
+export function TaggableCommentActions() {
+  const { commentReadOptions } = useContext(CommentContext);
+
+  // const { commentReplies, openSubComments, downVotes, upVotes } = props;
+
+  return (
+    <FlexBox
+      sx={{
+        justifyContent: 'start',
+        alignItems: 'center',
+        columnGap: 1,
+        gridColumn: '2/3',
+        gridRow: '2/3',
+      }}
+    >
+      {/* <CommentVoteAction downVotes={downVotes} upVotes={upVotes} /> */}
+
       <CommentMoreMenu />
     </FlexBox>
   );
@@ -108,21 +146,6 @@ export function VotableCommentActions(props: CommentReplyUtilProps & VotableComm
       >
         Show Reply ({commentReplies})
       </Button>
-      <CommentMoreMenu />
-    </FlexBox>
-  );
-}
-export function SubCommentActions() {
-  return (
-    <FlexBox
-      sx={{
-        justifyContent: 'start',
-        alignItems: 'center',
-        columnGap: 1,
-        gridColumn: '2/3',
-        gridRow: '2/3',
-      }}
-    >
       <CommentMoreMenu />
     </FlexBox>
   );
