@@ -6,7 +6,7 @@ import Typography from '@mui/material/Typography';
 
 import { useQuery } from '@tanstack/react-query';
 
-import type { VotableSubCommentType } from '@/FormData/comments/base';
+import type { VotableSubCommentType } from '@/FormData/comments/types';
 import { getSubComment } from '@/api/comment';
 import { FlexBox } from '@/components/styled';
 import useAuthState from '@/store/auth';

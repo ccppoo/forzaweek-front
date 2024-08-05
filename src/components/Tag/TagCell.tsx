@@ -10,33 +10,30 @@ import { FlexBox } from '@/components/styled';
 import { Image } from '@/components/styled';
 
 interface TagItemCellIntf {
-  tag: TagType.TagSchemaType | string;
+  tagID: string;
+  textOnly?: boolean;
   onClickDelete?: () => void;
 }
 
 export default function TagItemCell(props: TagItemCellIntf) {
-  const { tag, onClickDelete } = props;
-  const isTagIDgiven = typeof tag == 'string';
-  // useQuery
-  let { data: _tagInfo } = useQuery({
-    queryKey: ['get tag', tag as string],
+  const { tagID, textOnly, onClickDelete } = props;
+
+  let { data: tagInfo } = useQuery({
+    queryKey: ['get tag', tagID],
     queryFn: GetTagByID,
-    enabled: isTagIDgiven,
+    enabled: !!tagID,
   });
-
-  const tagInfo = isTagIDgiven ? _tagInfo : tag;
-
   // const Component = paper ? Paper : FlexBox;
 
   if (tagInfo) {
-    const tagName = tagInfo.name_en;
+    const tagName = tagInfo.name.en;
     const tagImage = tagInfo.imageURL || tagInfo.kind.imageURL;
 
     return (
       <Paper
         sx={{
           display: 'flex',
-          height: 48,
+          height: textOnly ? 36 : 48,
           paddingX: 1,
           alignItems: 'center',
           alignSelf: 'flex-start',
@@ -44,7 +41,7 @@ export default function TagItemCell(props: TagItemCellIntf) {
           columnGap: 1.5,
         }}
       >
-        {tagImage && (
+        {!textOnly && tagImage && (
           <FlexBox sx={{ maxWidth: 80, height: '40px', alignItems: 'center' }}>
             <Image src={tagImage} sx={{ objectFit: 'contain' }} />
           </FlexBox>
@@ -71,12 +68,12 @@ export function TagItemCellEditVersion({
   tag,
   onClickDelete,
 }: {
-  tag: TagType.TagSchemaType | string;
+  tag: string;
   onClickDelete: () => void;
 }) {
   return (
     <Paper sx={{ width: 'fit-content', flexDirection: 'column' }}>
-      <TagItemCell tag={tag} />
+      <TagItemCell tagID={tag} />
       <IconButton aria-label="delete">
         <CloseOutlinedIcon />
       </IconButton>

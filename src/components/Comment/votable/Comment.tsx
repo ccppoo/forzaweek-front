@@ -4,7 +4,7 @@ import Collapse from '@mui/material/Collapse';
 
 import { useQuery } from '@tanstack/react-query';
 
-import type { VotableMainCommentType } from '@/FormData/comments/base';
+import type { VotableMainCommentType } from '@/FormData/comments/types';
 import { getComment } from '@/api/comment';
 import {
   CommentBody,
