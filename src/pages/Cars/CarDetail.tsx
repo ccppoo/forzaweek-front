@@ -79,7 +79,7 @@ export default function CarDetail() {
             <ImageShowHorizontal images={carinfo?.image.images!} />
             {/* 댓글 */}
             <FlexBox sx={{ paddingY: 3 }}>
-              <Comments />
+              <Comments.temp.TempTaggableComments />
             </FlexBox>
 
             {/* 데칼 사진들 */}

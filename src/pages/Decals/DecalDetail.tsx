@@ -12,6 +12,7 @@ import { useQuery } from '@tanstack/react-query';
 import type { DecalSchemaReadType } from '@/FormData/decal';
 import { GetDecal } from '@/api/data/fh5/decal';
 import { BriefCarInfo2 } from '@/components/Car/BriefCarInfo';
+// import Comments from '@/components/Comment';
 import Comments from '@/components/Comment';
 import { RelatedDecals } from '@/components/Decals';
 import { ImageShowHorizontal } from '@/components/ImageList/Horizontal';
@@ -172,7 +173,7 @@ export default function DecalDetail() {
             {/* 데칼에 사용된 차 간단 정보 */}
             <BriefCarInfo2 carInfo={data.car} />
             {/* 댓글 */}
-            <Comments />
+            <Comments.TaggableComments subject_to={decalID!} />
             {/* 다른 데칼 */}
             <RelatedDecals carID={data.car.id} />
           </FlexBox>
