@@ -23,6 +23,7 @@ enum Pages {
   DataWrite,
   DataEdit,
   NotFound,
+  BoardWrite,
 
   Login,
   CallBack,

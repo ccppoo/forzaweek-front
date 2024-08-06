@@ -123,6 +123,13 @@ const routes: Routes = {
 
     icon: HomeIcon,
   },
+  [Pages.BoardWrite]: {
+    component: asyncComponentLoader(() => import('@/pages/Board/Write')),
+    path: '/board/write',
+    devUrl: '/board/write',
+    title: '글쓰기',
+    icon: HomeIcon,
+  },
   [Pages.UserProfile]: {
     component: asyncComponentLoader(() => import('@/pages/User/Profile')),
     path: '/profile/:userID',
