@@ -27,6 +27,15 @@
     "test:e2e:ui": "playwright test --ui"
   },
   "dependencies": {
+    "@editorjs/embed": "^2.7.4",
+    "@editorjs/header": "^2.8.7",
+    "@editorjs/image": "^2.9.3",
+    "@editorjs/link": "^2.6.2",
+    "@editorjs/list": "^1.10.0",
+    "@editorjs/nested-list": "^1.4.3",
+    "@editorjs/paragraph": "^2.11.6",
+    "@editorjs/quote": "^2.6.0",
+    "@editorjs/underline": "^1.1.0",
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
     "@hookform/resolvers": "^3.6.0",
@@ -40,6 +49,7 @@
     "apexcharts": "^3.49.1",
     "dexie": "^4.0.4",
     "dexie-react-hooks": "^1.1.7",
+    "editorjs-drag-drop": "^1.1.14",
     "eslint-plugin-json": "^3.1.0",
     "is-mobile": "^4.0.0",
     "leaflet": "^1.9.4",
