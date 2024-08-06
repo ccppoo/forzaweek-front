@@ -7,6 +7,12 @@ import { FlexBox } from '@/components/styled';
 
 import { CommentContext } from '../context';
 
+interface CommentCreateTextAreaIntf {
+  placeHolder: string;
+  commentBody: string;
+  // createComment : ()
+}
+
 export default function CommentCreateTextArea({ placeHolder }: { placeHolder: string }) {
   const { commentReadOptions } = useContext(CommentContext);
 

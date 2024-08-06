@@ -99,7 +99,7 @@ function VotableSubComment(props: VotableSubCommentIntf) {
           comment_created={created}
           toggleCommentDisplay={toggleCommentDisplay}
         />
-        <Collapse in={!commentFolded} unmountOnExit sx={{ paddingLeft: '36px' }}>
+        <Collapse in={!commentFolded} sx={{ paddingLeft: '36px' }}>
           <CommentBody value={value} />
           <VotableSubCommentActions
             downVotes={downVotes}

@@ -4,6 +4,8 @@ import { Box, Button, Typography } from '@mui/material';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Unstable_Grid2';
 
+import { dev_check } from '@/api/auth/dev';
+import { xbox } from '@/api/auth/oauth';
 import {
   updateCarDB,
   updateCarImage,
@@ -14,12 +16,28 @@ import {
   updateTrack,
   updateTrackImage,
 } from '@/api/indexedDB/get';
+// import { EditorJSInput } from '@/components/Editor';
+import { CommentEditor } from '@/components/Editor/editor2';
 import Meta from '@/components/Meta';
 import { FlexBox, FullSizeCenteredFlexBox } from '@/components/styled';
 import { db } from '@/db';
+import useAuthState from '@/store/auth';
 
 function Dev() {
   const [msg, setMSG] = useState<string>('');
+  const [userAuthMSG, setUserAuthMSG] = useState<string>('');
+  const [refreshMSG, setRefreshMSG] = useState<string>('');
+  const [auth, state, action] = useAuthState();
+
+  const refresh_token = async () => {
+    if (auth && auth.refresh_token) {
+      const data = await xbox.TokenRefresh({ refreshToken: auth.refresh_token });
+      action.setAuthTokens(data);
+      setUserAuthMSG(JSON.stringify(data));
+      return;
+    }
+    setUserAuthMSG(`no refresh token`);
+  };
 
   const insertDB2 = async (table: string) => {
     switch (table) {
@@ -57,6 +75,9 @@ function Dev() {
       }
     }
   };
+
+  // console.log(`auth : ${JSON.stringify(auth)}`);
+  // console.log(`auth.id_token : ${JSON.stringify(auth.id_token)}`);
 
   return (
     <>
@@ -115,6 +136,14 @@ function Dev() {
           <FlexBox>
             state : <Typography>{msg}</Typography>
           </FlexBox>
+          <FlexBox sx={{ flexDirection: 'column' }}>
+            <Typography>Token refresh</Typography>
+            <Button onClick={refresh_token} variant="contained">
+              토큰 refresh
+            </Button>
+            <Typography>returned : {refreshMSG}</Typography>
+          </FlexBox>
+          <CommentEditor />
         </FullSizeCenteredFlexBox>
       </Container>
     </>

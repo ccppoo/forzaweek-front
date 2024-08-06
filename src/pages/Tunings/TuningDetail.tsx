@@ -16,7 +16,7 @@ import { useQuery } from '@tanstack/react-query';
 import * as image from '@/image';
 import { GetTuning, SearchTunings } from '@/api/data/tuning';
 import { BriefCarInfo } from '@/components/Car';
-import { VotableComments } from '@/components/Comment';
+import Comments from '@/components/Comment';
 import SharingCreationCreator from '@/components/Post/Creator';
 import ShareCode from '@/components/Post/ShareCode';
 import Tags from '@/components/Post/Tags';
@@ -63,7 +63,7 @@ export default function TuningDetail() {
             <RadarChartAndPerformance tuning={data} />
             <Divider flexItem variant="fullWidth" />
             {/* 댓글 */}
-            <VotableComments subject_to={tuningID!} />
+            <Comments.VotableComments subject_to={tuningID!} />
             {/* 관련 영상 */}
             <RelatedVideos />
             {/* 관련 다른 튜닝들 */}
