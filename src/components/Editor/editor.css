@@ -1,0 +1,18 @@
+.section {
+  position: relative;
+  z-index: 2;
+  /* padding: var(--control-space-s) calc(var(--control-space-m) / 2); */
+  height: fit-content;
+  flex-grow: 1;
+  background: transparent;
+  /* border: var(--control-border-width) solid var(--color-control-bg-border-default); */
+  /* border-radius: var(--control-radius); */
+  cursor: text;
+}
+
+/* disable block converting -> THIS IS MAKING UNEXCEPECTED BEHAVIORS */
+div.ce-popover__items {
+  div.ce-popover-item[data-item-name='convert-to'] {
+    display: none;
+  }
+}
