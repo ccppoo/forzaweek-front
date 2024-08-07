@@ -1,4 +1,4 @@
 import embedTools from './embed';
-import imageTools from './image';
+import getImageTools from './image';
 
-export { embedTools, imageTools };
+export { embedTools, getImageTools };

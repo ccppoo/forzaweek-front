@@ -1,12 +1,16 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 
-import { Box } from '@mui/material';
+import { Box, Button, Paper } from '@mui/material';
 
 import EditorJS, { API, BlockMutationEvent } from '@editorjs/editorjs';
 import type { EditorConfig } from '@editorjs/editorjs';
 // @ts-ignore
 import DragDrop from 'editorjs-drag-drop';
 
+import boardImageAPI from '@/api/image';
+import useAuthState from '@/store/auth';
+
+import { FlexBox } from '../styled';
 import getEditorConfig from './config';
 import './editor.css';
 import type { OutputData, onChangeEditorJS } from './types';
@@ -32,6 +36,8 @@ interface EditorBaseIntf {
 
 export const EditorBase = (props: EditorBaseIntf): JSX.Element => {
   const { imageUpload } = props;
+  const [auth] = useAuthState();
+
   const ejInstance = useRef<EditorJS | null>(null);
   const date = new Date();
   const dateString = date.toLocaleDateString();
@@ -44,12 +50,12 @@ export const EditorBase = (props: EditorBaseIntf): JSX.Element => {
     return editor;
   };
 
+  const [outputData, setOutputData] = useState<OutputData | undefined>(DEFAULT_INITIAL_DATA);
+
   const onChange: onChangeEditorJS = async (
     api: API,
     event: EditorJSOnChangeEvent,
   ): Promise<void> => {
-    // TODO: image -> 삭제의 경우 이미지 원격으로 저장한거 삭제하기\
-
     // BlockMutationEvent => BlockAddedEvent, BlockRemovedEvent, BlockMovedEvent, BlockChangedEvent
     const isMultiBlockEvent = Array.isArray(event);
 
@@ -59,26 +65,37 @@ export const EditorBase = (props: EditorBaseIntf): JSX.Element => {
       // multiblock의 기준은 비동기적으로 측정되기 때문에
       // 빠르게 block을 생성하거나 조작할 경우 하나의 block에 대한 조작이 있을 경우에도
       // 변화가 버퍼에 쌓인 후 -> MultiBlock으로 처리된다.
-      (event as BlockMutationEvent[]).map((event_) => {
-        // console.log(`event_.type : ${event_.type}`);
-      });
+      // (event as BlockMutationEvent[]).map((event_) => {
+      //   console.log(`event_.type : ${event_.type}`);
+      // });
     }
     if (!isMultiBlockEvent) {
       // event.detail.target.
       const target_id = event.detail.target.id;
       // event.detail.target.holder.outerText -> 실제 입력한 내용 볼 수 있는 것
       // console.log(event.detail.target.holder.textContent);
-      const blockAPI = api.blocks.getById(target_id);
+      // const blockAPI = api.blocks.getById(target_id);
     }
 
     // api;
 
     const content = await ejInstance.current?.save();
+    setOutputData(content);
   };
 
   const handleReady = () => {
     ejInstance.current = new DragDrop(ejInstance.current);
   };
+
+  const imageUploader = useMemo(
+    () => boardImageAPI.getBoardCreate.imageUploader(auth.id_token!),
+    [auth.id_token!],
+  );
+
+  const imageRemover = useMemo(
+    () => boardImageAPI.getBoardCreate.imageRemover(auth.id_token!),
+    [auth.id_token!],
+  );
 
   const editorConfig: EditorConfig = getEditorConfig({
     onReady: handleReady,
@@ -86,7 +103,8 @@ export const EditorBase = (props: EditorBaseIntf): JSX.Element => {
     defaultBlock: defaultBlock,
     holder: defaultHolder,
     data: DEFAULT_INITIAL_DATA,
-    imageUpload: !!imageUpload,
+    uploadByFile: imageUploader,
+    removeImageFromBlock: imageRemover,
   });
 
   useEffect(() => {
@@ -109,11 +127,38 @@ export const EditorBase = (props: EditorBaseIntf): JSX.Element => {
     // };
   }, []);
 
+  const onClickButton = () => {
+    console.log(JSON.stringify(outputData));
+  };
+
   return (
-    <Box sx={{ border: '1px black solid', paddingX: 2 }}>
-      <section>
-        <Box id={defaultHolder} sx={{ minWidth: 600 }} />
-      </section>
-    </Box>
+    <FlexBox sx={{ flexDirection: 'column', rowGap: 2 }}>
+      <Paper
+        sx={{
+          display: 'flex',
+          height: 'fit-content',
+          flexGrow: 1,
+          minWidth: 800,
+          width: '100%',
+          justifyContent: 'center',
+        }}
+      >
+        <Box
+          id={defaultHolder}
+          sx={{
+            width: '100%',
+            marginTop: 1,
+            marginBottom: 0,
+          }}
+        />
+      </Paper>
+      <FlexBox sx={{ border: '1px black solid', justifyContent: 'end', padding: 2 }}>
+        {/* <Box sx={{ border: '1px black solid', paddingX: 2 }}> */}
+        <Button variant="contained" onClick={onClickButton}>
+          submit
+        </Button>
+        {/* </Box> */}
+      </FlexBox>
+    </FlexBox>
   );
 };
