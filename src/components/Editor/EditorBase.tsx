@@ -3,10 +3,11 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { Box, Button, Paper } from '@mui/material';
 
 import EditorJS, { API, BlockMutationEvent } from '@editorjs/editorjs';
-import type { EditorConfig } from '@editorjs/editorjs';
+import type { BlockMovedEvent, EditorConfig } from '@editorjs/editorjs';
 // @ts-ignore
 import DragDrop from 'editorjs-drag-drop';
 
+import * as editorjs from '@/FormData/editorjs';
 import boardImageAPI from '@/api/image';
 import useAuthState from '@/store/auth';
 
@@ -32,10 +33,12 @@ const DEFAULT_INITIAL_DATA: OutputData = {
 
 interface EditorBaseIntf {
   imageUpload?: boolean;
+  readOnly?: boolean;
+  onBlockChange: (blockEvent: BlockMutationEvent) => void;
 }
 
 export const EditorBase = (props: EditorBaseIntf): JSX.Element => {
-  const { imageUpload } = props;
+  const { imageUpload, readOnly, onBlockChange } = props;
   const [auth] = useAuthState();
 
   const ejInstance = useRef<EditorJS | null>(null);
@@ -56,28 +59,12 @@ export const EditorBase = (props: EditorBaseIntf): JSX.Element => {
     api: API,
     event: EditorJSOnChangeEvent,
   ): Promise<void> => {
-    // BlockMutationEvent => BlockAddedEvent, BlockRemovedEvent, BlockMovedEvent, BlockChangedEvent
     const isMultiBlockEvent = Array.isArray(event);
-
-    // event.type= block-added, block-changed, block-moved, block-removed(drag&drop의 경우 제자리 이동해도 trigger됨)
-    // event.detail= BlockAddedEventDetail, BlockRemovedEventDetail, BlockMovedEventDetail,  BlockChangedEventDetail
-    if (isMultiBlockEvent) {
-      // multiblock의 기준은 비동기적으로 측정되기 때문에
-      // 빠르게 block을 생성하거나 조작할 경우 하나의 block에 대한 조작이 있을 경우에도
-      // 변화가 버퍼에 쌓인 후 -> MultiBlock으로 처리된다.
-      // (event as BlockMutationEvent[]).map((event_) => {
-      //   console.log(`event_.type : ${event_.type}`);
-      // });
-    }
-    if (!isMultiBlockEvent) {
-      // event.detail.target.
-      const target_id = event.detail.target.id;
-      // event.detail.target.holder.outerText -> 실제 입력한 내용 볼 수 있는 것
-      // console.log(event.detail.target.holder.textContent);
-      // const blockAPI = api.blocks.getById(target_id);
-    }
-
-    // api;
+    // multiblock의 기준은 비동기적 fire됨 : 빠르게 block을 생성하거나 조작할 경우
+    // 변화가 버퍼에 쌓인 후 -> MultiBlock으로 처리된다.
+    // console.log(`isMultiBlockEvent : ${isMultiBlockEvent}`);
+    if (isMultiBlockEvent) event.map((event) => onBlockChange(event));
+    if (!isMultiBlockEvent) onBlockChange(event);
 
     const content = await ejInstance.current?.save();
     setOutputData(content);
@@ -92,10 +79,18 @@ export const EditorBase = (props: EditorBaseIntf): JSX.Element => {
     [auth.id_token!],
   );
 
+  // NOTE: 글 새로 작성하는 경우에는 이거 써야됨 -> 임시 이미지 파일 바로 삭제하는 용도
   const imageRemover = useMemo(
     () => boardImageAPI.getBoardCreate.imageRemover(auth.id_token!),
     [auth.id_token!],
   );
+
+  // NOTE: 글 수정하는 경우에는 이거 써야됨
+  const imageRemoverOnEdit = (imageURL: string) => {
+    const originImageURL = new URL(imageURL);
+    // TODO: form에 삭제할 사진들 리스트에 저장하기
+    originImageURL.pathname;
+  };
 
   const editorConfig: EditorConfig = getEditorConfig({
     onReady: handleReady,
@@ -127,38 +122,14 @@ export const EditorBase = (props: EditorBaseIntf): JSX.Element => {
     // };
   }, []);
 
-  const onClickButton = () => {
-    console.log(JSON.stringify(outputData));
-  };
-
   return (
-    <FlexBox sx={{ flexDirection: 'column', rowGap: 2 }}>
-      <Paper
-        sx={{
-          display: 'flex',
-          height: 'fit-content',
-          flexGrow: 1,
-          minWidth: 800,
-          width: '100%',
-          justifyContent: 'center',
-        }}
-      >
-        <Box
-          id={defaultHolder}
-          sx={{
-            width: '100%',
-            marginTop: 1,
-            marginBottom: 0,
-          }}
-        />
-      </Paper>
-      <FlexBox sx={{ border: '1px black solid', justifyContent: 'end', padding: 2 }}>
-        {/* <Box sx={{ border: '1px black solid', paddingX: 2 }}> */}
-        <Button variant="contained" onClick={onClickButton}>
-          submit
-        </Button>
-        {/* </Box> */}
-      </FlexBox>
-    </FlexBox>
+    <Box
+      id={defaultHolder}
+      sx={{
+        width: '100%',
+        marginTop: 1,
+        marginBottom: 0,
+      }}
+    />
   );
 };

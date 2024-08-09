@@ -1,7 +1,14 @@
 .codex-editor--narrow .ce-toolbar__actions {
-  right: 100%;
+  right: calc(100% + 8px);
 }
 
+.codex-editor .ce-toolbar__actions {
+  right: calc(100% + 12px * 2 + 2px);
+}
+
+.codex-editor {
+  /* max-width: 800px; */
+}
 /* 이건 에디터 전체 */
 /* TODO: Media width query */
 .codex-editor__redactor {
@@ -22,13 +29,12 @@
 
 /* 블럭 안에 컨텐츠 */
 .ce-block .ce-block__content {
-  transition: background-color 20ms ease-in;
-  padding-left: 4px;
-  padding-right: 4px;
-  /* max-width: 708px; */
-
-  width: minmax(auto, 708px);
-
+  transition: background-color 30ms ease-in;
+  padding-left: 8px;
+  padding-right: 8px;
+  max-width: 708px;
+  width: 85%;
+  /* width: clamp(auto, 600px, 708px); */
   margin: 0 clamp(96px, 120px, auto);
 }
 
