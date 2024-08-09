@@ -22,4 +22,5 @@ export const ContentTypeHeader = {
 };
 
 export const API_HOST = import.meta.env.VITE_API_HOST;
+export const API_IMAGE_UPLOAD_HOST = import.meta.env.VITE_API_IMAGE_UPLOAD_HOST;
 export const SOCKET_HOST = import.meta.env.VITE_SOCKET_HOST;

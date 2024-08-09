@@ -11,26 +11,11 @@ import type { ToolConstructable, ToolSettings } from '@editorjs/editorjs/types/t
 import ImageTool from '@editorjs/image';
 import type { ImageConfig, ImageToolData } from '@editorjs/image/dist/types/types';
 
-import { RemoveBoardImage, UploadBoardImage } from '@/api/image';
 import type {
   BoardImageUploadType,
   RemoveBoardImageType,
   UploadByFileType,
 } from '@/components/Editor/types';
-
-// Image의 경우 removed가 호출 될 때
-// 게시물 최초 생성시 <-> 게시물 수정시 다르게 호출되어야 함
-class ImageCreatePost extends ImageTool {
-  removed() {
-    // access the image block's file data
-    // @ts-ignore
-    const data = this._data;
-    console.log(`removed,  : ${JSON.stringify(data)}`);
-    if (data.file.url) {
-      RemoveBoardImage(data.file.url);
-    }
-  }
-}
 
 type ImageRemoverConfig = {
   remover: {
