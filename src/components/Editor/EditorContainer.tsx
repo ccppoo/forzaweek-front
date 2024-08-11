@@ -1,6 +1,12 @@
 import { useState } from 'react';
 import { useFieldArray, useForm, useFormContext } from 'react-hook-form';
-import type { ArrayPath, FieldArrayPath, FieldArrayWithId, FieldPath } from 'react-hook-form';
+import type {
+  ArrayPath,
+  FieldArrayPath,
+  FieldArrayWithId,
+  FieldPath,
+  PathValue,
+} from 'react-hook-form';
 
 import { Box, Button, Paper } from '@mui/material';
 
@@ -13,30 +19,42 @@ import type {
 } from '@editorjs/editorjs';
 
 import { outputSchema } from '@/FormData/editorjs';
-import type { OutputBlockDataType, OutputSchemaType } from '@/FormData/editorjs';
+import type {
+  OutputBlockDataType,
+  OutputDataSchemaType,
+  OutputSchemaType,
+} from '@/FormData/editorjs';
 import { EditorBase } from '@/components/Editor';
 
 import { FlexBox } from '../styled';
+import type { OutputData, onChangeEditorJS } from './types';
 
 // type EditorJSOnChangeEvent = BlockMutationEvent | BlockMutationEvent[];
 
 type MutationEventType = 'block-added' | 'block-changed' | 'block-moved' | 'block-removed';
+type EditorJSOnChangeEvent = BlockMutationEvent | BlockMutationEvent[];
 
-export default function EditorContainer<T>() {
-  // const { setValue, getValues, control, trigger } = useFormContext<T>();
-  const methods = useFormContext<OutputSchemaType>();
+export default function EditorContainer<T extends OutputDataSchemaType>() {
+  const { setValue, getValues, control, trigger } = useFormContext<T>();
+  type FormDataType = PathValue<T, FieldPath<T>>;
+  const outputDataFormPath = 'data' as FieldPath<T>; // 글 쓴 내용 저장되는 form-path
+  // getValues(outputDataFormPath)
+  const data = getValues(outputDataFormPath);
 
-  // useFieldArray()
-  const formPath = 'post_data.blocks' as FieldArrayPath<OutputSchemaType>;
+  const saveOnChange = (value: FormDataType) => {
+    setValue(outputDataFormPath, value);
+  };
 
-  const { fields: blocks } = useFieldArray({
-    control: methods.control,
-    name: formPath,
-  });
-
-  const onBlockChange = (mutationEvent: BlockMutationEvent) => {
+  const onChange: onChangeEditorJS = async (api: API, event: EditorJSOnChangeEvent) => {
     // const target_id = blockEvent.detail.target.id;
-    // methods.setValue('post_data')
+    const isMultiBlockEvent = Array.isArray(event);
+    if (isMultiBlockEvent) event.map((event) => dispatchChangeEvent(event));
+    if (!isMultiBlockEvent) dispatchChangeEvent(event);
+    const content = await api.saver.save();
+    saveOnChange(content as FormDataType);
+  };
+
+  const dispatchChangeEvent = (mutationEvent: BlockMutationEvent) => {
     switch (mutationEvent.type as MutationEventType) {
       case 'block-added': {
         onBlockAdded(mutationEvent as BlockAddedEvent);
@@ -58,7 +76,10 @@ export default function EditorContainer<T>() {
   };
 
   const onBlockAdded = (blockAddEvent: BlockAddedEvent) => {};
-  const onBlockChanged = (blockChangeEvent: BlockChangedEvent) => {};
+  const onBlockChanged = (blockChangeEvent: BlockChangedEvent) => {
+    // console.log(`blockChangeEvent.detail : ${JSON.stringify(blockChangeEvent.detail)}`);
+    // blockChangeEvent.detail.index
+  };
   const onBlockMoved = (blockMoveEvent: BlockMovedEvent) => {
     // NOTE: block moved event는 한 번에 하나씩 됨
     // (drag&drop의 경우 제자리 이동해도 trigger됨)
@@ -87,15 +108,8 @@ export default function EditorContainer<T>() {
           justifyContent: 'center',
         }}
       >
-        <EditorBase imageUpload onBlockChange={onBlockChange} />
+        <EditorBase imageUpload onChange={onChange} data={data} />
       </Paper>
-      <FlexBox sx={{ width: '100%', border: '1px black solid', justifyContent: 'end', padding: 2 }}>
-        <Box sx={{ border: '1px black solid', paddingX: 2 }}>
-          <Button variant="contained" onClick={onClickSubmitButton}>
-            submit
-          </Button>
-        </Box>
-      </FlexBox>
     </FlexBox>
   );
 }

@@ -1,5 +1,6 @@
 import type { EditorConfig, ToolboxConfig } from '@editorjs/editorjs';
 import type { OutputData } from '@editorjs/editorjs';
+import ImageTool from '@editorjs/image';
 
 import type {
   BoardImageUploadType,
@@ -16,6 +17,7 @@ interface EditorConfigIntf {
   data: OutputData;
   defaultBlock: string;
   embedAllow?: boolean;
+  readonly?: boolean;
   uploadByFile?: UploadByFileType;
   removeImageFromBlock?: RemoveBoardImageType;
   onChange: onChangeEditorJS;
@@ -36,10 +38,31 @@ const getEditorConfig: (props: EditorConfigIntf) => EditorConfig = (props: Edito
     : undefined;
   return {
     ...rest,
+
     tools: {
       ...basicEditorTools,
       image: _imageTool,
     },
+  } as unknown as EditorConfig;
+};
+
+interface EditorReaderConfigIntf {
+  holder: string;
+  data: OutputData;
+}
+
+export const getEditorReaderConfig: (props: EditorReaderConfigIntf) => EditorConfig = (
+  props: EditorReaderConfigIntf,
+) => {
+  const { holder, data } = props;
+  return {
+    tools: {
+      ...basicEditorTools,
+      image: ImageTool,
+    },
+    readOnly: true,
+    data: data,
+    holder: holder,
   } as unknown as EditorConfig;
 };
 

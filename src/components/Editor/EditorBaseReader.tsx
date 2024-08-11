@@ -2,76 +2,35 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 
 import { Box, Button, Paper } from '@mui/material';
 
-import EditorJS, { API, BlockMutationEvent } from '@editorjs/editorjs';
+import EditorJS from '@editorjs/editorjs';
 import type { BlockMovedEvent, EditorConfig } from '@editorjs/editorjs';
-// @ts-ignore
-import DragDrop from 'editorjs-drag-drop';
 
-import * as editorjs from '@/FormData/editorjs';
-import boardImageAPI from '@/api/image';
 import useAuthState from '@/store/auth';
 
 import { FlexBox } from '../styled';
-import getEditorConfig from './config';
+import { getEditorReaderConfig } from './config';
 import './editor.css';
-import './editor_edit.css';
 import type { OutputData, onChangeEditorJS } from './types';
 
-type EditorJSOnChangeEvent = BlockMutationEvent | BlockMutationEvent[];
-
 interface EditorBaseIntf {
-  imageUpload?: boolean;
-  readOnly?: boolean;
   data: OutputData;
-  onChange: onChangeEditorJS;
 }
 
-export const EditorBase = (props: EditorBaseIntf): JSX.Element => {
-  const { imageUpload, readOnly, onChange, data } = props;
-  const [auth] = useAuthState();
+export const EditorBaseReader = (props: EditorBaseIntf): JSX.Element => {
+  const { data } = props;
 
   const ejInstance = useRef<EditorJS | null>(null);
-  const date = new Date();
 
   const defaultHolder = 'editorjs-container';
-  const defaultBlock: string = 'paragraph';
 
   const createEditor = (configs: EditorConfig): EditorJS => {
     const editor = new EditorJS(configs);
     return editor;
   };
 
-  const handleReady = () => {
-    ejInstance.current = new DragDrop(ejInstance.current);
-  };
-
-  const imageUploader = useMemo(
-    () => boardImageAPI.getBoardCreate.imageUploader(auth.id_token!),
-    [auth.id_token!],
-  );
-
-  // NOTE: 글 새로 작성하는 경우에는 이거 써야됨 -> 임시 이미지 파일 바로 삭제하는 용도
-  const imageRemover = useMemo(
-    () => boardImageAPI.getBoardCreate.imageRemover(auth.id_token!),
-    [auth.id_token!],
-  );
-
-  // NOTE: 글 수정하는 경우에는 이거 써야됨
-  const imageRemoverOnEdit = (imageURL: string) => {
-    const originImageURL = new URL(imageURL);
-    // TODO: form에 삭제할 사진들 리스트에 저장하기
-    originImageURL.pathname;
-  };
-
-  const editorConfig: EditorConfig = getEditorConfig({
-    onReady: handleReady,
-    onChange: onChange,
-    defaultBlock: defaultBlock,
+  const editorConfig: EditorConfig = getEditorReaderConfig({
     holder: defaultHolder,
     data: data,
-
-    uploadByFile: imageUploader,
-    removeImageFromBlock: imageRemover,
   });
 
   useEffect(() => {

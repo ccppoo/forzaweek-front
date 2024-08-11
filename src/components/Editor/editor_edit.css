@@ -1,9 +1,7 @@
 .codex-editor--narrow .ce-toolbar__actions {
-  right: calc(100% + 8px);
 }
 
 .codex-editor .ce-toolbar__actions {
-  right: calc(100% + 12px * 2 + 2px);
 }
 
 .codex-editor {
@@ -12,12 +10,6 @@
 /* 이건 에디터 전체 */
 /* TODO: Media width query */
 .codex-editor__redactor {
-  padding-top: 6px;
-  padding-bottom: 6px;
-  min-height: 170px;
-  width: 100%;
-  /* max-width: 752px; */
-  min-width: 652px;
   /* margin: 0 minmax(96px, auto); */
   /* margin: 0 96px 0 96px; */
 }
@@ -29,14 +21,13 @@
 
 /* 블럭 안에 컨텐츠 */
 .ce-block .ce-block__content {
-  padding-left: 8px;
-  padding-right: 8px;
-  max-width: 708px;
-  width: 85%;
-  /* width: clamp(auto, 600px, 708px); */
-  margin: 0 clamp(96px, 120px, auto);
+  transition: background-color 30ms ease-in;
 }
 
+.ce-block__content:hover {
+  border-radius: 4px;
+  background-color: rgba(55, 53, 47, 0.06);
+}
 /* disable block converting -> THIS IS MAKING UNEXCEPECTED BEHAVIORS */
 div.ce-popover__items {
   div.ce-popover-item[data-item-name='convert-to'] {
