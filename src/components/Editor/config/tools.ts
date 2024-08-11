@@ -9,6 +9,8 @@ import Paragraph from '@editorjs/paragraph';
 import Quote from '@editorjs/quote';
 import Underline from '@editorjs/underline';
 
+import { LimitedNestedList } from './customTools';
+
 const headerTools: ToolSettings = {
   class: Header as unknown as BlockToolConstructable,
   config: {
@@ -37,11 +39,13 @@ const paragraphTool = {
   },
 };
 
+// max nest level : 3 (e.g : 1.1.1, 1.2.3, ...)
 const nestedListTool = {
-  class: NestedList,
+  class: LimitedNestedList,
   inlineToolbar: true,
   config: {
     defaultStyle: 'ordered',
+    maxDepth: 2,
   },
 };
 
