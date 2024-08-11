@@ -1,3 +1,3 @@
-import Dev from './Dev';
+import BoardEditor from './BoardEditor';
 
-export default Dev;
+export default BoardEditor;
