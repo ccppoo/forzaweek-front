@@ -15,30 +15,83 @@ const outputBlockData = z.union([
   block.headerBlockSchema,
   block.nestedListBlockSchema,
   block.paragraphBlockSchema,
+  block.imageBlockSchema,
 ]);
 
 export type OutputBlockDataType = z.infer<typeof outputBlockData>;
-const OutputDataSchema = z.object({
+
+const outputDataSchema = z.object({
   version: z.optional(z.string()),
   time: z.optional(z.number().nonnegative()),
   blocks: z.array(outputBlockData),
 });
 
-const boardPostVote = z.object({
-  up: z.number().nonnegative().default(0),
-  down: z.number().nonnegative().default(0),
+const _outputDataSchema = z.object({
+  data: outputDataSchema,
 });
 
-export const outputSchema = documentBase.merge(
-  z.object({
-    user_id: z.string(), // 게시물 작성자 public user id
-    post_data: OutputDataSchema, // 게시물 내용
-    uploaded_at: z.date(), // 작성일
-    modified_at: z.optional(z.date()), // 수정일
-    comments: z.number().nonnegative().default(0),
-    vote: boardPostVote,
-  }),
-);
+type OutputDataType = z.infer<typeof outputDataSchema>;
+
+export type OutputDataSchemaType = z.infer<typeof _outputDataSchema>;
+
+const boardPostVote = z.object({
+  vote: z.optional(
+    z
+      .object({
+        up: z.number().nonnegative(),
+        down: z.number().nonnegative(),
+      })
+      .default({
+        up: 0,
+        down: 0,
+      }),
+  ),
+});
+
+export const boardPostMetadata = z.object({
+  user_id: z.undefined(z.string()), // 게시물 작성자 public user id
+  uploaded_at: z.optional(z.date()), // 작성일
+  modified_at: z.optional(z.date()), // 수정일
+  comments: z.number().nonnegative().default(0),
+});
+
+export const boardPostTitle = z.object({
+  title: z.optional(z.string().default('')),
+});
+
+export type BoardPostTitle = z.infer<typeof boardPostTitle>;
+
+export const boardPostCategory = z.object({
+  category: z.optional(z.string()),
+});
+
+export const outputSchema = documentBase
+  .merge(boardPostTitle)
+  .merge(_outputDataSchema) // 본문
+  .merge(boardPostVote)
+  .merge(boardPostMetadata);
+
+const DEFAULT_INITIAL_DATA: OutputDataType = {
+  blocks: [
+    {
+      type: 'header',
+      data: {
+        text: 'New note title...',
+        level: 1,
+      },
+    },
+  ],
+};
+
+export const outputSchemaDefault: OutputSchemaType = {
+  id: undefined,
+  comments: 0,
+  data: DEFAULT_INITIAL_DATA,
+  uploaded_at: undefined,
+  modified_at: undefined,
+  vote: undefined,
+  user_id: undefined,
+};
 
 // 글쓰기 -> blob으로 일단 업로드 -> 글 작성시 백그라운드에서
 // 1. 수정하고 최종으로 보낼 때
