@@ -1,7 +1,7 @@
 import { z } from 'zod';
 
 export const blockSchemaBase = z.object({
-  id: z.string(),
+  id: z.optional(z.string()),
   type: z.string(),
-  tunes: z.any().default({}),
+  tunes: z.optional(z.any()).default({}),
 });
