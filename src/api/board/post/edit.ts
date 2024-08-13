@@ -26,34 +26,37 @@ const a = {
   title: 'asdasd',
   category: 'free',
 };
-export async function createBoardPost({
-  token,
-  data,
+
+export async function getBoardPostEdit({
+  queryKey,
 }: {
-  token: ID_TOKEN;
-  data: OutputSchemaType;
-}): Promise<void> {
-  const boardType = 'free';
-  let url = `${API_HOST}/board/${boardType}`;
-  const _data = { ...data, category: 'free', user_id: 'asdasd' };
-  const authHeaders = token ? AuthHeaders(token) : {};
-  console.log(`data : ${JSON.stringify(_data)}`);
-  const resp = await axios.post(url, _data, { headers: { ...authHeaders } });
-  return;
+  queryKey: [string, string];
+}): Promise<OutputSchemaType> {
+  const [mode, postID] = queryKey;
+  // mode == edit
+
+  let url = `${API_HOST}/board/${postID}`;
+
+  // const authHeaders = token ? AuthHeaders(token) : {};
+  // console.log(`data : ${JSON.stringify(_data)}`);
+  const resp = await axios.get(url);
+  return resp.data;
 }
 
-export async function createBoardPost2<T>({
+export async function editBoardPost<T>({
   token,
+  postID,
   data,
 }: {
   token: ID_TOKEN;
+  postID: string;
   data: T;
 }): Promise<void> {
   const boardType = 'free';
-  let url = `${API_HOST}/board/${boardType}`;
+  let url = `${API_HOST}/board/${boardType}/${postID}`;
   const _data = { ...data, category: 'free', user_id: 'asdasd' };
   const authHeaders = token ? AuthHeaders(token) : {};
   console.log(`data : ${JSON.stringify(_data)}`);
-  const resp = await axios.post(url, _data, { headers: { ...authHeaders } });
+  const resp = await axios.put(url, _data, { headers: { ...authHeaders } });
   return;
 }
