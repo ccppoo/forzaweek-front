@@ -1,6 +1,4 @@
-import { EditorBase } from './EditorBase';
-import EditorContainer from './EditorContainer';
+import EditorEditmode from './Editor';
+import EditorReader from './Reader';
 
-export default EditorContainer;
-
-export { EditorBase };
+export { EditorEditmode, EditorReader };

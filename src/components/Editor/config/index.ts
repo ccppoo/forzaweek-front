@@ -35,7 +35,7 @@ const getEditorConfig: (props: EditorConfigIntf) => EditorConfig = (props: Edito
   };
   const _imageTool = !!imageSupported
     ? getImageTools(uploadByFile, removeImageFromBlock)
-    : undefined;
+    : ImageTool;
   return {
     ...rest,
 
