@@ -24,7 +24,8 @@ enum Pages {
   DataEdit,
   NotFound,
   BoardWrite,
-
+  BoardPostEdit,
+  BoardRead,
   Login,
   CallBack,
 }

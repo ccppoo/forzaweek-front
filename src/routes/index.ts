@@ -124,10 +124,24 @@ const routes: Routes = {
     icon: HomeIcon,
   },
   [Pages.BoardWrite]: {
-    component: asyncComponentLoader(() => import('@/pages/Board/Write')),
+    component: asyncComponentLoader(() => import('@/pages/Board/Edit')),
     path: '/board/write',
     devUrl: '/board/write',
-    title: '글쓰기',
+    title: '글 쓰기',
+    icon: HomeIcon,
+  },
+  [Pages.BoardPostEdit]: {
+    component: asyncComponentLoader(() => import('@/pages/Board/Edit')),
+    path: '/board/edit/:postID',
+    devUrl: '/board/edit/66b9ca119152e4d1277df189',
+    title: '글 쓰기/수정',
+    icon: HomeIcon,
+  },
+  [Pages.BoardRead]: {
+    component: asyncComponentLoader(() => import('@/pages/Board/Read')),
+    path: '/board/read/:postID',
+    devUrl: '/board/read/66b89ab2a8976a05a59c43c3',
+    title: '글 읽기',
     icon: HomeIcon,
   },
   [Pages.UserProfile]: {
