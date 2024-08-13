@@ -34,6 +34,16 @@ type OutputDataType = z.infer<typeof outputDataSchema>;
 
 export type OutputDataSchemaType = z.infer<typeof _outputDataSchema>;
 
+const imageItem = z.object({
+  url: z.string(),
+});
+
+const postEditSchema = z.object({
+  imageDelete: z.array(imageItem).default([]),
+});
+
+export type PostEditSchemaType = z.infer<typeof postEditSchema>;
+
 const boardPostVote = z.object({
   vote: z.optional(
     z
@@ -69,7 +79,8 @@ export const outputSchema = documentBase
   .merge(boardPostTitle)
   .merge(_outputDataSchema) // 본문
   .merge(boardPostVote)
-  .merge(boardPostMetadata);
+  .merge(boardPostMetadata)
+  .merge(postEditSchema); // 수정할 때 사용하는 거
 
 const DEFAULT_INITIAL_DATA: OutputDataType = {
   blocks: [
@@ -91,6 +102,8 @@ export const outputSchemaDefault: OutputSchemaType = {
   modified_at: undefined,
   vote: undefined,
   user_id: undefined,
+  title: 'test default title',
+  imageDelete: [],
 };
 
 // 글쓰기 -> blob으로 일단 업로드 -> 글 작성시 백그라운드에서
