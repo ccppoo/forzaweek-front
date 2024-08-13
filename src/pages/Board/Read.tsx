@@ -16,8 +16,7 @@ import type { OutputSchemaType } from '@/FormData/editorjs';
 import { xbox } from '@/api/auth/oauth';
 import { createBoardPost } from '@/api/board/post/create';
 import { readBoardPost } from '@/api/board/post/read';
-import EditorContainer from '@/components/Editor';
-import EditorReader from '@/components/Editor/EditorReader';
+import { EditorReader } from '@/components/Editor';
 import Meta from '@/components/Meta';
 import { FlexBox, FullSizeCenteredFlexBox } from '@/components/styled';
 import { db } from '@/db';
@@ -48,7 +47,7 @@ export default function BoardRead() {
           width: '100%',
         }}
       >
-        <FlexBox sx={{ flexDirection: 'column' }}>
+        <FlexBox sx={{ flexDirection: 'column', alignItems: 'center' }}>
           {/* 게시판 종류 */}
 
           {/* 제목  */}

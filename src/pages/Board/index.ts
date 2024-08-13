@@ -1,3 +1,3 @@
-import BoardEditor from './BoardEditor';
+import BoardEditor from './Edit';
 
 export default BoardEditor;
