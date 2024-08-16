@@ -13,6 +13,7 @@ import { useLiveQuery } from 'dexie-react-hooks';
 import { CarDetailInfo } from '@/components/Car';
 import CarInGameDetailInfo from '@/components/Car/CarInGameDetailInfo';
 import Comments from '@/components/Comment';
+import { TempComments } from '@/components/Comment/Comments';
 import { RelatedDecals } from '@/components/Decals';
 import { ImageShowHorizontal } from '@/components/ImageList/Horizontal2';
 import { RelatedTunings } from '@/components/Tunings';
@@ -79,7 +80,10 @@ export default function CarDetail() {
             <ImageShowHorizontal images={carinfo?.image.images!} />
             {/* 댓글 */}
             <FlexBox sx={{ paddingY: 3 }}>
-              <Comments.temp.TempTaggableComments />
+              {/* <Comments.temp.TempTaggableComments /> */}
+              <Comments.temp.TempVotableComments />
+
+              {/* <TempComments /> */}
             </FlexBox>
 
             {/* 데칼 사진들 */}

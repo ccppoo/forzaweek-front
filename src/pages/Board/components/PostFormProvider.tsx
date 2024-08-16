@@ -15,7 +15,7 @@ import { outputSchema, outputSchemaDefault } from '@/FormData/editorjs';
 import type { OutputSchemaType, PostEditSchemaType } from '@/FormData/editorjs';
 import { createBoardPost2 } from '@/api/board/post/create';
 import { editBoardPost, getBoardPostEdit } from '@/api/board/post/edit';
-import EditorEditmode from '@/components/Editor/EditorEditmode';
+import EditorEditmode from '@/components/Editor/Editor';
 import { FlexBox, FullSizeCenteredFlexBox } from '@/components/styled';
 import useAuthState from '@/store/auth';
 

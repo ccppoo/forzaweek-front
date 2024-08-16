@@ -84,7 +84,7 @@ export default function Tracks() {
             {/* 트랙 사진들 */}
             <ImageShowHorizontal images={TRACK_IMAGES} />
             {/* 댓글 */}
-            <Comments.temp.TempTaggableComments />
+            <Comments.temp.TempVotableComments />
             {/* TODO: 관련 튜닝 */}
             <RelatedTunings />
             {/* TODO: 관련 영상 */}

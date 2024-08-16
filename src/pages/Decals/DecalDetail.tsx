@@ -12,10 +12,12 @@ import { useQuery } from '@tanstack/react-query';
 import type { DecalSchemaReadType } from '@/FormData/decal';
 import { GetDecal } from '@/api/data/fh5/decal';
 import { BriefCarInfo2 } from '@/components/Car/BriefCarInfo';
-// import Comments from '@/components/Comment';
-import Comments from '@/components/Comment';
+import { TempComments } from '@/components/Comment/Comments';
 import { RelatedDecals } from '@/components/Decals';
 import { ImageShowHorizontal } from '@/components/ImageList/Horizontal';
+// import Comments from '@/components/Comment';
+// import Comments from '@/components/Comment';
+import TagAdder from '@/components/TagAdd';
 import { FlexBox, FullSizeCenteredFlexBox } from '@/components/styled';
 import { Image } from '@/components/styled';
 
@@ -46,33 +48,6 @@ function stringAvatar(name: string) {
     },
     children: `${name[0].toUpperCase()}`,
   };
-}
-
-function TitlePart() {
-  const carName = '#98 Bryan Herta Autosport Elantra N';
-  return (
-    <FlexBox sx={{ width: '100%', height: 50, columnGap: 1 }}>
-      {/* 트랙 아이콘 */}
-      <FlexBox
-        sx={{
-          aspectRatio: '1/1',
-          height: '100%',
-        }}
-      >
-        {/* <Image
-          src={}
-          sx={{
-            objectFit: 'contain',
-            borderTopLeftRadius: 4,
-            borderBottomLeftRadius: 4,
-          }}
-        /> */}
-      </FlexBox>
-      <FlexBox sx={{ alignItems: 'center', paddingX: 1 }}>
-        <Typography variant="h4">{carName}</Typography>
-      </FlexBox>
-    </FlexBox>
-  );
 }
 
 function DecalInfo({ decalData }: { decalData: DecalSchemaReadType }) {
@@ -144,7 +119,7 @@ export default function DecalDetail() {
   const WIDTH = '100%';
 
   if (data) {
-    console.log(`data : ${JSON.stringify(data)}`);
+    // console.log(`data : ${JSON.stringify(data)}`);
     return (
       <Container sx={{ paddingTop: 2 }}>
         <FullSizeCenteredFlexBox
@@ -172,8 +147,11 @@ export default function DecalDetail() {
             <ImageShowHorizontal images={data.imageURLs} />
             {/* 데칼에 사용된 차 간단 정보 */}
             <BriefCarInfo2 carInfo={data.car} />
+            {/* 태그 달기 */}
+            <TagAdder />
             {/* 댓글 */}
-            <Comments.TaggableComments subject_to={decalID!} />
+            {/* <Comments.TaggableComments subject_to={decalID!} /> */}
+            <TempComments />
             {/* 다른 데칼 */}
             <RelatedDecals carID={data.car.id} />
           </FlexBox>
