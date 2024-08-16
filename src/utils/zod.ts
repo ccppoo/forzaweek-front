@@ -28,3 +28,12 @@ export const getPropertyPaths = (schema: Zod.ZodType): string[] => {
 
 export const toZodLiteral = (literalType: any[]) =>
   Zod.custom<string>((val) => literalType.includes(val));
+
+export function getDefaults<Schema extends Zod.AnyZodObject>(schema: Schema) {
+  return Object.fromEntries(
+    Object.entries(schema.shape).map(([key, value]) => {
+      if (value instanceof Zod.ZodDefault) return [key, value._def.defaultValue()];
+      return [key, undefined];
+    }),
+  );
+}
