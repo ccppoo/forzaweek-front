@@ -27,7 +27,7 @@ export async function AddNewTag({ tag }: { tag: TagType.TagEditSchema }) {
   console.log(`처리된 data : ${JSON.stringify(data)}`);
 
   const path_ = `tag`;
-  const url = `${API_HOST}/${path_}`;
+  const url = `${API_HOST}/${path_}/create`;
   const resp = await axios.post(url, data, {
     headers: {
       'Content-Type': 'application/json',
@@ -76,7 +76,7 @@ export async function GetAllTag({
 
   const path_ = `tag`;
 
-  const url = `${API_HOST}/${path_}${!!tagKind ? `?kind=${tagKind}` : ''}`;
+  const url = `${API_HOST}/${path_}/all${!!tagKind ? `?kind=${tagKind}` : ''}`;
 
   const resp = await axios.get(url, {});
 
