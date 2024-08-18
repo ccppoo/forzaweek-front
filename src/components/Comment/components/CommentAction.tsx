@@ -54,18 +54,20 @@ function CommentVoteAction(props: VotableCommentAction) {
       }}
     >
       <Tooltip arrow title={upVotes} placement="top">
-        <IconButton
-          aria-label="score up"
-          size="small"
-          onClick={clickUpVote}
-          disabled={voteDisabled}
-        >
-          {up_voted ? (
-            <ThumbUpAltIcon fontSize="small" />
-          ) : (
-            <ThumbUpAltOutlinedIcon fontSize="small" />
-          )}
-        </IconButton>
+        <span>
+          <IconButton
+            aria-label="score up"
+            size="small"
+            onClick={clickUpVote}
+            disabled={voteDisabled}
+          >
+            {up_voted ? (
+              <ThumbUpAltIcon fontSize="small" />
+            ) : (
+              <ThumbUpAltOutlinedIcon fontSize="small" />
+            )}
+          </IconButton>
+        </span>
       </Tooltip>
       <FlexBox
         sx={{
@@ -79,18 +81,20 @@ function CommentVoteAction(props: VotableCommentAction) {
         <Typography>{comment_score}</Typography>
       </FlexBox>
       <Tooltip arrow title={downVotes} placement="top">
-        <IconButton
-          aria-label="score down"
-          size="small"
-          onClick={clickDownVote}
-          disabled={voteDisabled}
-        >
-          {down_voted ? (
-            <ThumbDownAltIcon fontSize="small" />
-          ) : (
-            <ThumbDownAltOutlinedIcon fontSize="small" />
-          )}
-        </IconButton>
+        <span>
+          <IconButton
+            aria-label="score down"
+            size="small"
+            onClick={clickDownVote}
+            disabled={voteDisabled}
+          >
+            {down_voted ? (
+              <ThumbDownAltIcon fontSize="small" />
+            ) : (
+              <ThumbDownAltOutlinedIcon fontSize="small" />
+            )}
+          </IconButton>
+        </span>
       </Tooltip>
     </FlexBox>
   );

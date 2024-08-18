@@ -1,5 +1,6 @@
 import { useContext, useState } from 'react';
 
+import Button from '@mui/material/Button';
 import Pagination from '@mui/material/Pagination';
 
 import { useQuery } from '@tanstack/react-query';
@@ -9,10 +10,12 @@ import { CommentCreateTextArea, CommentOption } from '@/components/Comment/compo
 import { CommentContext, commentReadOptionsDefault } from '@/components/Comment/context';
 import type { CommentReadOptions, CommentReadOptionsContext } from '@/components/Comment/context';
 import type { CommentSortOption } from '@/components/Comment/types';
+import { MinHeightTextarea } from '@/components/TextArea';
 import { FlexBox } from '@/components/styled';
 import useAuthState from '@/store/auth';
 
 import TaggableComment from './Comment';
+import TaggableCommentCreate from './CreateTaggableComment';
 
 function CommentDisplayOptions() {
   return (
@@ -102,7 +105,8 @@ export default function TaggableComments({ subject_to }: { subject_to: string })
     >
       <FlexBox sx={{ width: '100%', flexDirection: 'column', rowGap: 2 }}>
         {/* Add Comment */}
-        <CommentCreateTextArea placeHolder="comment" />
+        {/* <CommentCreateTextArea placeHolder="comment" /> */}
+        <TaggableCommentCreate placeHolder="comment" />
         {/* Comment sort option and search */}
         <CommentDisplayOptions />
         {/* show comments */}
