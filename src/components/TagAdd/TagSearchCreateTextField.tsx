@@ -1,5 +1,12 @@
 import { useState } from 'react';
 import { useFieldArray, useFormContext } from 'react-hook-form';
+import type {
+  FieldArray,
+  FieldArrayPath,
+  FieldArrayPathValue,
+  FieldPath,
+  PathValue,
+} from 'react-hook-form';
 
 import CloseIcon from '@mui/icons-material/Close';
 import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
@@ -13,6 +20,7 @@ import { useDebounce } from '@uidotdev/usehooks';
 
 import type { TagType } from '@/FormData/tag';
 import { tagEditSchemaDefault } from '@/FormData/tag/tag';
+import type { TagDependent, TagItemSchema } from '@/FormData/tag/tagAdd';
 import type { TagEditSchema } from '@/FormData/tag/types';
 import { GetAllTag, SearchTag } from '@/api/data/tag';
 import { FlexBox, Image } from '@/components/styled';
@@ -148,57 +156,29 @@ function AsyncTagSearchSelect({
   );
 }
 
-export default function TagSearchCreateTextFeild() {
-  //  이 FormContext는 등록한 태그 전부 있는 formContext
-  const { control, watch } = useFormContext();
+interface TagSearchCreateTextFieldIntf {
+  addTag: (id: string) => void;
+  addNewTag: (name: string) => void;
+}
 
-  const { append, fields } = useFieldArray({ control, name: 'tags' });
+export default function TagSearchCreateTextFeild<T extends TagDependent>(
+  props: TagSearchCreateTextFieldIntf,
+) {
+  const { addTag, addNewTag } = props;
 
   // TODO: 여기서 새로운 태그 추가될 경우(id 없는), 그대로 보내서 category는 general로 백엔드가 새로 만들기
   // comment create -> 바로 만들고 나중에 태그 관리하는 페이지에서 wiki page에 편집할 수 있게 만들기
   const addCompletedTag = (tag: TagType.TagSchemaTypeExtended) => {
-    append(tag.id);
+    console.log(`tag : ${JSON.stringify(tag)}`);
+    // 이미 존재하는 태그 추가하는 경우
+    addTag(tag.id!);
   };
 
-  const [inputValue, setInputValue] = useState<string>('');
-  const [value, setValue] = useState<string>('');
-  const [tempNewTagName, setTempNewTagName] = useState<string>('');
-  const [newTagModalOpened, setNewTagModalOpened] = useState<boolean>(false);
   const openNewTagModal = (newTagName: string) => {
+    // 새로운 태그 이름으로 추가
     console.log(newTagName);
-    // setTempNewTagName(newTagName);
-    // setNewTagModalOpened(true);
+    addNewTag(newTagName);
   };
-
-  // const selectedTags: string[] = watch('tags').map((tag: TagType.TagWrite) => tag.name_en);
-  // console.log(`selectedTags :${selectedTags.map((tag) => tag.name_en)}`);
-  // 태그를 TextField에서는 직접 거르지 않고 입력만 해서 외부에서 필터링 해야함
-
-  const createNewTag = (value: string, kind: string = 'general') => {
-    const newTag = {
-      name: {
-        value: value,
-        lang: 'en',
-      },
-      name_en: value,
-      description: [],
-      kind: kind,
-    };
-    return newTag;
-  };
-
-  // 새 태그 등록하고 서버에 보낸 뒤 ID 받아와서 태그 목록에 등록함
-  const registerNewTag = (newTag: string | undefined) => {
-    setNewTagModalOpened(false);
-    // tag form 받기
-    // 서버로 보내기
-    // 서버에서 ID 받고, 글 작성중인 태그 목록에 추가하기
-    return;
-  };
-  // if (tagList) {
-  //   const TAG_OPTIONS = tagList.filter(
-  //     ({ name_en }) => !selectedTags.includes(name_en),
-  //   ) as TagType.TagSchemaTypeExtended[];
 
   return (
     <Paper
@@ -215,13 +195,6 @@ export default function TagSearchCreateTextFeild() {
       </FlexBox>
       {/* 밑은 태그 검색/추가 하는 component, 얘네들은 태그ID만 보내주면 됨 */}
       <AsyncTagSearchSelect addCompletedTag={addCompletedTag} openNewTagModal={openNewTagModal} />
-      {/* 태그 새로 추가할 경우 form으로 보낼 때  */}
-      {/* <TagCreateDialog
-        newTagInitName={tempNewTagName}
-        opened={newTagModalOpened}
-        onClose={registerNewTag}
-      /> */}
     </Paper>
   );
 }
-// }

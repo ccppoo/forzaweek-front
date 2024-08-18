@@ -37,7 +37,7 @@ export default function AddTags<T extends TagDependentCreation>(props: SelectCar
           <FlexBox sx={{ flexWrap: 'wrap', columnGap: 1, rowGap: 1 }}>
             {tagsAdded.map((tagID, idx) => (
               <TagItemCell
-                tag={tagID}
+                tagID={tagID}
                 key={`${selectScope}-write-tag-input-${tagID}-${idx}`}
                 onClickDelete={() => deleteAddedTag(idx)}
               />
