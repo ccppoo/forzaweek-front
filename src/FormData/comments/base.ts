@@ -1,9 +1,9 @@
 import { z } from 'zod';
 
 export const commentBase = z.object({
-  creator: z.string(),
-  value: z.string(),
-  created_at: z.date(),
+  creator: z.optional(z.string()),
+  value: z.string().default(''),
+  created_at: z.optional(z.date()),
   modified_at: z.optional(z.date()),
 });
 
@@ -13,4 +13,5 @@ export const commentsBase = z.object({
   comments: z.array(z.string()).default([]),
 });
 
+export type CommentBaseType = z.infer<typeof commentBase>;
 export type CommentsType = z.infer<typeof commentsBase>;
