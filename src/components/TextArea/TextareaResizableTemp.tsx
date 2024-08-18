@@ -1,0 +1,103 @@
+import * as React from 'react';
+import { FormProvider, useForm, useFormContext } from 'react-hook-form';
+import type { FieldPath, PathValue } from 'react-hook-form';
+
+import { TextareaAutosize as BaseTextareaAutosize } from '@mui/base/TextareaAutosize';
+import type { TextareaAutosizeProps } from '@mui/base/TextareaAutosize';
+import { styled } from '@mui/system';
+
+import { TaggableCommentType } from '@/FormData/comments/types';
+import type { CommentBaseType } from '@/FormData/comments/types';
+
+interface TextAreaProps {
+  placeholder?: string | undefined;
+  width?: string | number | undefined;
+}
+
+const blue = {
+  100: '#DAECFF',
+  200: '#b6daff',
+  400: '#3399FF',
+  500: '#007FFF',
+  600: '#0072E5',
+  900: '#003A75',
+};
+
+const grey = {
+  50: '#F3F6F9',
+  100: '#E5EAF2',
+  200: '#DAE2ED',
+  300: '#C7D0DD',
+  400: '#B0B8C4',
+  500: '#9DA8B7',
+  600: '#6B7A90',
+  700: '#434D5B',
+  800: '#303740',
+  900: '#1C2025',
+};
+
+const Textarea = styled(BaseTextareaAutosize)(
+  ({ theme }) => `
+  box-sizing: border-box;
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 0.875rem;
+  font-weight: 400;
+  width : 100%;
+  resize: vertical;
+  line-height: 1.5;
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 0px solid ${theme.palette.mode === 'dark' ? grey[700] : grey[200]};
+  background: ${theme.palette.mode === 'dark' ? grey[900] : '#fff'};
+  box-shadow: 0px 0px 0px ${theme.palette.mode === 'dark' ? grey[900] : grey[50]};
+  color: ${theme.palette.mode === 'dark' ? grey[300] : grey[900]};
+
+  &:hover {
+    // border-color: ${blue[400]};
+  }
+
+  &:focus {
+    // border-color: ${blue[400]};
+    // box-shadow: 0 0 0 3px ${theme.palette.mode === 'dark' ? blue[600] : blue[200]};
+  }
+
+  // firefox
+  &:focus-visible {
+    outline: 0;
+  }
+`,
+);
+
+export default function MinHeightTextarea<T extends CommentBaseType>(props: TextAreaProps) {
+  // CommentsType -> value가 평문으로 댓글 쓰는 것
+  // const { editMode } = props;
+  const { getValues, setValue, formState, register, watch } = useFormContext<T>();
+
+  const formPath = 'value' as FieldPath<T>;
+  type FormDataType = PathValue<T, FieldPath<T>>;
+
+  const helperText = formState.errors.value?.message ? 'Please input comment' : undefined;
+
+  // const commentValue = swa(formPath) as string;
+  const setCommentValue = (value: string) => setValue(formPath, value as FormDataType);
+
+  const { width, ...resProps } = props;
+
+  const onTextChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+    console.log(`event.target.value : ${event.target.value}`);
+    setCommentValue(event.target.value);
+  };
+
+  return (
+    <Textarea
+      aria-label="minimum height"
+      minRows={1}
+      {...register(formPath)}
+      {...props}
+      // sx={{ width: width }}
+      style={{ width: '100%' }}
+      // value={commentValue}
+      // onChange={onTextChange}
+    />
+  );
+}
