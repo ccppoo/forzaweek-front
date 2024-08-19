@@ -66,16 +66,16 @@ export const newTagDependent = z.object({ newTags: z.optional(z.array(newTagAddS
 export type NewTagDependent = z.infer<typeof newTagDependent>;
 
 // NOTE: 태그만 있는 반응 담는 스키마, 댓글과 같지만 태그만 있다는 것이 특징이다.
-export const tagCommentSchema = z
+export const taggingSchema = z
   .object({
     id: z.optional(z.string()),
   })
   .merge(tagDependent)
   .merge(newTagDependent);
 
-export type TagCommentSchema = z.infer<typeof tagCommentSchema>;
+export type TaggingSchema = z.infer<typeof taggingSchema>;
 
-export const tagCommentSchemaDefault: TagCommentSchema = {
+export const taggingSchemaDefault: TaggingSchema = {
   id: undefined,
   tags: [],
   newTags: [],

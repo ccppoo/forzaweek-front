@@ -9,9 +9,8 @@ import TextField from '@mui/material/TextField';
 
 import { outputSchema, outputSchemaDefault } from '@/FormData/editorjs';
 import type { OutputSchemaType, PostEditSchemaType } from '@/FormData/editorjs';
-import type { TagCommentSchema } from '@/FormData/tag/tagAdd';
-// import { createBoardPost2 } from '@/api/board/post/create';
-// import { editBoardPost, getBoardPostEdit } from '@/api/board/post/edit';
+import type { TaggingSchema } from '@/FormData/tag/tagAdd';
+import { updatePersonalTagging } from '@/api/tagging/tags';
 import EditorEditmode from '@/components/Editor/Editor';
 import { FlexBox, FullSizeCenteredFlexBox } from '@/components/styled';
 import useAuthState from '@/store/auth';
@@ -25,24 +24,28 @@ import useAuthState from '@/store/auth';
 interface PostFormProviderPropsIntf<T> {
   data: DefaultValues<T>;
   children: React.ReactNode;
+  topic: string;
+  subjectID: string;
+  id_token: string;
 }
 
 export default function TagCommentFormProvider<T extends FieldValues>(
   props: PostFormProviderPropsIntf<T>,
 ) {
-  const { data, children } = props;
+  const { data, children, topic, subjectID, id_token } = props;
   const methods = useForm<T>({
     defaultValues: data,
   });
 
-  const [auth, state, action] = useAuthState();
   const commentID = methods.getValues('id' as FieldPath<T>);
   const isEditMode = !!commentID;
   // console.log(`methods.getValues('id') : ${methods.getValues('id')}`);
 
   const submit = async () => {
-    const allValues = methods.getValues();
-    console.log(`data : ${JSON.stringify(allValues)}`);
+    // TaggingSchema
+    const tags = methods.getValues() as unknown as TaggingSchema;
+    console.log(`data : ${JSON.stringify(tags)}`);
+    await updatePersonalTagging({ id_token, topic, subjectID, tags });
 
     // NOTE: 태그 보낼때
     /**
@@ -54,18 +57,6 @@ export default function TagCommentFormProvider<T extends FieldValues>(
         이거 tags : ["668fd0fce5ff03a8fe22eb48", ... ]
         string[] 형태로 변환해서 보내기
      */
-    if (isEditMode) {
-      console.log(`tag comment edit`);
-
-      // await editBoardPost({ token: auth.id_token, data: allValues, postID: postID });
-      //   await EditDecal({ decal: data });
-      //   return;
-    }
-    if (!isEditMode) {
-      console.log(`new tag comment add submit`);
-      // await createBoardPost2<T>({ token: auth.id_token, data: allValues });
-      //   await AddNewTrack({ track: data });
-    }
     return;
   };
 

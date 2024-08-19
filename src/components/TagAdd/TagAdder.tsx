@@ -9,8 +9,8 @@ import Typography from '@mui/material/Typography';
 
 import { taggableComment, taggableCommentDefault } from '@/FormData/comments/taggable';
 import { CommentBaseType } from '@/FormData/comments/types';
-import type { TagCommentSchema } from '@/FormData/tag/tagAdd';
-import { tagCommentSchemaDefault } from '@/FormData/tag/tagAdd';
+import type { TaggingSchema } from '@/FormData/tag/tagAdd';
+import { taggingSchemaDefault } from '@/FormData/tag/tagAdd';
 import { TagSearchCreateTextFeild } from '@/components/TagSearchCreate';
 import MinHeightTextarea from '@/components/TextArea/TextareaResizableTemp';
 import { FlexBox } from '@/components/styled';
@@ -41,16 +41,26 @@ function AddTag() {
       <AccordionDetails>
         <FlexBox sx={{ flexDirection: 'column' }}>
           {/* 직접 검색 */}
-          <SearchAndCreateTag<TagCommentSchema>
-            postType="taggableComment"
-            selectScope={selectScope}
-          />
+          <SearchAndCreateTag<TaggingSchema> postType="taggableComment" selectScope={selectScope} />
         </FlexBox>
       </AccordionDetails>
       <AccordionActions sx={{ paddingTop: 0 }}>
-        <Button color="error" variant="outlined" size="small">
-          remove all tag
+        {/* <FlexBox sx={{ justifyContent: 'end', paddingY: 0.3 }}> */}
+        {/* <FlexBox sx={{ columnGap: 1 }}> */}
+        <Button color="warning" variant="outlined" size="small" sx={{ borderRadius: 2 }}>
+          cancel
         </Button>
+        <Button
+          color="success"
+          variant="contained"
+          size="small"
+          sx={{ borderRadius: 2 }}
+          type="submit"
+        >
+          add tag
+        </Button>
+        {/* </FlexBox> */}
+        {/* </FlexBox> */}
       </AccordionActions>
     </Accordion>
   );
@@ -70,6 +80,7 @@ export default function TagAdder() {
   //   enabled: queryEnabled,
   //   // staleTime: Infinity,
   // });
+  const selectScope = 'taggable-comment-create';
 
   return (
     <FlexBox
@@ -83,10 +94,63 @@ export default function TagAdder() {
         paddingBottom: 2,
       }}
     >
-      <TagCommentFormProvider<TagCommentSchema> data={tagCommentSchemaDefault}>
+      <TagCommentFormProvider<TaggingSchema> data={taggingSchemaDefault}>
         {/* 태그 달 수 있는 fold */}
-        <AddTag />
+        <SearchAndCreateTag<TaggingSchema> postType="taggableComment" selectScope={selectScope} />
+
         <FlexBox sx={{ justifyContent: 'end', paddingY: 0.3 }}>
+          <FlexBox sx={{ columnGap: 1 }}>
+            <Button color="warning" variant="outlined" size="small" sx={{ borderRadius: 2 }}>
+              cancel
+            </Button>
+            <Button
+              color="success"
+              variant="contained"
+              size="small"
+              sx={{ borderRadius: 2 }}
+              type="submit"
+            >
+              add tag
+            </Button>
+          </FlexBox>
+        </FlexBox>
+      </TagCommentFormProvider>
+    </FlexBox>
+  );
+}
+
+export function TagAdder2() {
+  // const [auth, state, action] = useAuthState();
+  // const { postID } = useParams<EditPathParam>();
+  // // postID 있으면 편집모드
+  // // console.log(`postID: ${postID}`);
+
+  // const queryEnabled = !!auth.id_token && !!postID;
+  // // console.log(`queryEnabled : ${queryEnabled}`);
+  // const { data, isSuccess, isFetching } = useQuery({
+  //   queryKey: ['edit post', postID!],
+  //   queryFn: getBoardPostEdit,
+  //   enabled: queryEnabled,
+  //   // staleTime: Infinity,
+  // });
+  const selectScope = 'taggable-comment-create';
+
+  return (
+    <FlexBox
+      sx={{
+        // border: '1px black solid',
+        paddingY: 0.2,
+        paddingX: 0.1,
+        borderRadius: 2,
+        width: '100%',
+        flexDirection: 'column',
+        paddingBottom: 2,
+      }}
+    >
+      <TagCommentFormProvider<TaggingSchema> data={taggingSchemaDefault}>
+        {/* 태그 달 수 있는 fold */}
+        <SearchAndCreateTag<TaggingSchema> postType="decal" selectScope={selectScope} />
+        <FlexBox sx={{ justifyContent: 'end', paddingY: 1 }}>
           <FlexBox sx={{ columnGap: 1 }}>
             <Button color="warning" variant="outlined" size="small" sx={{ borderRadius: 2 }}>
               cancel

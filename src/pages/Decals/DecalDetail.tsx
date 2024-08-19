@@ -15,6 +15,7 @@ import { BriefCarInfo2 } from '@/components/Car/BriefCarInfo';
 import { TempComments } from '@/components/Comment/Comments';
 import { RelatedDecals } from '@/components/Decals';
 import { ImageShowHorizontal } from '@/components/ImageList/Horizontal';
+import Tags from '@/components/Tag/Tags';
 // import Comments from '@/components/Comment';
 // import Comments from '@/components/Comment';
 import TagAdder from '@/components/TagAdd';
@@ -69,13 +70,13 @@ function DecalInfo({ decalData }: { decalData: DecalSchemaReadType }) {
         <Typography variant="h5">{creator}</Typography>
       </FlexBox>
       {/* 태그 */}
-      <FlexBox sx={{ columnGap: 0.5, alignContent: 'flex-start' }}>
+      {/* <FlexBox sx={{ columnGap: 0.5, alignContent: 'flex-start' }}>
         {decalData.tags.map((tag) => {
           return (
             <Chip label={tag.name_en} key={`decal-${decalData.share_code}-data-tag-${tag.id}`} />
           );
         })}
-      </FlexBox>
+      </FlexBox> */}
       {/* 공유 코드 */}
       <FlexBox
         sx={{
@@ -111,6 +112,8 @@ function DecalInfo({ decalData }: { decalData: DecalSchemaReadType }) {
 export default function DecalDetail() {
   const { decalID } = useParams();
 
+  const TOPIC = 'decal';
+
   const { data } = useQuery({
     queryFn: GetDecal,
     queryKey: ['get decal', decalID!],
@@ -142,13 +145,17 @@ export default function DecalDetail() {
           >
             {/* 제목 */}
             {/* <TitlePart /> */}
-            {/* 데칼 태그, 게시자, 공유 코드 */}
+            {/* 게시자, 공유 코드 */}
             <DecalInfo decalData={data} />
+
             <ImageShowHorizontal images={data.imageURLs} />
             {/* 데칼에 사용된 차 간단 정보 */}
             <BriefCarInfo2 carInfo={data.car} />
+            {/* 태그 */}
+            <Tags topic={TOPIC} subjectID={decalID!} />
+
             {/* 태그 달기 */}
-            <TagAdder />
+            {/* <TagAdder /> */}
             {/* 댓글 */}
             {/* <Comments.TaggableComments subject_to={decalID!} /> */}
             <TempComments />

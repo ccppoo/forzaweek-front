@@ -1,5 +1,6 @@
 import { useContext, useRef, useState } from 'react';
 
+import { Typography } from '@mui/material';
 import Pagination from '@mui/material/Pagination';
 
 import { useQuery } from '@tanstack/react-query';
@@ -112,6 +113,7 @@ export default function Comments({ subject_to }: { subject_to: string }) {
         setCommentReadOptions: setCommentReadOption,
       }}
     >
+      <Typography variant="h6">Comments</Typography>
       <FlexBox sx={{ width: '100%', flexDirection: 'column', rowGap: 2 }}>
         {/* Add Comment */}
         <CommentCreateTextArea placeHolder="comment" />
