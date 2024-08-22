@@ -80,7 +80,6 @@ export default function CarDetail() {
             <ImageShowHorizontal images={carinfo?.image.images!} />
             {/* 댓글 */}
             <FlexBox sx={{ paddingY: 3 }}>
-              {/* <Comments.temp.TempTaggableComments /> */}
               <Comments.temp.TempVotableComments />
 
               {/* <TempComments /> */}

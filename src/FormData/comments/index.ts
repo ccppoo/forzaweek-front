@@ -1,4 +1,3 @@
-import { taggableComment } from './taggable';
 import { votableComment, votableComments, votableMainComment } from './votable';
 
 export default {
@@ -6,6 +5,5 @@ export default {
   comment: {
     votableComment,
     votableMainComment,
-    taggableComment,
   },
 };

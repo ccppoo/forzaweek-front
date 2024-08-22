@@ -157,7 +157,6 @@ export default function DecalDetail() {
             {/* 태그 달기 */}
             {/* <TagAdder /> */}
             {/* 댓글 */}
-            {/* <Comments.TaggableComments subject_to={decalID!} /> */}
             <TempComments />
             {/* 다른 데칼 */}
             <RelatedDecals carID={data.car.id} />
