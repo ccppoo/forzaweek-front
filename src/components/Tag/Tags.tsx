@@ -20,8 +20,9 @@ import Typography from '@mui/material/Typography';
 import { useQuery } from '@tanstack/react-query';
 
 import type { DecalSchemaReadType } from '@/FormData/decal';
-import { GetTagByID } from '@/api/data/tag';
-import { getAllTagsOfSubject, getTagOfSubject, voteTagOfSubject } from '@/api/tagging/tags';
+import { GetTagByID } from '@/api/tag/tag';
+import { voteTagOfSubject } from '@/api/tag/tagging/vote';
+import { getAllTagsOfSubject, getTagOfSubject } from '@/api/tag/tags';
 import { TagAdder2 } from '@/components/TagAdd/TagAdder';
 import { FlexBox, FullSizeCenteredFlexBox } from '@/components/styled';
 import { Image } from '@/components/styled';
@@ -90,6 +91,7 @@ function TagChip(props: TagChipIntf) {
         borderRadius: '14px',
         backgroundColor: 'rgba(0, 0, 0, 0.08)',
         alignItems: 'center',
+        paddingLeft: 0.5,
       }}
     >
       <ButtonBase
@@ -108,7 +110,7 @@ function TagChip(props: TagChipIntf) {
             minWidth: 10,
             marginLeft: 1,
             paddingX: 1,
-            borderRadius: '14px',
+            borderRadius: '8px',
             backgroundColor: 'rgba(255, 255, 255,1)',
           }}
         >
@@ -186,9 +188,10 @@ function Tag(props: TagIntf) {
     // console.log(`data.up_user : ${data.up_user}`);
     const up_voted = !!user?.userID ? data.up_user.includes(user?.userID) : false;
     const down_voted = !!user?.userID ? data.down_user.includes(user?.userID) : false;
+    const label = tagData.name.en || tagData.initial_name;
     return (
       <TagChip
-        label={tagData.name.en}
+        label={label!}
         voteTag={voteTag}
         down_voted={down_voted}
         up_voted={up_voted}

@@ -11,7 +11,7 @@ import { styled } from '@mui/material/styles';
 import { useQuery } from '@tanstack/react-query';
 
 import type { TagDependentCreation } from '@/FormData/post/tag';
-import { GetTagByID } from '@/api/data/tag';
+import { GetTagByID } from '@/api/tag/tag';
 import { FlexBox, FullSizeCenteredFlexBox } from '@/components/styled';
 
 export function TagChip({ tagID }: { tagID: string }) {

@@ -5,7 +5,7 @@ import IconButton from '@mui/material/IconButton';
 import { useQuery } from '@tanstack/react-query';
 
 import type { TagType } from '@/FormData/tag';
-import { GetTagByID } from '@/api/data/tag';
+import { GetTagByID } from '@/api/tag/tag';
 import { FlexBox } from '@/components/styled';
 import { Image } from '@/components/styled';
 
@@ -26,8 +26,8 @@ export default function TagItemCell(props: TagItemCellIntf) {
   // const Component = paper ? Paper : FlexBox;
 
   if (tagInfo) {
-    const tagName = tagInfo.name.en;
-    const tagImage = tagInfo.imageURL || tagInfo.kind.imageURL;
+    const tagName = tagInfo.name.en || tagInfo.initial_name;
+    const tagImage = tagInfo.imageURL || undefined; // tagInfo.kind.imageURL;
 
     return (
       <Paper

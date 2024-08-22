@@ -25,8 +25,8 @@ export async function AddNewTag({ tag }: { tag: TagType.TagEditSchema }) {
   };
 
   console.log(`처리된 data : ${JSON.stringify(data)}`);
+  const path_ = `tag/tag`;
 
-  const path_ = `tag`;
   const url = `${API_HOST}/${path_}/create`;
   const resp = await axios.post(url, data, {
     headers: {
@@ -54,7 +54,7 @@ export async function EditTag({ tag }: { tag: TagType.TagEditSchema }) {
   };
   console.log(`data : ${JSON.stringify(data)}`);
 
-  const path_ = `tag/edit/${docID}`;
+  const path_ = `tag/tag/edit/${docID}`;
   const url = `${API_HOST}/${path_}`;
   const resp = await axios.post(url, data, {
     headers: {
@@ -74,9 +74,10 @@ export async function GetAllTag({
 }): Promise<TagType.TagSchemaType[]> {
   const [_, tagKind] = queryKey;
 
-  const path_ = `tag`;
+  const path_ = `tag/tag`;
 
-  const url = `${API_HOST}/${path_}/all${!!tagKind ? `?kind=${tagKind}` : ''}`;
+  // const url = `${API_HOST}/${path_}/all${!!tagKind ? `?kind=${tagKind}` : ''}`;
+  const url = `${API_HOST}/${path_}${!!tagKind ? `?kind=${tagKind}` : ''}`;
 
   const resp = await axios.get(url, {});
 
@@ -90,8 +91,8 @@ export async function GetTagByID({
   queryKey: [API_NAME, string];
 }): Promise<TagReadType> {
   const [_, tagID] = queryKey;
+  const path_ = `tag/tag`;
 
-  const path_ = `tag`;
   const url = `${API_HOST}/${path_}/${tagID}`;
 
   const resp = await axios.get(url, {});
@@ -107,7 +108,7 @@ export async function SearchTag({
 }): Promise<TagType.TagSchemaTypeExtended[]> {
   const [_, searchKeyWord] = queryKey;
 
-  const path_ = `tag/search/a`;
+  const path_ = `search/tag/a`;
   const url = `${API_HOST}/${path_}?keyword=${searchKeyWord}`;
 
   const resp = await axios.get(url, {});

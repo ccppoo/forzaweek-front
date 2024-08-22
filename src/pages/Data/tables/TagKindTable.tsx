@@ -13,7 +13,7 @@ import TableRow from '@mui/material/TableRow';
 import { useQuery } from '@tanstack/react-query';
 
 import type { TagKindType } from '@/FormData/tag';
-import { GetAllTagKind } from '@/api/data/tagKind';
+import { GetAllTagKind } from '@/api/tag/category';
 import DeleteItemPopUp from '@/components/Dialogs/DeletePopUp';
 import { TagKindItemCell } from '@/components/Tag';
 import { FlexBox, FullSizeCenteredFlexBox } from '@/components/styled';

@@ -10,8 +10,8 @@ import { useQuery } from '@tanstack/react-query';
 
 import type { TagType } from '@/FormData/tag';
 import { Tag } from '@/FormData/tag';
-import { AddNewTag, EditTag, GetAllTag } from '@/api/data/tag';
-import { GetAllTagKind } from '@/api/data/tagKind';
+import { GetAllTagKind } from '@/api/tag/category';
+import { AddNewTag, EditTag, GetAllTag } from '@/api/tag/tag';
 import AddSingleImage from '@/components/FormInputs/AddSingleImage';
 import { TagKindItemCell } from '@/components/Tag';
 import { FlexBox, FullSizeCenteredFlexBox, VisuallyHiddenInput } from '@/components/styled';

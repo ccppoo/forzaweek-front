@@ -14,7 +14,7 @@ import { useDebounce } from '@uidotdev/usehooks';
 import type { TagType } from '@/FormData/tag';
 import { tagEditSchemaDefault } from '@/FormData/tag/tag';
 import type { TagEditSchema } from '@/FormData/tag/types';
-import { GetAllTag, SearchTag } from '@/api/data/tag';
+import { SearchTag } from '@/api/search/tag';
 import { FlexBox, Image } from '@/components/styled';
 import { tagKindGeneralID } from '@/config/api';
 

@@ -22,7 +22,7 @@ import type { TagType } from '@/FormData/tag';
 import { tagEditSchemaDefault } from '@/FormData/tag/tag';
 import type { TagDependent, TagItemSchema } from '@/FormData/tag/tagAdd';
 import type { TagEditSchema } from '@/FormData/tag/types';
-import { GetAllTag, SearchTag } from '@/api/data/tag';
+import { SearchTag } from '@/api/search/tag';
 import { FlexBox, Image } from '@/components/styled';
 import { tagKindGeneralID } from '@/config/api';
 
@@ -84,6 +84,8 @@ function AsyncTagSearchSelect({
   };
 
   // console.log(`tagList : ${JSON.stringify(tagList)}`);
+
+  // TODO: FIXME: tag 정보 바뀜에 따라서 filter하고 display하는 방법 바뀜
 
   return (
     <Autocomplete

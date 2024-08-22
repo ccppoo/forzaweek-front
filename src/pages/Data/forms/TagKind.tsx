@@ -10,7 +10,7 @@ import TextField from '@mui/material/TextField';
 
 import type { TagKindType } from '@/FormData/tag';
 import { TagKind } from '@/FormData/tag';
-import { AddNewTagKind, EditTagKind } from '@/api/data/tagKind';
+import { AddNewTagKind, EditTagKind } from '@/api/tag/category';
 import { FlexBox, VisuallyHiddenInput } from '@/components/styled';
 import { Image } from '@/components/styled';
 
