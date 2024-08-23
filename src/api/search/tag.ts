@@ -1,6 +1,7 @@
 import axios from 'axios';
 
-import type { TagType } from '@/FormData/tag';
+import { populateTagSearchResult } from '@/FormData/tag/search';
+import type { TagItemPopulated, TagSearchQueryResponse } from '@/FormData/tag/search/types';
 import type { API_NAME } from '@/api/types';
 
 import { API_HOST } from '../index';
@@ -10,13 +11,13 @@ export async function SearchTag({
   queryKey,
 }: {
   queryKey: [API_NAME, string];
-}): Promise<TagType.TagSchemaTypeExtended[]> {
+}): Promise<TagItemPopulated[]> {
   const [_, searchKeyWord] = queryKey;
 
   const path_ = `search/tag/a`;
   const url = `${API_HOST}/${path_}?keyword=${searchKeyWord}`;
 
-  const resp = await axios.get(url, {});
+  const resp = await axios.get<TagSearchQueryResponse>(url, {});
 
-  return resp.data || [];
+  return !!resp.data ? populateTagSearchResult(resp.data) : [];
 }

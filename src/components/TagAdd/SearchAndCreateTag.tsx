@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { useFieldArray, useFormContext } from 'react-hook-form';
 import type {
   ArrayPath,
@@ -11,7 +12,7 @@ import type {
 
 import { Paper, Typography } from '@mui/material';
 
-import type { TagDependentCreation } from '@/FormData/post/tag';
+import type { TagItemPopulated, TagName } from '@/FormData/tag/search/types';
 import type {
   NewTagAddSchema,
   NewTagDependent,
@@ -42,9 +43,10 @@ export default function SearchAndCreateTag<T extends TagDependent & NewTagDepend
   const tagsFormPath = 'tags' as FieldArrayPath<T>;
   const tagsFormPath2 = 'tags' as FieldPath<T>;
   type FormDataType = FieldArray<T, FieldArrayPath<T>>;
-  type TagsItem = TagItemSchema & FieldArrayWithId<T, ArrayPath<T>, 'customID'>;
-  type NewTagsItem = NewTagAddSchema & FieldArrayWithId<T, ArrayPath<T>, 'customID'>;
+  type TagItemForm = TagItemPopulated & FieldArrayWithId<T, ArrayPath<T>, 'customID'>;
+  // type NewTagsItem = NewTagAddSchema & FieldArrayWithId<T, ArrayPath<T>, 'customID'>;
   type ArrayPathFormValue = FieldArrayPathValue<T, FieldArrayPath<T>>;
+  // const [tagsAdded, setTagsAdded] = useState<TagItemPopulated[]>([]) // temp
   const {
     fields: _tagsField,
     remove: removeTag,
@@ -55,7 +57,7 @@ export default function SearchAndCreateTag<T extends TagDependent & NewTagDepend
     keyName: 'customID',
   });
 
-  const tagsField = _tagsField as TagsItem[]; // 이렇게까지 type casting을 해야하나??
+  const tagsField = _tagsField as TagItemForm[]; // 이렇게까지 type casting을 해야하나??
 
   const {
     fields: _newTagsField,
@@ -67,50 +69,37 @@ export default function SearchAndCreateTag<T extends TagDependent & NewTagDepend
     keyName: 'customID',
   });
 
-  const newTagsField = _newTagsField as NewTagsItem[]; // 이렇게까지 type casting을 해야하나??
+  // const newTagsField = _newTagsField as NewTagsItem[]; // 이렇게까지 type casting을 해야하나??
 
-  const addTag = (tagID: string) => {
-    appendTag({ id: tagID } as FormDataType);
+  const addTag = (tag: TagItemPopulated) => {
+    appendTag(tag as TagItemForm);
   };
 
-  const addNewTag = (name: string) => {
-    appendNewTag({ name: name } as FormDataType);
-  };
   const deleteAddedTag = (tagIndex: number) => {
     removeTag(tagIndex);
   };
 
-  const deleteAddedNewTag = (tagIndex: number) => {
-    removeNewTag(tagIndex);
-  };
-
   console.log(`tagsField : ${JSON.stringify(getValues(tagsFormPath2))}`);
 
-  const tagsAdded = tagsField.length > 0 || newTagsField.length > 0;
+  const tagsAdded = tagsField.length > 0;
+  // const tagsAdded = tagsField.length > 0 || newTagsField.length > 0;
 
   return (
     <FlexBox sx={{ width: '100%', flexDirection: 'column', rowGap: 1 }}>
-      <TagSearchCreateTextFeild<T> addTag={addTag} addNewTag={addNewTag} />
+      <TagSearchCreateTextFeild<T> addTag={addTag} tagsAdded={tagsField} />
       <Paper sx={{ backgroundColor: 'EEEEEE', paddingX: 1, paddingY: 1, minHeight: 64 }}>
         {tagsAdded ? (
           <FlexBox sx={{ flexWrap: 'wrap', columnGap: 1, rowGap: 1 }}>
             {tagsField.map((tag, idx) => {
+              const isNewTag = tag.id == tag.name.unknown;
               console.log(`tag aaaaaaa : ${JSON.stringify(tag)}`);
+              console.log(`isNewTag  :${isNewTag}`);
               return (
                 <TagItemCell
                   tagID={tag.id}
+                  newTag={isNewTag}
                   key={tag.customID}
                   onClickDelete={() => deleteAddedTag(idx)}
-                />
-              );
-            })}
-            {newTagsField.map((newTag, idx) => {
-              console.log(`newTag  : ${JSON.stringify(newTag)}`);
-              return (
-                <NewTagItemCell
-                  name={newTag.name}
-                  key={newTag.customID}
-                  onClickDelete={() => deleteAddedNewTag(idx)}
                 />
               );
             })}

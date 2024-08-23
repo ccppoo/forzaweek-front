@@ -11,9 +11,7 @@ import TextField from '@mui/material/TextField';
 import { useQuery } from '@tanstack/react-query';
 import { useDebounce } from '@uidotdev/usehooks';
 
-import type { TagType } from '@/FormData/tag';
-import { tagEditSchemaDefault } from '@/FormData/tag/tag';
-import type { TagEditSchema } from '@/FormData/tag/types';
+import type { TagItemPopulated, TagName } from '@/FormData/tag/search/types';
 import { SearchTag } from '@/api/search/tag';
 import { FlexBox, Image } from '@/components/styled';
 import { tagKindGeneralID } from '@/config/api';
@@ -21,16 +19,29 @@ import { tagKindGeneralID } from '@/config/api';
 // import TagCreateDialog from './TagCreateDialog';
 // import TagInstantCreateFormProvider from './TagInstantCreateForm';
 
+// TODO: 전역 환경에서 언어 보여주는거 순위 만들기
+
+function displayLang(tagItemOption: TagItemPopulated): string {
+  //  const langs =  Object.keys(tagItemOption.name)
+  type NameKey = 'ko' | 'en' | 'jp' | 'unknown';
+  const displayOrder: NameKey[] = ['ko', 'en', 'jp', 'unknown'];
+  for (const lang of displayOrder) {
+    const _name = tagItemOption.name[lang];
+    if (_name) return _name;
+  }
+  return tagItemOption.name.unknown!;
+}
+
 function AsyncTagSearchSelect({
   openNewTagModal,
   addCompletedTag,
 }: {
   openNewTagModal: (newTagName: string) => void;
-  addCompletedTag: (tag: TagType.TagSchemaTypeExtended) => void;
+  addCompletedTag: (tag: TagItemPopulated) => void;
 }) {
   // options -> 여기서 useQuery로 가져오기
-  const filterOptions = createFilterOptions<TagType.TagSchemaTypeExtended>({});
-  const [tagOptions, setTagOptions] = useState<TagType.TagSchemaTypeExtended[]>([]);
+  // const filterOptions = createFilterOptions<TagType.TagSchemaTypeExtended>({});
+  const [tagOptions, setTagOptions] = useState<TagItemPopulated[]>([]);
   const [inputValue, setInputValue] = useState<string>('');
   const [value, setValue] = useState<string>('');
   const searchParams = useDebounce(inputValue, 600);
@@ -41,9 +52,14 @@ function AsyncTagSearchSelect({
     enabled: !!inputValue,
   });
 
+  const matchesName = (names: TagName, value: string): boolean => {
+    const match = Object.values(names).map((name) => name == value);
+    return match.some((val) => !!val);
+  };
+
   const onChangeAutoComplete = (
     event: React.SyntheticEvent,
-    newValue: TagType.TagSchemaTypeExtended | string | null,
+    newValue: TagItemPopulated | string | null,
   ) => {
     if (newValue === null) {
       setInputValue('');
@@ -52,7 +68,7 @@ function AsyncTagSearchSelect({
     if (typeof newValue === 'string') {
       // 메뉴에서 선택한게 아니고, 바로 엔터 칠 경우
       // 원래 있던 옵션 + 새로 만들어졌을 가능성 둘 다 있는 거임
-      const tg = tagList!.filter(({ name_en }) => name_en == newValue)[0];
+      const tg = tagList!.filter(({ name }) => matchesName(name, newValue))[0];
       if (tg) {
         // 원래 있던 옵션 엔터쳐서 바로 등록할 경우
         addCompletedTag(tg);
@@ -63,10 +79,13 @@ function AsyncTagSearchSelect({
       else {
         openNewTagModal(newValue);
       }
-    } else if (newValue && newValue.inputValue) {
-      // 새로운 태그 동적으로 추가하면서 메뉴에서 선택할 경우
-      openNewTagModal(newValue.inputValue);
-    } else {
+    }
+    // else if (newValue && newValue.inputValue) {
+    //   // 새로운 태그 동적으로 추가하면서 메뉴에서 선택할 경우
+    //   console.log(`openNewTagModal fixme!!`)
+    //   // openNewTagModal(newValue.inputValue);
+    // }
+    else {
       // 기존에 있는 옵션 선택할 경우
 
       addCompletedTag(newValue);
@@ -90,16 +109,19 @@ function AsyncTagSearchSelect({
       value={value}
       filterOptions={(options, params) => {
         // const filtered = filterOptions(options, params);
+        console.log(`options : ${options}`);
+
         const { inputValue } = params;
         // 보기 옵션에서 새로 추가하는 옵션 동적으로 만드는 경우
-        const isExisting = options.some((option) => inputValue === option.name_en);
+        const isExisting = options.some((option) => matchesName(option.name, inputValue));
         if (inputValue !== '' && !isExisting) {
+          console.log("inputValue !== '' && !isExisting");
           options.push({
+            name: {
+              unknown: inputValue,
+            },
+            id: '',
             inputValue,
-            name_en: `Add "${inputValue}"`,
-            name: [],
-            kind: tagKindGeneralID,
-            description: [],
           });
         }
         return options;
@@ -109,38 +131,47 @@ function AsyncTagSearchSelect({
       handleHomeEndKeys
       id="Search for tag"
       getOptionLabel={(option) => {
+        console.log(`option option : ${JSON.stringify(option)}`);
+
         // Value selected with enter, right from the input
         if (typeof option === 'string') {
+          console.log(`typeof option === 'string', option: ${option}`);
           return option;
         }
         // Add "xxx" option created dynamically
         if (option.inputValue) {
+          console.log(`option.inputValue : ${option.inputValue}`);
           return option.inputValue;
         }
         // Regular option
-        return option.name_en;
+        const temp = displayLang(option);
+        console.log(`temp : ${temp}`);
+        return displayLang(option);
       }}
-      renderOption={(props, option) => (
-        <li key={`auto-complete-option-${option.id}`} {...props}>
-          <FlexBox
-            sx={{
-              width: '100%',
-              paddingLeft: 1,
-              paddingY: 0.5,
-              height: 40,
-              columnGap: 2,
-            }}
-          >
-            {option.imageURL && (
-              <Image src={option.imageURL} sx={{ objectFit: 'contain', width: 'auto' }} />
-            )}
+      renderOption={(props, option) => {
+        console.log(`랜더 옵션 : ${option}`);
+        return (
+          <li key={`auto-complete-option-${option.id}`} {...props}>
+            <FlexBox
+              sx={{
+                width: '100%',
+                paddingLeft: 1,
+                paddingY: 0.5,
+                height: 40,
+                columnGap: 2,
+              }}
+            >
+              {option.image_url && (
+                <Image src={option.image_url} sx={{ objectFit: 'contain', width: 'auto' }} />
+              )}
 
-            <FlexBox sx={{ alignItems: 'center' }}>
-              <Typography>{option.name_en}</Typography>
+              <FlexBox sx={{ alignItems: 'center' }}>
+                <Typography>{displayLang(option)}</Typography>
+              </FlexBox>
             </FlexBox>
-          </FlexBox>
-        </li>
-      )}
+          </li>
+        );
+      }}
       sx={{}}
       fullWidth
       freeSolo
@@ -156,7 +187,7 @@ export default function TagSearchCreateTextFeild() {
 
   // TODO: 여기서 새로운 태그 추가될 경우(id 없는), 그대로 보내서 category는 general로 백엔드가 새로 만들기
   // comment create -> 바로 만들고 나중에 태그 관리하는 페이지에서 wiki page에 편집할 수 있게 만들기
-  const addCompletedTag = (tag: TagType.TagSchemaTypeExtended) => {
+  const addCompletedTag = (tag: TagItemPopulated) => {
     append(tag.id);
   };
 
