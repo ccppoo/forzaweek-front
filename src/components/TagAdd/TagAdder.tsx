@@ -7,11 +7,8 @@ import Button from '@mui/material/Button';
 import Divider from '@mui/material/Divider';
 import Typography from '@mui/material/Typography';
 
-import { taggableComment, taggableCommentDefault } from '@/FormData/comments/taggable';
-import { CommentBaseType } from '@/FormData/comments/types';
 import type { TaggingSchema } from '@/FormData/tag/tagAdd';
 import { taggingSchemaDefault } from '@/FormData/tag/tagAdd';
-import { TagSearchCreateTextFeild } from '@/components/TagSearchCreate';
 import MinHeightTextarea from '@/components/TextArea/TextareaResizableTemp';
 import { FlexBox } from '@/components/styled';
 

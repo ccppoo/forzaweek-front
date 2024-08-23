@@ -1,7 +1,6 @@
 import axios from 'axios';
 import type { AxiosResponse } from 'axios';
 
-import type { TaggingSchema } from '@/FormData/tag/tagAdd';
 import { API_HOST, API_IMAGE_UPLOAD_HOST, AuthHeaders } from '@/api/index';
 import type { API_NAME } from '@/api/types';
 

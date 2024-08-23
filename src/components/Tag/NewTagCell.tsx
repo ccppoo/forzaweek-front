@@ -2,7 +2,6 @@ import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
 import { Paper, Typography } from '@mui/material';
 import IconButton from '@mui/material/IconButton';
 
-import type { TagType } from '@/FormData/tag';
 import { FlexBox } from '@/components/styled';
 import { Image } from '@/components/styled';
 

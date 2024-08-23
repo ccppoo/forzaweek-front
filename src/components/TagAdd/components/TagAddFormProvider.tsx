@@ -7,13 +7,8 @@ import { Box, Button, Typography } from '@mui/material';
 import Container from '@mui/material/Container';
 import TextField from '@mui/material/TextField';
 
-import { outputSchema, outputSchemaDefault } from '@/FormData/editorjs';
-import type { OutputSchemaType, PostEditSchemaType } from '@/FormData/editorjs';
 import type { TaggingSchema } from '@/FormData/tag/tagAdd';
-import { updatePersonalTagging } from '@/api/tagging/tags';
-import EditorEditmode from '@/components/Editor/Editor';
-import { FlexBox, FullSizeCenteredFlexBox } from '@/components/styled';
-import useAuthState from '@/store/auth';
+import { updatePersonalTagging } from '@/api/tag/tagging/crud';
 
 // export const tagCommentSchema = z.object({
 //   id: z.optional(z.string()),

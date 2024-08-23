@@ -1,6 +1,5 @@
 import axios from 'axios';
 
-import type { TagKindType } from '@/FormData/tag';
 import { TagKind } from '@/FormData/tag';
 import { UploadImage } from '@/api/data/image';
 import type { API_NAME } from '@/api/types';

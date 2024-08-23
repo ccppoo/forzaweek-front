@@ -19,14 +19,10 @@ import Typography from '@mui/material/Typography';
 
 import { useQuery } from '@tanstack/react-query';
 
-import type { DecalSchemaReadType } from '@/FormData/decal';
 import type { TaggingSchema } from '@/FormData/tag/tagAdd';
 import { taggingSchemaDefault } from '@/FormData/tag/tagAdd';
-import { GetTagByID } from '@/api/tag/tag';
 import { getPersonalTagging, voteTagOfSubject } from '@/api/tag/tagging/vote';
-import { TagAdder2 } from '@/components/TagAdd/TagAdder';
 import { FlexBox, FullSizeCenteredFlexBox } from '@/components/styled';
-import { Image } from '@/components/styled';
 import useAuthState from '@/store/auth';
 import useUserProfile from '@/store/user';
 
