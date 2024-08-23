@@ -84,6 +84,26 @@ const routes: Routes = {
     title: 'tuning write',
     icon: HomeIcon,
   },
+
+  [Pages.Tags]: {
+    component: asyncComponentLoader(() => import('@/pages/Tag/Tag')),
+    path: '/tag',
+    title: 'tags',
+    icon: HomeIcon,
+  },
+  [Pages.TagList]: {
+    component: asyncComponentLoader(() => import('@/pages/Tag/TagList')),
+    path: '/tag/list',
+    title: 'tag list',
+    icon: HomeIcon,
+  },
+  [Pages.TagDetail]: {
+    component: asyncComponentLoader(() => import('@/pages/Tag/TagDetail')),
+    path: '/tag/:tagID',
+    title: 'tag detail',
+    devUrl: '/tag/668bb6d9c677bb3e3b93e651',
+    icon: HomeIcon,
+  },
   [Pages.Data]: {
     component: asyncComponentLoader(() => import('@/pages/Data/Data')),
     path: '/data',

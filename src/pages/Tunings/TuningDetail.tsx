@@ -20,6 +20,7 @@ import Comments from '@/components/Comment';
 import SharingCreationCreator from '@/components/Post/Creator';
 import ShareCode from '@/components/Post/ShareCode';
 import Tags from '@/components/Post/Tags';
+// import Tags from '@/components/Tag/Tags';
 import { RelatedTunings } from '@/components/Tunings';
 import { RadarChartAndPerformance, TuningInfo } from '@/components/Tunings';
 import { RelatedVideos } from '@/components/Videos';
