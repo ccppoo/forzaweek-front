@@ -1,11 +1,8 @@
 import { z } from 'zod';
 
 import { documentBase } from '@/FormData/base';
-import { carSimpleSchemaType } from '@/FormData/car';
-import { i18nMapName } from '@/FormData/i18n';
 import { tag } from '@/FormData/post';
 import { car, sharingCreation, track } from '@/FormData/post/sharingCreation';
-import { Tag } from '@/FormData/tag';
 
 import { tuningDetailed, tuningDetailedDefault } from './detailed';
 import { tuningMajorParts, tuningMajorPartsDefault } from './majorParts';

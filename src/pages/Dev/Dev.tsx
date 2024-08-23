@@ -1,9 +1,12 @@
 import { useState } from 'react';
 
-import { Box, Button, Typography } from '@mui/material';
+import { Box, Button, TextField, Typography } from '@mui/material';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Unstable_Grid2';
 
+import type { TagItemPopulated } from '@/FormData/tag/search/types';
+// import { tagItemPopulated } from '@/FormData/tag/search';
+// import { populateTagSearchResult } from '@/FormData/tag/utils';
 import { dev_check } from '@/api/auth/dev';
 import { xbox } from '@/api/auth/oauth';
 import {
@@ -16,9 +19,10 @@ import {
   updateTrack,
   updateTrackImage,
 } from '@/api/indexedDB/get';
+import { SearchTag } from '@/api/search';
 // import { EditorJSInput } from '@/components/Editor';
-import { CommentEditor } from '@/components/Editor/editor2';
 import Meta from '@/components/Meta';
+import TagItemCell from '@/components/Tag/TagCell';
 import { FlexBox, FullSizeCenteredFlexBox } from '@/components/styled';
 import { db } from '@/db';
 import useAuthState from '@/store/auth';
@@ -76,8 +80,13 @@ function Dev() {
     }
   };
 
-  // console.log(`auth : ${JSON.stringify(auth)}`);
-  // console.log(`auth.id_token : ${JSON.stringify(auth.id_token)}`);
+  const [searchKeyword, setSearchKeyword] = useState<string>('');
+  const [searchResult, setSearchResult] = useState<TagItemPopulated[]>([]);
+
+  const onClickGetSearch = async () => {
+    const resp = await SearchTag({ queryKey: ['search tag', searchKeyword] });
+    setSearchResult(resp);
+  };
 
   return (
     <>
@@ -132,9 +141,25 @@ function Dev() {
               </Grid>
             </Grid>
           </FlexBox>
-
           <FlexBox>
             state : <Typography>{msg}</Typography>
+          </FlexBox>
+          <FlexBox sx={{ flexDirection: 'column' }}>
+            <FlexBox sx={{ columnGap: 1 }}>
+              <Button onClick={onClickGetSearch} variant="outlined">
+                search tag
+              </Button>
+              <TextField
+                onChange={(e) => setSearchKeyword(e.target.value)}
+                value={searchKeyword}
+                placeholder="tag search keyword"
+              />
+            </FlexBox>
+            <FlexBox sx={{ flexWrap: 'wrap', columnGap: 2, paddingY: 2 }}>
+              {searchResult.map((val) => (
+                <TagItemCell key={val.id} tagID={val.id} />
+              ))}
+            </FlexBox>
           </FlexBox>
           <FlexBox sx={{ flexDirection: 'column' }}>
             <Typography>Token refresh</Typography>
@@ -143,7 +168,6 @@ function Dev() {
             </Button>
             <Typography>returned : {refreshMSG}</Typography>
           </FlexBox>
-          <CommentEditor />
         </FullSizeCenteredFlexBox>
       </Container>
     </>

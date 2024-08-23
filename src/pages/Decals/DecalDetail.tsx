@@ -16,8 +16,6 @@ import { TempComments } from '@/components/Comment/Comments';
 import { RelatedDecals } from '@/components/Decals';
 import { ImageShowHorizontal } from '@/components/ImageList/Horizontal';
 import Tags from '@/components/Tag/Tags';
-// import Comments from '@/components/Comment';
-// import Comments from '@/components/Comment';
 import TagAdder from '@/components/TagAdd';
 import { FlexBox, FullSizeCenteredFlexBox } from '@/components/styled';
 import { Image } from '@/components/styled';

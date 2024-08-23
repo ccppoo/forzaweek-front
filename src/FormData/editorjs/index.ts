@@ -1,10 +1,7 @@
-// import type { OutputBlockData, OutputData } from '@editorjs/editorjs';
 import Paragraph from '@editorjs/paragraph';
 import { z } from 'zod';
 
 import { documentBase } from '@/FormData/base';
-import { carSimpleSchemaType } from '@/FormData/car';
-import { Tag } from '@/FormData/tag';
 
 import * as block from './block';
 import type { NestedListBlockSchemaType } from './block/types';
