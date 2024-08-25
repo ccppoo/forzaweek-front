@@ -19,9 +19,7 @@ import TextField from '@mui/material/TextField';
 import { useQuery } from '@tanstack/react-query';
 import { useDebounce } from '@uidotdev/usehooks';
 
-import type { TagType } from '@/FormData/tag';
 import type { TagItemPopulated, TagName } from '@/FormData/tag/search/types';
-import type { TagDependent } from '@/FormData/tag/tagAdd';
 import { SearchTag } from '@/api/search/tag';
 import { FlexBox, Image } from '@/components/styled';
 import { tagKindGeneralID } from '@/config/api';
@@ -46,8 +44,8 @@ function OptionCategory() {}
 
 function AutoCompleteOption({ option, liProps }: AutoCompleteOptionIntf) {
   // TODO: merged 된 경우 바뀐 선택지로
-  // TODO: parent 있는 경우 상위 태그 tag1 > tag2 .. 이렇게 표시하기
-  // TODO: Category 있는 경우 상위 태그 [cat1] tag1 > tag2 .. 이렇게 표시하기
+  // TODO: parent 있는 경우 상위 태그 tag1 > tag .. 이렇게 표시하기
+  // TODO: Category 있는 경우 상위 태그 [cat1] tag1 > tag .. 이렇게 표시하기
 
   const displayName = option.inputValue || displayLang(option);
   const hasCategory = option.category && displayLang(option.category);
@@ -100,7 +98,7 @@ function AsyncTagSearchSelect({
     queryKey: ['search_tag', searchParams],
     queryFn: SearchTag,
     placeholderData: [],
-    enabled: !!inputValue,
+    enabled: !!inputValue && inputValue.length > 2,
   });
 
   const onChangeAutoComplete = (
@@ -231,9 +229,7 @@ interface TagSearchCreateTextFieldIntf {
   tagsAdded: TagItemPopulated[];
 }
 
-export default function TagSearchCreateTextFeild<T extends TagDependent>(
-  props: TagSearchCreateTextFieldIntf,
-) {
+export default function TagSearchCreateTextFeild(props: TagSearchCreateTextFieldIntf) {
   const { addTag, tagsAdded } = props;
 
   // TODO: 여기서 새로운 태그 추가될 경우(id 없는), 그대로 보내서 category는 general로 백엔드가 새로 만들기

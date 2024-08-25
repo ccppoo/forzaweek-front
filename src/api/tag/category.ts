@@ -1,12 +1,13 @@
 import axios from 'axios';
 
 import { TagKind } from '@/FormData/tag';
+import { TagCategory, TagCategoryReadOnly } from '@/FormData/tag/tag';
 import { UploadImage } from '@/api/data/image';
 import type { API_NAME } from '@/api/types';
 
 import { API_HOST } from '../index';
 
-export async function AddNewTagKind({ tagKind }: { tagKind: TagKind.TagKindEditSchema }) {
+export async function AddNewTagKind({ tagKind }: { tagKind: TagCategory }) {
   const { value: name_en } = tagKind.name.filter((i18n) => i18n.lang == 'en')[0];
 
   const image_url = tagKind.imageURL!;
@@ -34,7 +35,7 @@ export async function AddNewTagKind({ tagKind }: { tagKind: TagKind.TagKindEditS
   });
 }
 
-export async function EditTagKind({ tagKind }: { tagKind: TagKind.TagKindEditSchema }) {
+export async function EditTagKind({ tagKind }: { tagKind: TagCategory }) {
   const NAME_EN = tagKind.name.filter((i18n) => i18n.lang == 'en')[0].value;
 
   const { id: docID } = tagKind;
@@ -67,11 +68,11 @@ export async function EditTagKind({ tagKind }: { tagKind: TagKind.TagKindEditSch
 }
 
 // TODO: pagination
-export async function GetAllTagKind({
+export async function GetAllTagCategory({
   queryKey,
 }: {
   queryKey: [API_NAME, string?];
-}): Promise<TagKind.TagKindSchemaType[]> {
+}): Promise<TagCategoryReadOnly[]> {
   const [_, tagKind] = queryKey;
 
   const path_ = `tagkind`;

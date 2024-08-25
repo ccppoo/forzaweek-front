@@ -7,13 +7,12 @@ import { Box, Button, Typography } from '@mui/material';
 import Container from '@mui/material/Container';
 import TextField from '@mui/material/TextField';
 
-import type { TaggingSchema } from '@/FormData/tag/tagAdd';
+import type { TaggingItemForm } from '@/FormData/tag/tagAdd';
 import { updatePersonalTagging } from '@/api/tag/tagging/crud';
 
 // export const tagCommentSchema = z.object({
 //   id: z.optional(z.string()),
 //   tagIDs: z.array(z.string()).default([]), // 이미 있는 태그의 경우 ID로 저장
-//   newTags: z.optional(z.array(newTagAddSchema)), // 작성 중에 새롭게 만드는 태그의 경우에만 있음
 // });
 
 interface PostFormProviderPropsIntf<T> {
@@ -37,8 +36,7 @@ export default function TagCommentFormProvider<T extends FieldValues>(
   // console.log(`methods.getValues('id') : ${methods.getValues('id')}`);
 
   const submit = async () => {
-    // TaggingSchema
-    const tags = methods.getValues() as unknown as TaggingSchema;
+    const tags = methods.getValues() as unknown as TaggingItemForm;
     console.log(`data : ${JSON.stringify(tags)}`);
     await updatePersonalTagging({ id_token, topic, subjectID, tags });
 

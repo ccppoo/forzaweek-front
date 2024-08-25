@@ -8,9 +8,9 @@ import TextField from '@mui/material/TextField';
 
 import { useQuery } from '@tanstack/react-query';
 
-import type { TagType } from '@/FormData/tag';
-import { Tag } from '@/FormData/tag';
-import { GetAllTagKind } from '@/api/tag/category';
+import { tagItem } from '@/FormData/tag/tag';
+import type { TagItem } from '@/FormData/tag/tag';
+import { GetAllTagCategory } from '@/api/tag/category';
 import { AddNewTag, EditTag, GetAllTag } from '@/api/tag/tag';
 import AddSingleImage from '@/components/FormInputs/AddSingleImage';
 import { TagKindItemCell } from '@/components/Tag';
@@ -18,29 +18,29 @@ import { FlexBox, FullSizeCenteredFlexBox, VisuallyHiddenInput } from '@/compone
 import { Image } from '@/components/styled';
 
 interface dataTextInputIntf {
-  tagEditSchema?: TagType.TagEditSchema;
+  tagItem?: TagItem;
 }
 
 export default function TagForm(props: dataTextInputIntf) {
   const navigate = useNavigate();
   const DATA_TYPE = 'tag';
-  const { tagEditSchema } = props;
+  const { tagItem } = props;
 
-  const methods = useForm<TagType.TagEditSchema>({
-    defaultValues: tagEditSchema || Tag.tagEditSchemaDefault,
+  const methods = useForm<TagItem>({
+    defaultValues: tagItem, // FIXME: add default values,
     mode: 'onChange',
   });
 
-  const { data: tagKindList } = useQuery({
+  const { data: tagCategoryList } = useQuery({
     queryKey: ['all tag kind'],
-    queryFn: GetAllTagKind,
+    queryFn: GetAllTagCategory,
   });
 
   const goBackToListPage = () => navigate(`/data/${DATA_TYPE}`);
 
   const isEditMode = !!methods.getValues('id');
   const { data: mergeTagCandidate } = useQuery({
-    queryKey: [DATA_TYPE, tagEditSchema?.kind],
+    queryKey: [DATA_TYPE, tagItem?.category],
     queryFn: GetAllTag,
     enabled: isEditMode,
   });
@@ -57,7 +57,7 @@ export default function TagForm(props: dataTextInputIntf) {
     name: 'description',
   });
 
-  const submit = async (data: Tag.TagEditSchema) => {
+  const submit = async (data: TagItem) => {
     console.log(`data : ${JSON.stringify(data)}`);
 
     // if (isEditMode) {
@@ -69,14 +69,16 @@ export default function TagForm(props: dataTextInputIntf) {
     // }
   };
 
-  const handleOnError = (errors: SubmitErrorHandler<Tag.TagEditSchema>) => {
+  const handleOnError = (errors: SubmitErrorHandler<TagItem>) => {
     console.log(errors);
     // console.log(`errors : ${JSON.stringify(errors)}`);
   };
 
-  if (tagKindList) {
-    const sortedTagKindList = tagKindList.toSorted((t1, t2) => (t1.name_en > t2.name_en ? 1 : -1));
-    console.log(`sortedTagKindList ; ${JSON.stringify(sortedTagKindList)}`);
+  if (tagCategoryList) {
+    const sortedTagCategoryList = tagCategoryList.toSorted((t1, t2) =>
+      t1.name_en > t2.name_en ? 1 : -1,
+    );
+    console.log(`sortedTagCategoryList ; ${JSON.stringify(sortedTagCategoryList)}`);
     return (
       <FlexBox sx={{ flexDirection: 'column', paddingX: 2 }}>
         <FormProvider {...methods}>
@@ -111,9 +113,9 @@ export default function TagForm(props: dataTextInputIntf) {
                       SelectProps={{ MenuProps: { sx: { maxHeight: 450 } } }}
                       size="small"
                     >
-                      {sortedTagKindList.map((tagKind) => (
-                        <MenuItem key={`${tagKind.name_en}-${tagKind.id}`} value={tagKind.id}>
-                          <TagKindItemCell tagKind={tagKind} />
+                      {sortedTagCategoryList.map((tagCategory) => (
+                        <MenuItem key={`${tagCategory.id}`} value={tagCategory.id}>
+                          <TagKindItemCell tagCategory={tagCategory} />
                         </MenuItem>
                       ))}
                     </TextField>

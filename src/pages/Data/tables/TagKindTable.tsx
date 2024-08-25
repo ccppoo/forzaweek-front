@@ -12,15 +12,15 @@ import TableRow from '@mui/material/TableRow';
 
 import { useQuery } from '@tanstack/react-query';
 
-import type { TagKindType } from '@/FormData/tag';
-import { GetAllTagKind } from '@/api/tag/category';
+import type { TagCategoryReadOnly } from '@/FormData/tag/tag';
+import { GetAllTagCategory } from '@/api/tag/category';
 import DeleteItemPopUp from '@/components/Dialogs/DeletePopUp';
 import { TagKindItemCell } from '@/components/Tag';
 import { FlexBox, FullSizeCenteredFlexBox } from '@/components/styled';
 import { Image } from '@/components/styled';
 import { supportLangs } from '@/config/i18n';
 
-function TagKindRowItem({ tagKind }: { tagKind: TagKindType.TagKindSchemaType }) {
+function TagKindRowItem({ tagCategory }: { tagCategory: TagCategoryReadOnly }) {
   const DATA_TYPE = 'tagkind';
 
   const navigate = useNavigate();
@@ -54,23 +54,23 @@ function TagKindRowItem({ tagKind }: { tagKind: TagKindType.TagKindSchemaType })
     navigate(`/data/${DATA_TYPE}/edit/${itemID}`);
   };
 
-  const descriptionProvided = tagKind.description.map(({ lang }) => lang);
+  const descriptionProvided = tagCategory.description.map(({ lang }) => lang);
   const langNotProvided = [...supportLangs].filter((val) => !descriptionProvided.includes(val));
 
   // console.log(`tag.imageURL : ${tag.imageURL}`);
 
-  const nameSorted = tagKind.name.toSorted(({ lang: n1 }, { lang: n2 }) => (n1 > n2 ? 1 : -1));
-  const descriptionSorted = tagKind.description.toSorted(({ lang: d1 }, { lang: d2 }) =>
+  const nameSorted = tagCategory.name.toSorted(({ lang: n1 }, { lang: n2 }) => (n1 > n2 ? 1 : -1));
+  const descriptionSorted = tagCategory.description.toSorted(({ lang: d1 }, { lang: d2 }) =>
     d1 > d2 ? 1 : -1,
   );
   return (
     <>
       <TableRow
-        key={`table-row-${tagKind.name_en}`}
+        key={`table-row-${tagCategory.name_en}`}
         sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
       >
         <TableCell component="th" scope="row">
-          <TagKindItemCell tagKind={tagKind} />
+          <TagKindItemCell tagCategory={tagCategory} />
         </TableCell>
         {nameSorted.map(({ lang, value }) => {
           return (
@@ -116,13 +116,17 @@ function TagKindRowItem({ tagKind }: { tagKind: TagKindType.TagKindSchemaType })
             })}
           </FlexBox>
         </TableCell>
-        <TableCell align="right" key={`table-cell-${tagKind.name_en}-action`} sx={{ width: 75 }}>
+        <TableCell
+          align="right"
+          key={`table-cell-${tagCategory.name_en}-action`}
+          sx={{ width: 75 }}
+        >
           <FlexBox sx={{ columnGap: 1 }}>
             <Button
               color="info"
               variant="outlined"
               size="small"
-              onClick={() => editItem(tagKind.id)}
+              onClick={() => editItem(tagCategory.id)}
             >
               Edit
             </Button>
@@ -134,7 +138,7 @@ function TagKindRowItem({ tagKind }: { tagKind: TagKindType.TagKindSchemaType })
             opened={deletePopUpOpened}
             onClose={closeDeletePopUp}
             dataType={DATA_TYPE}
-            itemID={tagKind.id}
+            itemID={tagCategory.id}
           />
         </TableCell>
       </TableRow>
@@ -146,12 +150,12 @@ function TagKindRowItem({ tagKind }: { tagKind: TagKindType.TagKindSchemaType })
                 Descriptions
               </Typography>
               <FlexBox sx={{ paddingLeft: 2, flexDirection: 'column' }}>
-                {tagKind.description.map(({ value, lang }) => {
+                {tagCategory.description.map(({ value, lang }) => {
                   if (value)
                     return (
                       <FlexBox
                         sx={{ columnGap: 3, minHeight: 50, alignItems: 'center' }}
-                        key={`tag-kind-description-${tagKind.name_en}-${lang}`}
+                        key={`tag-kind-description-${tagCategory.name_en}-${lang}`}
                       >
                         <Typography>{lang}</Typography>
 
@@ -178,7 +182,7 @@ export default function TagKindTable() {
   // TODO: delete, edit 한 다음에 다시 부르기
   const { data } = useQuery({
     queryKey: ['get tags kinds', undefined],
-    queryFn: GetAllTagKind,
+    queryFn: GetAllTagCategory,
     staleTime: 10,
   });
 
@@ -220,7 +224,10 @@ export default function TagKindTable() {
             </TableHead>
             <TableBody>
               {data.map((manu, idx) => (
-                <TagKindRowItem tagKind={manu} key={`tag-table-row-item-${manu.name_en}-${idx}`} />
+                <TagKindRowItem
+                  tagCategory={manu}
+                  key={`tag-table-row-item-${manu.name_en}-${idx}`}
+                />
               ))}
             </TableBody>
           </Table>

@@ -19,8 +19,8 @@ import Typography from '@mui/material/Typography';
 
 import { useQuery } from '@tanstack/react-query';
 
-import type { TaggingSchema } from '@/FormData/tag/tagAdd';
-import { taggingSchemaDefault } from '@/FormData/tag/tagAdd';
+import type { TaggingItemForm } from '@/FormData/tag/tagAdd';
+import { taggingItemFormDefault } from '@/FormData/tag/tagAdd';
 import { getPersonalTagging, voteTagOfSubject } from '@/api/tag/tagging/vote';
 import { FlexBox, FullSizeCenteredFlexBox } from '@/components/styled';
 import useAuthState from '@/store/auth';
@@ -52,7 +52,7 @@ export default function Tagging(props: TaggingIntf) {
   }
 
   if (auth.id_token && data) {
-    let data_ = { ...taggingSchemaDefault, ...data };
+    let data_ = { ...taggingItemFormDefault, ...data };
 
     const taggedBefore = !!data.tags.length;
 
@@ -63,14 +63,14 @@ export default function Tagging(props: TaggingIntf) {
           <Typography variant="subtitle1">Propose tags that could describe</Typography>
         </FlexBox>
         <FlexBox sx={{ flexDirection: 'column' }}>
-          <TagCommentFormProvider<TaggingSchema>
+          <TagCommentFormProvider<TaggingItemForm>
             data={data_}
             id_token={auth.id_token}
             topic={topic}
             subjectID={subjectID}
           >
             {/* 태그 달 수 있는 fold */}
-            <SearchAndCreateTag<TaggingSchema> postType="decal" selectScope={selectScope} />
+            <SearchAndCreateTag<TaggingItemForm> postType="decal" selectScope={selectScope} />
             <FlexBox sx={{ justifyContent: 'end', paddingY: 1 }}>
               <FlexBox sx={{ columnGap: 1 }}>
                 <Button color="warning" variant="outlined" size="small" sx={{ borderRadius: 2 }}>

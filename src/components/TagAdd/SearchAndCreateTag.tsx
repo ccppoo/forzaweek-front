@@ -13,12 +13,7 @@ import type {
 import { Paper, Typography } from '@mui/material';
 
 import type { TagItemPopulated, TagName } from '@/FormData/tag/search/types';
-import type {
-  NewTagAddSchema,
-  NewTagDependent,
-  TagDependent,
-  TagItemSchema,
-} from '@/FormData/tag/tagAdd';
+import type { TaggingItemForm } from '@/FormData/tag/tagAdd';
 import { TagItemCell } from '@/components/Tag';
 import NewTagItemCell from '@/components/Tag/NewTagCell';
 import { FlexBox, Image } from '@/components/styled';
@@ -33,9 +28,7 @@ type SelectCarFormInput = {
 };
 
 // NOTE: src\components\FormInputs\AddTags.tsx 이거 복제본
-export default function SearchAndCreateTag<T extends TagDependent & NewTagDependent>(
-  props: SelectCarFormInput,
-) {
+export default function SearchAndCreateTag<T extends TaggingItemForm>(props: SelectCarFormInput) {
   const { selectScope, postType } = props;
 
   const { setValue, getValues, watch, control } = useFormContext<T>();
@@ -44,7 +37,6 @@ export default function SearchAndCreateTag<T extends TagDependent & NewTagDepend
   const tagsFormPath2 = 'tags' as FieldPath<T>;
   type FormDataType = FieldArray<T, FieldArrayPath<T>>;
   type TagItemForm = TagItemPopulated & FieldArrayWithId<T, ArrayPath<T>, 'customID'>;
-  // type NewTagsItem = NewTagAddSchema & FieldArrayWithId<T, ArrayPath<T>, 'customID'>;
   type ArrayPathFormValue = FieldArrayPathValue<T, FieldArrayPath<T>>;
   // const [tagsAdded, setTagsAdded] = useState<TagItemPopulated[]>([]) // temp
   const {
@@ -86,7 +78,7 @@ export default function SearchAndCreateTag<T extends TagDependent & NewTagDepend
 
   return (
     <FlexBox sx={{ width: '100%', flexDirection: 'column', rowGap: 1 }}>
-      <TagSearchCreateTextFeild<T> addTag={addTag} tagsAdded={tagsField} />
+      <TagSearchCreateTextFeild addTag={addTag} tagsAdded={tagsField} />
       <Paper sx={{ backgroundColor: 'EEEEEE', paddingX: 1, paddingY: 1, minHeight: 64 }}>
         {tagsAdded ? (
           <FlexBox sx={{ flexWrap: 'wrap', columnGap: 1, rowGap: 1 }}>

@@ -1,11 +1,11 @@
 import { Paper, Typography } from '@mui/material';
 
-import type { TagKindType } from '@/FormData/tag';
+import type { TagCategoryReadOnly } from '@/FormData/tag/tag';
 import { FlexBox } from '@/components/styled';
 import { Image } from '@/components/styled';
 
-export default function TagKindItemCell({ tagKind }: { tagKind: TagKindType.TagKindSchemaType }) {
-  const tagName = tagKind.name_en;
+export default function TagCategoryItemCell({ tagCategory }: { tagCategory: TagCategoryReadOnly }) {
+  const tagName = tagCategory.name.en;
 
   return (
     <Paper
@@ -19,9 +19,9 @@ export default function TagKindItemCell({ tagKind }: { tagKind: TagKindType.TagK
         columnGap: 1.5,
       }}
     >
-      {tagKind.imageURL && (
+      {tagCategory.imageURL && (
         <FlexBox sx={{ aspectRatio: '1/1', height: '40px', alignItems: 'center' }}>
-          <Image src={tagKind.imageURL} sx={{ objectFit: 'contain' }} />
+          <Image src={tagCategory.imageURL} sx={{ objectFit: 'contain' }} />
         </FlexBox>
       )}
       <FlexBox sx={{ alignItems: 'center' }}>

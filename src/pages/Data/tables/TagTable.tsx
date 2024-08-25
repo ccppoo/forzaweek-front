@@ -12,7 +12,7 @@ import TableRow from '@mui/material/TableRow';
 
 import { useQuery } from '@tanstack/react-query';
 
-import type { TagType } from '@/FormData/tag';
+import type { TagItemReadOnly } from '@/FormData/tag/tag';
 import { GetAllTag } from '@/api/tag/tag';
 import DeleteItemPopUp from '@/components/Dialogs/DeletePopUp';
 import { TagKindItemCell } from '@/components/Tag';
@@ -20,7 +20,7 @@ import { FlexBox, FullSizeCenteredFlexBox } from '@/components/styled';
 import { Image } from '@/components/styled';
 import { supportLangs } from '@/config/i18n';
 
-function TagRowItem({ tag }: { tag: TagType.TagSchemaType }) {
+function TagRowItem({ tag }: { tag: TagItemReadOnly }) {
   const DATA_TYPE = 'tag';
 
   const navigate = useNavigate();

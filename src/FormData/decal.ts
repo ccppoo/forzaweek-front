@@ -1,11 +1,11 @@
 import { z } from 'zod';
 
 import { carSimpleSchemaType } from '@/FormData/car';
-import { Tag } from '@/FormData/tag';
 
 import { documentBase } from './base';
 import { image, tag } from './post';
 import { car, sharingCreation, track } from './post/sharingCreation';
+import { tagItemReadOnly } from './tag/tag';
 
 export const decalEditSchema = documentBase
   .merge(sharingCreation)
@@ -48,6 +48,6 @@ export const decalSchemaReadType = z.object({
   last_edited: z.optional(z.string().datetime()),
 
   car: carSimpleSchemaType, // 차 정보 간단버전
-  tags: z.array(Tag.tagSimpleSchemaType), // 데칼 태그
+  tags: z.array(tagItemReadOnly), // 데칼 태그
 });
 export type DecalSchemaReadType = z.infer<typeof decalSchemaReadType>;

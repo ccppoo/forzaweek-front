@@ -24,10 +24,9 @@ import TextField from '@mui/material/TextField';
 import { useQuery } from '@tanstack/react-query';
 import { useDebounce } from '@uidotdev/usehooks';
 
-import { TagKind } from '@/FormData/tag';
-import { tagEditSchemaDefault } from '@/FormData/tag/tag';
-import type { TagEditSchema } from '@/FormData/tag/types';
-import { GetAllTagKind } from '@/api/tag/category';
+import type { TagCategoryReadOnly, TagItem } from '@/FormData/tag/tag';
+import { tagCategory, tagItem } from '@/FormData/tag/tag';
+import { GetAllTagCategory } from '@/api/tag/category';
 import { FlexBox, Image, TextArea } from '@/components/styled';
 import { tagKindGeneralID } from '@/config/api';
 import { supportLangs } from '@/config/i18n';
@@ -42,17 +41,17 @@ function SelectTagKind() {
     control,
     register,
     formState: { errors },
-  } = useFormContext<TagEditSchema>();
+  } = useFormContext<TagItem>();
   const [open, setOpen] = useState(false);
 
-  const [tagKind, setTagKind] = useState<TagKind.TagKindSchemaType | null>(null);
+  const [tagKind, setTagKind] = useState<TagCategoryReadOnly | null>(null);
   const [inputValue, setInputValue] = useState<string>(''); // 이거는 값이 확정되지 않은 단순 string
 
   const { data: tagKindList, isFetching } = useQuery({
     queryKey: ['all tag kind'],
-    queryFn: GetAllTagKind,
+    queryFn: GetAllTagCategory,
   });
-  const tagKindFieldPath = `kind` as FieldPath<TagEditSchema>;
+  const tagKindFieldPath = `kind` as FieldPath<TagItem>;
 
   console.log(`errors.kind : ${errors.kind}`);
   return (
@@ -67,9 +66,9 @@ function SelectTagKind() {
         setOpen(false);
       }}
       isOptionEqualToValue={(option, value) => option.id === value.id}
-      getOptionLabel={(option) => option.name_en}
+      getOptionLabel={(option) => option.name.en}
       options={tagKindList || []}
-      onChange={(event: any, newValue: TagKind.TagKindSchemaType | null) => {
+      onChange={(event: any, newValue: TagCategoryReadOnly | null) => {
         setTagKind(newValue);
       }}
       inputValue={inputValue}
@@ -125,9 +124,9 @@ export default function TagCreateDialog({
     control,
     register,
     formState: { errors },
-  } = useFormContext<TagEditSchema>();
+  } = useFormContext<TagItem>();
 
-  type i18nFieldPath = FieldArrayPath<TagEditSchema>;
+  type i18nFieldPath = FieldArrayPath<TagItem>;
 
   const { fields: tagNames } = useFieldArray({
     control,
@@ -197,7 +196,7 @@ export default function TagCreateDialog({
   const tagCreateTitle = 'Add new tag';
 
   return (
-    <TagInstantCreateFormProvider<TagEditSchema> data={tagEditSchemaDefault}>
+    <TagInstantCreateFormProvider<TagItem> data={tagItem}>
       <Dialog
         open={opened}
         onClose={handleCloseDialog}

@@ -1,13 +1,12 @@
 import axios from 'axios';
 
-import type { TagType } from '@/FormData/tag';
-import type { TagReadType } from '@/FormData/tag/tag';
+import type { TagItem, TagItemReadOnly } from '@/FormData/tag/tag';
 import { UploadImage } from '@/api/data/image';
 import type { API_NAME } from '@/api/types';
 
 import { API_HOST } from '../index';
 
-export async function AddNewTag({ tag }: { tag: TagType.TagEditSchema }) {
+export async function AddNewTag({ tag }: { tag: TagItem }) {
   const { value: name_en } = tag.name.filter((i18n) => i18n.lang == 'en')[0];
 
   const image_url = tag.imageURL!;
@@ -35,7 +34,7 @@ export async function AddNewTag({ tag }: { tag: TagType.TagEditSchema }) {
   });
 }
 
-export async function EditTag({ tag }: { tag: TagType.TagEditSchema }) {
+export async function EditTag({ tag }: { tag: TagItem }) {
   const NAME_EN = tag.name.filter((i18n) => i18n.lang == 'en')[0].value;
 
   const { id: docID } = tag;
@@ -71,7 +70,7 @@ export async function GetAllTag({
   queryKey,
 }: {
   queryKey: [API_NAME, string?];
-}): Promise<TagType.TagSchemaType[]> {
+}): Promise<TagItemReadOnly[]> {
   const [_, tagKind] = queryKey;
 
   const path_ = `tag/tag`;
@@ -89,7 +88,7 @@ export async function GetTagByID({
   queryKey,
 }: {
   queryKey: [API_NAME, string];
-}): Promise<TagReadType> {
+}): Promise<TagItemReadOnly> {
   const [_, tagID] = queryKey;
   const path_ = `tag/tag`;
 
@@ -98,20 +97,4 @@ export async function GetTagByID({
   const resp = await axios.get(url, {});
 
   return resp.data;
-}
-
-// 작성 중 태그 검색
-export async function SearchTag({
-  queryKey,
-}: {
-  queryKey: [API_NAME, string];
-}): Promise<TagType.TagSchemaTypeExtended[]> {
-  const [_, searchKeyWord] = queryKey;
-
-  const path_ = `search/tag/a`;
-  const url = `${API_HOST}/${path_}?keyword=${searchKeyWord}`;
-
-  const resp = await axios.get(url, {});
-
-  return resp.data || [];
 }

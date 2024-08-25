@@ -1,7 +1,7 @@
 import axios from 'axios';
 import type { AxiosResponse } from 'axios';
 
-import type { TaggingSchema } from '@/FormData/tag/tagAdd';
+import type { TaggingItemForm } from '@/FormData/tag/tagAdd';
 import { API_HOST, API_IMAGE_UPLOAD_HOST, AuthHeaders } from '@/api/index';
 import type { API_NAME } from '@/api/types';
 
@@ -51,7 +51,7 @@ export async function updatePersonalTagging({
   topic: string;
   subjectID: string;
   id_token: string;
-  tags: TaggingSchema;
+  tags: TaggingItemForm;
 }) {
   const path_ = `tag/tagging/${topic}/${subjectID}`;
   const headers = AuthHeaders(id_token);

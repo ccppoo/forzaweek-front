@@ -8,14 +8,14 @@ import FileUploadOutlined from '@mui/icons-material/FileUploadOutlined';
 import { Box, Button, Typography } from '@mui/material';
 import TextField from '@mui/material/TextField';
 
-import type { TagKindType } from '@/FormData/tag';
 import { TagKind } from '@/FormData/tag';
+import type { TagCategory } from '@/FormData/tag/tag';
 import { AddNewTagKind, EditTagKind } from '@/api/tag/category';
 import { FlexBox, VisuallyHiddenInput } from '@/components/styled';
 import { Image } from '@/components/styled';
 
 interface dataTextInputIntf {
-  tagKindEditSchema?: TagKindType.TagKindEditSchema;
+  tagCategory?: TagCategory;
 }
 
 const tagKinds = ['general', 'car', 'track', 'tuning', 'decal'];
@@ -23,7 +23,7 @@ const tagKinds = ['general', 'car', 'track', 'tuning', 'decal'];
 export default function TagKindForm(props: dataTextInputIntf) {
   const navigate = useNavigate();
   const DATA_TYPE = 'tag';
-  const { tagKindEditSchema } = props;
+  const { tagCategory } = props;
 
   const {
     control,
@@ -34,8 +34,8 @@ export default function TagKindForm(props: dataTextInputIntf) {
     trigger,
     setValue,
     formState: { errors },
-  } = useForm<TagKindType.TagKindEditSchema>({
-    defaultValues: tagKindEditSchema || TagKind.tagKindEditSchemaDefault,
+  } = useForm<TagCategory>({
+    defaultValues: tagCategory, // FIXME: add default value
     mode: 'onChange',
   });
   const goBackToListPage = () => navigate(`/data/${DATA_TYPE}`);
@@ -56,7 +56,7 @@ export default function TagKindForm(props: dataTextInputIntf) {
     name: 'description',
   });
 
-  const submit = async (data: TagKind.TagKindEditSchema) => {
+  const submit = async (data: TagCategory) => {
     console.log(`data : ${JSON.stringify(data)}`);
 
     if (isEditMode) {
@@ -84,7 +84,7 @@ export default function TagKindForm(props: dataTextInputIntf) {
     setImagePreview(fileBlobURL || null);
     setValue('imageURL', fileBlobURL);
   };
-  const handleOnError = (errors: SubmitErrorHandler<TagKind.TagKindEditSchema>) => {
+  const handleOnError = (errors: SubmitErrorHandler<TagCategory>) => {
     console.log(errors);
     // console.log(`errors : ${JSON.stringify(errors)}`);
   };
