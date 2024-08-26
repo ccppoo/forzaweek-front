@@ -8,6 +8,8 @@ import { CarAndTagSearch } from '@/components/Search';
 import { FlexBox, FullSizeCenteredFlexBox } from '@/components/styled';
 import ScrollToTop from '@/hooks/useResetScroll';
 
+import ItemListing from './ItemListing';
+
 export default function Decals() {
   const searchScope = 'decal';
 
@@ -16,10 +18,11 @@ export default function Decals() {
       <FullSizeCenteredFlexBox sx={{ flexDirection: 'column', rowGap: 2 }}>
         {/* 차, 태그 검색 */}
         <CarAndTagSearch searchScope={searchScope} doFinalSelect />
-        {/* 데칼 목록 */}
+        {/* 글쓰기, 등  */}
         <PostListMenu scope={searchScope} write />
 
         {/* TODO: 검색 조건 선택 안되었을 경우 추천 차 보여주기 */}
+        <ItemListing scope={searchScope} />
         <DecalCellListing />
         <DecalCellListing />
         <DecalCellListing />

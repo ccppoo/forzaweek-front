@@ -15,6 +15,7 @@ import { BriefCarInfo2 } from '@/components/Car/BriefCarInfo';
 import { TempComments } from '@/components/Comment/Comments';
 import { RelatedDecals } from '@/components/Decals';
 import { ImageShowHorizontal } from '@/components/ImageList/Horizontal';
+import Tagging from '@/components/Tag/Tagging';
 import Tags from '@/components/Tag/Tags';
 import TagAdder from '@/components/TagAdd';
 import { FlexBox, FullSizeCenteredFlexBox } from '@/components/styled';
@@ -151,9 +152,8 @@ export default function DecalDetail() {
             <BriefCarInfo2 carInfo={data.car} />
             {/* 태그 */}
             <Tags topic={TOPIC} subjectID={decalID!} />
-
             {/* 태그 달기 */}
-            {/* <TagAdder /> */}
+            <Tagging topic={TOPIC} subjectID={decalID!} />
             {/* 댓글 */}
             <TempComments />
             {/* 다른 데칼 */}
