@@ -1,5 +1,3 @@
-import { M } from 'vite/dist/node/types.d-jgA8ss1A';
-
 import type { CarInfoEssential } from '@/types/car';
 
 import { db } from './index';

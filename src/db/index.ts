@@ -133,6 +133,22 @@ export async function getAllCarInfoSimple(): Promise<CarInfoSimple[]> {
   return carInfoSimples;
 }
 
+export async function getCarInfoSimple(
+  carID: string | undefined,
+): Promise<CarInfoSimple | undefined> {
+  if (!carID) return undefined;
+
+  const car = await db.car2.get(carID);
+  if (!car) return undefined;
+
+  const manu = await db.manufacturer.get(car.manufacturer);
+
+  return {
+    ...car,
+    manufacturer: manu!,
+  };
+}
+
 export async function getCarAndImage2(carID: string): Promise<CarAndImage | undefined> {
   const car = await db.car2.get(carID);
   if (!car) return undefined;

@@ -147,8 +147,8 @@ function DecalsShowMore({ carID }: { carID: string }) {
 
   const goto = (relativePath: string) => navigate(relativePath);
   const goSearchDecals = async () => {
-    const car2 = await getCar2(carID);
-    searchCarDecal(car2);
+    // const car2 = await getCar2(carID);
+    searchCarDecal(carID);
     goto('/FH5/decal');
   };
 
