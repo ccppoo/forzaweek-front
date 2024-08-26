@@ -1,27 +1,16 @@
 import axios from 'axios';
 import type { AxiosResponse } from 'axios';
 
-import type { TaggingItemForm } from '@/FormData/tag/tagAdd';
+import type { TaggingItemForm, TaggingItemFormReadonly } from '@/FormData/tag/tagging';
+import '@/FormData/tag/tagging';
 import { API_HOST, API_IMAGE_UPLOAD_HOST, AuthHeaders } from '@/api/index';
 import type { API_NAME } from '@/api/types';
-
-type Tags = {
-  tags: string[];
-};
-
-type TaggingTagItem = {
-  id: string;
-};
-
-type PersonalTagging = {
-  tags: TaggingTagItem[];
-};
 
 export async function getPersonalTagging({
   queryKey,
 }: {
   queryKey: [API_NAME, string, string, string];
-}): Promise<PersonalTagging> {
+}): Promise<TaggingItemFormReadonly> {
   const [_, topic, subjectID, id_token] = queryKey;
 
   const headers = !!id_token ? AuthHeaders(id_token) : {};
