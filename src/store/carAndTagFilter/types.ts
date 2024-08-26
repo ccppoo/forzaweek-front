@@ -1,15 +1,17 @@
-import type { Car2 } from '@/db/schema/car';
-import type { Tags } from '@/types';
-import type { CarInfo2 } from '@/types/car';
+// import type { TagItem } from '@/FormData/tag/tag';
+// import type { Car2 } from '@/db/schema/car';
+// import type { CarInfo2 } from '@/types/car';
+export type CarID = string;
+export type TagID = string;
 
 export type CarActions = {
-  setCar: (car: Car2 | undefined) => void;
+  setCar: (car: CarID | undefined) => void;
   removeCar: () => void;
 };
 
 export type TagActions = {
-  setTags: (tags: Tags) => void;
-  removeTag: (tag: string) => void;
+  setTags: (tags: TagID[]) => void;
+  removeTag: (tag: TagID) => void;
   removeAllTags: () => void;
-  addTag: (tag: string) => void;
+  addTag: (tag: TagID) => void;
 };

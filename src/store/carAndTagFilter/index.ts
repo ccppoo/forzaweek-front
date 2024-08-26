@@ -1,5 +1,6 @@
 import { atomFamily, useRecoilState } from 'recoil';
 
+import type { TagItem } from '@/FormData/tag/tag';
 import type { Car2 } from '@/db/schema/car';
 import type { CarInfo2 } from '@/types/car';
 import type { CarAndImage } from '@/types/car';
@@ -7,16 +8,16 @@ import type { Tags } from '@/types/tag';
 
 import { CarActions, TagActions } from './types';
 
-const tagsDefault: Tags = [];
-const carDefault: Car2 | undefined = undefined;
+export type TagID = string;
+export type CarID = string;
 type CarTagFilter = {
-  tags: Tags;
-  car: Car2 | undefined;
+  tagIDs: TagID[];
+  car: CarID | undefined;
 };
 
 const carTagFilterDefault: CarTagFilter = {
-  tags: tagsDefault,
-  car: carDefault,
+  tagIDs: [],
+  car: undefined,
 };
 
 const carTagFilterStateFamily = atomFamily<CarTagFilter, string>({
@@ -25,26 +26,26 @@ const carTagFilterStateFamily = atomFamily<CarTagFilter, string>({
 });
 
 function useCarAndTagFilter(scope: string): {
-  filter: { car: Car2 | undefined; tags: Tags };
+  filter: { car: CarID | undefined; tagIDs: TagID[] };
   actions: { car: CarActions; tag: TagActions };
 } {
   const carTagFilterState = carTagFilterStateFamily(scope);
   const [carTagFilterOptions, setCarTagFilterOptions] = useRecoilState(carTagFilterState);
 
-  const setTags = (tags: Tags) => {
+  const setTags = (tagIDs: string[]) => {
     setCarTagFilterOptions((prev) => {
       return {
         ...prev,
-        tags: tags,
+        tagIDs: tagIDs,
       };
     });
   };
 
-  const addTag = (tag: string) => {
+  const addTag = (tagID: string) => {
     setCarTagFilterOptions((prev) => {
       return {
         ...prev,
-        tags: [...prev.tags, tag],
+        tagIDs: [...prev.tagIDs, tagID],
       };
     });
   };
@@ -53,7 +54,7 @@ function useCarAndTagFilter(scope: string): {
     setCarTagFilterOptions((prev) => {
       return {
         ...prev,
-        tags: [...prev.tags.filter((t) => t != tagRemoved)],
+        tags: [...prev.tagIDs.filter((t) => t != tagRemoved)],
       };
     });
   };
@@ -67,7 +68,7 @@ function useCarAndTagFilter(scope: string): {
     });
   };
 
-  const setCar = async (name: Car2 | undefined) => {
+  const setCar = async (name: CarID | undefined) => {
     setCarTagFilterOptions((prev) => {
       return {
         ...prev,
