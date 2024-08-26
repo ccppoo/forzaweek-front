@@ -23,21 +23,22 @@ interface FinalSelectInterface {
   setFilter?: (car: CarInfo2) => void;
 }
 
-function RenderCarImage({ carID }: { carID: string | undefined }) {
-  if (!carID) return;
-
+function RenderCarImage({ carID }: { carID: string }) {
   const carImage = useLiveQuery(async () => getCarImage(carID), [carID]);
 
-  return (
-    <Image
-      src={carImage?.first}
-      sx={{
-        width: '100%',
-        height: 240,
-        objectFit: 'contain',
-      }}
-    />
-  );
+  if (carImage?.first) {
+    return (
+      <Image
+        src={carImage?.first}
+        sx={{
+          width: '100%',
+          height: 240,
+          objectFit: 'contain',
+        }}
+      />
+    );
+  }
+  return;
 }
 
 export default function FinalSelect(props: FinalSelectInterface) {
@@ -69,8 +70,8 @@ export default function FinalSelect(props: FinalSelectInterface) {
 
   const submitToCarTagFilter = async () => {
     if (carID == '') return;
-    const car = await getCar2(carID);
-    setCar(car);
+    // const car = await getCar2(carID);
+    setCar(carID);
   };
 
   const selectCarMenuItem = (event: SelectChangeEvent) => {
@@ -126,7 +127,7 @@ export default function FinalSelect(props: FinalSelectInterface) {
           </Select>
         </FormControl>
       </FlexBox>
-      <RenderCarImage carID={carID} />
+      {carID && <RenderCarImage carID={carID} />}
       <FlexBox sx={{ justifyContent: 'end', paddingX: 0.5, paddingY: 0.5, columnGap: 0.5 }}>
         <Button variant="outlined" size="small" onClick={submitToCarTagFilter}>
           Select

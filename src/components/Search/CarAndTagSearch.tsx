@@ -12,14 +12,19 @@ import Collapse from '@mui/material/Collapse';
 import Container from '@mui/material/Container';
 import Stack from '@mui/material/Stack';
 
+import { useLiveQuery } from 'dexie-react-hooks';
+
 import { DecalCellListing } from '@/components/Decals';
 import {
   AutocompleteCarSearchBar,
   CarFilterAndSelect,
   TagAutocompleteTextField,
 } from '@/components/Search';
+import { TagItemCell } from '@/components/Tag';
 import { FlexBox, FullSizeCenteredFlexBox } from '@/components/styled';
+import { getCarInfoSimple } from '@/db';
 import useCarAndTagFilter from '@/store/carAndTagFilter';
+import type { CarInfoSimple } from '@/types/car';
 
 interface CarAndTagSearchIterface {
   searchScope: string;
@@ -32,12 +37,18 @@ export default function CarAndTagSearch(props: CarAndTagSearchIterface) {
   const noCarSelected = 'No car selected';
   const noTagsSelected = 'No tags selected (all tags)';
   const {
-    filter: { car, tags: tagsSelected },
+    filter: { car, tagIDs },
     actions: {
       tag: { removeAllTags },
       car: { removeCar },
     },
   } = useCarAndTagFilter(searchScope);
+
+  // console.log(`tagIDstagIDstagIDs :${JSON.stringify(tagIDs)}`);
+  const carSelected = useLiveQuery<CarInfoSimple | undefined>(
+    async () => getCarInfoSimple(car),
+    [car],
+  );
 
   return (
     <FlexBox sx={{ flexDirection: 'column', width: '100%' }}>
@@ -52,12 +63,20 @@ export default function CarAndTagSearch(props: CarAndTagSearchIterface) {
           id="panel1-header"
         >
           <Typography sx={{ width: '20%', flexShrink: 0 }}>Car</Typography>
-          <Typography
-            sx={{ color: car?.name ? 'text.main' : 'text.first' }}
-            fontWeight={car?.name ? 500 : 300}
-          >
-            {car?.name_en || noCarSelected}
-          </Typography>
+          <FlexBox sx={{ columnGap: 1 }}>
+            <Typography
+              sx={{ color: carSelected?.name ? 'text.main' : 'text.first' }}
+              fontWeight={carSelected?.name ? 400 : 200}
+            >
+              {carSelected?.manufacturer.name_en}
+            </Typography>
+            <Typography
+              sx={{ color: carSelected?.name ? 'text.main' : 'text.first' }}
+              fontWeight={carSelected?.name ? 500 : 300}
+            >
+              {carSelected?.name_en || noCarSelected}
+            </Typography>
+          </FlexBox>
         </AccordionSummary>
         <AccordionDetails>
           <FlexBox sx={{ flexDirection: 'column' }}>
@@ -90,16 +109,17 @@ export default function CarAndTagSearch(props: CarAndTagSearchIterface) {
           id="panel2-header"
         >
           <Typography sx={{ width: '20%', flexShrink: 0 }}>Tags</Typography>
-          {tagsSelected.length > 0 ? (
+          {tagIDs.length > 0 ? (
             <Stack direction="row" spacing={1}>
-              {tagsSelected.map((tag: string) => (
-                <Chip label={tag} variant="outlined" key={`tag-selected-chip-${tag}`} />
+              {tagIDs.map((tagID) => (
+                <TagItemCell tagID={tagID} key={tagID} />
+                // <Chip label={tag} variant="outlined" key={`tag-selected-${tagID}`} />
               ))}
             </Stack>
           ) : (
             <Typography
-              sx={{ color: tagsSelected.length > 0 ? 'text.main' : 'text.first' }}
-              fontWeight={tagsSelected.length > 0 ? 500 : 300}
+              sx={{ color: tagIDs.length > 0 ? 'text.main' : 'text.first' }}
+              fontWeight={tagIDs.length > 0 ? 500 : 300}
             >
               {noTagsSelected}
             </Typography>
@@ -108,7 +128,7 @@ export default function CarAndTagSearch(props: CarAndTagSearchIterface) {
         <AccordionDetails>
           <FlexBox sx={{ flexDirection: 'column' }}>
             {/* FIXME: TagAutocompleteTextField - 태그 자동완성 컴포넌트  */}
-            {/* <TagAutocompleteTextField searchScope={searchScope} values={tags} /> */}
+            <TagAutocompleteTextField searchScope={searchScope} limitTags={5} />
           </FlexBox>
         </AccordionDetails>
         <AccordionActions sx={{ paddingTop: 0 }}>
