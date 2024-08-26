@@ -23,7 +23,6 @@ import type { DecalSchemaReadType } from '@/FormData/decal';
 import { GetTagByID } from '@/api/tag/tag';
 import { voteTagOfSubject } from '@/api/tag/tagging/vote';
 import { getAllTagsOfSubject, getTagOfSubject } from '@/api/tag/tags';
-import { TagAdder2 } from '@/components/TagAdd/TagAdder';
 import { FlexBox, FullSizeCenteredFlexBox } from '@/components/styled';
 import { Image } from '@/components/styled';
 import useAuthState from '@/store/auth';
@@ -188,7 +187,7 @@ function Tag(props: TagIntf) {
     // console.log(`data.up_user : ${data.up_user}`);
     const up_voted = !!user?.userID ? data.up_user.includes(user?.userID) : false;
     const down_voted = !!user?.userID ? data.down_user.includes(user?.userID) : false;
-    const label = tagData.name.en || tagData.initial_name;
+    const label = tagData.name.en || tagData.name.ko;
     return (
       <TagChip
         label={label!}
@@ -211,6 +210,7 @@ export default function Tags(props: TagsIntf) {
   });
 
   if (data) {
+    console.log(`data  : ${JSON.stringify(data)}`);
     return (
       <FlexBox sx={{ flexDirection: 'column' }}>
         <FlexBox sx={{ paddingBottom: 1 }}>
@@ -230,7 +230,6 @@ export default function Tags(props: TagsIntf) {
             return <Tag {...props} tagID={tagID} key={`tagging-tag-${tagID}-${idx}`} />;
           })}
         </Paper>
-        <Tagging topic={topic} subjectID={subjectID} />
       </FlexBox>
     );
   }

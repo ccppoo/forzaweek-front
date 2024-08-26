@@ -7,7 +7,7 @@ import { Box, Button, Typography } from '@mui/material';
 import Container from '@mui/material/Container';
 import TextField from '@mui/material/TextField';
 
-import type { TaggingItemForm } from '@/FormData/tag/tagAdd';
+import type { TaggingItemForm } from '@/FormData/tag/tagging';
 import { updatePersonalTagging } from '@/api/tag/tagging/crud';
 
 // export const tagCommentSchema = z.object({
@@ -15,23 +15,21 @@ import { updatePersonalTagging } from '@/api/tag/tagging/crud';
 //   tagIDs: z.array(z.string()).default([]), // 이미 있는 태그의 경우 ID로 저장
 // });
 
-interface PostFormProviderPropsIntf<T> {
-  data: DefaultValues<T>;
+interface PostFormProviderPropsIntf {
+  data: DefaultValues<TaggingItemForm>;
   children: React.ReactNode;
   topic: string;
   subjectID: string;
   id_token: string;
 }
 
-export default function TagCommentFormProvider<T extends FieldValues>(
-  props: PostFormProviderPropsIntf<T>,
-) {
+export default function TagCommentFormProvider(props: PostFormProviderPropsIntf) {
   const { data, children, topic, subjectID, id_token } = props;
-  const methods = useForm<T>({
+  const methods = useForm<TaggingItemForm>({
     defaultValues: data,
   });
 
-  const commentID = methods.getValues('id' as FieldPath<T>);
+  const commentID = methods.getValues('id' as FieldPath<TaggingItemForm>);
   const isEditMode = !!commentID;
   // console.log(`methods.getValues('id') : ${methods.getValues('id')}`);
 

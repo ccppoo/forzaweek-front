@@ -40,7 +40,6 @@ function AsyncTagSearchSelect({
   addCompletedTag: (tag: TagItemPopulated) => void;
 }) {
   // options -> 여기서 useQuery로 가져오기
-  // const filterOptions = createFilterOptions<TagType.TagSchemaTypeExtended>({});
   const [tagOptions, setTagOptions] = useState<TagItemPopulated[]>([]);
   const [inputValue, setInputValue] = useState<string>('');
   const [value, setValue] = useState<string>('');
@@ -49,7 +48,7 @@ function AsyncTagSearchSelect({
     queryKey: ['search_tag', searchParams],
     queryFn: SearchTag,
     placeholderData: [],
-    enabled: !!inputValue,
+    enabled: !!inputValue && inputValue.length > 2,
   });
 
   const matchesName = (names: TagName, value: string): boolean => {
@@ -226,10 +225,6 @@ export default function TagSearchCreateTextFeild() {
     // 서버에서 ID 받고, 글 작성중인 태그 목록에 추가하기
     return;
   };
-  // if (tagList) {
-  //   const TAG_OPTIONS = tagList.filter(
-  //     ({ name_en }) => !selectedTags.includes(name_en),
-  //   ) as TagType.TagSchemaTypeExtended[];
 
   return (
     <Paper

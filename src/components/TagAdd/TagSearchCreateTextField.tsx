@@ -34,13 +34,12 @@ function displayLang(tagItemOption: TagItemPopulated): string {
   }
   return tagItemOption.name.unknown!;
 }
+function OptionCategory() {}
 
 interface AutoCompleteOptionIntf {
   option: TagItemPopulated;
   liProps: React.HTMLAttributes<HTMLLIElement>;
 }
-
-function OptionCategory() {}
 
 function AutoCompleteOption({ option, liProps }: AutoCompleteOptionIntf) {
   // TODO: merged 된 경우 바뀐 선택지로

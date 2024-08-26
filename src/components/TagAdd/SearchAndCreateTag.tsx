@@ -13,7 +13,7 @@ import type {
 import { Paper, Typography } from '@mui/material';
 
 import type { TagItemPopulated, TagName } from '@/FormData/tag/search/types';
-import type { TaggingItemForm } from '@/FormData/tag/tagAdd';
+import type { TaggingItemForm } from '@/FormData/tag/tagging';
 import { TagItemCell } from '@/components/Tag';
 import NewTagItemCell from '@/components/Tag/NewTagCell';
 import { FlexBox, Image } from '@/components/styled';
@@ -28,17 +28,19 @@ type SelectCarFormInput = {
 };
 
 // NOTE: src\components\FormInputs\AddTags.tsx 이거 복제본
-export default function SearchAndCreateTag<T extends TaggingItemForm>(props: SelectCarFormInput) {
+export default function SearchAndCreateTag(props: SelectCarFormInput) {
   const { selectScope, postType } = props;
 
-  const { setValue, getValues, watch, control } = useFormContext<T>();
-  const newTagsFormPath = 'newTags' as FieldArrayPath<T>;
-  const tagsFormPath = 'tags' as FieldArrayPath<T>;
-  const tagsFormPath2 = 'tags' as FieldPath<T>;
-  type FormDataType = FieldArray<T, FieldArrayPath<T>>;
-  type TagItemForm = TagItemPopulated & FieldArrayWithId<T, ArrayPath<T>, 'customID'>;
-  type ArrayPathFormValue = FieldArrayPathValue<T, FieldArrayPath<T>>;
+  const { setValue, getValues, watch, control, trigger } = useFormContext<TaggingItemForm>();
+  const newTagsFormPath = 'newTags' as FieldArrayPath<TaggingItemForm>;
+  const tagsFormPath = 'tags' as FieldArrayPath<TaggingItemForm>;
+  const tagsFormPath2 = 'tags' as FieldPath<TaggingItemForm>;
+  type FormDataType = FieldArray<TaggingItemForm, FieldArrayPath<TaggingItemForm>>;
+  type TagItemForm = TagItemPopulated &
+    FieldArrayWithId<TaggingItemForm, ArrayPath<TaggingItemForm>, 'customID'>;
+  type ArrayPathFormValue = FieldArrayPathValue<TaggingItemForm, FieldArrayPath<TaggingItemForm>>;
   // const [tagsAdded, setTagsAdded] = useState<TagItemPopulated[]>([]) // temp
+
   const {
     fields: _tagsField,
     remove: removeTag,
@@ -50,18 +52,6 @@ export default function SearchAndCreateTag<T extends TaggingItemForm>(props: Sel
   });
 
   const tagsField = _tagsField as TagItemForm[]; // 이렇게까지 type casting을 해야하나??
-
-  const {
-    fields: _newTagsField,
-    remove: removeNewTag,
-    append: appendNewTag,
-  } = useFieldArray({
-    control,
-    name: newTagsFormPath,
-    keyName: 'customID',
-  });
-
-  // const newTagsField = _newTagsField as NewTagsItem[]; // 이렇게까지 type casting을 해야하나??
 
   const addTag = (tag: TagItemPopulated) => {
     appendTag(tag as TagItemForm);
