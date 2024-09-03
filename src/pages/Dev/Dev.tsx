@@ -9,23 +9,51 @@ import type { TagItemPopulated } from '@/FormData/tag/search/types';
 // import { populateTagSearchResult } from '@/FormData/tag/utils';
 import { dev_check } from '@/api/auth/dev';
 import { xbox } from '@/api/auth/oauth';
+import { GetCarFH5 } from '@/api/fh5/car/get';
 import {
-  updateCarDB,
-  updateCarImage,
-  updateCar_FH5_meta,
-  updateCar_FH5_performance,
+  updateCarDB, // updateCarImage,
+  updateCar_FH5,
+  updateCar_FH5_Image,
+  updateCountryDB,
   updateManufacturerDB,
-  updateNationDB,
   updateTrack,
   updateTrackImage,
 } from '@/api/indexedDB/get';
-import { SearchTag } from '@/api/search';
+import { GetRealCar } from '@/api/real/car/get';
+import { GetCountry } from '@/api/real/country/get';
+import { GetManufacturer } from '@/api/real/manufacturer/get';
 // import { EditorJSInput } from '@/components/Editor';
 import Meta from '@/components/Meta';
 import TagItemCell from '@/components/Tag/TagCell';
 import { FlexBox, FullSizeCenteredFlexBox } from '@/components/styled';
 import { db } from '@/db';
+import type { CarFH5Type } from '@/schema/fh5/types';
+import type { CarType, CountryType, ManufacturerType } from '@/schema/real/types';
 import useAuthState from '@/store/auth';
+
+type APIFunctionType<T> = () => Promise<T>;
+
+function GetAPITest<T>({ name, APIFunction }: { name: string; APIFunction: APIFunctionType<T> }) {
+  const [value, setValue] = useState<T | undefined>(undefined);
+
+  const onClick = async () => {
+    const apiResult = await APIFunction();
+    setValue(apiResult);
+  };
+
+  return (
+    <FlexBox sx={{ flexDirection: 'column' }}>
+      <FlexBox sx={{ columnGap: 1 }}>
+        <Button onClick={onClick} variant="outlined">
+          {name}
+        </Button>
+      </FlexBox>
+      <FlexBox sx={{ flexWrap: 'wrap', columnGap: 2, paddingY: 2 }}>
+        {JSON.stringify(value)}
+      </FlexBox>
+    </FlexBox>
+  );
+}
 
 function Dev() {
   const [msg, setMSG] = useState<string>('');
@@ -45,8 +73,8 @@ function Dev() {
 
   const insertDB2 = async (table: string) => {
     switch (table) {
-      case 'nation': {
-        await updateNationDB();
+      case 'country': {
+        await updateCountryDB();
         return;
       }
       case 'manufacturer': {
@@ -57,16 +85,12 @@ function Dev() {
         await updateCarDB();
         return;
       }
-      case 'car_FH5_meta': {
-        await updateCar_FH5_meta();
+      case 'car_FH5': {
+        await updateCar_FH5();
         return;
       }
-      case 'car_FH5_performance': {
-        await updateCar_FH5_performance();
-        return;
-      }
-      case 'car_image': {
-        await updateCarImage();
+      case 'car_FH5_image': {
+        await updateCar_FH5_Image();
         return;
       }
       case 'track': {
@@ -83,11 +107,6 @@ function Dev() {
   const [searchKeyword, setSearchKeyword] = useState<string>('');
   const [searchResult, setSearchResult] = useState<TagItemPopulated[]>([]);
 
-  const onClickGetSearch = async () => {
-    const resp = await SearchTag({ queryKey: ['search tag', searchKeyword] });
-    setSearchResult(resp);
-  };
-
   return (
     <>
       <Meta title="Test" />
@@ -100,8 +119,8 @@ function Dev() {
 
             <Grid container sx={{}} rowGap={2}>
               <Grid xs={4} sx={{}}>
-                <Button variant="outlined" onClick={() => insertDB2('nation')}>
-                  nations
+                <Button variant="outlined" onClick={() => insertDB2('country')}>
+                  country
                 </Button>
               </Grid>
               <Grid xs={4}>
@@ -115,18 +134,13 @@ function Dev() {
                 </Button>
               </Grid>
               <Grid xs={4}>
-                <Button variant="outlined" onClick={() => insertDB2('car_FH5_meta')}>
-                  car FH5 meta
+                <Button variant="outlined" onClick={() => insertDB2('car_FH5')}>
+                  car FH5
                 </Button>
               </Grid>
               <Grid xs={4}>
-                <Button variant="outlined" onClick={() => insertDB2('car_FH5_performance')}>
-                  car FH5 performance
-                </Button>
-              </Grid>
-              <Grid xs={4}>
-                <Button variant="outlined" onClick={() => insertDB2('car_image')}>
-                  car images
+                <Button variant="outlined" onClick={() => insertDB2('car_FH5_image')}>
+                  car FH5 images
                 </Button>
               </Grid>
               <Grid xs={4}>
@@ -144,23 +158,18 @@ function Dev() {
           <FlexBox>
             state : <Typography>{msg}</Typography>
           </FlexBox>
-          <FlexBox sx={{ flexDirection: 'column' }}>
-            <FlexBox sx={{ columnGap: 1 }}>
-              <Button onClick={onClickGetSearch} variant="outlined">
-                search tag
-              </Button>
-              <TextField
-                onChange={(e) => setSearchKeyword(e.target.value)}
-                value={searchKeyword}
-                placeholder="tag search keyword"
-              />
-            </FlexBox>
-            <FlexBox sx={{ flexWrap: 'wrap', columnGap: 2, paddingY: 2 }}>
-              {searchResult.map((val) => (
-                <TagItemCell key={val.id} tagID={val.id} />
-              ))}
-            </FlexBox>
-          </FlexBox>
+
+          <GetAPITest<CarType> name="get real car" APIFunction={async () => GetRealCar({})} />
+          <GetAPITest<ManufacturerType>
+            name="get real manufacturer"
+            APIFunction={async () => GetManufacturer({})}
+          />
+          <GetAPITest<CountryType>
+            name="get real country"
+            APIFunction={async () => GetCountry({})}
+          />
+          <GetAPITest<CarFH5Type> name="get fh5 car" APIFunction={async () => GetCarFH5({})} />
+
           <FlexBox sx={{ flexDirection: 'column' }}>
             <Typography>Token refresh</Typography>
             <Button onClick={refresh_token} variant="contained">
