@@ -2,22 +2,16 @@ import axios from 'axios';
 
 import type { CarEditSchema, CarSchemaType } from '@/FormData/car';
 import { UploadImage } from '@/api/data/image';
-import { API_HOST } from '@/api/index';
 import type { API_NAME } from '@/api/types';
-import { dbTableUpsert } from '@/db/index';
-import {
-  Car2,
-  CarImage2,
-  FH5_META,
-  FH5_Performance,
-  Manufacturer,
-  Nation,
-  Track2,
-  TrackImage,
-} from '@/db/schema';
+import { CarFH5, CarFH5Image } from '@/db/model/fh5';
+import { Car, Country, Manufacturer } from '@/db/model/real';
+import { dbCollectionUpdate } from '@/db/query/update';
+import { Car2, CarImage2, FH5_META, FH5_Performance, Track2, TrackImage } from '@/db/schema';
+
+import { BASE_PATH_DB, JSONContentType } from './config';
 
 interface GetIndexedDB {
-  table: string;
+  collection: string;
   path?: string;
 }
 
@@ -27,39 +21,49 @@ type GetDBType<T> = {
   data: T[];
 };
 
-async function updateIndexedDB<T>(params: GetIndexedDB) {
-  const { table, path } = params;
+async function updateIndexedDB<T>({ collection, path }: GetIndexedDB) {
+  // const { table, path } = params;
 
-  const path_ = !!path ? `db/${path}` : `db/${params.table}`;
-  const url = `${API_HOST}/${path_}`;
+  const path_ = !!path ? path : collection;
+  const url = `${BASE_PATH_DB}/${path_}`;
   const { data } = await axios.get<GetDBType<T>>(url, {
     headers: {
-      'Content-Type': 'application/json',
+      ...JSONContentType,
     },
   });
 
-  // const { version, lastUpdate, data: newTableData } = data;
+  const { version, lastUpdate, data: collectionData } = data;
 
-  await dbTableUpsert<T>({ table, ...data });
+  await dbCollectionUpdate<T>({
+    collection,
+    version: version,
+    lastUpdate: lastUpdate,
+    data: collectionData,
+  });
+  // await dbTableUpsert<T>({ table, ...data });
 }
 
-export const updateNationDB = async () => updateIndexedDB<Nation>({ table: 'nation' });
+export const updateCountryDB = async () => updateIndexedDB<Country>({ collection: 'country' });
 
 export const updateManufacturerDB = async () =>
-  updateIndexedDB<Manufacturer>({ table: 'manufacturer' });
+  updateIndexedDB<Manufacturer>({ collection: 'manufacturer' });
 
-export const updateCarDB = async () => updateIndexedDB<Car2>({ table: 'car2' });
+export const updateCarDB = async () => updateIndexedDB<Car>({ collection: 'car' });
 
-export const updateCarImage = async () =>
-  updateIndexedDB<CarImage2>({ table: 'carImage2', path: 'car2/image' });
+// export const updateCarImage = async () =>
+//   updateIndexedDB<CarImage2>({ collection: 'carImage2', path: 'car2/image' });
 
-export const updateCar_FH5_meta = async () =>
-  updateIndexedDB<FH5_META>({ table: 'car_FH5_meta', path: 'car2/FH5/meta' });
+export const updateCar_FH5 = async () =>
+  updateIndexedDB<CarFH5>({ collection: 'carFH5', path: 'FH5/car' });
 
-export const updateCar_FH5_performance = async () =>
-  updateIndexedDB<FH5_Performance>({ table: 'car_FH5_performance', path: 'car2/FH5/performance' });
+export const updateCar_FH5_Image = async () =>
+  updateIndexedDB<CarFH5Image>({
+    collection: 'carFH5Image',
+    path: 'FH5/car/image',
+  });
 
-export const updateTrack = async () => updateIndexedDB<Track2>({ table: 'track2', path: 'track2' });
+export const updateTrack = async () =>
+  updateIndexedDB<Track2>({ collection: 'track2', path: 'track2' });
 
 export const updateTrackImage = async () =>
-  updateIndexedDB<TrackImage>({ table: 'trackImage', path: 'track2/image' });
+  updateIndexedDB<TrackImage>({ collection: 'trackImage', path: 'track2/image' });
