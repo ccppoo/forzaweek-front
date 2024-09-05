@@ -19,7 +19,7 @@ interface FH5_Performance {
   offroad: number;
 }
 
-export interface Car extends DocumentBase {
+export interface CarFH5 extends DocumentBase {
   baseCar: string;
 
   PI: number;

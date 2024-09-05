@@ -1,8 +1,9 @@
 import { DocumentBase } from '@/db/model/base';
 import { dbIndexBuilder } from '@/db/model/config';
 import { i18nArrayMap, i18nNameArrayIndex } from '@/db/model/i18n';
+import { MultiImageURL } from '@/db/model/image';
 
-export interface Car extends DocumentBase {
+export interface Car extends DocumentBase, MultiImageURL {
   manufacturer: string;
   productionYear: number;
   engineType: string;
