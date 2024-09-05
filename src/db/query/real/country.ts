@@ -15,3 +15,10 @@ export async function getCountry(countryID: string): Promise<CountryType | undef
 
   return country as unknown as CountryType;
 }
+
+export async function getCountriesByID(countryIDs: string[]): Promise<CountryType[]> {
+  const country = await db.country.bulkGet(countryIDs);
+  if (!country) return [];
+
+  return country as CountryType[];
+}
