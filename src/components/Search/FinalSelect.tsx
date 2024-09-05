@@ -13,7 +13,10 @@ import { useLiveQuery } from 'dexie-react-hooks';
 
 import { FlexBox, FullSizeCenteredFlexBox } from '@/components/styled';
 import { Image } from '@/components/styled';
-import { getCar2, getCarImage } from '@/db/index';
+import type { CarFH5Image } from '@/db/model/fh5';
+// import { getCar2, getCarImage } from '@/db/index';
+import { getCarFH5, getCarFH5Image, searchCarByName } from '@/db/query/fh5/car';
+import { CarFH5FullInput, CarFH5FullType } from '@/schema/fh5/types';
 import useCarAndTagFilter from '@/store/carAndTagFilter';
 import useCarSearchFilters, { CarSearchOption } from '@/store/carSearchFilters';
 import type { CarInfo2 } from '@/types/car';
@@ -24,12 +27,14 @@ interface FinalSelectInterface {
 }
 
 function RenderCarImage({ carID }: { carID: string }) {
-  const carImage = useLiveQuery(async () => getCarImage(carID), [carID]);
+  const carImage = useLiveQuery(async () => getCarFH5Image(carID), [carID]);
 
-  if (carImage?.first) {
+  const carImageUrl = carImage?.imageURLs[0];
+
+  if (carImageUrl) {
     return (
       <Image
-        src={carImage?.first}
+        src={carImageUrl}
         sx={{
           width: '100%',
           height: 240,
@@ -97,12 +102,12 @@ export default function FinalSelect(props: FinalSelectInterface) {
     return items;
   };
 
-  const selectValueCar = useLiveQuery(async () => getCar2(carID), [carID]);
+  const selectValueCar = useLiveQuery(async () => getCarFH5(carID), [carID]);
 
   const renderSelectedValue = (carID: string | undefined) => {
     return (
       <FlexBox sx={{ flexDirection: 'row', columnGap: 1 }}>
-        <Typography>{selectValueCar?.name_en}</Typography>
+        <Typography>{selectValueCar?.baseCar.name.en[0]}</Typography>
       </FlexBox>
     );
   };

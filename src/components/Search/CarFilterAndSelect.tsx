@@ -5,7 +5,7 @@ import Divider from '@mui/material/Divider';
 
 import { useLiveQuery } from 'dexie-react-hooks';
 
-import * as query from '@/db/query';
+// import * as query from '@/db/query2';
 import { FlexBox } from '@/components/styled';
 import {
   BOOST,
@@ -15,6 +15,8 @@ import {
   PRODUCTION_YEARs,
   RARITY,
 } from '@/data/values';
+import { getAllCountry } from '@/db/query/real/country';
+import { getAllManufacturers } from '@/db/query/real/manufacturer';
 import useCarSearchFilters, { CarSearchOption } from '@/store/carSearchFilters';
 
 import AutocompleteTextField, {
@@ -35,8 +37,8 @@ export default function CarFilterAndSelect(props: CarSearchAndSelectInterface) {
 
   const [options, _, __, { clearAllOptions }] = useCarSearchFilters(scope);
 
-  const nations = useLiveQuery(query.getAllNations);
-  const manufacturers = useLiveQuery(query.getAllManufacturers);
+  const nations = useLiveQuery(getAllCountry);
+  const manufacturers = useLiveQuery(getAllManufacturers);
 
   return (
     <FlexBox sx={{ flexDirection: 'column', width: '100%' }}>

@@ -22,11 +22,13 @@ import { darken, lighten, styled } from '@mui/system';
 import { useLiveQuery } from 'dexie-react-hooks';
 
 import { FlexBox } from '@/components/styled';
-import { getAllCarInfoSimple, getCar2, getCarInfoSimple } from '@/db';
 import { searchCar } from '@/db/car';
 import { getManufacturer } from '@/db/manufacturer';
+// import { getAllCarInfoSimple, getCar2, getCarInfoSimple } from '@/db';
+import { getCarFH5, searchCarByName } from '@/db/query/fh5/car';
 import { Manufacturer } from '@/db/schema';
 import useAsyncLiveQuery from '@/db/useAsyncLiveQuery';
+import { CarFH5FullInput, CarFH5FullType } from '@/schema/fh5/types';
 import useCarAndTagFilter from '@/store/carAndTagFilter';
 import type { CarInfoSimple } from '@/types/car';
 
@@ -69,15 +71,16 @@ export default function AutocompleteCarSearchBar({ searchScope }: { searchScope:
   const submitToCarTagFilter = async (carID: string) => {
     setCar(carID);
   };
-  const { data: options2, isLoading } = useAsyncLiveQuery<CarInfoSimple[]>({
-    queryFn: async () => searchCar({ query: inputValue }),
+  const { data: options2, isLoading } = useAsyncLiveQuery<CarFH5FullType[]>({
+    // queryFn: async () => searchCar({ query: inputValue }),
+    queryFn: async () => searchCarByName({ query: inputValue }),
     queryKeys: [inputValue],
     defaultIfMissing: [],
     // enabled: inputValue.length > 0,
     placeHolder: [],
   });
-  const carSelected = useLiveQuery<CarInfoSimple | undefined>(async () =>
-    getCarInfoSimple(selectedCarID),
+  const carSelected = useLiveQuery<CarFH5FullType | undefined>(async () =>
+    getCarFH5(selectedCarID),
   );
 
   const renderGroup = (params: AutocompleteRenderGroupParams) => {
@@ -118,11 +121,11 @@ export default function AutocompleteCarSearchBar({ searchScope }: { searchScope:
   //   return filteredOptions;
   // };
 
-  const getOptionLabel = (option: CarInfoSimple) => option.name_en;
+  const getOptionLabel = (option: CarFH5FullType) => option.baseCar.name.en[0];
 
   const renderOptions = (
     props: HTMLAttributes<HTMLLIElement>,
-    option: CarInfoSimple,
+    option: CarFH5FullType,
     state: AutocompleteRenderOptionState,
   ) => {
     const { ...optionProps } = props;
@@ -159,15 +162,15 @@ export default function AutocompleteCarSearchBar({ searchScope }: { searchScope:
         //   );
         //   return displayOptions;
         // }}
-        groupBy={(car: CarInfoSimple) => car.manufacturer.id}
+        groupBy={(car: CarFH5FullType) => car.baseCar.manufacturer.id!!}
         renderGroup={renderGroup}
         getOptionLabel={getOptionLabel}
-        isOptionEqualToValue={(option: CarInfoSimple, value: CarInfoSimple | undefined) => {
+        isOptionEqualToValue={(option: CarFH5FullType, value: CarFH5FullType | undefined) => {
           return value ? option.id == value.id : false;
         }}
         defaultValue={null}
         value={carSelected}
-        onChange={(event: any, newValue: CarInfoSimple | null) => {
+        onChange={(event: any, newValue: CarFH5FullType | null) => {
           newValue || removeCar();
           // setSelection(newValue || undefined);
           if (newValue?.id) {

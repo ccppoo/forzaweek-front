@@ -18,9 +18,11 @@ import Grid from '@mui/material/Unstable_Grid2';
 
 import { FlexBox } from '@/components/styled';
 import { Image } from '@/components/styled';
-import { getCar2 } from '@/db';
+import { CarFH5FullInput, CarFH5FullType } from '@/schema/fh5/types';
+// import { getCar } from '@/db/query/fh5/car';
 import useCarAndTagFilter from '@/store/carAndTagFilter';
-import { CarInfo2 } from '@/types/car';
+
+// import { CarInfo2 } from '@/types/car';
 
 const StyledLink = styled(Link)`
   text-decoration: none;
@@ -42,13 +44,13 @@ function setFontSize(target: string): number {
   return 15;
 }
 
-export default function CarPreviewCard({ carInfo }: { carInfo: CarInfo2 }) {
-  const FULL_NAME = carInfo.name_en;
+export default function CarPreviewCard({ carInfo }: { carInfo: CarFH5FullType }) {
+  const FULL_NAME = carInfo.baseCar.name.en[0];
   const NAME_FONT_SIZE = setFontSize(FULL_NAME);
-  const YEAR = carInfo.productionYear;
-  const PI = carInfo.fh5_perf.pi;
-  const DIVISION = carInfo.fh5_meta.division;
-  const EngineType = carInfo.engineType;
+  const YEAR = carInfo.baseCar.productionYear;
+  const PI = carInfo.PI;
+  const DIVISION = carInfo.meta.division;
+  const EngineType = carInfo.baseCar.engineType;
 
   const {
     actions: {
@@ -64,13 +66,13 @@ export default function CarPreviewCard({ carInfo }: { carInfo: CarInfo2 }) {
 
   const goto = (relativePath: string) => navigate(relativePath);
   const goSearchDecals = async () => {
-    const car2 = await getCar2(carInfo.id);
-    searchCarDecal(car2);
+    // const car2 = await getCar2(carInfo.id);
+    searchCarDecal(carInfo.id);
     goto('/FH5/decal');
   };
   const goSearchTunings = async () => {
-    const car2 = await getCar2(carInfo.id);
-    searchCarTuning(car2);
+    // const car2 = await getCar2(carInfo.id);
+    searchCarTuning(carInfo.id);
     goto('/FH5/tuning');
   };
 
@@ -95,7 +97,7 @@ export default function CarPreviewCard({ carInfo }: { carInfo: CarInfo2 }) {
           }}
         >
           <Image
-            src={carInfo.image.first}
+            src={carInfo.imageURLs[0]}
             sx={{
               height: '100%',
               objectFit: 'contain',

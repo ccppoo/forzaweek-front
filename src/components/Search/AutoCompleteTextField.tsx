@@ -6,10 +6,17 @@ import Chip from '@mui/material/Chip';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 
+import { useLiveQuery } from 'dexie-react-hooks';
+
 import { FlexBox } from '@/components/styled';
 import { Image } from '@/components/styled';
 import { db } from '@/db';
-import { Manufacturer, Nation, Track } from '@/db/schema';
+import { getAllCountry } from '@/db/query/real/country';
+import { getCountriesByID } from '@/db/query/real/country';
+import { getManufacturersById } from '@/db/query/real/manufacturer';
+// import { Manufacturer, Nation, Track } from '@/db/schema';
+import { CountryInput, CountryType } from '@/schema/real/types';
+import { ManufacturerFullInput, ManufacturerFullType, ManufacturerType } from '@/schema/real/types';
 import useCarSearchFilters, { CarSearchOption } from '@/store/carSearchFilters';
 
 export default function AutocompleteTextField({
@@ -82,7 +89,7 @@ export function AutocompleteNationTextField({
 }: {
   searchScope: string;
   optionName: CarSearchOption;
-  values: Nation[];
+  values: CountryType[];
   groupOptions?: boolean;
   limitTags?: number;
 }) {
@@ -95,11 +102,21 @@ export function AutocompleteNationTextField({
     },
   ] = useCarSearchFilters(searchScope);
   // 쿼리할 때 필터링할 수 있는 값으로 ID 넘김 (document ID)
-  const setSearchOption = (nations: Nation[]) =>
-    setNationOption(nations.toSorted((n1, n2) => (n1.name_en > n2.name_en ? 1 : -1)));
-  const selectedOptions = options[optionName] as Nation[];
+  const setSearchOption = (nations: CountryType[]) =>
+    setNationOption(
+      nations
+        .toSorted((n1, n2) => (n1.name.en!! > n2.name.en!! ? 1 : -1))
+        .map((country) => country.id!!),
+    );
+  // const selectedOptions = useMemo(() => getCountriesByID(options[optionName]), [options[optionName]]);
+  const selectedOptions = options[optionName];
 
-  const selectedValues = useMemo(() => selectedOptions, [selectedOptions]);
+  // options[optionName] as string[];
+  // useLiveQuery
+
+  // const selectedValues = useMemo(() => getCountriesByID(selectedOptions), [selectedOptions]);
+  const selectedValues = useLiveQuery<CountryType[]>(async () => getCountriesByID(selectedOptions));
+  // const countryOptions = useLiveQuery(getAllCountry);
 
   const ITEM_HEIGHT = 48;
   const ITEM_PADDING_TOP = 8;
@@ -119,12 +136,12 @@ export function AutocompleteNationTextField({
           size="small"
           options={values}
           groupBy={undefined}
-          getOptionLabel={(nation) => nation.name_en}
-          defaultValue={[...selectedOptions]}
+          getOptionLabel={(nation) => nation.name.en!!}
           filterSelectedOptions
-          onChange={(event: any, newValue: Nation[]) => {
+          onChange={(event: any, newValue: CountryType[]) => {
             setSearchOption(newValue);
           }}
+          // defaultValue={[...selectedOptions]}
           value={selectedValues}
           renderOption={(props, option, { selected, index }) => {
             const { ...optionProps } = props;
@@ -145,19 +162,19 @@ export function AutocompleteNationTextField({
                 >
                   <Image src={option.imageURL} sx={{ objectFit: 'contain' }} />
                   <FlexBox sx={{ alignItems: 'center', paddingLeft: 2 }}>
-                    <Typography>{option.name_en}</Typography>
+                    <Typography>{option.name.en}</Typography>
                   </FlexBox>
                 </Box>
               </li>
             );
           }}
-          renderTags={(value: readonly Nation[], getTagProps) => {
+          renderTags={(value: readonly CountryType[], getTagProps) => {
             console.log(`value : ${JSON.stringify(value)}`);
 
-            return value.map((nation: Nation, index: number) => (
+            return value.map((country: CountryType, index: number) => (
               <Chip
                 variant="outlined"
-                label={nation.name_en}
+                label={country.name.en}
                 {...getTagProps({ index })}
                 size="small"
               />
@@ -186,7 +203,7 @@ export function AutocompleteManufacturerTextField({
 }: {
   searchScope: string;
   optionName: CarSearchOption;
-  values: Manufacturer[];
+  values: ManufacturerType[];
   groupOptions?: boolean;
   limitTags?: number;
 }) {
@@ -198,10 +215,16 @@ export function AutocompleteManufacturerTextField({
       setOptions: { setManufacturerOption },
     },
   ] = useCarSearchFilters(searchScope);
-  const selectedOptions = options[optionName] as Manufacturer[];
-  const selectedValues = useMemo(() => selectedOptions, [selectedOptions]);
-  const setSearchOption = (nations: Manufacturer[]) =>
-    setManufacturerOption(nations.toSorted((n1, n2) => (n1.name_en > n2.name_en ? 1 : -1)));
+  const selectedOptions = options[optionName] as string[]; // country ID string[]
+  // const selectedValues = useMemo(() => selectedOptions, [selectedOptions]);
+  const selectedValues = useLiveQuery<ManufacturerType[]>(async () =>
+    getManufacturersById(selectedOptions),
+  );
+
+  const setSearchOption = (manus: ManufacturerType[]) =>
+    setManufacturerOption(
+      manus.toSorted((n1, n2) => (n1.name.en!! > n2.name.en!! ? 1 : -1)).map((man) => man.id!!),
+    );
 
   const ITEM_HEIGHT = 48;
   const ITEM_PADDING_TOP = 8;
@@ -219,12 +242,13 @@ export function AutocompleteManufacturerTextField({
           size="small"
           options={values}
           // groupBy={groupOptions ? (option) => option[0] : undefined}
-          getOptionLabel={(option) => option.name_en}
-          defaultValue={[...selectedOptions]}
+          getOptionLabel={(option) => option.name.en!!}
+          // defaultValue={[...selectedOptions]}
           filterSelectedOptions
-          onChange={(event: any, newValue: Manufacturer[]) => {
+          onChange={(event: any, newValue: ManufacturerType[]) => {
             setSearchOption(newValue);
           }}
+          isOptionEqualToValue={(option, value) => option.id == value.id}
           value={selectedValues}
           renderOption={(props, option, { selected, index }) => {
             const { ...optionProps } = props;
@@ -245,17 +269,17 @@ export function AutocompleteManufacturerTextField({
                 >
                   <Image src={option.imageURL} sx={{ objectFit: 'contain' }} />
                   <FlexBox sx={{ alignItems: 'center', paddingLeft: 2 }}>
-                    <Typography>{option.name_en}</Typography>
+                    <Typography>{option.name.en!!}</Typography>
                   </FlexBox>
                 </Box>
               </li>
             );
           }}
-          renderTags={(value: readonly Manufacturer[], getTagProps) =>
-            value.map((option: Manufacturer, index: number) => (
+          renderTags={(value: readonly ManufacturerType[], getTagProps) =>
+            value.map((option: ManufacturerType, index: number) => (
               <Chip
                 variant="outlined"
-                label={option.name_en}
+                label={option.name.en!!}
                 {...getTagProps({ index })}
                 size="small"
               />

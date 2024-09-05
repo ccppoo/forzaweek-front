@@ -7,7 +7,7 @@ import TextField from '@mui/material/TextField';
 import { useLiveQuery } from 'dexie-react-hooks';
 
 import { FlexBox } from '@/components/styled';
-import { getAllCarEssential } from '@/db/query';
+import { getAllCarEssential } from '@/db/query2';
 import type { CarInfoEssential } from '@/types/car';
 
 /**

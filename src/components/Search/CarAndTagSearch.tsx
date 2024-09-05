@@ -22,7 +22,9 @@ import {
 } from '@/components/Search';
 import { TagItemCell } from '@/components/Tag';
 import { FlexBox, FullSizeCenteredFlexBox } from '@/components/styled';
-import { getCarInfoSimple } from '@/db';
+// import { getCarInfoSimple } from '@/db';
+import { getCarFH5 } from '@/db/query/fh5/car';
+import { CarFH5FullInput, CarFH5FullType } from '@/schema/fh5/types';
 import useCarAndTagFilter from '@/store/carAndTagFilter';
 import type { CarInfoSimple } from '@/types/car';
 
@@ -34,10 +36,10 @@ interface CarAndTagSearchIterface {
 export default function CarAndTagSearch(props: CarAndTagSearchIterface) {
   const { searchScope, doFinalSelect: DoFinalSelect } = props;
   const navigate = useNavigate();
-  const noCarSelected = 'No car selected';
+  const NO_CAR_SELECTED = 'No car selected';
   const noTagsSelected = 'No tags selected (all tags)';
   const {
-    filter: { car, tagIDs },
+    filter: { car: carID, tagIDs },
     actions: {
       tag: { removeAllTags },
       car: { removeCar },
@@ -45,10 +47,15 @@ export default function CarAndTagSearch(props: CarAndTagSearchIterface) {
   } = useCarAndTagFilter(searchScope);
 
   // console.log(`tagIDstagIDstagIDs :${JSON.stringify(tagIDs)}`);
-  const carSelected = useLiveQuery<CarInfoSimple | undefined>(
-    async () => getCarInfoSimple(car),
-    [car],
+  // CarInfoSimple는 제조사 제외한 차 정보 전부
+  const carSelected = useLiveQuery<CarFH5FullType | undefined>(
+    async () => getCarFH5(carID),
+    [carID],
   );
+
+  // FIXME: car name selection i18n
+  const BASE_CAR_NAME = carSelected?.baseCar.name.en[0];
+  const BASE_CAR_MANUFACTURER_NAME = carSelected?.baseCar.manufacturer.name.en;
 
   return (
     <FlexBox sx={{ flexDirection: 'column', width: '100%' }}>
@@ -65,16 +72,16 @@ export default function CarAndTagSearch(props: CarAndTagSearchIterface) {
           <Typography sx={{ width: '20%', flexShrink: 0 }}>Car</Typography>
           <FlexBox sx={{ columnGap: 1 }}>
             <Typography
-              sx={{ color: carSelected?.name ? 'text.main' : 'text.first' }}
-              fontWeight={carSelected?.name ? 400 : 200}
+              sx={{ color: BASE_CAR_NAME ? 'text.main' : 'text.first' }}
+              fontWeight={BASE_CAR_NAME ? 400 : 200}
             >
-              {carSelected?.manufacturer.name_en}
+              {BASE_CAR_MANUFACTURER_NAME}
             </Typography>
             <Typography
-              sx={{ color: carSelected?.name ? 'text.main' : 'text.first' }}
-              fontWeight={carSelected?.name ? 500 : 300}
+              sx={{ color: BASE_CAR_NAME ? 'text.main' : 'text.first' }}
+              fontWeight={BASE_CAR_NAME ? 500 : 300}
             >
-              {carSelected?.name_en || noCarSelected}
+              {BASE_CAR_NAME || NO_CAR_SELECTED}
             </Typography>
           </FlexBox>
         </AccordionSummary>
