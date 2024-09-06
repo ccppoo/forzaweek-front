@@ -13,6 +13,10 @@ export async function getAllManufacturers(): Promise<ManufacturerType[]> {
   return _manufacturers;
 }
 
+export async function getAllManufacturerPK(): Promise<string[]> {
+  const manufacturers = await db.manufacturer.offset(0).primaryKeys();
+  return manufacturers;
+}
 export async function getManufacturersById(manufacturerIDs: string[]): Promise<ManufacturerType[]> {
   const mans = await db.manufacturer.bulkGet(manufacturerIDs);
   if (!mans) return [];

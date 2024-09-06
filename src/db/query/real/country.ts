@@ -9,6 +9,13 @@ export async function getAllCountry(): Promise<CountryType[]> {
   return _countries;
 }
 
+export async function getAllCountryPK(): Promise<string[]> {
+  const countries = await db.country.offset(0).primaryKeys();
+  return countries;
+  // const _countries = countries.map((cnt) => countryZod.parse(cnt) as CountryType);
+  // return _countries;
+}
+
 export async function getCountry(countryID: string): Promise<CountryType | undefined> {
   const country = await db.country.get(countryID);
   if (!country) return undefined;
