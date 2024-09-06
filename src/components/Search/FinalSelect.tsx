@@ -14,7 +14,6 @@ import { useLiveQuery } from 'dexie-react-hooks';
 import { FlexBox, FullSizeCenteredFlexBox } from '@/components/styled';
 import { Image } from '@/components/styled';
 import type { CarFH5Image } from '@/db/model/fh5';
-// import { getCar2, getCarImage } from '@/db/index';
 import { getCarFH5, getCarFH5Image, searchCarByName } from '@/db/query/fh5/car';
 import { CarFH5FullInput, CarFH5FullType } from '@/schema/fh5/types';
 import useCarAndTagFilter from '@/store/carAndTagFilter';
@@ -75,7 +74,6 @@ export default function FinalSelect(props: FinalSelectInterface) {
 
   const submitToCarTagFilter = async () => {
     if (carID == '') return;
-    // const car = await getCar2(carID);
     setCar(carID);
   };
 

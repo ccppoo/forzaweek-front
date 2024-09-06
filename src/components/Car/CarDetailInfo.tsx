@@ -9,8 +9,11 @@ import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Unstable_Grid2';
 
+import { useLiveQuery } from 'dexie-react-hooks';
+
 import { FlexBox } from '@/components/styled';
 import { Image } from '@/components/styled';
+import { getCarFH5FullType } from '@/db/query/fh5/car';
 import type { CarInfo2, EngineType } from '@/types/car';
 
 function CarDetailInfoCell({
@@ -80,32 +83,33 @@ function CarDetailInfoCell({
   );
 }
 
-export default function CarDetailInfo({ carInfo }: { carInfo: CarInfo2 }) {
+export default function CarDetailInfo({ carFH5ID }: { carFH5ID: string }) {
   const engineTypeIcon: Record<EngineType, SvgIconComponent> = {
     EV: BoltOutlinedIcon,
     HV: WaterDropOutlinedIcon,
     ICE: LocalFireDepartmentOutlinedIcon,
   };
+  const carInfo = useLiveQuery(async () => getCarFH5FullType(carFH5ID!), [carFH5ID]);
 
   const detailInfo = [
     {
       title: 'Manufacturer',
-      value: carInfo.manufacturer.name_en,
-      image: carInfo.manufacturer.imageURL,
+      value: carInfo?.baseCar.manufacturer.name.en!!,
+      image: carInfo?.baseCar.manufacturer.imageURL!!,
     },
     {
       title: 'Origin',
-      value: carInfo.nation.name_en,
-      image: carInfo.nation.imageURL,
+      value: carInfo?.baseCar.manufacturer.origin.name.en!!,
+      image: carInfo?.baseCar.manufacturer.origin.imageURL!!,
     },
     {
       title: 'Production Year',
-      value: carInfo.productionYear,
+      value: carInfo?.baseCar.productionYear!!,
     },
     {
       title: 'Engine Type',
-      value: carInfo.engineType,
-      IconComponent: engineTypeIcon[carInfo.engineType as EngineType],
+      value: carInfo?.baseCar.engineType!!,
+      IconComponent: engineTypeIcon[carInfo?.baseCar.engineType as EngineType],
     },
   ];
 
@@ -120,7 +124,7 @@ export default function CarDetailInfo({ carInfo }: { carInfo: CarInfo2 }) {
       }}
     >
       {detailInfo.map((info) => {
-        return <CarDetailInfoCell {...info} key={`car-detail-info-${info.value}`} />;
+        return <CarDetailInfoCell {...info} key={`car-detail-info-${info.title}`} />;
       })}
     </FlexBox>
   );

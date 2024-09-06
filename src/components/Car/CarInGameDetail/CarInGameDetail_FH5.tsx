@@ -9,7 +9,7 @@ import Grid from '@mui/material/Unstable_Grid2';
 import { PI_Card } from '@/components/PI';
 import { FlexBox } from '@/components/styled';
 import { Image } from '@/components/styled';
-import type { FH5_META_BASE, FH5_Performance_BASE } from '@/db/schema/fh5';
+import { CarFH5Input, CarFH5Type } from '@/schema/fh5/types';
 
 import { chartOptions } from './chartOption';
 
@@ -43,29 +43,23 @@ function setFontSize(target: string): number {
   return 15;
 }
 
-export default function CarInGameDetail_FH5({
-  meta,
-  performance,
-}: {
-  meta: FH5_META_BASE;
-  performance: FH5_Performance_BASE;
-}) {
-  const series = [
-    {
-      name: 'performance',
-      data: [
-        performance.acceleration,
-        performance.speed,
-        performance.braking,
-        performance.offroad,
-        performance.launch,
-        performance.handling,
-      ],
-    },
-  ];
+export default function CarInGameDetail_FH5({ carFH5 }: { carFH5: CarFH5Type }) {
+  // const series = [
+  //   {
+  //     name: 'performance',
+  //     data: [
+  //       performance.acceleration,
+  //       performance.speed,
+  //       performance.braking,
+  //       performance.offroad,
+  //       performance.launch,
+  //       performance.handling,
+  //     ],
+  //   },
+  // ];
 
-  const DIVISION = meta.division;
-  const DIVISION_FONT_SIZE = setFontSize(meta.division);
+  const DIVISION = carFH5.meta.division;
+  const DIVISION_FONT_SIZE = setFontSize(carFH5.meta.division);
   return (
     <Box
       sx={{
@@ -122,7 +116,7 @@ export default function CarInGameDetail_FH5({
             <Divider variant="middle" sx={{ margin: 0 }} />
           </FlexBox>
           <FlexBox sx={{ alignItems: 'center', justifyContent: 'center' }}>
-            <Typography sx={{ fontSize: 18, fontWeight: 400 }}>{meta.rarity}</Typography>
+            <Typography sx={{ fontSize: 18, fontWeight: 400 }}>{carFH5.meta.rarity}</Typography>
           </FlexBox>
         </FlexBox>
         <FlexBox
@@ -141,7 +135,7 @@ export default function CarInGameDetail_FH5({
           </FlexBox>
           <FlexBox sx={{ alignItems: 'center', justifyContent: 'center' }}>
             <Typography sx={{ fontSize: 18, fontWeight: 400 }}>
-              {meta.value.toLocaleString()} CR
+              {carFH5.meta.value.toLocaleString()} CR
             </Typography>
           </FlexBox>
         </FlexBox>
@@ -159,7 +153,7 @@ export default function CarInGameDetail_FH5({
         }}
       >
         <FlexBox sx={{ justifyContent: 'center', alignItems: 'center' }}>
-          <PI_Card height={40} pi_number={performance.pi} />
+          <PI_Card height={40} pi_number={carFH5.PI} />
         </FlexBox>
         <FlexBox
           sx={{
@@ -182,28 +176,28 @@ export default function CarInGameDetail_FH5({
           >
             <FlexBox sx={{ width: '100%', justifyContent: 'space-between', paddingX: 1 }}>
               <Typography>Acceleration</Typography>
-              <Typography>{performance.acceleration}</Typography>
+              <Typography>{carFH5.performance.acceleration}</Typography>
             </FlexBox>
             <FlexBox sx={{ width: '100%', justifyContent: 'space-between', paddingX: 1 }}>
               <Typography>Speed</Typography>
-              <Typography>{performance.speed}</Typography>
+              <Typography>{carFH5.performance.speed}</Typography>
             </FlexBox>
             <FlexBox sx={{ width: '100%', justifyContent: 'space-between', paddingX: 1 }}>
               <Typography>Braking</Typography>
 
-              <Typography>{performance.braking}</Typography>
+              <Typography>{carFH5.performance.braking}</Typography>
             </FlexBox>
             <FlexBox sx={{ width: '100%', justifyContent: 'space-between', paddingX: 1 }}>
               <Typography>Offroad</Typography>
-              <Typography>{performance.offroad}</Typography>
+              <Typography>{carFH5.performance.offroad}</Typography>
             </FlexBox>
             <FlexBox sx={{ width: '100%', justifyContent: 'space-between', paddingX: 1 }}>
               <Typography>Launch</Typography>
-              <Typography>{performance.launch}</Typography>
+              <Typography>{carFH5.performance.launch}</Typography>
             </FlexBox>
             <FlexBox sx={{ width: '100%', justifyContent: 'space-between', paddingX: 1 }}>
               <Typography>Handling</Typography>
-              <Typography>{performance.handling}</Typography>
+              <Typography>{carFH5.performance.handling}</Typography>
             </FlexBox>
           </Box>
         </FlexBox>

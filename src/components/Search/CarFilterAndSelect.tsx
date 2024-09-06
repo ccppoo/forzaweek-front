@@ -15,8 +15,8 @@ import {
   PRODUCTION_YEARs,
   RARITY,
 } from '@/data/values';
-import { getAllCountry } from '@/db/query/real/country';
-import { getAllManufacturers } from '@/db/query/real/manufacturer';
+import { getAllCountry, getAllCountryPK } from '@/db/query/real/country';
+import { getAllManufacturerPK, getAllManufacturers } from '@/db/query/real/manufacturer';
 import useCarSearchFilters, { CarSearchOption } from '@/store/carSearchFilters';
 
 import AutocompleteTextField, {
@@ -37,8 +37,8 @@ export default function CarFilterAndSelect(props: CarSearchAndSelectInterface) {
 
   const [options, _, __, { clearAllOptions }] = useCarSearchFilters(scope);
 
-  const nations = useLiveQuery(getAllCountry);
-  const manufacturers = useLiveQuery(getAllManufacturers);
+  const nations = useLiveQuery(getAllCountryPK);
+  const manufacturers = useLiveQuery(getAllManufacturerPK);
 
   return (
     <FlexBox sx={{ flexDirection: 'column', width: '100%' }}>
@@ -78,26 +78,26 @@ export default function CarFilterAndSelect(props: CarSearchAndSelectInterface) {
           <AutocompleteTextField
             searchScope={scope}
             optionName="division"
-            values={DIVISIONS}
+            values={DIVISIONS || []}
             groupOptions
             limitTags={4}
           />
           <AutocompleteTextField
             searchScope={scope}
             optionName="productionYear"
-            values={PRODUCTION_YEARs}
+            values={PRODUCTION_YEARs || []}
             limitTags={4}
           />
           <AutocompleteTextField
             searchScope={scope}
             optionName="rarity"
-            values={RARITY}
+            values={RARITY || []}
             limitTags={4}
           />
           <AutocompleteTextField
             searchScope={scope}
             optionName="boost"
-            values={BOOST}
+            values={BOOST || []}
             limitTags={3}
           />
           <FlexBox sx={{ justifyContent: 'end' }}>

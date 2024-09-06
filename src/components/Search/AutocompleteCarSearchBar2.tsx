@@ -7,8 +7,8 @@ import TextField from '@mui/material/TextField';
 import { useLiveQuery } from 'dexie-react-hooks';
 
 import { FlexBox } from '@/components/styled';
-import { getAllCarEssential } from '@/db/query2';
-import type { CarInfoEssential } from '@/types/car';
+// import type { CarInfoEssential } from '@/types/car';
+import { getAllCar, getCarFH5 } from '@/db/query/fh5/car';
 
 /**
  * NOTE: 이 자동완성은 튜닝, 데칼 글 작성할 때 차 선택하는 컴포넌트
@@ -25,7 +25,7 @@ export default function AutocompleteCarSearchBar2(props: AutocompleteCarSearchBa
 
   const { searchScope, onSelect } = props;
 
-  const options = useLiveQuery(getAllCarEssential) || [];
+  const options = useLiveQuery(getAllCar) || [];
   const [carValue, setCarValue] = useState<CarInfoEssential | undefined>(undefined);
   const [inputValue, setInputValue] = useState<string>('');
 

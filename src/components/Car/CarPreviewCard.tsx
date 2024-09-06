@@ -66,12 +66,10 @@ export default function CarPreviewCard({ carInfo }: { carInfo: CarFH5FullType })
 
   const goto = (relativePath: string) => navigate(relativePath);
   const goSearchDecals = async () => {
-    // const car2 = await getCar2(carInfo.id);
     searchCarDecal(carInfo.id);
     goto('/FH5/decal');
   };
   const goSearchTunings = async () => {
-    // const car2 = await getCar2(carInfo.id);
     searchCarTuning(carInfo.id);
     goto('/FH5/tuning');
   };

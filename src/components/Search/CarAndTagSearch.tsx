@@ -23,7 +23,7 @@ import {
 import { TagItemCell } from '@/components/Tag';
 import { FlexBox, FullSizeCenteredFlexBox } from '@/components/styled';
 // import { getCarInfoSimple } from '@/db';
-import { getCarFH5 } from '@/db/query/fh5/car';
+import { getCarFH5, getCarFH5FullType } from '@/db/query/fh5/car';
 import { CarFH5FullInput, CarFH5FullType } from '@/schema/fh5/types';
 import useCarAndTagFilter from '@/store/carAndTagFilter';
 import type { CarInfoSimple } from '@/types/car';
@@ -49,7 +49,7 @@ export default function CarAndTagSearch(props: CarAndTagSearchIterface) {
   // console.log(`tagIDstagIDstagIDs :${JSON.stringify(tagIDs)}`);
   // CarInfoSimple는 제조사 제외한 차 정보 전부
   const carSelected = useLiveQuery<CarFH5FullType | undefined>(
-    async () => getCarFH5(carID),
+    async () => (!!carID ? getCarFH5FullType(carID) : undefined),
     [carID],
   );
 

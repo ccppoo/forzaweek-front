@@ -11,7 +11,6 @@ import { useQuery } from '@tanstack/react-query';
 import { GetTuning, SearchTunings } from '@/api/data/tuning';
 import { PI_Card } from '@/components/PI';
 import { FlexBox } from '@/components/styled';
-import { getCar2 } from '@/db';
 import useCarAndTagFilter from '@/store/carAndTagFilter';
 
 import TuningBriefCell from './TuningBriefCell';
@@ -19,7 +18,7 @@ import TuningBriefCell from './TuningBriefCell';
 function TuningsShowMore({ carID }: { carID: string }) {
   const {
     actions: {
-      car: { setCar: searchCarTuning },
+      car: { setCar },
     },
   } = useCarAndTagFilter('tunings');
   const navigate = useNavigate();
@@ -27,8 +26,7 @@ function TuningsShowMore({ carID }: { carID: string }) {
   const goto = (relativePath: string) => navigate(relativePath);
 
   const goSearchTunings = async () => {
-    const car2 = await getCar2(carID);
-    searchCarTuning(car2);
+    setCar(carID);
     goto('/FH5/tuning');
   };
   const onClick = async () => {

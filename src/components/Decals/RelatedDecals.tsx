@@ -20,7 +20,6 @@ import { FlexBox, FullSizeCenteredFlexBox } from '@/components/styled';
 import { Image } from '@/components/styled';
 import { decalsWithImage } from '@/data/decals';
 import type { DecalData } from '@/data/decals';
-import { getCar2 } from '@/db';
 import useCarAndTagFilter from '@/store/carAndTagFilter';
 
 function RelatedDecal({ decalData }: { decalData: DecalData }) {
@@ -147,7 +146,6 @@ function DecalsShowMore({ carID }: { carID: string }) {
 
   const goto = (relativePath: string) => navigate(relativePath);
   const goSearchDecals = async () => {
-    // const car2 = await getCar2(carID);
     searchCarDecal(carID);
     goto('/FH5/decal');
   };

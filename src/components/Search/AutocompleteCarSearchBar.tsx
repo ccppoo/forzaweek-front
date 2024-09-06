@@ -22,13 +22,16 @@ import { darken, lighten, styled } from '@mui/system';
 import { useLiveQuery } from 'dexie-react-hooks';
 
 import { FlexBox } from '@/components/styled';
-import { searchCar } from '@/db/car';
-import { getManufacturer } from '@/db/manufacturer';
-// import { getAllCarInfoSimple, getCar2, getCarInfoSimple } from '@/db';
-import { getCarFH5, searchCarByName } from '@/db/query/fh5/car';
-import { Manufacturer } from '@/db/schema';
+import { getCarFH5, getCarFH5FullType, searchCarByName } from '@/db/query/fh5/car';
+import { getManufacturerById } from '@/db/query/real/manufacturer';
 import useAsyncLiveQuery from '@/db/useAsyncLiveQuery';
 import { CarFH5FullInput, CarFH5FullType } from '@/schema/fh5/types';
+import {
+  ManufacturerFullInput,
+  ManufacturerFullType,
+  ManufacturerInput,
+  ManufacturerType,
+} from '@/schema/real/types';
 import useCarAndTagFilter from '@/store/carAndTagFilter';
 import type { CarInfoSimple } from '@/types/car';
 
@@ -48,8 +51,8 @@ const GroupItems = styled('ul')({
 });
 
 function ManufacturerGroupHeader({ manufacturerID }: { manufacturerID: string }) {
-  const manufacturer = useLiveQuery<Manufacturer | undefined>(
-    async () => getManufacturer(manufacturerID),
+  const manufacturer = useLiveQuery<ManufacturerType | undefined>(
+    async () => getManufacturerById(manufacturerID),
     [manufacturerID],
   );
 
@@ -80,7 +83,7 @@ export default function AutocompleteCarSearchBar({ searchScope }: { searchScope:
     placeHolder: [],
   });
   const carSelected = useLiveQuery<CarFH5FullType | undefined>(async () =>
-    getCarFH5(selectedCarID),
+    !!selectedCarID ? getCarFH5FullType(selectedCarID) : undefined,
   );
 
   const renderGroup = (params: AutocompleteRenderGroupParams) => {
@@ -156,12 +159,6 @@ export default function AutocompleteCarSearchBar({ searchScope }: { searchScope:
         size="small"
         loading={isLoading}
         options={options2 || []}
-        // filterOptions={(options, state) => {
-        //   const displayOptions = options.filter((option) =>
-        //     option.name_en.toLowerCase().trim().includes(state.inputValue.toLowerCase().trim()),
-        //   );
-        //   return displayOptions;
-        // }}
         groupBy={(car: CarFH5FullType) => car.baseCar.manufacturer.id!!}
         renderGroup={renderGroup}
         getOptionLabel={getOptionLabel}
@@ -169,6 +166,7 @@ export default function AutocompleteCarSearchBar({ searchScope }: { searchScope:
           return value ? option.id == value.id : false;
         }}
         defaultValue={null}
+        // value + onChange
         value={carSelected}
         onChange={(event: any, newValue: CarFH5FullType | null) => {
           newValue || removeCar();
@@ -177,7 +175,7 @@ export default function AutocompleteCarSearchBar({ searchScope }: { searchScope:
             submitToCarTagFilter(newValue.id);
           }
         }}
-        // filterSelectedOptions
+        // inputValue + onInputChange
         inputValue={inputValue}
         onInputChange={(event, newInputValue) => {
           setInputValue(newInputValue);
