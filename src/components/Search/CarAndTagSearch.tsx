@@ -14,7 +14,6 @@ import Stack from '@mui/material/Stack';
 
 import { useLiveQuery } from 'dexie-react-hooks';
 
-import { DecalCellListing } from '@/components/Decals';
 import {
   AutocompleteCarSearchBar,
   CarFilterAndSelect,
@@ -26,7 +25,6 @@ import { FlexBox, FullSizeCenteredFlexBox } from '@/components/styled';
 import { getCarFH5, getCarFH5FullType } from '@/db/query/fh5/car';
 import { CarFH5FullInput, CarFH5FullType } from '@/schema/fh5/types';
 import useCarAndTagFilter from '@/store/carAndTagFilter';
-import type { CarInfoSimple } from '@/types/car';
 
 interface CarAndTagSearchIterface {
   searchScope: string;

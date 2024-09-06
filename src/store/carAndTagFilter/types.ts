@@ -1,6 +1,3 @@
-// import type { TagItem } from '@/FormData/tag/tag';
-// import type { Car2 } from '@/db/schema/car';
-// import type { CarInfo2 } from '@/types/car';
 export type CarID = string;
 export type TagID = string;
 

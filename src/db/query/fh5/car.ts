@@ -1,9 +1,6 @@
-import { Collection, Table } from 'dexie';
-
 import { db } from '@/db/index';
 import type { CarFH5, CarFH5Image } from '@/db/model/fh5';
 import { Car } from '@/db/model/real';
-import { getCar } from '@/db/query/real/car';
 import { getCarFull as getCarRealFull } from '@/db/query/real/car';
 import { CarFH5FullInput, CarFH5FullType } from '@/schema/fh5/types';
 import { CarFH5Input, CarFH5Type } from '@/schema/fh5/types';

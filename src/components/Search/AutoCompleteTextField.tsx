@@ -15,7 +15,6 @@ import { db } from '@/db';
 import { getAllCountry, getCountry } from '@/db/query/real/country';
 import { getCountriesByID } from '@/db/query/real/country';
 import { getManufacturerById, getManufacturersById } from '@/db/query/real/manufacturer';
-// import { Manufacturer, Nation, Track } from '@/db/schema';
 import { CountryInput, CountryType } from '@/schema/real/types';
 import { ManufacturerFullInput, ManufacturerFullType, ManufacturerType } from '@/schema/real/types';
 import useCarSearchFilters, { CarSearchOption } from '@/store/carSearchFilters';

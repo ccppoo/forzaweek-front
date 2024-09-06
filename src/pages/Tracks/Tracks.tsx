@@ -21,7 +21,7 @@ import TrackAndTagSearch from '@/components/Search/TrackAndTagSearch';
 import TrackPreviewCell from '@/components/Track/TrackPreviewCell';
 import { FlexBox, FullSizeCenteredFlexBox } from '@/components/styled';
 import { Image } from '@/components/styled';
-import type { Track2, TrackImage } from '@/db/schema';
+import type { Track2 } from '@/db/schema';
 import useTrackSearchFilters from '@/store/trackSearchFilters';
 import type { TrackInfo } from '@/types';
 

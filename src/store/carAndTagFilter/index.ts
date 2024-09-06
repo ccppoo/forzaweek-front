@@ -1,11 +1,5 @@
 import { atomFamily, useRecoilState } from 'recoil';
 
-import type { TagItem } from '@/FormData/tag/tag';
-import type { Car2 } from '@/db/schema/car';
-import type { CarInfo2 } from '@/types/car';
-import type { CarAndImage } from '@/types/car';
-import type { Tags } from '@/types/tag';
-
 import { CarActions, TagActions } from './types';
 
 export type TagID = string;

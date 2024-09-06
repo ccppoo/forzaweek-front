@@ -19,10 +19,7 @@ import Grid from '@mui/material/Unstable_Grid2';
 import { FlexBox } from '@/components/styled';
 import { Image } from '@/components/styled';
 import { CarFH5FullInput, CarFH5FullType } from '@/schema/fh5/types';
-// import { getCar } from '@/db/query/fh5/car';
 import useCarAndTagFilter from '@/store/carAndTagFilter';
-
-// import { CarInfo2 } from '@/types/car';
 
 const StyledLink = styled(Link)`
   text-decoration: none;

@@ -1,21 +1,11 @@
 import { SyntheticEvent, useState } from 'react';
 
-import TabContext from '@mui/lab/TabContext';
-import TabList from '@mui/lab/TabList';
-import TabPanel from '@mui/lab/TabPanel';
-import { Box, Divider } from '@mui/material';
-import Paper from '@mui/material/Paper';
-import Tab from '@mui/material/Tab';
-import Typography from '@mui/material/Typography';
-import Grid from '@mui/material/Unstable_Grid2';
-
 import { useLiveQuery } from 'dexie-react-hooks';
 
 import { FlexBox } from '@/components/styled';
 import { Image } from '@/components/styled';
 import { getCarFH5 } from '@/db/query/fh5/car';
 import type { GAME } from '@/types';
-import type { CarInfo2 } from '@/types/car';
 
 import * as InGameDetail from './CarInGameDetail';
 

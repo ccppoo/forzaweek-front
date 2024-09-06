@@ -10,7 +10,6 @@ import {
 import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
 import Autocomplete from '@mui/material/Autocomplete';
 import type {
-  AutocompleteOwnerState,
   AutocompleteRenderGroupParams,
   AutocompleteRenderOptionState,
 } from '@mui/material/Autocomplete';
@@ -33,7 +32,6 @@ import {
   ManufacturerType,
 } from '@/schema/real/types';
 import useCarAndTagFilter from '@/store/carAndTagFilter';
-import type { CarInfoSimple } from '@/types/car';
 
 const GroupHeader = styled('div')(({ theme }) => ({
   position: 'sticky',

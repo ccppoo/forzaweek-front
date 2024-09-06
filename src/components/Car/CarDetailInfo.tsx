@@ -14,7 +14,7 @@ import { useLiveQuery } from 'dexie-react-hooks';
 import { FlexBox } from '@/components/styled';
 import { Image } from '@/components/styled';
 import { getCarFH5FullType } from '@/db/query/fh5/car';
-import type { CarInfo2, EngineType } from '@/types/car';
+import type { EngineType } from '@/types/car';
 
 function CarDetailInfoCell({
   title,
