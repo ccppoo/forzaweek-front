@@ -28,7 +28,6 @@ export interface CarFH5 extends DocumentBase {
 
   performance: FH5_Performance;
 }
-
 const carMetaKey = nestedKey('meta', ['division', 'rarity', 'boost', 'value']);
 const carPerformanceKey = nestedKey('performance', [
   'speed',

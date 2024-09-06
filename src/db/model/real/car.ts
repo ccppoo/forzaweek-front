@@ -9,6 +9,7 @@ export interface Car extends DocumentBase, MultiImageURL {
   engineType: string;
   bodyStyle: string[];
   name: i18nArrayMap;
+  alias: i18nArrayMap;
   door: number;
 }
 
