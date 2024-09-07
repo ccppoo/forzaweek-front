@@ -38,7 +38,7 @@ const carPerformanceKey = nestedKey('performance', [
   'offroad',
 ]);
 
-export interface CarImage extends DocumentBase, MultiImageURL {}
+export interface CarFH5Image extends DocumentBase, MultiImageURL {}
 
 export const CarIndex = dbIndexBuilder({
   PK: '&id',
