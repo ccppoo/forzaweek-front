@@ -14,12 +14,16 @@ import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Unstable_Grid2';
 
+import { useQuery } from '@tanstack/react-query';
+
 import * as image from '@/image';
 import { FlexBox, FullSizeCenteredFlexBox } from '@/components/styled';
 import { Image } from '@/components/styled';
 import { decalsWithImage } from '@/data/decals';
 import type { DecalData } from '@/data/decals';
 import useCarAndTagFilter from '@/store/carAndTagFilter';
+
+// import {} from '@/api/decal'
 
 function stringToColor(string: string) {
   let hash = 0;
@@ -234,6 +238,8 @@ export default function ItemListing(props: ItemListingIntf) {
   const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
     setPage(value);
   };
+
+  // const {} = useQuery({queryFn:})
 
   return (
     <FlexBox sx={{ width: '100%', flexDirection: 'column' }}>

@@ -20,17 +20,20 @@ import { RelatedTunings } from '@/components/Tunings';
 import { RelatedVideos } from '@/components/Videos';
 import { FlexBox, FullSizeCenteredFlexBox } from '@/components/styled';
 import { Image } from '@/components/styled';
-import { getCarInfo2 } from '@/db/index';
+// import { getCarInfo2 } from '@/db/index';
+import { getCarFH5FullType } from '@/db/query/fh5/car';
+import { getCarFH5 } from '@/db/query/fh5/car';
 import ScrollToTop from '@/hooks/useResetScroll';
-import type { CarInfo2 } from '@/types/car';
 
-function TitlePart({ carInfo }: { carInfo: CarInfo2 }) {
-  const name = carInfo.name_en;
+function TitlePart({ carFH5ID }: { carFH5ID: string }) {
+  const carinfo = useLiveQuery(async () => getCarFH5FullType(carFH5ID!), [carFH5ID]);
 
+  // TODO: if Special Verison (Forizon Edition, etc) add suffix
+  const carName = carinfo?.baseCar.name.en[0];
   return (
     <FlexBox sx={{ width: '100%', flexDirection: 'column' }}>
       <FlexBox sx={{ alignItems: 'center', paddingX: 0 }}>
-        <Typography variant="h4">{name}</Typography>
+        <Typography variant="h4">{carinfo?.baseCar.name.en[0]}</Typography>
       </FlexBox>
     </FlexBox>
   );
@@ -54,7 +57,8 @@ export default function CarDetail() {
   // FUTURE: prepare for FH4
   const game_context = 'FH5';
 
-  const carinfo = useLiveQuery(async () => getCarInfo2(carID!, game_context), [carID]);
+  const carinfo = useLiveQuery(async () => await getCarFH5FullType(carID!), [carID]);
+  const carinfo2 = useLiveQuery(async () => await getCarFH5(carID!), [carID]);
 
   if (carinfo)
     return (
@@ -71,13 +75,13 @@ export default function CarDetail() {
             }}
             component={Paper}
           >
-            <TitlePart carInfo={carinfo} />
+            <TitlePart carFH5ID={carID!!} />
             <FlexBox sx={{ paddingY: 1.5, rowGap: 2, flexDirection: 'column', width: '100%' }}>
-              <CarDetailInfo carInfo={carinfo} />
-              <CarInGameDetailInfo carInfo={carinfo} />
+              <CarDetailInfo carFH5ID={carID!!} />
+              <CarInGameDetailInfo carFH5ID={carID!!} />
             </FlexBox>
             {/* <CarTags /> */}
-            <ImageShowHorizontal images={carinfo?.image.images!} />
+            <ImageShowHorizontal images={carinfo?.imageURLs} />
             {/* 댓글 */}
             <FlexBox sx={{ paddingY: 3 }}>
               <Comments.temp.TempVotableComments />
@@ -86,7 +90,7 @@ export default function CarDetail() {
             </FlexBox>
 
             {/* 데칼 사진들 */}
-            <RelatedDecals carID={carinfo.id} />
+            <RelatedDecals carID={carinfo.id!!} />
             {/* TODO: 관련 튜닝 */}
             <RelatedTunings carID={carinfo.id} />
             {/* TODO: 관련 영상 */}

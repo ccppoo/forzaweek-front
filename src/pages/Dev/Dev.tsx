@@ -16,8 +16,8 @@ import {
   updateCar_FH5_Image,
   updateCountryDB,
   updateManufacturerDB,
-  updateTrack,
-  updateTrackImage,
+  updateRaceRouteImage_FH5,
+  updateRaceRoute_FH5,
 } from '@/api/indexedDB/get';
 import { GetRealCar } from '@/api/real/car/get';
 import { GetCountry } from '@/api/real/country/get';
@@ -93,12 +93,12 @@ function Dev() {
         await updateCar_FH5_Image();
         return;
       }
-      case 'track': {
-        await updateTrack();
+      case 'race_route_FH5': {
+        await updateRaceRoute_FH5();
         return;
       }
-      case 'track_image': {
-        await updateTrackImage();
+      case 'race_route_FH5_image': {
+        await updateRaceRouteImage_FH5();
         return;
       }
     }
@@ -144,13 +144,13 @@ function Dev() {
                 </Button>
               </Grid>
               <Grid xs={4}>
-                <Button variant="outlined" onClick={() => insertDB2('track')}>
-                  track
+                <Button variant="outlined" onClick={() => insertDB2('race_route_FH5')}>
+                  race_route_FH5
                 </Button>
               </Grid>
               <Grid xs={4}>
-                <Button variant="outlined" onClick={() => insertDB2('track_image')}>
-                  track images
+                <Button variant="outlined" onClick={() => insertDB2('race_route_FH5_image')}>
+                  race_route_FH5_image
                 </Button>
               </Grid>
             </Grid>

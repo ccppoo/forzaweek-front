@@ -10,7 +10,7 @@ import Typography from '@mui/material/Typography';
 import { useQuery } from '@tanstack/react-query';
 
 import type { DecalSchemaReadType } from '@/FormData/decal';
-import { GetDecal } from '@/api/data/fh5/decal';
+import { GetDecal } from '@/api/fh5/decal';
 import { BriefCarInfo2 } from '@/components/Car/BriefCarInfo';
 import { TempComments } from '@/components/Comment/Comments';
 import { RelatedDecals } from '@/components/Decals';

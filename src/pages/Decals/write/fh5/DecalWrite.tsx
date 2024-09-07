@@ -4,7 +4,7 @@ import { Box, Button, Container, Paper, Typography } from '@mui/material';
 
 import type { DecalEditSchema } from '@/FormData/decal';
 import { decalEditSchemaDefault } from '@/FormData/decal';
-import { AddNewDecal, EditDecal } from '@/api/data/fh5/decal';
+import { AddNewDecal, EditDecal } from '@/api/fh5/decal';
 import AddMultipleImages from '@/components/FormInputs/AddMultipleImages';
 import AddTags from '@/components/FormInputs/AddTags';
 import SelectCar from '@/components/FormInputs/CarSelect';
