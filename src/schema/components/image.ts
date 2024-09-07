@@ -5,5 +5,5 @@ export const multipleImageURLs = z.object({
 });
 
 export const singleImageURL = z.object({
-  imageURL: z.array(z.string()).default([]),
+  imageURL: z.string(),
 });

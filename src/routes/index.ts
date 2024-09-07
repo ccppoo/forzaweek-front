@@ -20,7 +20,7 @@ const routes: Routes = {
   [Pages.CarDetail]: {
     component: asyncComponentLoader(() => import('@/pages/Cars/CarDetail')),
     path: '/car/:carID',
-    devUrl: '/car/6684cbca6b755b09a74f84fc',
+    devUrl: '/car/66d69c65a368e84afdbb6347',
     title: 'car detail',
     icon: HomeIcon,
   },

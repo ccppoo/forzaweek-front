@@ -4,6 +4,7 @@ import { atom, useRecoilState } from 'recoil';
 import { useLiveQuery } from 'dexie-react-hooks';
 
 import { db } from '@/db';
+import type { RaceRouteFH5, RaceRouteFH5Image } from '@/db/model/fh5/raceRoute';
 import type { Track2 } from '@/db/schema';
 import type { GAME } from '@/types';
 import type { TrackCategory, TrackFormat, TrackFormatTopology, World } from '@/types/fh5';
@@ -111,7 +112,7 @@ type Actions = {
     removeTrackWorld: (world: World) => void;
   };
 };
-function useTrackSearchFilters(): [TrackSearchOptions, Track2[], Actions] {
+function useTrackSearchFilters(): [TrackSearchOptions, string[], Actions] {
   const [trackSearchOptions, setTrackSearchOptions] = useRecoilState(trackSearchOptionState);
 
   const searchResults: Track2[] | undefined = useLiveQuery(

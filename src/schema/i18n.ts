@@ -16,9 +16,9 @@ export const i18nMap = z.object({
 });
 
 export const i18nArrayMap = z.object({
-  en: z.string().optional(),
-  ko: z.string().optional(),
-  jp: z.string().optional(),
+  en: z.array(z.string()).default([]),
+  ko: z.array(z.string()).default([]),
+  jp: z.array(z.string()).default([]),
 });
 
 export const i18nMapName = z.object({
