@@ -17,7 +17,8 @@ export default function Decals() {
     <Container sx={{ paddingTop: 2 }}>
       <FullSizeCenteredFlexBox sx={{ flexDirection: 'column', rowGap: 2 }}>
         {/* 차, 태그 검색 */}
-        <CarAndTagSearch searchScope={searchScope} doFinalSelect />
+        {/* FIXME: doFinalSelect -> 이거 고치기 */}
+        <CarAndTagSearch searchScope={searchScope} />
         {/* 글쓰기, 등  */}
         <PostListMenu scope={searchScope} write />
 
