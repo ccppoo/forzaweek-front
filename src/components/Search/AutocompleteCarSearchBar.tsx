@@ -134,13 +134,13 @@ export default function AutocompleteCarSearchBar({ searchScope }: { searchScope:
     const key = option.id;
     return (
       <Box
+        {...optionProps}
         key={key}
         sx={{
           borderRadius: '8px',
           margin: '5px',
         }}
         component="li"
-        {...optionProps}
       >
         {getOptionLabel(option)}
       </Box>

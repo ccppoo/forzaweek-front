@@ -14,7 +14,8 @@ import { useLiveQuery } from 'dexie-react-hooks';
 import { FlexBox, FullSizeCenteredFlexBox } from '@/components/styled';
 import { Image } from '@/components/styled';
 import type { CarFH5Image } from '@/db/model/fh5';
-import { getCarFH5, getCarFH5Image, searchCarByName } from '@/db/query/fh5/car';
+import { getCarFH5, getCarFH5FullType, getCarFH5Image, searchCarByName } from '@/db/query/fh5/car';
+import { getManufacturerById } from '@/db/query/real/manufacturer';
 import { CarFH5FullInput, CarFH5FullType } from '@/schema/fh5/types';
 import useCarAndTagFilter from '@/store/carAndTagFilter';
 import useCarSearchFilters, { CarSearchOption } from '@/store/carSearchFilters';
@@ -22,7 +23,7 @@ import type { CarInfo2 } from '@/types/car';
 
 interface FinalSelectInterface {
   scope: string;
-  setFilter?: (car: CarInfo2) => void;
+  // setFilter?: (car: CarInfo2) => void;
 }
 
 function RenderCarImage({ carID }: { carID: string }) {
@@ -45,8 +46,36 @@ function RenderCarImage({ carID }: { carID: string }) {
   return;
 }
 
+function SelectGroupManufacturer({ manufacturererID }: { manufacturererID: string }) {
+  const manufacturer = useLiveQuery(
+    async () => getManufacturerById(manufacturererID),
+    [manufacturererID],
+  );
+
+  if (manufacturer) {
+    return (
+      <MenuItem key={`car-final-select-${manufacturer.name.en}`} value={manufacturererID}>
+        {manufacturer.name.en}
+      </MenuItem>
+    );
+  }
+}
+
+function SelectedCar({ carID }: { carID: string | undefined }) {
+  if (!carID) return;
+  const carFH5 = useLiveQuery(async () => getCarFH5FullType(carID), [carID]);
+
+  if (carFH5) {
+    return (
+      <FlexBox sx={{ flexDirection: 'row', columnGap: 1 }}>
+        <Typography>{carFH5?.baseCar.name.en[0]}</Typography>
+      </FlexBox>
+    );
+  }
+}
+
 export default function FinalSelect(props: FinalSelectInterface) {
-  const { scope, setFilter } = props;
+  const { scope } = props;
   // NOTE: useCarAndTagFilter는 차, 튜닝, 데칼 검색할 때 어떤 차를 볼 지 선택하는 것
   const {
     actions: {
@@ -55,7 +84,7 @@ export default function FinalSelect(props: FinalSelectInterface) {
   } = useCarAndTagFilter(scope);
   const [_, carSearchResults, __, { clearAllOptions }] = useCarSearchFilters(scope);
   const [carID, setCarID] = useState<string>(
-    carSearchResults.length > 0 ? carSearchResults[0].name_en : '',
+    carSearchResults.length > 0 ? carSearchResults[0].baseCar.name.en[0] : '',
   );
   const ITEM_HEIGHT = 48;
   const ITEM_PADDING_TOP = 8;
@@ -82,35 +111,45 @@ export default function FinalSelect(props: FinalSelectInterface) {
   };
 
   const manufactureIDList = Array.from(
-    new Set(carSearchResults.map(({ manufacturer }) => manufacturer.id)),
+    new Set(
+      carSearchResults.map(({ baseCar: { manufacturer } }) => manufacturer.id).filter((x) => !!x),
+    ),
   );
 
-  const renderSelectGroup = (manufacturererID: string) => {
+  function renderSelectGroup(manufacturererID: string) {
+    const manufacturer = useLiveQuery(
+      async () => getManufacturerById(manufacturererID),
+      [manufacturererID],
+    );
+
+    {
+      /* <SelectGroupManufacturer manufacturererID={manufacturererID} key={`final-select-${manufacturererID}`}/> */
+    }
     const items = carSearchResults
-      .filter(({ manufacturer: man }) => man.id == manufacturererID)
-      .map((c: CarInfo2) => {
+      .filter(({ baseCar: { manufacturer } }) => manufacturer.id == manufacturererID)
+      .map((c: CarFH5FullType) => {
         return (
-          <MenuItem key={`car-final-select-${c.name_en}`} value={c.id}>
-            {c.name_en}
+          <MenuItem key={`car-final-select-${c.baseCar.name.en}`} value={c.id}>
+            {c.baseCar.name.en}
           </MenuItem>
         );
       });
     // FIXME: 제조사 ID에 따라 이름 가져오기
-    // return [<ListSubheader>{manufacturer name}</ListSubheader>, items];
-    return items;
-  };
+    if (manufacturer) {
+      return [<ListSubheader>{manufacturer.name.en}</ListSubheader>, items];
+    }
+  }
 
-  const selectValueCar = useLiveQuery(async () => getCarFH5(carID), [carID]);
+  // const selectValueCar = useLiveQuery(async () => getCarFH5(carID), [carID]);
 
-  const renderSelectedValue = (carID: string | undefined) => {
-    return (
-      <FlexBox sx={{ flexDirection: 'row', columnGap: 1 }}>
-        <Typography>{selectValueCar?.baseCar.name.en[0]}</Typography>
-      </FlexBox>
-    );
-  };
-
-  const availableCarLists = carSearchResults.length > 0 ? carSearchResults[0].name : 'No cars!';
+  function renderSelectedValue(carID: string | undefined) {
+    return <SelectedCar carID={carID} />;
+    // return (
+    //   <FlexBox sx={{ flexDirection: 'row', columnGap: 1 }}>
+    //     <Typography>{selectValueCar?.baseCar.name.en[0]}</Typography>
+    //   </FlexBox>
+    // );
+  }
 
   return (
     <FlexBox sx={{ width: '40%', flexDirection: 'column' }}>
@@ -126,7 +165,8 @@ export default function FinalSelect(props: FinalSelectInterface) {
             renderValue={renderSelectedValue}
             MenuProps={MenuProps}
           >
-            {manufactureIDList.map((manufacturerID) => renderSelectGroup(manufacturerID))}
+            {manufactureIDList &&
+              manufactureIDList.map((manufacturerID) => renderSelectGroup(manufacturerID!))}
           </Select>
         </FormControl>
       </FlexBox>
