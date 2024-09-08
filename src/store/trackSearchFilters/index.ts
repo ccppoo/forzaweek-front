@@ -5,54 +5,35 @@ import { useLiveQuery } from 'dexie-react-hooks';
 
 import { db } from '@/db';
 import type { RaceRouteFH5, RaceRouteFH5Image } from '@/db/model/fh5/raceRoute';
+import { searchRaceRouteFH5 } from '@/db/query/fh5/raceRoute';
 import type { Track2 } from '@/db/schema';
 import type { GAME } from '@/types';
 import type { TrackCategory, TrackFormat, TrackFormatTopology, World } from '@/types/fh5';
+import type {
+  FH5_Category,
+  FH5_Format,
+  FH5_World,
+  TrackSearchOptions,
+} from '@/types/fh5/race_route';
+import {
+  RACEROUTE_FH5_CATEGORY_ALL,
+  RACEROUTE_FH5_FORMAT_ALL,
+  RACEROUTE_FH5_WORLD_ALL,
+} from '@/types/fh5/race_route';
 
 export type TrackSearchOption = 'game' | 'category' | 'format' | 'laps' | 'world';
 
-type TrackSearchOptions = {
-  game: GAME; // choice
-  world: Record<World, boolean>; // select
-  category: Record<TrackCategory, boolean>; // select
-  format: Record<TrackFormat, boolean>; // select
-  laps: number;
-};
+// world  : "mexico", "hot_wheels", "rally", "event_island"
+// laps : gte 0
+// format :  "sprint", "trail", "course", "circuit", "scramble", "street", "crosscountry", "showcase", "drag",
+// category : "crosscountry", "rally", "offroad", "road", "street", "drag", "hazard", "speed"
+// event :
 
 const trackSearchOptionDefault: TrackSearchOptions = {
   game: 'FH5',
-  world: {
-    Mexico: true,
-    HotWheels: true,
-    SierraNueva: true,
-  },
-  category: {
-    crossCountry: true,
-    offRoad: true,
-    drag: true,
-    road: true,
-    street: true,
-  },
-  format: {
-    circuit: true,
-    sprint: true,
-    colossus: true,
-    goliath: true,
-
-    street: true,
-    marathon: true,
-
-    scramble: true,
-    trail: true,
-    gauntlet: true,
-    juggernaut: true,
-
-    crossCountryCircuit: true,
-    crossCountry: true,
-    titan: true,
-
-    drag: true,
-  },
+  world: [],
+  category: [],
+  format: [],
   laps: -1,
 };
 
@@ -61,62 +42,41 @@ const trackSearchOptionState = atom<TrackSearchOptions>({
   default: trackSearchOptionDefault,
 });
 
-const getSelectedOptions = (options: Record<any, boolean>) =>
-  Object.entries(options)
-    .filter(([_, selected]) => !!selected)
-    .map(([cat, _]) => cat);
+function addToSet<T>(arr: T[], item: T): T[] {
+  if (arr.includes(item)) return arr;
+  return [...arr, item];
+}
 
-export async function getTrackData(options: TrackSearchOptions): Promise<Track2[]> {
-  // 옵션 선택 없는 경우 전체 반환
-  // game: string;
-  // category: string;
-  // format: string;
-  // laps: number;
-  // world: string;
-  // name: i18nMap;
-  // liberal_translation: i18nMap;
-
-  // console.log(`options.category : ${JSON.stringify(options.category)}`);
-  const cats = Object.entries(options.category)
-    .filter(([_, selected]) => !!selected)
-    .map(([cat, _]) => cat);
-  const formats = Object.entries(options.format)
-    .filter(([_, selected]) => !!selected)
-    .map(([fmt, _]) => fmt);
-
-  const tracks = await db.track2
-    .where('game')
-    .equals(options.game)
-    .and((x) => formats.includes(x.format))
-    .toArray();
-  // db.track2.where('category').equals()
-  return tracks;
+function removeFromSet<T>(arr: T[], item: T): T[] {
+  return arr.filter((itm) => itm != item);
 }
 
 type Actions = {
-  setOption: (value: string | string[] | number, option: TrackSearchOption) => void;
   format: {
-    setTrackFormat: (newFormat: Record<TrackFormat, boolean>) => void;
-    toggleTrackFormat: (format: TrackFormat) => void;
-    addTrackFormat: (format: TrackFormat) => void;
-    removeTrackFormat: (format: TrackFormat) => void;
+    clearRaceRouteFormat: () => void;
+    selectAllRaceRouteFormat: () => void;
+    addRaceRouteFormat: (format: FH5_Format) => void;
+    removeRaceRouteFormat: (format: FH5_Format) => void;
   };
   category: {
-    setTrackCategory: (newCategory: Record<TrackCategory, boolean>) => void;
-    addTrackCategory: (category: TrackCategory) => void;
-    removeTrackCategory: (category: TrackCategory) => void;
+    clearRaceRouteCategory: () => void;
+    selectAllRaceRouteCategory: () => void;
+    addRaceRouteCategory: (category: FH5_Category) => void;
+    removeRaceRouteCategory: (category: FH5_Category) => void;
   };
   world: {
-    setTrackWorld: (world: World) => void;
-    addTrackWorld: (world: World) => void;
-    removeTrackWorld: (world: World) => void;
+    clearRaceRouteWorld: () => void;
+    selectAllRaceRouteWorld: () => void;
+    addRaceRouteWorld: (world: FH5_World) => void;
+    removeRaceRouteWorld: (world: FH5_World) => void;
   };
 };
+
 function useTrackSearchFilters(): [TrackSearchOptions, string[], Actions] {
   const [trackSearchOptions, setTrackSearchOptions] = useRecoilState(trackSearchOptionState);
 
-  const searchResults: Track2[] | undefined = useLiveQuery(
-    () => getTrackData(trackSearchOptions),
+  const searchResults: string[] | undefined = useLiveQuery(
+    async () => await searchRaceRouteFH5(trackSearchOptions),
     [
       trackSearchOptions.game,
       trackSearchOptions.world,
@@ -126,99 +86,123 @@ function useTrackSearchFilters(): [TrackSearchOptions, string[], Actions] {
     ],
   );
 
-  // console.log(`trackSearchOptions.format :${JSON.stringify(trackSearchOptions.format)}`);
-
-  const setOption = (value: string | string[] | number, option: TrackSearchOption) => {
-    setTrackSearchOptions((curVal) => {
+  // ======== world ========
+  const _setRaceRouteWorld = useCallback((world: FH5_World[]) => {
+    setTrackSearchOptions(({ world: prevWorld, ...res }) => {
       return {
-        ...curVal,
-        [option]: value,
+        ...res,
+        world: world,
       };
     });
-  };
+  }, []);
 
-  const setTrackFormat = (newFormat: Record<TrackFormat, boolean>) => {
-    // 'circuit' | 'sprint' | 'scramble' | 'trail' | 'crossCountry' | 'street';
-    // circular : 'circuit', 'scramble'
-    // linear : 'sprint', 'trail','crossCountry', 'street'
-    setTrackSearchOptions((curVal) => {
+  const clearRaceRouteWorld = () => _setRaceRouteWorld([]);
+  const selectAllRaceRouteWorld = () => _setRaceRouteWorld(RACEROUTE_FH5_WORLD_ALL);
+
+  function addRaceRouteWorld(world: FH5_World): void {
+    setTrackSearchOptions(({ world: prevWorld, ...res }) => {
       return {
-        ...curVal,
-        format: newFormat,
+        ...res,
+        world: addToSet<FH5_World>(prevWorld, world),
       };
     });
-  };
-
-  const toggleTrackFormat = (format: TrackFormat) => {
-    // 'circuit' | 'sprint' | 'scramble' | 'trail' | 'crossCountry' | 'street';
-    // circular : 'circuit', 'scramble'
-    // linear : 'sprint', 'trail','crossCountry', 'street'
-    setTrackSearchOptions((curVal: TrackSearchOptions) => {
-      const { format: a, ...resss } = curVal;
-      const { [format]: goingToChange, ...res } = a;
+  }
+  function removeRaceRouteWorld(world: FH5_World): void {
+    setTrackSearchOptions(({ world: prevWorld, ...res }) => {
       return {
-        ...resss,
-        format: {
-          ...res,
-          [format]: !goingToChange,
-        } as Record<TrackFormat, boolean>,
+        ...res,
+        world: removeFromSet<FH5_World>(prevWorld, world),
       };
     });
-  };
+  }
 
-  const addTrackFormat = (format: TrackFormat) => {
-    // circular, linear (이벤트 트랙은 수동으로 )
-  };
-  const removeTrackFormat = (format: TrackFormat) => {
-    // circular, linear (이벤트 트랙은 수동으로 )
-  };
+  function toggleRaceRouteWorld(world: FH5_World): void {
+    trackSearchOptions.world.includes(world)
+      ? removeRaceRouteWorld(world)
+      : addRaceRouteWorld(world);
+  }
 
-  const setTrackCategory = (newCategory: Record<TrackCategory, boolean>) => {
-    // 'crossCountry' | 'offRoad' | 'road' | 'street' | 'drag';
-    setTrackSearchOptions((curVal) => {
+  // ======== cateogry ========
+  const _setRaceRouteCategory = useCallback((categories: FH5_Category[]) => {
+    setTrackSearchOptions(({ category: prevCategory, ...res }) => {
       return {
-        ...curVal,
-        category: newCategory,
+        ...res,
+        category: categories,
       };
     });
-  };
-  const addTrackCategory = (category: TrackCategory) => {
-    // 'crossCountry' | 'offRoad' | 'road' | 'street' | 'drag';
-  };
-  const removeTrackCategory = (category: TrackCategory) => {
-    // 'crossCountry' | 'offRoad' | 'road' | 'street' | 'drag';
-  };
+  }, []);
 
-  const setTrackWorld = (world: World) => {
-    //  'Mexico' | 'Hot Wheels' | 'Sierra Nueva';
-  };
-  const addTrackWorld = (world: World) => {
-    //  'Mexico' | 'Hot Wheels' | 'Sierra Nueva';
-  };
-  const removeTrackWorld = (world: World) => {
-    //  'Mexico' | 'Hot Wheels' | 'Sierra Nueva';
-  };
+  const clearRaceRouteCategory = () => _setRaceRouteCategory([]);
+  const selectAllRaceRouteCategory = () => _setRaceRouteCategory(RACEROUTE_FH5_CATEGORY_ALL);
+
+  function addRaceRouteCategory(category: FH5_Category): void {
+    setTrackSearchOptions(({ category: prevCategory, ...res }) => {
+      return {
+        ...res,
+        category: addToSet<FH5_Category>(prevCategory, category),
+      };
+    });
+  }
+  function removeRaceRouteCategory(category: FH5_Category): void {
+    setTrackSearchOptions(({ category: prevCategory, ...res }) => {
+      return {
+        ...res,
+        category: removeFromSet<FH5_Category>(prevCategory, category),
+      };
+    });
+  }
+
+  // ======== format ========
+  const _setRaceRouteFormat = useCallback((formats: FH5_Format[]) => {
+    setTrackSearchOptions(({ format: prevFormat, ...res }) => {
+      return {
+        ...res,
+        format: formats,
+      };
+    });
+  }, []);
+
+  const clearRaceRouteFormat = () => _setRaceRouteFormat([]);
+  const selectAllRaceRouteFormat = () => _setRaceRouteFormat(RACEROUTE_FH5_FORMAT_ALL);
+
+  function addRaceRouteFormat(format: FH5_Format): void {
+    setTrackSearchOptions(({ format: prevFormat, ...res }) => {
+      return {
+        ...res,
+        format: addToSet<FH5_Format>(prevFormat, format),
+      };
+    });
+  }
+  function removeRaceRouteFormat(format: FH5_Format): void {
+    setTrackSearchOptions(({ format: prevFormat, ...res }) => {
+      return {
+        ...res,
+        format: removeFromSet<FH5_Format>(prevFormat, format),
+      };
+    });
+  }
 
   return [
     trackSearchOptions,
     searchResults || [],
     {
-      setOption,
       format: {
-        setTrackFormat,
-        toggleTrackFormat,
-        addTrackFormat,
-        removeTrackFormat,
+        clearRaceRouteFormat,
+        selectAllRaceRouteFormat,
+        addRaceRouteFormat,
+        removeRaceRouteFormat,
       },
       category: {
-        setTrackCategory,
-        addTrackCategory,
-        removeTrackCategory,
+        clearRaceRouteCategory,
+        selectAllRaceRouteCategory,
+        addRaceRouteCategory,
+        removeRaceRouteCategory,
       },
       world: {
-        setTrackWorld,
-        addTrackWorld,
-        removeTrackWorld,
+        clearRaceRouteWorld,
+        selectAllRaceRouteWorld,
+        addRaceRouteWorld,
+        removeRaceRouteWorld,
       },
     },
   ];
