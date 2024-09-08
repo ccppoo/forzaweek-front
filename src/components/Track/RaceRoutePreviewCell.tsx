@@ -25,43 +25,77 @@ import * as image from '@/image';
 import { RouterLinkWrapper } from '@/components/Routing/LinkWrapper';
 import { FlexBox, FullSizeCenteredFlexBox } from '@/components/styled';
 import { Image } from '@/components/styled';
-import { getTrackImage } from '@/db/index';
+// import { getTrackImage } from '@/db/index';
+import { getRaceRouteFH5 } from '@/db/query/fh5/raceRoute';
 // import type { TrackInfo } from '@/types';
 import type { Track2, TrackImage } from '@/db/schema';
+import type { RaceRouteFH5Input, RaceRouteFH5Type } from '@/schema/fh5/types';
 import useTrackSearchFilters from '@/store/trackSearchFilters';
+import type { FH5_Category, FH5_Format, FH5_World } from '@/types/fh5/race_route';
 
 type TrackType = 'road' | 'offRoad' | 'crossCountry' | 'street' | 'drag';
+type PartialRecord<K extends keyof any, T> = {
+  [P in K]?: T;
+};
+type RaceRouteIcon = PartialRecord<FH5_Format, string>;
 
-const trackIcon: Record<TrackType, any> = {
+const trackIcon: PartialRecord<FH5_Category, RaceRouteIcon> = {
   road: {
     circuit: image.track_icon.road_track,
     sprint: image.track_icon.road_sprint,
-    goliath: image.track_icon.goliath,
-    colossus: image.track_icon.colossus,
   },
-  offRoad: {
+  offroad: {
     trail: image.track_icon.offroad_track,
     scramble: image.track_icon.offroad_sprint,
-    gauntlet: image.track_icon.gauntlet,
   },
-  crossCountry: {
-    crossCountry: image.track_icon.crosscounrty_sprint,
-    crossCountryCircuit: image.track_icon.crosscounrty_track,
-    juggernaut: image.track_icon.juggernaut,
-    titan: image.track_icon.titan,
+  crosscountry: {
+    crosscountry: image.track_icon.crosscounrty_sprint,
+    circuit: image.track_icon.crosscounrty_track,
   },
   street: {
     street: image.track_icon.street_racing,
-    marathon: image.track_icon.marathon,
   },
   drag: {
     drag: image.track_icon.drag_racing,
   },
 };
 
-function TrackName({ track }: { track: Track2 }) {
-  const trackicon = trackIcon[track.category as TrackType][track.format];
+const raceRouteEventIcon = {
+  goliath: image.track_icon.goliath,
+  colossus: image.track_icon.colossus,
+};
+// The Titan
+// event: The Goliath
+// event: The Colossus
+// juggernaut: image.track_icon.juggernaut,
+// titan: image.track_icon.titan,
+// marathon: image.track_icon.marathon,
 
+function getTrackIcon({
+  category,
+  format,
+  event,
+}: {
+  category: string;
+  format: string;
+  event: string | undefined;
+}): string | undefined {
+  if (format == 'showcase') {
+  }
+  if (event) {
+  }
+
+  const trackIcon_ = trackIcon[category as FH5_Category];
+  if (!trackIcon_) return undefined;
+  return trackIcon_[format as FH5_Format];
+}
+
+function RaceRouteName({ raceRoute }: { raceRoute: RaceRouteFH5Type }) {
+  raceRoute.category;
+  const { category, raceFormat: format, event } = raceRoute;
+  // const iconSrc = getTrackIcon({ category, format, event });
+  const iconSrc = raceRoute.iconURL;
+  const raceRouteName = raceRoute.name.en;
   return (
     <FlexBox
       sx={{
@@ -80,14 +114,14 @@ function TrackName({ track }: { track: Track2 }) {
           }}
         >
           <Image
-            src={trackicon}
+            src={iconSrc}
             sx={{
               objectFit: 'contain',
             }}
           />
         </Box>
         <FlexBox sx={{ flexDirection: 'column' }}>
-          <Typography variant="h5">{track.name.en}</Typography>
+          <Typography variant="h5">{raceRouteName}</Typography>
         </FlexBox>
       </FlexBox>
       {/* 맵 특징 태그,  */}
@@ -98,7 +132,7 @@ function TrackName({ track }: { track: Track2 }) {
   );
 }
 
-function TrackPreview({ trackImage }: { trackImage: TrackImage }) {
+function RaceRoutePreview({ image }: { image: string }) {
   return (
     <FlexBox
       sx={{
@@ -111,7 +145,7 @@ function TrackPreview({ trackImage }: { trackImage: TrackImage }) {
       }}
     >
       <Image
-        src={trackImage.fullPathImage.zoom_out}
+        src={image}
         // sx={{ objectFit: 'contain', borderTopLeftRadius: 4, borderBottomLeftRadius: 4 }}
         sx={{ objectFit: 'fill', borderTopLeftRadius: 4, borderBottomLeftRadius: 4 }}
       />
@@ -119,33 +153,39 @@ function TrackPreview({ trackImage }: { trackImage: TrackImage }) {
   );
 }
 
-export default function TrackPreviewCell({ track }: { track: Track2 }) {
+export default function RaceRoutePreviewCell({ raceRouteID }: { raceRouteID: string }) {
   const WIDTH = '100%';
   const HEIGHT = 200;
 
-  const trackImage: TrackImage | undefined = useLiveQuery(
-    async () => await getTrackImage(track.id!),
+  const raceRouteFH5: RaceRouteFH5Type | undefined = useLiveQuery(
+    async () => await getRaceRouteFH5(raceRouteID!),
+    [raceRouteID],
   );
 
   const game = 'FH5';
-  const track_name_ = track.name.en.replaceAll(' ', '_');
-  const track_href = `/${game}/track/${track_name_}`;
-  return (
-    <Paper
-      sx={{
-        width: WIDTH,
-        maxWidth: 1200,
-        height: HEIGHT,
-        borderTopLeftRadius: 4,
-        borderBottomLeftRadius: 4,
-      }}
-    >
-      <RouterLinkWrapper to={track_href}>
-        <FlexBox sx={{ display: 'flex', width: '100%', height: '100%' }}>
-          {trackImage && <TrackPreview trackImage={trackImage} />}
-          <TrackName track={track} />
-        </FlexBox>
-      </RouterLinkWrapper>
-    </Paper>
-  );
+  const raceRoute_name_ = raceRouteFH5?.name.en;
+  const raceRoute_image =
+    raceRouteFH5?.fullPathImage.zoom_in || raceRouteFH5?.fullPathImage.zoom_out;
+  const track_href = `/${game}/raceroute/${raceRoute_name_}`;
+
+  if (raceRouteFH5) {
+    return (
+      <Paper
+        sx={{
+          width: WIDTH,
+          maxWidth: 1200,
+          height: HEIGHT,
+          borderTopLeftRadius: 4,
+          borderBottomLeftRadius: 4,
+        }}
+      >
+        <RouterLinkWrapper to={track_href}>
+          <FlexBox sx={{ display: 'flex', width: '100%', height: '100%' }}>
+            {raceRoute_image && <RaceRoutePreview image={raceRoute_image} />}
+            <RaceRouteName raceRoute={raceRouteFH5!} />
+          </FlexBox>
+        </RouterLinkWrapper>
+      </Paper>
+    );
+  }
 }
