@@ -1,12 +1,9 @@
 import axios from 'axios';
 
-import type { CarEditSchema, CarSchemaType } from '@/FormData/car';
-import { UploadImage } from '@/api/data/image';
-import type { API_NAME } from '@/api/types';
 import { CarFH5, CarFH5Image } from '@/db/model/fh5';
+import { RaceRouteFH5, RaceRouteFH5Image } from '@/db/model/fh5';
 import { Car, Country, Manufacturer } from '@/db/model/real';
 import { dbCollectionUpdate } from '@/db/query/update';
-import { Car2, CarImage2, FH5_META, FH5_Performance, Track2, TrackImage } from '@/db/schema';
 
 import { BASE_PATH_DB, JSONContentType } from './config';
 
@@ -50,9 +47,6 @@ export const updateManufacturerDB = async () =>
 
 export const updateCarDB = async () => updateIndexedDB<Car>({ collection: 'car' });
 
-// export const updateCarImage = async () =>
-//   updateIndexedDB<CarImage2>({ collection: 'carImage2', path: 'car2/image' });
-
 export const updateCar_FH5 = async () =>
   updateIndexedDB<CarFH5>({ collection: 'carFH5', path: 'FH5/car' });
 
@@ -62,8 +56,11 @@ export const updateCar_FH5_Image = async () =>
     path: 'FH5/car/image',
   });
 
-export const updateTrack = async () =>
-  updateIndexedDB<Track2>({ collection: 'track2', path: 'track2' });
+export const updateRaceRoute_FH5 = async () =>
+  updateIndexedDB<RaceRouteFH5>({ collection: 'raceRouteFH5', path: 'FH5/raceroute' });
 
-export const updateTrackImage = async () =>
-  updateIndexedDB<TrackImage>({ collection: 'trackImage', path: 'track2/image' });
+export const updateRaceRouteImage_FH5 = async () =>
+  updateIndexedDB<RaceRouteFH5Image>({
+    collection: 'raceRouteFH5Image',
+    path: 'FH5/raceroute/image',
+  });
