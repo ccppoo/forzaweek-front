@@ -10,8 +10,8 @@ import { tagItemReadOnly } from './tag/tag';
 export const decalEditSchema = documentBase
   .merge(sharingCreation)
   .merge(image.multipleImages)
-  .merge(car.carDependent)
-  .merge(tag.tagDependent);
+  .merge(car.carDependent);
+// .merge(tag.tagDependent);
 
 export const decalSchemaType = decalEditSchema.required({
   id: true,
@@ -20,7 +20,7 @@ export const decalSchemaType = decalEditSchema.required({
   firstImage: true,
   imageURLs: true,
   share_code: true,
-  tags: true,
+  // tags: true,
 });
 
 export type DecalSchemaType = z.infer<typeof decalSchemaType>;
@@ -34,7 +34,7 @@ export const decalEditSchemaDefault: DecalEditSchema = {
 
   imageURLs: [], // 데칼 사진
   firstImage: undefined,
-  tags: [], // 데칼 태그
+  // tags: [], // 데칼 태그
 };
 
 export const decalSchemaReadType = z.object({

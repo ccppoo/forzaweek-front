@@ -6,7 +6,7 @@ import { Box, Button, Container, Typography } from '@mui/material';
 import type { TuningEditSchema } from '@/FormData/tuning';
 import { tuningEditSchemaDefault } from '@/FormData/tuning';
 import { createTuningFH5 } from '@/api/fh5/tuning';
-import AddTags from '@/components/FormInputs/AddTags';
+// import AddTags from '@/components/FormInputs/AddTags';
 import SelectCar from '@/components/FormInputs/CarSelect';
 import CreatorUsernameInput from '@/components/FormInputs/CreatorUsername';
 import ShareCodeInput from '@/components/FormInputs/ShareCode';
@@ -146,7 +146,7 @@ export default function TuningWrite(props: dataTextInputIntf) {
                 </FlexBox>
                 <ShareCodeInput />
               </Box>
-              {/* 3. 태그 붙이기 */}
+              {/* 3. 태그 붙이기
               <Box
                 sx={{
                   width: '100%',
@@ -159,7 +159,7 @@ export default function TuningWrite(props: dataTextInputIntf) {
                   <Typography>Tuning Tags</Typography>
                 </FlexBox>
                 <AddTags selectScope={selectScope} postType="tuning" />
-              </Box>
+              </Box> */}
               {/* 4. 튜닝 성능 입력(PI) */}
               <Box
                 sx={{

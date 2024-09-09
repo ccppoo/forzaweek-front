@@ -41,82 +41,62 @@ export default function DecalWrite(props: dataTextInputIntf) {
   };
 
   console.log(`isEditMode :${isEditMode}`);
+  // console.log(`all form  : ${JSON.stringify(methods.getValues())}`);
 
   return (
     <Container sx={{ paddingTop: 2 }}>
       <FullSizeCenteredFlexBox sx={{ width: '100%', paddingBottom: 10, paddingTop: 4 }}>
         <FormProvider {...methods}>
           <form onSubmit={methods.handleSubmit(submit)} style={{ width: '100%' }}>
-            <FlexBox sx={{ flexDirection: 'column', rowGap: 2, width: '100%' }}>
-              <Box
+            <FlexBox sx={{ flexDirection: 'column', rowGap: 2, width: '80%' }}>
+              <FlexBox
                 sx={{
                   width: '100%',
-                  display: 'grid',
-                  gridTemplateColumns: '150px auto',
-                  gridTemplateRows: '200px',
+                  flexDirection: 'column',
                 }}
               >
                 <FlexBox sx={{ alignItems: 'center', height: '100%' }}>
                   <Typography>Base Car</Typography>
                 </FlexBox>
                 <SelectCar selectScope={selectScope} />
-              </Box>
+              </FlexBox>
               {/* 1. 원본 제작자 이름 */}
-              <Box
+
+              <FlexBox
                 sx={{
                   width: '100%',
-                  display: 'grid',
-                  gridTemplateColumns: '150px auto',
-                  gridTemplateRows: '50px',
+                  flexDirection: 'column',
                 }}
               >
                 <FlexBox sx={{ alignItems: 'center' }}>
                   <Typography>Creator username</Typography>
                 </FlexBox>
                 <CreatorUsernameInput />
-              </Box>
+              </FlexBox>
               {/* 2. 공유 코드 입력 */}
-              <Box
+              <FlexBox
                 sx={{
                   width: '100%',
-                  display: 'grid',
-                  gridTemplateColumns: '150px auto',
-                  gridTemplateRows: '50px',
+                  flexDirection: 'column',
                 }}
               >
                 <FlexBox sx={{ alignItems: 'center' }}>
                   <Typography>Share code</Typography>
                 </FlexBox>
                 <ShareCodeInput />
-              </Box>
-              {/* 3. 태그 붙이기 */}
-              <Box
+              </FlexBox>
+              {/* 3. 이미지 올리기 */}
+              <FlexBox
                 sx={{
                   width: '100%',
-                  display: 'grid',
-                  gridTemplateColumns: '150px auto',
-                  gridTemplateRows: 'auto',
-                }}
-              >
-                <FlexBox sx={{ alignItems: 'center', height: 60 }}>
-                  <Typography>Decal Tags</Typography>
-                </FlexBox>
-                <AddTags selectScope={selectScope} postType="decal" />
-              </Box>
-              {/* 4. 이미지 올리기 */}
-              <Box
-                sx={{
-                  width: '100%',
-                  display: 'grid',
-                  gridTemplateColumns: '150px auto',
-                  gridTemplateRows: 'auto',
+                  flexDirection: 'column',
                 }}
               >
                 <FlexBox>
                   <Typography>Decal Images</Typography>
                 </FlexBox>
                 <AddMultipleImages postType="decal upload" />
-              </Box>
+              </FlexBox>
               <FlexBox sx={{ width: '100%', justifyContent: 'end' }}>
                 <Button type="submit" variant="outlined">
                   Post

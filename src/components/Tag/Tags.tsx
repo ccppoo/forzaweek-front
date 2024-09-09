@@ -205,7 +205,7 @@ export default function Tags(props: TagsIntf) {
   const { topic, subjectID } = props;
 
   const { data } = useQuery({
-    queryKey: ['get tags of subject id', topic, subjectID],
+    queryKey: ['tags', topic, subjectID],
     queryFn: getAllTagsOfSubject,
   });
 
@@ -214,7 +214,9 @@ export default function Tags(props: TagsIntf) {
     return (
       <FlexBox sx={{ flexDirection: 'column' }}>
         <FlexBox sx={{ paddingBottom: 1 }}>
-          <Typography variant="h5">Tags</Typography>
+          <Typography variant="h5" fontWeight={300}>
+            Tags
+          </Typography>
         </FlexBox>
         <Paper
           sx={{
@@ -222,6 +224,7 @@ export default function Tags(props: TagsIntf) {
             padding: 1,
             columnGap: 0.5,
             alignContent: 'flex-start',
+            minHeight: 65,
             flexWrap: 'wrap',
             rowGap: 1,
           }}

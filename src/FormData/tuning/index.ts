@@ -12,7 +12,7 @@ import { tuningTestReading, tuningTestReadingDefault } from './testReading';
 export const tuningEditSchema = documentBase
   .merge(sharingCreation)
   .merge(car.carDependent)
-  .merge(tag.tagDependent)
+  // .merge(tag.tagDependent)
   .merge(
     z.object({
       pi: z.optional(z.number().min(100).max(999)), // PI
@@ -46,7 +46,7 @@ export const tuningEditSchemaDefault: TuningEditSchema = {
   car: undefined, // 차 (id)
   creator: undefined, // 튜닝 제작자
 
-  tags: [], // 튜닝 태그
+  // tags: [], // 튜닝 태그
   pi: 800,
   performance: tuningPerformanceDefault,
   testReadings: tuningTestReadingDefault,
@@ -59,7 +59,7 @@ export const tuningSchemaType = tuningEditSchema.required({
   share_code: true,
   car: true,
   creator: true,
-  tags: true,
+  // tags: true,
   pi: true,
   performance: true,
   testReadings: true,

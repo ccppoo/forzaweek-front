@@ -62,11 +62,12 @@ function useCarAndTagFilter(scope: string): {
     });
   };
 
-  const setCar = async (name: CarID | undefined) => {
+  const setCar = async (carID: CarID | undefined) => {
+    console.log(`set carID : ${carID}`);
     setCarTagFilterOptions((prev) => {
       return {
         ...prev,
-        car: name,
+        carID: carID,
       };
     });
   };
@@ -75,7 +76,7 @@ function useCarAndTagFilter(scope: string): {
     setCarTagFilterOptions((prev) => {
       return {
         ...prev,
-        car: undefined,
+        carID: undefined,
       };
     });
   };

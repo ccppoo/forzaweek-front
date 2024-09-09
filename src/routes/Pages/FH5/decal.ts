@@ -22,7 +22,7 @@ export const routesFH5Decal: RoutesFH5Decal = {
   [FH5_Decal.DecalWrite]: {
     component: asyncComponentLoader(() => import('@/pages/Decals/write/fh5')),
     path: 'write',
-    title: 'decal write',
+    title: 'FH5 decal write',
     devUrl: '/FH5/decal/write',
     icon: HomeIcon,
   },

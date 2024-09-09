@@ -190,7 +190,7 @@ function DecalCellListingHeader() {
             }}
           >
             <Image
-              src={image.manufacturer.hyundai}
+              src={image.chevrolet_corvette_2020}
               sx={{
                 objectFit: 'contain',
                 borderTopLeftRadius: 4,
