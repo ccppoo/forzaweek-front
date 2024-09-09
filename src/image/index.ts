@@ -24,7 +24,6 @@ import elantra_front2 from './decal/elantra_front_top_left.jpg';
 import elantra_front3 from './decal/elantra_front_top_right.jpg';
 import elantra_left from './decal/elantra_left.jpg';
 import elantra_right from './decal/elantra_right.jpg';
-import flags from './flag';
 import ford_focus_2001 from './ford_Focus2001.jpg';
 import ford_focus_2017 from './ford_focus2017.jpg';
 import honda_civic from './honda_civic.jpg';
@@ -32,42 +31,10 @@ import fh4 from './logo/fh4.png';
 import fh5 from './logo/fh5.png';
 import fm2023black from './logo/fm2023-black.png';
 import fm2023 from './logo/fm2023.png';
-import manufacturer from './manufacturer';
 import series_33 from './poster/massive_Series_33_Apex_Allstars_series.webp';
 import { mulege } from './track/mulege';
 import track_lecerbohio from './track/track_1.jpg';
 import track_molehach from './track/track_2.jpg';
-import colossus from './track_icon/colossus.png';
-import crosscounrty_sprint from './track_icon/crosscountry_sprint.png';
-import crosscounrty_track from './track_icon/crosscountry_track.png';
-import drag_racing from './track_icon/drag_racing.png';
-import gauntlet from './track_icon/gauntlet.png';
-import goliath from './track_icon/goliath.png';
-import juggernaut from './track_icon/juggernaut.png';
-import marathon from './track_icon/marathon.png';
-import offroad_sprint from './track_icon/offroad_sprint.png';
-import offroad_track from './track_icon/offroad_track.png';
-import road_sprint from './track_icon/road_sprint.png';
-import road_track from './track_icon/road_track.png';
-import street_racing from './track_icon/street_racing.png';
-import titan from './track_icon/titan.png';
-
-const track_icon = {
-  road_track: road_track,
-  road_sprint: road_sprint,
-  offroad_track: offroad_track,
-  offroad_sprint: offroad_sprint,
-  crosscounrty_track: crosscounrty_track,
-  crosscounrty_sprint: crosscounrty_sprint,
-  drag_racing: drag_racing,
-  street_racing: street_racing,
-  titan: titan,
-  marathon: marathon,
-  juggernaut: juggernaut,
-  goliath: goliath,
-  gauntlet: gauntlet,
-  colossus: colossus,
-};
 
 const track = {
   lecerbohio: track_lecerbohio,
@@ -121,9 +88,7 @@ const car = {
 };
 
 export {
-  manufacturer,
   track,
-  track_icon,
   logo,
   poster,
   car,
@@ -133,5 +98,4 @@ export {
   ford_focus_2017,
   chevrolet_corvette_2020,
   series_33,
-  flags,
 };
