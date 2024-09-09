@@ -1,5 +1,6 @@
 import { useContext, useRef, useState } from 'react';
 
+import { Typography } from '@mui/material';
 import Pagination from '@mui/material/Pagination';
 
 import { useQuery } from '@tanstack/react-query';
@@ -94,21 +95,28 @@ export default function VotableComments({ subject_to }: { subject_to: string }) 
   };
 
   return (
-    <CommentContext.Provider
-      value={{
-        commentReadOptions: commentReadOptions,
-        setCommentReadOptions: setCommentReadOption,
-      }}
-    >
-      <FlexBox sx={{ width: '100%', flexDirection: 'column', rowGap: 2 }}>
-        {/* Add Comment */}
-        <CommentCreateTextArea placeHolder="comment" />
-        {/* Comment sort option and search */}
-        <CommentDisplayOptions />
-        {/* show comments */}
-        <VotableCommentsWithPagination />
+    <FlexBox sx={{ flexDirection: 'column', width: '100%' }}>
+      <FlexBox sx={{ paddingBottom: 1 }}>
+        <Typography variant="h5" fontWeight={300}>
+          Comments
+        </Typography>
       </FlexBox>
-    </CommentContext.Provider>
+      <CommentContext.Provider
+        value={{
+          commentReadOptions: commentReadOptions,
+          setCommentReadOptions: setCommentReadOption,
+        }}
+      >
+        <FlexBox sx={{ width: '100%', flexDirection: 'column', rowGap: 2 }}>
+          {/* Add Comment */}
+          <CommentCreateTextArea placeHolder="comment" />
+          {/* Comment sort option and search */}
+          <CommentDisplayOptions />
+          {/* show comments */}
+          <VotableCommentsWithPagination />
+        </FlexBox>
+      </CommentContext.Provider>
+    </FlexBox>
   );
 }
 
