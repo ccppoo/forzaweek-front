@@ -6,6 +6,7 @@ import Typography from '@mui/material/Typography';
 
 import { FlexBox } from '@/components/styled';
 import routes from '@/routes';
+import { routesForDev } from '@/routes';
 
 function NavigationButton({ name, path }: { name: string; path: string }) {
   const navigate = useNavigate();
@@ -51,13 +52,13 @@ function NavigationButton({ name, path }: { name: string; path: string }) {
 export default function MenuNavigation({ leftPadding }: { leftPadding: number }) {
   return (
     <Toolbar variant="dense" sx={{ marginX: `${leftPadding}px`, columnGap: 1, flexWrap: 'wrap' }}>
-      {Object.entries(routes)
+      {Object.entries(routesForDev)
         .filter(([key, item]) => item.title && !item.devHide)
         .map(([key, item]) => (
           <NavigationButton
             name={item.title!}
             path={item.devUrl! || item.path!}
-            key={`menu-navigate-${item.title}`}
+            key={`menu-navigate-${item.path}`}
           />
         ))}
     </Toolbar>

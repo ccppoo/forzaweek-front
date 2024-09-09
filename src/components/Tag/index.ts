@@ -1,4 +1,5 @@
 import TagItemCell, { TagItemCellEditVersion } from './TagCell';
 import TagKindItemCell from './TagKindCell';
+import Tags from './Tags';
 
-export { TagItemCell, TagItemCellEditVersion, TagKindItemCell };
+export { Tags, TagItemCell, TagItemCellEditVersion, TagKindItemCell };

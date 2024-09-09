@@ -1,35 +1,18 @@
 import { useNavigate } from 'react-router-dom';
 
-import { ImageRounded } from '@mui/icons-material';
-import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
-import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
-import Avatar from '@mui/material/Avatar';
-import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
-import ButtonBase from '@mui/material/ButtonBase';
-import Chip from '@mui/material/Chip';
 import Container from '@mui/material/Container';
-import Divider from '@mui/material/Divider';
-import IconButton from '@mui/material/IconButton';
-import Paper from '@mui/material/Paper';
-import Typography from '@mui/material/Typography';
-import Grid from '@mui/material/Unstable_Grid2';
-import { styled } from '@mui/material/styles';
 
-import * as image from '@/image';
 import TrackAndTagSearch from '@/components/Search/TrackAndTagSearch';
-import TrackPreviewCell from '@/components/Track/TrackPreviewCell';
+import RaceRoutePreviewCell from '@/components/Track/RaceRoutePreviewCell';
 import { FlexBox, FullSizeCenteredFlexBox } from '@/components/styled';
 import { Image } from '@/components/styled';
-import type { Track2 } from '@/db/schema';
 import useTrackSearchFilters from '@/store/trackSearchFilters';
-import type { TrackInfo } from '@/types';
 
 // import Map from './Map';
 
 export default function Tracks() {
   const navigate = useNavigate();
-  const [_, tracks] = useTrackSearchFilters();
+  const [_, raceRouteFH5IDs] = useTrackSearchFilters();
 
   const searchScope = 'track-browse';
   const MAP_HEIGHT = 600;
@@ -56,8 +39,13 @@ export default function Tracks() {
             flexDirection: 'column',
           }}
         >
-          {tracks.map((track: Track2) => {
-            return <TrackPreviewCell track={track} key={`track-info-track=${track.name.en}`} />;
+          {raceRouteFH5IDs.map((raceRouteFH5ID: string) => {
+            return (
+              <RaceRoutePreviewCell
+                raceRouteID={raceRouteFH5ID}
+                key={`race-rout-${raceRouteFH5ID}`}
+              />
+            );
           })}
         </FlexBox>
       </FullSizeCenteredFlexBox>

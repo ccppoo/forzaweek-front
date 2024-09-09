@@ -231,7 +231,7 @@ interface ItemListingIntf {
 export default function ItemListing(props: ItemListingIntf) {
   const { scope } = props;
   const {
-    filter: { car, tagIDs },
+    filter: { carID, tagIDs },
   } = useCarAndTagFilter(scope);
 
   const [page, setPage] = useState(1);

@@ -6,12 +6,12 @@ export type TagID = string;
 export type CarID = string;
 type CarTagFilter = {
   tagIDs: TagID[];
-  car: CarID | undefined;
+  carID: CarID | undefined;
 };
 
 const carTagFilterDefault: CarTagFilter = {
   tagIDs: [],
-  car: undefined,
+  carID: undefined,
 };
 
 const carTagFilterStateFamily = atomFamily<CarTagFilter, string>({
@@ -20,7 +20,7 @@ const carTagFilterStateFamily = atomFamily<CarTagFilter, string>({
 });
 
 function useCarAndTagFilter(scope: string): {
-  filter: { car: CarID | undefined; tagIDs: TagID[] };
+  filter: { carID: CarID | undefined; tagIDs: TagID[] };
   actions: { car: CarActions; tag: TagActions };
 } {
   const carTagFilterState = carTagFilterStateFamily(scope);

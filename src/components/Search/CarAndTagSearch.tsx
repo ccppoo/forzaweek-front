@@ -37,7 +37,7 @@ export default function CarAndTagSearch(props: CarAndTagSearchIterface) {
   const NO_CAR_SELECTED = 'No car selected';
   const noTagsSelected = 'No tags selected (all tags)';
   const {
-    filter: { car: carID, tagIDs },
+    filter: { carID, tagIDs },
     actions: {
       tag: { removeAllTags },
       car: { removeCar },

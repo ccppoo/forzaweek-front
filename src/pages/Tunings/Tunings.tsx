@@ -16,7 +16,6 @@ import { TuningBriefCell } from '@/components/Tunings';
 import TuningOptionFilter from '@/components/Tunings/TuningSearchFilter';
 import { FlexBox, FullSizeCenteredFlexBox } from '@/components/styled';
 import { Image } from '@/components/styled';
-import { getCar2 } from '@/db/index';
 import ScrollToTop from '@/hooks/useResetScroll';
 import useCarAndTagFilter from '@/store/carAndTagFilter';
 
@@ -54,7 +53,7 @@ function TuningCellListingHeader() {
             }}
           >
             <Image
-              src={image.manufacturer.hyundai}
+              src={image.chevrolet_corvette_2020}
               sx={{
                 objectFit: 'contain',
                 borderTopLeftRadius: 4,
@@ -89,10 +88,9 @@ function TuningShowMore({ carName, searchScope }: { carName: string; searchScope
   // more -> search filter 보여주고 있는 차로 세팅 -> 재검색
 
   const onClick = async () => {
+    // FIXME: show more click하면 car ID 넘기기
     console.log(`show more - tuning`);
-    const car2 = await getCar2(carName);
-    console.log(`carInfo : ${JSON.stringify(car2)}`);
-    setCar(car2);
+    setCar(carName);
   };
 
   return (
@@ -143,7 +141,7 @@ function TuningsSearchResults() {
   const searchScope = 'tunings';
 
   const {
-    filter: { car, tags },
+    filter: { carID, tagIDs },
   } = useCarAndTagFilter(searchScope);
 
   // pagination
@@ -157,9 +155,9 @@ function TuningsSearchResults() {
   };
 
   const { data } = useQuery({
-    queryKey: ['tuning-search', car ? car.id : '', page, itemLimit],
+    queryKey: ['tuning-search', carID, page, itemLimit],
     queryFn: SearchTunings,
-    enabled: !!car,
+    enabled: !!carID,
   });
 
   console.log(`data : ${JSON.stringify(data)}`);
@@ -193,7 +191,7 @@ export default function Tunings() {
   const searchScope = 'tunings';
 
   const {
-    filter: { car, tags },
+    filter: { carID, tagIDs },
   } = useCarAndTagFilter(searchScope);
 
   // 1) 검색 조건이 없을 땐 -> 최근에 추가된 차, 검색 많이 된 차 미리 정해서 목록으로 올리기
@@ -201,10 +199,11 @@ export default function Tunings() {
   return (
     <Container sx={{ paddingTop: 2 }}>
       <FullSizeCenteredFlexBox sx={{ flexDirection: 'column' }}>
-        <CarAndTagSearch searchScope={searchScope} doFinalSelect />
+        {/*  doFinalSelect 고치기 */}
+        <CarAndTagSearch searchScope={searchScope} />
         <TuningOptionFilter />
         {/* if no car selected */}
-        {car ? <TuningsSearchResults /> : <RecommandedTunings />}
+        {carID ? <TuningsSearchResults /> : <RecommandedTunings />}
       </FullSizeCenteredFlexBox>
       <ScrollToTop />
     </Container>

@@ -62,7 +62,7 @@ export default function AutocompleteCarSearchBar({ searchScope }: { searchScope:
   // TODO: Selection -> DB에서 자동차 ID로 저장 + 하나 선택했으면 Search Filter 업데이트하기
 
   const {
-    filter: { car: selectedCarID },
+    filter: { carID },
     actions: {
       car: { setCar, removeCar },
     },
@@ -81,7 +81,7 @@ export default function AutocompleteCarSearchBar({ searchScope }: { searchScope:
     placeHolder: [],
   });
   const carSelected = useLiveQuery<CarFH5FullType | undefined>(async () =>
-    !!selectedCarID ? getCarFH5FullType(selectedCarID) : undefined,
+    !!carID ? getCarFH5FullType(carID) : undefined,
   );
 
   const renderGroup = (params: AutocompleteRenderGroupParams) => {

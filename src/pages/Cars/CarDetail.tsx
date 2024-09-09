@@ -7,7 +7,6 @@ import Container from '@mui/material/Container';
 import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
 
-import { useQuery } from '@tanstack/react-query';
 import { useLiveQuery } from 'dexie-react-hooks';
 
 import { CarDetailInfo } from '@/components/Car';
@@ -16,11 +15,11 @@ import Comments from '@/components/Comment';
 import { TempComments } from '@/components/Comment/Comments';
 import { RelatedDecals } from '@/components/Decals';
 import { ImageShowHorizontal } from '@/components/ImageList/Horizontal2';
+import { Tags } from '@/components/Tag';
 import { RelatedTunings } from '@/components/Tunings';
 import { RelatedVideos } from '@/components/Videos';
 import { FlexBox, FullSizeCenteredFlexBox } from '@/components/styled';
 import { Image } from '@/components/styled';
-// import { getCarInfo2 } from '@/db/index';
 import { getCarFH5FullType } from '@/db/query/fh5/car';
 import { getCarFH5 } from '@/db/query/fh5/car';
 import ScrollToTop from '@/hooks/useResetScroll';
@@ -58,7 +57,6 @@ export default function CarDetail() {
   const game_context = 'FH5';
 
   const carinfo = useLiveQuery(async () => await getCarFH5FullType(carID!), [carID]);
-  const carinfo2 = useLiveQuery(async () => await getCarFH5(carID!), [carID]);
 
   if (carinfo)
     return (
@@ -80,8 +78,8 @@ export default function CarDetail() {
               <CarDetailInfo carFH5ID={carID!!} />
               <CarInGameDetailInfo carFH5ID={carID!!} />
             </FlexBox>
-            {/* <CarTags /> */}
             <ImageShowHorizontal images={carinfo?.imageURLs} />
+            <Tags topic="car" subjectID={carID!} />
             {/* 댓글 */}
             <FlexBox sx={{ paddingY: 3 }}>
               <Comments.temp.TempVotableComments />

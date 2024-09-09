@@ -71,6 +71,8 @@ export default function CarPreviewCard({ carInfo }: { carInfo: CarFH5FullType })
     goto('/FH5/tuning');
   };
 
+  const carDetailURL = `/FH5/car/${carInfo.id}`;
+
   return (
     <FlexBox sx={{ minWidth: 400, width: 'calc( 50% - 20px )', maxWidth: 560 }}>
       <Paper
@@ -114,7 +116,7 @@ export default function CarPreviewCard({ carInfo }: { carInfo: CarFH5FullType })
         >
           {/* 차 이름 + 연식 */}
           <FlexBox sx={{ width: '100%', paddingY: 0.2, alignItems: 'baseline', columnGap: 1 }}>
-            <StyledLink to={`/car/${carInfo.id}`}>
+            <StyledLink to={carDetailURL}>
               <Typography fontSize={NAME_FONT_SIZE}>{FULL_NAME}</Typography>
             </StyledLink>
             <Typography variant="body2" sx={{ fontWeight: 200 }}>

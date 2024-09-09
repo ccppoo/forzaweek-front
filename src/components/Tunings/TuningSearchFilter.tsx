@@ -280,7 +280,7 @@ export default function TuningOptionFilter() {
   // 차 선택하고 나서 필터링하는 옵션
   const searchScope = 'tunings';
   const {
-    filter: { car, tags },
+    filter: { carID, tagIDs },
   } = useCarAndTagFilter(searchScope);
   const [tuningOption, _] = useTuningSearchFilters();
 
@@ -291,7 +291,7 @@ export default function TuningOptionFilter() {
   };
 
   // TODO: 서스펜션, 타이어, 구동방식 그림 아이콘
-  const isSearchOptionApplied = !!car;
+  const isSearchOptionApplied = !!carID;
   const noSearchOptionTooltipMSG = 'you could filter tunings after applying search options';
 
   return (
@@ -301,7 +301,7 @@ export default function TuningOptionFilter() {
       </FlexBox>
       <Paper sx={{ display: 'flex', width: '100%', flexDirection: 'column' }}>
         <Tooltip title={isSearchOptionApplied ? null : noSearchOptionTooltipMSG} placement="top">
-          <Accordion disabled={!car} expanded={!!car && expanded} onChange={handleChange}>
+          <Accordion disabled={!carID} expanded={!!carID && expanded} onChange={handleChange}>
             <AccordionSummary expandIcon={<ExpandMoreIcon />}>
               <TuningOptionSummaryDisplay
                 name="PI Class"

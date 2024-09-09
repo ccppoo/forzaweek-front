@@ -6,9 +6,6 @@ import { useLiveQuery } from 'dexie-react-hooks';
 import { db } from '@/db';
 import type { RaceRouteFH5, RaceRouteFH5Image } from '@/db/model/fh5/raceRoute';
 import { searchRaceRouteFH5 } from '@/db/query/fh5/raceRoute';
-import type { Track2 } from '@/db/schema';
-import type { GAME } from '@/types';
-import type { TrackCategory, TrackFormat, TrackFormatTopology, World } from '@/types/fh5';
 import type {
   FH5_Category,
   FH5_Format,
