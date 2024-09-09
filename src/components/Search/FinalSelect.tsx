@@ -19,11 +19,9 @@ import { getManufacturerById } from '@/db/query/real/manufacturer';
 import { CarFH5FullInput, CarFH5FullType } from '@/schema/fh5/types';
 import useCarAndTagFilter from '@/store/carAndTagFilter';
 import useCarSearchFilters, { CarSearchOption } from '@/store/carSearchFilters';
-import type { CarInfo2 } from '@/types/car';
 
 interface FinalSelectInterface {
   scope: string;
-  // setFilter?: (car: CarInfo2) => void;
 }
 
 function RenderCarImage({ carID }: { carID: string }) {

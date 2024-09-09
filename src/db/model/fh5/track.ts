@@ -10,15 +10,3 @@ export interface Track extends DocumentBase, MultiImageURL {
   laps: number;
   world: string;
 }
-
-// export type Track = {
-//   zoom_out: string;
-//   zoom_in?: string;
-// };
-
-// export interface TrackImage {
-//   id?: string; // Track ID
-//   first?: string;
-//   images: string[];
-//   fullPathImage: TrackFullPathImage;
-// }

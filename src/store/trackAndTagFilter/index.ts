@@ -1,10 +1,20 @@
 import { atomFamily, useRecoilState } from 'recoil';
 
-import type { Track } from '@/db/schema/track';
 import type { Tags } from '@/types/tag';
 
 import { TagActions, TrackActions } from './types';
 
+interface Track {
+  id?: number;
+  name: string;
+  name_en: string;
+  ko_sound: string;
+  en_sound: string;
+  ko_trans: string;
+  en_trans: string;
+  trackType: string;
+  courseType: string;
+}
 const tagsDefault: Tags = [];
 const trackDefault: Track | undefined = undefined;
 

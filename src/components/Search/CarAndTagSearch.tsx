@@ -7,9 +7,6 @@ import Accordion from '@mui/material/Accordion';
 import AccordionActions from '@mui/material/AccordionActions';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import AccordionSummary from '@mui/material/AccordionSummary';
-import Chip from '@mui/material/Chip';
-import Collapse from '@mui/material/Collapse';
-import Container from '@mui/material/Container';
 import Stack from '@mui/material/Stack';
 
 import { useLiveQuery } from 'dexie-react-hooks';
@@ -21,7 +18,6 @@ import {
 } from '@/components/Search';
 import { TagItemCell } from '@/components/Tag';
 import { FlexBox, FullSizeCenteredFlexBox } from '@/components/styled';
-// import { getCarInfoSimple } from '@/db';
 import { getCarFH5, getCarFH5FullType } from '@/db/query/fh5/car';
 import { CarFH5FullInput, CarFH5FullType } from '@/schema/fh5/types';
 import useCarAndTagFilter from '@/store/carAndTagFilter';
@@ -44,8 +40,9 @@ export default function CarAndTagSearch(props: CarAndTagSearchIterface) {
     },
   } = useCarAndTagFilter(searchScope);
 
+  console.log(`selected carID : ${carID}`);
+
   // console.log(`tagIDstagIDstagIDs :${JSON.stringify(tagIDs)}`);
-  // CarInfoSimple는 제조사 제외한 차 정보 전부
   const carSelected = useLiveQuery<CarFH5FullType | undefined>(
     async () => (!!carID ? getCarFH5FullType(carID) : undefined),
     [carID],

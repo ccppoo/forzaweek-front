@@ -25,13 +25,9 @@ import * as image from '@/image';
 import { RouterLinkWrapper } from '@/components/Routing/LinkWrapper';
 import { FlexBox, FullSizeCenteredFlexBox } from '@/components/styled';
 import { Image } from '@/components/styled';
-// import { getTrackImage } from '@/db/index';
 import { getRaceRouteFH5 } from '@/db/query/fh5/raceRoute';
-// import type { TrackInfo } from '@/types';
-import type { Track2, TrackImage } from '@/db/schema';
 import type { RaceRouteFH5Input, RaceRouteFH5Type } from '@/schema/fh5/types';
-import useTrackSearchFilters from '@/store/trackSearchFilters';
-import type { FH5_Category, FH5_Format, FH5_World } from '@/types/fh5/race_route';
+import type { FH5_Category, FH5_Format } from '@/types/fh5/race_route';
 
 type TrackType = 'road' | 'offRoad' | 'crossCountry' | 'street' | 'drag';
 type PartialRecord<K extends keyof any, T> = {

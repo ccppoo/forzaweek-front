@@ -1,4 +1,4 @@
-import { CarImages, DrivingSystemType, EngineType, SuspensionType, TireType } from './car';
+import { DrivingSystemType, EngineType, SuspensionType, TireType } from './car';
 import { Tags } from './tag';
 import { TrackInfo } from './track';
 
@@ -8,7 +8,6 @@ type GAME = 'FH5' | 'FH4';
 export type {
   GAME,
   EngineType,
-  CarImages,
   Tags,
   TrackInfo,
   PIClass,
