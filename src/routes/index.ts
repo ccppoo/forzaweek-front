@@ -2,6 +2,7 @@ import HomeIcon from '@mui/icons-material/Home';
 
 import asyncComponentLoader from '@/utils/loader';
 
+import { routesForDev } from './paths';
 import { Pages, Routes } from './types';
 
 const routes: Routes = {
@@ -190,4 +191,5 @@ const routes: Routes = {
   },
 };
 
+export { routesForDev };
 export default routes;
