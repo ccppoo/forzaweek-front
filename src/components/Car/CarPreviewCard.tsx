@@ -16,23 +16,9 @@ import {
 } from '@mui/material';
 import Grid from '@mui/material/Unstable_Grid2';
 
-import { FlexBox } from '@/components/styled';
-import { Image } from '@/components/styled';
+import { FlexBox, Image, StyledLink } from '@/components/styled';
 import { CarFH5FullInput, CarFH5FullType } from '@/schema/fh5/types';
 import useCarAndTagFilter from '@/store/carAndTagFilter';
-
-const StyledLink = styled(Link)`
-  text-decoration: none;
-  color: inherit;
-  position: relative;
-  padding: 2px 6px 2px 6px;
-  border-radius: 4px;
-  &:hover,
-  &:focus {
-    background-color: rgba(0, 0, 0, 0.1);
-    transition: background-color 0.3s;
-  }
-`;
 
 function setFontSize(target: string): number {
   if (target.length < 21) return 21;

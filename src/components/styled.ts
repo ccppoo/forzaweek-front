@@ -1,3 +1,5 @@
+import { Link } from 'react-router-dom';
+
 import { TextareaAutosize as BaseTextareaAutosize } from '@mui/base/TextareaAutosize';
 import Box from '@mui/material/Box';
 import { styled } from '@mui/material/styles';
@@ -86,4 +88,25 @@ const TextArea = styled(BaseTextareaAutosize)(
 `,
 );
 
-export { FlexBox, CenteredFlexBox, FullSizeCenteredFlexBox, Image, VisuallyHiddenInput, TextArea };
+const StyledLink = styled(Link)`
+  text-decoration: none;
+  color: inherit;
+  position: relative;
+  padding: 2px 6px 2px 6px;
+  border-radius: 4px;
+  &:hover,
+  &:focus {
+    background-color: rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s;
+  }
+`;
+
+export {
+  FlexBox,
+  CenteredFlexBox,
+  FullSizeCenteredFlexBox,
+  Image,
+  VisuallyHiddenInput,
+  StyledLink,
+  TextArea,
+};
