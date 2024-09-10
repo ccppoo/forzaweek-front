@@ -11,16 +11,13 @@ export const decalEditSchema = documentBase
   .merge(sharingCreation)
   .merge(image.multipleImages)
   .merge(car.carDependent);
-// .merge(tag.tagDependent);
 
 export const decalSchemaType = decalEditSchema.required({
   id: true,
   car: true,
   creator: true,
-  firstImage: true,
   imageURLs: true,
   share_code: true,
-  // tags: true,
 });
 
 export type DecalSchemaType = z.infer<typeof decalSchemaType>;
@@ -33,8 +30,6 @@ export const decalEditSchemaDefault: DecalEditSchema = {
   creator: undefined, // 데칼 제작자
 
   imageURLs: [], // 데칼 사진
-  firstImage: undefined,
-  // tags: [], // 데칼 태그
 };
 
 export const decalSchemaReadType = z.object({
@@ -42,7 +37,6 @@ export const decalSchemaReadType = z.object({
   share_code: z.string(), // 공유코드
   creator: z.string(), // 데칼 제작자
   imageURLs: z.array(z.string()), // 데칼 사진
-  firstImage: z.string(), // 데칼 대문 사진(의미는 없음)
 
   first_uploaded: z.string().datetime(),
   last_edited: z.optional(z.string().datetime()),

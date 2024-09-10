@@ -8,7 +8,6 @@ export const singleImage = z.object({
 // 이미지 여러개 들어가는 요소  -> car, decal, map 등
 export const multipleImages = z.object({
   imageURLs: z.optional(z.array(z.string())),
-  firstImage: z.optional(z.string()),
 });
 
 export type SingleImageDependentCreation = z.infer<typeof singleImage>;

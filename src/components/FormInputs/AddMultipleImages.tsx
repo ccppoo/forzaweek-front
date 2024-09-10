@@ -1,7 +1,7 @@
 import { ChangeEvent, useRef, useState } from 'react';
 import { Controller } from 'react-hook-form';
-import { useFormContext } from 'react-hook-form';
-import type { FieldPath, PathValue } from 'react-hook-form';
+import { useFieldArray, useFormContext } from 'react-hook-form';
+import type { FieldArrayPath, FieldPath, PathValue } from 'react-hook-form';
 
 import CancelOutlinedIcon from '@mui/icons-material/CancelOutlined';
 import FileUploadOutlined from '@mui/icons-material/FileUploadOutlined';
@@ -11,7 +11,15 @@ import { Box, Button, Paper, Typography } from '@mui/material';
 import IconButton from '@mui/material/IconButton';
 
 import type { MultipleImagesDependentCreation } from '@/FormData/post/image';
+import { AuthedImageDelete } from '@/api/CDN/image/delete';
+import { AuthedImageUpload } from '@/api/CDN/image/upload';
 import { FlexBox, Image, VisuallyHiddenInput } from '@/components/styled';
+import type {
+  ImageUploadFailResponse,
+  ImageUploadResponse,
+  ImageUploadSuccessResponse,
+} from '@/schema/CDN/image/upload';
+import useAuthState from '@/store/auth';
 
 type MultipleImagesDepenednt = 'decal upload';
 
@@ -26,6 +34,7 @@ export default function AddMultipleImages<T extends MultipleImagesDependentCreat
   const { postType, required } = props;
 
   const { setValue, getValues, control, trigger } = useFormContext<T>();
+  const [{ id_token }] = useAuthState();
 
   // TODO: 받을 수 있는 확장자
   const allowed_formats = ['.jpg', '.jpeg', '.png', '.webp'];
@@ -35,29 +44,48 @@ export default function AddMultipleImages<T extends MultipleImagesDependentCreat
   const imageUploadMax = 20;
 
   const formPathImageURLs = 'imageURLs' as FieldPath<T>;
-  const formPathFirstImage = 'firstImage' as FieldPath<T>;
+  // TODO: change to field Array
+  // const formPathImageURLs = 'imageURLs' as FieldArrayPath<T>;
+  // const {fields, append} = useFieldArray({control, name : formPathImageURLs})
+  // const formPathFirstImage = 'firstImage' as FieldPath<T>;
   type FormDataType = PathValue<T, FieldPath<T>>;
 
   const [imagePreviews, setImagePreviews] = useState<string[]>(
-    (getValues(formPathImageURLs) as []) || [],
+    (getValues(formPathImageURLs) as string[]) || [],
   ); // Blob URL
 
   const [imagePreviewIdx, setImagePreviewIdx] = useState<number>(0);
 
   const handleUploadClick = async (e: ChangeEvent<HTMLInputElement>) => {
+    if (!id_token) return; // NOTE: if not logged in, alert pop up
+
     e.preventDefault();
     e.persist();
 
     if (!e.target.files) return;
+    // 기존 이미지 개수 + 업로드 이미지 개수 > 20 alert
+    if (imageUploadMax < imagePreviews.length + e.target.files.length) {
+      console.log(`총 올리려는 이미지 개수 : ${imagePreviews.length + e.target.files.length}`);
+      return;
+    }
     let uploadingImages: string[] = [];
     for (let idx: number = 0; idx < e.target.files.length; idx++) {
       const selectedFile = e.target.files[idx];
-      const fileBlobURL = URL.createObjectURL(selectedFile);
-      uploadingImages = [...uploadingImages, fileBlobURL];
+      const response: ImageUploadResponse = await AuthedImageUpload({
+        file: selectedFile,
+        authToken: id_token,
+      });
+      console.log(`response : ${JSON.stringify(response)}`);
+      if (response.code < 2000 && response.code >= 3000) {
+        response as ImageUploadFailResponse;
+        continue;
+      }
+      const _response = response as ImageUploadSuccessResponse;
+      uploadingImages = [...uploadingImages, _response.remoteURL];
     }
-    // console.log(`uploadingImages : ${uploadingImages}`);
+    // console.log(`BEFORE )) uploadingImages : ${uploadingImages}`);
     const uploaded_images = [...imagePreviews, ...uploadingImages];
-    // console.log(`uploaded_images : ${uploaded_images}`);
+    // console.log(`AFTER )) uploaded_images : ${uploaded_images}`);
     setImagePreviews(uploaded_images);
     setValue(formPathImageURLs, uploaded_images as FormDataType);
   };
@@ -71,7 +99,7 @@ export default function AddMultipleImages<T extends MultipleImagesDependentCreat
     gridRef.current?.scroll({ behavior: 'smooth', top: imagePreviewHeight * (idx - 1) });
   };
   const setAsRepresentiveImage = (imageUrl: string) => {
-    setValue(formPathFirstImage, imageUrl as FormDataType);
+    // setValue(formPathFirstImage, imageUrl as FormDataType);
     setImagePreviews((prev) => [imageUrl, ...prev.filter((val) => val != imageUrl)]);
   };
 
@@ -110,19 +138,19 @@ export default function AddMultipleImages<T extends MultipleImagesDependentCreat
     setImagePreviewIdx(0);
   };
 
-  const removeImage = (imageUrl: string) => {
+  const removeImage = async (imageURL: string) => {
     // const prevImage = getValues('imageURLs');
     const prevImage = imagePreviews;
-
-    const removed = prevImage.filter((val) => val != imageUrl);
+    const removed = prevImage.filter((val) => val != imageURL);
     setValue(formPathImageURLs, removed as FormDataType);
     setImagePreviews(removed);
+    await AuthedImageDelete({ imageURL, authToken: id_token! });
     if (imagePreviewIdx > imagePreviews.length - 1) {
       setImagePreviewIdx(imagePreviews.length - 1);
     }
   };
 
-  // console.log(`imagePreviews : ${imagePreviews}`);
+  console.log(`imagePreviews : ${imagePreviews}`);
 
   return (
     <FlexBox sx={{ width: '100%', height: 500, columnGap: 1 }}>
@@ -215,9 +243,10 @@ export default function AddMultipleImages<T extends MultipleImagesDependentCreat
                   <IconButton
                     color="error"
                     sx={{ borderRadius: 0.2 }}
-                    onClick={(e) => {
+                    onClick={async (e) => {
                       e.stopPropagation();
-                      removeImage(imgURL);
+                      console.log(`delete imgURL : ${imgURL}`);
+                      await removeImage(imgURL);
                     }}
                   >
                     <CancelOutlinedIcon />

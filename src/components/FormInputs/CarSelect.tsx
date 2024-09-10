@@ -22,6 +22,10 @@ function SelectedCarPreview({ carID }: { carID: string }) {
     [carID],
   );
 
+  // console.log(`carSelected?.imageURLs[0] : ${carSelected?.imageURLs[0]}`);
+
+  const carSelectedImage = carSelected?.imageURLs[0];
+
   return (
     <Paper
       sx={{
@@ -32,13 +36,11 @@ function SelectedCarPreview({ carID }: { carID: string }) {
         display: 'flex',
       }}
     >
-      <FlexBox sx={{ height: '100%', aspectRatio: '16/9' }}>
-        {carSelected?.imageURLs[0] ? (
-          <Image src={carSelected?.imageURLs[0]} />
-        ) : (
-          <FlexBox></FlexBox>
-        )}
-      </FlexBox>
+      {carSelectedImage && (
+        <FlexBox sx={{ height: '100%', aspectRatio: '16/9' }}>
+          <Image src={carSelectedImage} />
+        </FlexBox>
+      )}
       <FlexBox
         sx={{
           width: '100%',
@@ -73,7 +75,7 @@ export default function SelectCar<T extends CarDependentCreation>(props: SelectC
 
   const selectedCarID = watch(formPath);
 
-  console.log(`selectedCarID : ${selectedCarID}`);
+  // console.log(`selectedCarID : ${selectedCarID}`);
 
   return (
     <FlexBox
