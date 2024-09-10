@@ -23,7 +23,7 @@ import useUserProfile from '@/store/user';
 import './border.css';
 
 function LogginButton() {
-  const loginPath = '/login';
+  const loginPath = '/auth/login';
   const borderRadius = 1;
 
   return (

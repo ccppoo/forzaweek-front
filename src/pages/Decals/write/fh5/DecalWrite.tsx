@@ -2,9 +2,9 @@ import { FormProvider, useForm } from 'react-hook-form';
 
 import { Box, Button, Container, Paper, Typography } from '@mui/material';
 
-import type { DecalEditSchema } from '@/FormData/decal';
+import type { DecalEditSchema, DecalSchemaType } from '@/FormData/decal';
 import { decalEditSchemaDefault } from '@/FormData/decal';
-import { AddNewDecal, EditDecal } from '@/api/fh5/decal';
+import { CreateDecalPost, EditDecal } from '@/api/fh5/decal';
 import AddMultipleImages from '@/components/FormInputs/AddMultipleImages';
 import AddTags from '@/components/FormInputs/AddTags';
 import SelectCar from '@/components/FormInputs/CarSelect';
@@ -30,13 +30,13 @@ export default function DecalWrite(props: dataTextInputIntf) {
   const submit = async (data: DecalEditSchema) => {
     console.log(`data : ${JSON.stringify(data)}`);
 
-    // if (isEditMode) {
-    //   await EditDecal({ decal: data });
-    //   return;
-    // }
-    // if (!isEditMode) {
-    //   await AddNewDecal({ decal: data });
-    // }
+    if (isEditMode) {
+      await EditDecal({ decal: data });
+      return;
+    }
+    if (!isEditMode) {
+      await CreateDecalPost({ decal: data as DecalSchemaType });
+    }
     return;
   };
 

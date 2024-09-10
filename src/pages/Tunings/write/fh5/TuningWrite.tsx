@@ -105,47 +105,41 @@ export default function TuningWrite(props: dataTextInputIntf) {
         <FormProvider {...methods}>
           <form onSubmit={methods.handleSubmit(submit)} style={{ width: '100%' }}>
             <FlexBox sx={{ flexDirection: 'column', rowGap: 4, width: '100%' }}>
-              <Box
+              <FlexBox
                 sx={{
                   width: '100%',
-                  display: 'grid',
-                  gridTemplateColumns: '175px auto',
-                  gridTemplateRows: '200px',
+                  flexDirection: 'column',
                 }}
               >
                 <FlexBox sx={{ alignItems: 'center', height: '100%' }}>
                   <Typography>Base Car</Typography>
                 </FlexBox>
                 <SelectCar selectScope={selectScope} />
-              </Box>
+              </FlexBox>
               {/* 1. 원본 제작자 이름 */}
-              <Box
+              <FlexBox
                 sx={{
                   width: '100%',
-                  display: 'grid',
-                  gridTemplateColumns: '175px auto',
-                  gridTemplateRows: '50px',
+                  flexDirection: 'column',
                 }}
               >
                 <FlexBox sx={{ alignItems: 'center' }}>
                   <Typography>Creator username</Typography>
                 </FlexBox>
                 <CreatorUsernameInput />
-              </Box>
+              </FlexBox>
               {/* 2. 공유 코드 입력 */}
-              <Box
+              <FlexBox
                 sx={{
                   width: '100%',
-                  display: 'grid',
-                  gridTemplateColumns: '175px auto',
-                  gridTemplateRows: '50px',
+                  flexDirection: 'column',
                 }}
               >
                 <FlexBox sx={{ alignItems: 'center' }}>
                   <Typography>Share code</Typography>
                 </FlexBox>
                 <ShareCodeInput />
-              </Box>
+              </FlexBox>
               {/* 3. 태그 붙이기
               <Box
                 sx={{
@@ -161,12 +155,10 @@ export default function TuningWrite(props: dataTextInputIntf) {
                 <AddTags selectScope={selectScope} postType="tuning" />
               </Box> */}
               {/* 4. 튜닝 성능 입력(PI) */}
-              <Box
+              <FlexBox
                 sx={{
                   width: '100%',
-                  display: 'grid',
-                  gridTemplateColumns: '175px auto',
-                  gridTemplateRows: 'auto',
+                  flexDirection: 'column',
                 }}
               >
                 <FlexBox>
@@ -175,14 +167,12 @@ export default function TuningWrite(props: dataTextInputIntf) {
                 <FlexBox sx={{ width: '100%', height: '100%', columnGap: 2 }}>
                   <TuningPI />
                 </FlexBox>
-              </Box>
+              </FlexBox>
               {/* 5. 튜닝 성능 입력 */}
-              <Box
+              <FlexBox
                 sx={{
                   width: '100%',
-                  display: 'grid',
-                  gridTemplateColumns: '175px auto',
-                  gridTemplateRows: 'auto',
+                  flexDirection: 'column',
                 }}
               >
                 <FlexBox>
@@ -191,14 +181,12 @@ export default function TuningWrite(props: dataTextInputIntf) {
                 <FlexBox sx={{ width: '100%', height: '100%', columnGap: 2 }}>
                   <TuningPerformance />
                 </FlexBox>
-              </Box>
+              </FlexBox>
               {/* 6. 튜닝 측정치 */}
-              <Box
+              <FlexBox
                 sx={{
                   width: '100%',
-                  display: 'grid',
-                  gridTemplateColumns: '175px auto',
-                  gridTemplateRows: 'auto',
+                  flexDirection: 'column',
                 }}
               >
                 <FlexBox>
@@ -207,14 +195,12 @@ export default function TuningWrite(props: dataTextInputIntf) {
                 <FlexBox sx={{ width: '100%', height: '100%', columnGap: 2 }}>
                   <TestReadingInput />
                 </FlexBox>
-              </Box>
+              </FlexBox>
               {/* 7. 주요부품 */}
-              <Box
+              <FlexBox
                 sx={{
                   width: '100%',
-                  display: 'grid',
-                  gridTemplateColumns: '175px auto',
-                  gridTemplateRows: 'auto',
+                  flexDirection: 'column',
                 }}
               >
                 <FlexBox>
@@ -223,7 +209,7 @@ export default function TuningWrite(props: dataTextInputIntf) {
                 <FlexBox sx={{ width: '100%', height: '100%', columnGap: 2 }}>
                   <MajorParts />
                 </FlexBox>
-              </Box>
+              </FlexBox>
               {/* 8. 세부 튜닝 */}
               <DetailedTuningChoiceContext.Provider
                 value={{
@@ -231,12 +217,10 @@ export default function TuningWrite(props: dataTextInputIntf) {
                   setDetailedTuning: detailTuningChoiceChange,
                 }}
               >
-                <Box
+                <FlexBox
                   sx={{
                     width: '100%',
-                    display: 'grid',
-                    gridTemplateColumns: '175px auto',
-                    gridTemplateRows: 'auto',
+                    flexDirection: 'column',
                   }}
                 >
                   <FlexBox>
@@ -245,7 +229,7 @@ export default function TuningWrite(props: dataTextInputIntf) {
                   <FlexBox sx={{ width: '100%', height: '100%', minHeight: 400, columnGap: 2 }}>
                     <DetailedTuningTabs />
                   </FlexBox>
-                </Box>
+                </FlexBox>
 
                 <FlexBox sx={{ width: '100%', justifyContent: 'end' }}>
                   <Button type="submit" variant="outlined">
