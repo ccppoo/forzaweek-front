@@ -7,9 +7,8 @@ import type { API_NAME } from '@/api/types';
 
 import { BASE_PATH, JSONContentType } from './config';
 
-export async function AddNewDecal({ decal }: { decal: DecalEditSchema }) {
+export async function CreateDecalPost({ decal }: { decal: DecalSchemaType }) {
   // 1. blob으로 추가된 사진은 서버로 보내서 URL 받아오기
-  const firstImageIdx = decal.firstImage ? decal.imageURLs.indexOf(decal.firstImage) : 0;
   const imageUrls = await Promise.all(
     decal.imageURLs.map(async (img) => {
       if (img.startsWith('blob')) {
@@ -20,37 +19,6 @@ export async function AddNewDecal({ decal }: { decal: DecalEditSchema }) {
   );
 
   decal.imageURLs = imageUrls;
-  decal.firstImage = imageUrls[firstImageIdx];
-
-  const data = {
-    ...decal,
-  };
-
-  console.log(`처리된 data : ${JSON.stringify(data)}`);
-
-  const path_ = `decal`;
-  const url = `${API_HOST}/FH5/${path_}`;
-  const resp = await axios.post(url, data, {
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  });
-}
-
-export async function CreateDecalPost({ decal }: { decal: DecalEditSchema }) {
-  // 1. blob으로 추가된 사진은 서버로 보내서 URL 받아오기
-  const firstImageIdx = decal.firstImage ? decal.imageURLs.indexOf(decal.firstImage) : 0;
-  const imageUrls = await Promise.all(
-    decal.imageURLs.map(async (img) => {
-      if (img.startsWith('blob')) {
-        return await UploadImage({ folder: 'decal', fileBlobURL: img });
-      }
-      return img;
-    }),
-  );
-
-  decal.imageURLs = imageUrls;
-  decal.firstImage = imageUrls[firstImageIdx];
 
   const data = {
     ...decal,

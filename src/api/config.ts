@@ -4,6 +4,7 @@ export const AuthHeaders = (token: string) => {
 
 export const ContentTypeHeader = {
   JSON: { 'Content-Type': 'application/json' },
+  FORM: { 'Content-Type': 'multipart/form-data' },
 };
 
 export const API_HOST = import.meta.env.VITE_API_HOST;
