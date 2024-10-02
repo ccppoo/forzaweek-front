@@ -2,7 +2,8 @@ import { z } from 'zod';
 
 import { documentBase, documentID } from '@/schema/base';
 import { i18nMap } from '@/schema/i18n';
-import type { FH5_Category, FH5_Format, FH5_World } from '@/types/fh5/race_route';
+
+// import type { FH5_Category, FH5_Format, FH5_World } from '@/types/fh5/race_route';
 
 const fullPathImage = z.object({
   zoom_out: z.optional(z.string()),

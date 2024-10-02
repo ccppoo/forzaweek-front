@@ -22,5 +22,5 @@ export const manufacturer = _manufacturer.extend({
 });
 
 export const manufacturerFull = _manufacturer.extend({
-  origin: country,
+  origin: z.optional(country),
 });
