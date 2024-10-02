@@ -10,7 +10,9 @@ import AddTags from '@/components/FormInputs/AddTags';
 import SelectCar from '@/components/FormInputs/CarSelect';
 import CreatorUsernameInput from '@/components/FormInputs/CreatorUsername';
 import ShareCodeInput from '@/components/FormInputs/ShareCode';
+import SharenameInput from '@/components/FormInputs/ShareName';
 import { FlexBox, FullSizeCenteredFlexBox, Image } from '@/components/styled';
+import useAuthState from '@/store/auth';
 
 interface dataTextInputIntf {
   decalEditSchema?: DecalEditSchema;
@@ -25,17 +27,18 @@ export default function DecalWrite(props: dataTextInputIntf) {
     defaultValues: decalEditSchema || decalEditSchemaDefault,
     mode: 'onChange',
   });
+  const [{ id_token }] = useAuthState();
 
   const isEditMode = !!methods.getValues('id');
   const submit = async (data: DecalEditSchema) => {
     console.log(`data : ${JSON.stringify(data)}`);
 
     if (isEditMode) {
-      await EditDecal({ decal: data });
+      await EditDecal({ decal: data, authToken: id_token! });
       return;
     }
     if (!isEditMode) {
-      await CreateDecalPost({ decal: data as DecalSchemaType });
+      await CreateDecalPost({ decal: data as DecalSchemaType, authToken: id_token! });
     }
     return;
   };
@@ -70,6 +73,18 @@ export default function DecalWrite(props: dataTextInputIntf) {
               >
                 <FlexBox sx={{ alignItems: 'center' }}>
                   <Typography>Creator username</Typography>
+                </FlexBox>
+                <CreatorUsernameInput />
+              </FlexBox>
+              {/* 데칼 이름  */}
+              <FlexBox
+                sx={{
+                  width: '100%',
+                  flexDirection: 'column',
+                }}
+              >
+                <FlexBox sx={{ alignItems: 'center' }}>
+                  <Typography>name</Typography>
                 </FlexBox>
                 <CreatorUsernameInput />
               </FlexBox>

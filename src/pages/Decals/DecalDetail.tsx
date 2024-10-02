@@ -6,11 +6,13 @@ import Chip from '@mui/material/Chip';
 import Container from '@mui/material/Container';
 import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
+import Grid from '@mui/material/Unstable_Grid2';
 
 import { useQuery } from '@tanstack/react-query';
+import { useLiveQuery } from 'dexie-react-hooks';
 
 import type { DecalSchemaReadType } from '@/FormData/decal';
-import { GetDecal } from '@/api/fh5/decal';
+import { GetDecal, GetDecalImageUpload, GetDecalImageUploadIDs } from '@/api/fh5/decal';
 import { BriefCarInfo2 } from '@/components/Car/BriefCarInfo';
 import { TempComments } from '@/components/Comment/Comments';
 import { RelatedDecals } from '@/components/Decals';
@@ -20,6 +22,11 @@ import Tags from '@/components/Tag/Tags';
 import TagAdder from '@/components/TagAdd';
 import { FlexBox, FullSizeCenteredFlexBox } from '@/components/styled';
 import { Image } from '@/components/styled';
+import { getCarFH5FullType } from '@/db/query/fh5/car';
+import type { DecalImageRead, DecalRead } from '@/schema/fh5/decal';
+import useAuthState from '@/store/auth';
+
+import { DecalImages } from './DecalImages';
 
 function stringToColor(string: string) {
   let hash = 0;
@@ -50,40 +57,44 @@ function stringAvatar(name: string) {
   };
 }
 
-function DecalInfo({ decalData }: { decalData: DecalSchemaReadType }) {
-  const creator = decalData.creator;
+function DecalBaseCar({ carFH5ID }: { carFH5ID: string }) {
+  // carFH5ID
+  const carFH5 = useLiveQuery(async () => await getCarFH5FullType(carFH5ID), [carFH5ID]);
+
+  if (carFH5) {
+    const carFH5name = carFH5.baseCar.name.en;
+
+    return (
+      <FlexBox sx={{ flexDirection: 'column' }}>
+        <Image src={carFH5.imageURLs[0]} sx={{ objectFit: 'contain', height: 160 }} />
+        <Typography>{carFH5name}</Typography>
+      </FlexBox>
+    );
+  }
+}
+
+function DecalShareCodeName({ decalRead }: { decalRead: DecalRead }) {
+  const creator = decalRead.gamerTag;
 
   const share_code3 = [
-    decalData.share_code.substring(0, 3),
-    decalData.share_code.substring(3, 6),
-    decalData.share_code.substring(6, 9),
+    decalRead.shareCode.substring(0, 3),
+    decalRead.shareCode.substring(3, 6),
+    decalRead.shareCode.substring(6, 9),
   ];
 
-  decalData.tags;
-
   return (
-    <FlexBox sx={{ flexDirection: 'column', width: '100%', rowGap: 2 }}>
-      {/* 제작자 */}
+    <FlexBox sx={{ flexDirection: 'column' }}>
       <FlexBox sx={{ alignItems: 'center', columnGap: 1 }}>
         <Avatar {...stringAvatar(creator)} sx={{ width: 35, height: 35 }} />
         <Typography variant="h5">{creator}</Typography>
       </FlexBox>
-      {/* 태그 */}
-      {/* <FlexBox sx={{ columnGap: 0.5, alignContent: 'flex-start' }}>
-        {decalData.tags.map((tag) => {
-          return (
-            <Chip label={tag.name_en} key={`decal-${decalData.share_code}-data-tag-${tag.id}`} />
-          );
-        })}
-      </FlexBox> */}
-      {/* 공유 코드 */}
       <FlexBox
         sx={{
           justifyContent: 'start',
           alignItems: 'center',
         }}
       >
-        <Typography>Share code : </Typography>
+        <Typography>Share code</Typography>
         <FlexBox
           sx={{
             alignItems: 'center',
@@ -108,59 +119,110 @@ function DecalInfo({ decalData }: { decalData: DecalSchemaReadType }) {
   );
 }
 
+function DecalInfo({ decalID }: { decalID: string }) {
+  const [{ id_token }] = useAuthState();
+
+  const { data } = useQuery({
+    queryFn: GetDecal,
+    queryKey: ['get decal', decalID!, id_token],
+  });
+
+  data?.name;
+  if (data) {
+    return (
+      <FlexBox sx={{ flexDirection: 'column', width: '100%', rowGap: 2 }}>
+        <Grid container>
+          <Grid xs={12} sm={6}>
+            {/* 제작자 */}
+            <DecalShareCodeName decalRead={data} />
+          </Grid>
+          <Grid xs={12} sm={6}>
+            <DecalBaseCar carFH5ID={data.baseCar} />
+          </Grid>
+        </Grid>
+      </FlexBox>
+    );
+  }
+}
+
 export default function DecalDetail() {
   const { decalID } = useParams();
 
   const TOPIC = 'decal';
 
-  const { data } = useQuery({
-    queryFn: GetDecal,
-    queryKey: ['get decal', decalID!],
-  });
-
   const WIDTH = '100%';
 
-  if (data) {
-    // console.log(`data : ${JSON.stringify(data)}`);
-    return (
-      <Container sx={{ paddingTop: 2 }}>
-        <FullSizeCenteredFlexBox
-          sx={
-            {
-              // height: '100%',
-            }
-          }
+  // console.log(`data : ${JSON.stringify(data)}`);
+  return (
+    <Container sx={{ paddingTop: 2 }}>
+      <FullSizeCenteredFlexBox
+        sx={{
+          // height: '100%',
+          paddingX: 2,
+        }}
+      >
+        <FlexBox
+          sx={{
+            width: WIDTH,
+            maxWidth: 1200,
+            flexDirection: 'column',
+            paddingY: 2,
+            rowGap: 2,
+          }}
+          component={Paper}
         >
+          {/* 제목 */}
+          {/* <TitlePart /> */}
           <FlexBox
             sx={{
-              width: WIDTH,
-              maxWidth: 1200,
-              flexDirection: 'column',
-              paddingY: 2,
+              width: '100%',
+              height: '100%',
               paddingX: 2,
-              rowGap: 2,
+              paddingY: 1,
+              flexDirection: 'column',
+              backgroundColor: '#FFFFFF',
             }}
-            component={Paper}
           >
-            {/* 제목 */}
-            {/* <TitlePart /> */}
-            {/* 게시자, 공유 코드 */}
-            <DecalInfo decalData={data} />
+            <DecalInfo decalID={decalID!} />
+          </FlexBox>
 
-            <ImageShowHorizontal images={data.imageURLs} />
-            {/* 데칼에 사용된 차 간단 정보 */}
-            <BriefCarInfo2 carInfo={data.car} />
-            {/* 태그 */}
+          <FlexBox
+            sx={{
+              width: '100%',
+              height: '100%',
+              paddingX: 2,
+              paddingY: 1,
+              flexDirection: 'column',
+              backgroundColor: '#FFFFFF',
+            }}
+          >
+            <DecalImages decalID={decalID!} />
+          </FlexBox>
+          {/* 태그 */}
+          <FlexBox
+            sx={{
+              width: '100%',
+              height: '100%',
+              paddingX: 2,
+              paddingY: 1,
+              flexDirection: 'column',
+              backgroundColor: '#EEEEEE',
+            }}
+          >
             <Tags topic={TOPIC} subjectID={decalID!} />
             {/* 태그 달기 */}
             <Tagging topic={TOPIC} subjectID={decalID!} />
-            {/* 댓글 */}
-            <TempComments />
-            {/* 다른 데칼 */}
-            <RelatedDecals carID={data.car.id} />
           </FlexBox>
-        </FullSizeCenteredFlexBox>
-      </Container>
-    );
-  }
+          {/* 댓글 */}
+          <FlexBox sx={{ flexDirection: 'column', paddingX: 2, paddingY: 1 }}>
+            <TempComments />
+          </FlexBox>
+          <FlexBox sx={{ flexDirection: 'column', paddingX: 2, paddingY: 1 }}>
+            {/* 다른 데칼 */}
+            <RelatedDecals decalID={decalID!} />
+          </FlexBox>
+        </FlexBox>
+      </FullSizeCenteredFlexBox>
+    </Container>
+  );
 }
