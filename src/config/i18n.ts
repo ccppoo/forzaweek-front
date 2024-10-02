@@ -1,3 +1,3 @@
-export const supportLangs: string[] = ['en', 'ko'];
+export const supportLangs: string[] = ['en', 'ko', 'jp'];
 
-export type SupportLang = 'en' | 'ko';
+export type SupportLang = 'en' | 'ko' | 'jp';
