@@ -77,12 +77,9 @@ function numberRange(start: number, end: number) {
   return new Array(end - start).fill(0).map((d, i) => i + start);
 }
 
-function useCarSearchFilters(
-  scope: string,
-): [CarSearchOptions, CarFH5FullType[], boolean, Actions] {
+function useCarSearchFilters(scope: string): [CarSearchOptions, string[], boolean, Actions] {
   const [carSearchOptions, setCarSearchOptions] = useRecoilState(carSearchOptionStateFamily(scope));
-  // const [carSearchOptions, setCarSearchOptions] = useRecoilState(carSearchOptionState);
-  const searchResults: CarFH5FullType[] | undefined = useLiveQuery(
+  const searchResults: string[] | undefined = useLiveQuery(
     async () => await searchCarByFilter(carSearchOptions),
     [
       carSearchOptions.boost,
