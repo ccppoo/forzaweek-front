@@ -16,7 +16,7 @@ export const routesFH5Decal: RoutesFH5Decal = {
     component: asyncComponentLoader(() => import('@/pages/Decals/DecalDetail')),
     path: ':decalID',
     title: 'FH5 decal detail',
-    devUrl: '/FH5/decal/66cd813fdf960de7f80a72bd',
+    devUrl: '/FH5/decal/66e1503e6bad6dd5e7215fd2',
     icon: HomeIcon,
   },
   [FH5_Decal.DecalWrite]: {

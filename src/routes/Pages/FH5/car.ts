@@ -15,7 +15,7 @@ export const routesFH5Car: RoutesFH5Car = {
   [FH5_Car.CarDetail]: {
     component: asyncComponentLoader(() => import('@/pages/Cars/CarDetail')),
     path: ':carID',
-    devUrl: '/FH5/car/66d69c65a368e84afdbb6347',
+    devUrl: '/FH5/car/66d6a4f32090a29cc017fbb9',
     title: 'car detail',
     icon: HomeIcon,
   },

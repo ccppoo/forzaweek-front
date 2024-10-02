@@ -19,11 +19,22 @@ export const routesFH5Tuning: RoutesFH5Tuning = {
     title: 'tuning detail',
     icon: HomeIcon,
   },
-
-  [FH5_Tuning.TuningWrite]: {
-    component: asyncComponentLoader(() => import('@/pages/Tunings/write/fh5')),
+  [FH5_Tuning.TuningWriteHome]: {
+    component: asyncComponentLoader(() => import('@/pages/Tunings/TuningWriteHome')),
     path: 'write',
+    title: 'tuning write Home',
+    icon: HomeIcon,
+  },
+  [FH5_Tuning.TuningDetailWrite]: {
+    component: asyncComponentLoader(() => import('@/pages/Tunings/write/fh5/TuningDetailedWrite')),
+    path: 'write/detail',
     title: 'tuning write',
+    icon: HomeIcon,
+  },
+  [FH5_Tuning.TuningBulkWrite]: {
+    component: asyncComponentLoader(() => import('@/pages/Tunings/write/fh5/TuningBulkWrite')),
+    path: 'write/bulk',
+    title: 'tuning Bulk write',
     icon: HomeIcon,
   },
 };
