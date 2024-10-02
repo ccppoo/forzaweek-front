@@ -5,7 +5,7 @@ import { singleImageURL } from '@/db/model/image';
 
 export interface Manufacturer extends DocumentBase, singleImageURL {
   founded: number;
-  origin: string;
+  origin?: string;
   name: i18nFlatMap;
   en: string;
 }

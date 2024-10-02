@@ -21,6 +21,7 @@ interface FH5_Performance {
 
 export interface CarFH5 extends DocumentBase {
   baseCar: string;
+  // manufacturer: string;
 
   PI: number;
 
