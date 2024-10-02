@@ -8,35 +8,35 @@ import type { SharingCreation } from '@/FormData/post/sharingCreation';
 import { FlexBox } from '@/components/styled';
 
 /**
- * TODO: 3개로 나눠서 보기 편하게
- * share code : ___ ___ ___
+ * TODO: 이쁘게?
+ *
  */
 
-export default function ShareCodeInput<T extends SharingCreation>() {
+export default function ShareNameInput<T extends SharingCreation>() {
   const { getValues, formState, register } = useFormContext<T>();
 
-  const formPath = 'shareCode' as FieldPath<T>;
-  const helperText = formState.errors.shareCode?.message ? 'Please input share code' : undefined;
+  const formPath = 'name' as FieldPath<T>;
+  const helperText = formState.errors.name?.message ? 'Please input name' : undefined;
 
   return (
     // <FlexBox sx={{ alignItems: 'center' }}>
     <TextField
       fullWidth
-      // label="e.g) 1234567890"
+      label=""
       defaultValue={getValues(formPath) || ''}
       inputProps={register(formPath, {
-        required: 'Please input share code',
+        required: 'Please input name',
       })}
-      error={!!formState.errors.shareCode}
+      error={!!formState.errors.gamerTag}
       helperText={helperText}
       SelectProps={{ MenuProps: { sx: { maxHeight: 450 } } }}
       size="small"
     />
-    //</FlexBox>
+    // </FlexBox>
   );
 }
 
-export function FieldArrayShareCodeInput<T extends FieldValues>({
+export function FieldArrayShareNameInput<T extends FieldValues>({
   register,
   formPath,
 }: {
@@ -46,7 +46,6 @@ export function FieldArrayShareCodeInput<T extends FieldValues>({
   return (
     <TextField
       fullWidth
-      maxRows={1}
       label=""
       // defaultValue={getValues(formPath) || ''}
       inputProps={register(formPath, {
