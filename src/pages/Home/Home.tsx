@@ -31,17 +31,14 @@ export default function Home() {
   }, []);
 
   return (
-    <>
-      <MainFullBanner />
-      <Container sx={{ height: '120vh' }}>
-        <ShortCutMenu />
-        <FlexBox sx={{ flexDirection: 'column', justifyContent: 'center', paddingY: 3, rowGap: 2 }}>
-          {/*  뉴스/공지  */}
-          <CardPreviews sectionTitle="NEWS / Announcements" />
-          <CardPreviews sectionTitle="Week Festa" />
-          {/* 자동차 */}
-        </FlexBox>
-      </Container>
-    </>
+    <Container sx={{ height: '100%' }} maxWidth={'xl'}>
+      <ShortCutMenu />
+      <FlexBox sx={{ flexDirection: 'column', justifyContent: 'center', paddingY: 3, rowGap: 2 }}>
+        {/*  뉴스/공지  */}
+        <CardPreviews sectionTitle="NEWS / Announcements" />
+        <CardPreviews sectionTitle="Week Festa" />
+        {/* 자동차 */}
+      </FlexBox>
+    </Container>
   );
 }
