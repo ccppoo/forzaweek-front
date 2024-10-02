@@ -14,9 +14,13 @@ import {
   Typography,
   styled,
 } from '@mui/material';
+import Skeleton from '@mui/material/Skeleton';
 import Grid from '@mui/material/Unstable_Grid2';
 
+import { useLiveQuery } from 'dexie-react-hooks';
+
 import { FlexBox, Image, StyledLink } from '@/components/styled';
+import { getCarFH5FullType, getCarFH5Images } from '@/db/query/fh5/car';
 import { CarFH5FullInput, CarFH5FullType } from '@/schema/fh5/types';
 import useCarAndTagFilter from '@/store/carAndTagFilter';
 
@@ -27,14 +31,54 @@ function setFontSize(target: string): number {
   return 15;
 }
 
-export default function CarPreviewCard({ carInfo }: { carInfo: CarFH5FullType }) {
-  const FULL_NAME = carInfo.baseCar.name.en[0];
-  const NAME_FONT_SIZE = setFontSize(FULL_NAME);
-  const YEAR = carInfo.baseCar.productionYear;
-  const PI = carInfo.PI;
-  const DIVISION = carInfo.meta.division;
-  const EngineType = carInfo.baseCar.engineType;
+function CarPreviewImage({ imageURL }: { imageURL: string }) {
+  return (
+    <FlexBox
+      sx={{
+        width: '100%',
+        height: '100%',
+        justifyContent: 'center',
+        alignItems: 'center',
+      }}
+    >
+      <Image
+        src={imageURL}
+        sx={{
+          height: '100%',
+          objectFit: 'contain',
+        }}
+      />
+    </FlexBox>
+  );
+}
 
+function CarPreviewImage2({ carFH5ID }: { carFH5ID: string }) {
+  const carFH5Images = useLiveQuery(async () => await getCarFH5Images(carFH5ID), [carFH5ID]);
+
+  if (carFH5Images) {
+    console.log(`carFH5Images : ${carFH5Images.imageURLs[0]}`);
+    return (
+      <FlexBox
+        sx={{
+          width: '100%',
+          height: '100%',
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}
+      >
+        <Image
+          src={carFH5Images.imageURLs[0]}
+          sx={{
+            height: '100%',
+            objectFit: 'contain',
+          }}
+        />
+      </FlexBox>
+    );
+  }
+}
+
+function CarPreviewCardTemp({ carInfo }: { carInfo: CarFH5FullType }) {
   const {
     actions: {
       car: { setCar: searchCarDecal },
@@ -58,9 +102,17 @@ export default function CarPreviewCard({ carInfo }: { carInfo: CarFH5FullType })
   };
 
   const carDetailURL = `/FH5/car/${carInfo.id}`;
+  const FULL_NAME = carInfo.baseCar.name.en[0];
+  const NAME_FONT_SIZE = setFontSize(FULL_NAME);
+  const YEAR = carInfo.baseCar.productionYear;
+  const PI = carInfo.PI;
+  const DIVISION = carInfo.meta.division;
+  const EngineType = carInfo.baseCar.engineType;
+
+  // console.log(`carInfo.imageURLs : ${JSON.stringify(carInfo.imageURLs)}`);
 
   return (
-    <FlexBox sx={{ minWidth: 400, width: 'calc( 50% - 20px )', maxWidth: 560 }}>
+    <FlexBox sx={{ minWidth: 400, width: 'calc( 45% - 20px )', maxWidth: 560 }}>
       <Paper
         sx={{
           display: 'grid',
@@ -71,22 +123,8 @@ export default function CarPreviewCard({ carInfo }: { carInfo: CarFH5FullType })
         }}
       >
         {/* 차 사진 */}
-        <FlexBox
-          sx={{
-            width: '100%',
-            height: '100%',
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}
-        >
-          <Image
-            src={carInfo.imageURLs[0]}
-            sx={{
-              height: '100%',
-              objectFit: 'contain',
-            }}
-          />
-        </FlexBox>
+        <CarPreviewImage imageURL={carInfo.imageURLs[0]} />
+        {/* <CarPreviewImage2 carFH5ID={carInfo.id!} /> */}
         {/* 여백  */}
         <Divider orientation="vertical" sx={{ margin: 0 }} />
         {/* 이름 기타 정보 */}
@@ -165,4 +203,20 @@ export default function CarPreviewCard({ carInfo }: { carInfo: CarFH5FullType })
       </Paper>
     </FlexBox>
   );
+}
+
+export default function CarPreviewCard({ carFH5ID }: { carFH5ID: string }) {
+  // console.log(`carFH5ID : ${carFH5ID}`);
+  const carInfo = useLiveQuery(async () => await getCarFH5FullType(carFH5ID), [carFH5ID]);
+
+  if (carInfo) {
+    // console.log(`carInfo.imageURLs : ${JSON.stringify(carInfo.imageURLs)}`);
+    return <CarPreviewCardTemp carInfo={carInfo} />;
+  }
+
+  // 나중에
+  console.log(`carInfo : ${carInfo}`);
+
+  // minWidth: 400, width: 'calc( 45% - 20px )', maxWidth: 560
+  return <Skeleton variant="rectangular" width={400} height={60} sx={{}} />;
 }
