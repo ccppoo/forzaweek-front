@@ -1,6 +1,7 @@
-import { HTMLAttributes, useState } from 'react';
+import { HTMLAttributes, useEffect, useState } from 'react';
 
 import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
+import { Typography } from '@mui/material';
 import Autocomplete from '@mui/material/Autocomplete';
 import type {
   AutocompleteRenderGroupParams,
@@ -24,7 +25,14 @@ import { CarFH5FullInput, CarFH5FullType } from '@/schema/fh5/types';
 import { ManufacturerType } from '@/schema/real/types';
 
 function getOptionLabel(option: CarFH5FullType) {
-  return option.baseCar.name.en[0];
+  // console.log(`option.meta.rarity : ${option.meta.rarity}`);
+  const prodYear = option.baseCar.productionYear;
+  if (option.meta.rarity.includes('Edition')) {
+    const rarity = option.meta.rarity;
+    return `${option.baseCar.name.en[0]} ${rarity} ${prodYear}`;
+  }
+
+  return `${option.baseCar.name.en[0]} ${prodYear}`;
 }
 
 const GroupHeader = styled('div')(({ theme }) => ({
@@ -64,6 +72,11 @@ function renderOptions(
   const { ...optionProps } = props;
   const { selected } = state;
   const key = option.id;
+
+  const isSpecialEdition = option.meta.rarity.includes('Edition');
+  const carEdtion = option.meta.rarity;
+  const carProdYear = option.baseCar.productionYear;
+
   return (
     <Box
       {...optionProps}
@@ -74,7 +87,11 @@ function renderOptions(
       }}
       component="li"
     >
-      {getOptionLabel(option)}
+      <FlexBox sx={{ columnGap: 0.5 }}>
+        <Typography fontWeight={600}>{option.baseCar.name.en[0]}</Typography>
+        {isSpecialEdition && <Typography fontWeight={400}>{carEdtion}</Typography>}
+        <Typography fontWeight={300}>{carProdYear}</Typography>
+      </FlexBox>
     </Box>
   );
 }
