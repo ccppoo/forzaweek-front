@@ -42,10 +42,10 @@ export const tuningEditSchema = documentBase
 export type TuningEditSchema = z.infer<typeof tuningEditSchema>;
 
 export const tuningEditSchemaDefault: TuningEditSchema = {
-  share_code: undefined, // 공유코드
+  shareCode: undefined, // 공유코드
   car: undefined, // 차 (id)
-  creator: undefined, // 튜닝 제작자
-
+  gamerTag: undefined, // 튜닝 제작자
+  name: undefined,
   // tags: [], // 튜닝 태그
   pi: 800,
   performance: tuningPerformanceDefault,
@@ -56,9 +56,10 @@ export const tuningEditSchemaDefault: TuningEditSchema = {
 
 export const tuningSchemaType = tuningEditSchema.required({
   id: true,
-  share_code: true,
+  shareCode: true,
   car: true,
-  creator: true,
+  gamerTag: true,
+  name: undefined,
   // tags: true,
   pi: true,
   performance: true,

@@ -1,17 +1,9 @@
 import { useState } from 'react';
-import { useFieldArray, useFormContext } from 'react-hook-form';
-import type {
-  FieldArray,
-  FieldArrayPath,
-  FieldArrayPathValue,
-  FieldPath,
-  PathValue,
-} from 'react-hook-form';
 
 import CloseIcon from '@mui/icons-material/Close';
 import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
 import { Box, Button, Checkbox, Chip, List, MenuItem, Paper, Typography } from '@mui/material';
-import Autocomplete, { createFilterOptions } from '@mui/material/Autocomplete';
+import Autocomplete from '@mui/material/Autocomplete';
 // import  type {FilterOptionsState} from '@mui/material/Autocomplete/';
 import IconButton from '@mui/material/IconButton';
 import TextField from '@mui/material/TextField';
@@ -22,7 +14,6 @@ import { useDebounce } from '@uidotdev/usehooks';
 import type { TagItemPopulated, TagName } from '@/FormData/tag/search/types';
 import { SearchTag } from '@/api/search/tag';
 import { FlexBox, Image } from '@/components/styled';
-import { tagKindGeneralID } from '@/config/api';
 
 function displayLang(tagItemOption: TagItemPopulated): string {
   //  const langs =  Object.keys(tagItemOption.name)

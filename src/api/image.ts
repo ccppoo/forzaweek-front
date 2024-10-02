@@ -1,8 +1,6 @@
 import axios from 'axios';
-import type { AxiosResponse } from 'axios';
 
 import { API_HOST, API_IMAGE_UPLOAD_HOST, AuthHeaders } from '@/api/index';
-import type { API_NAME } from '@/api/types';
 import type {
   BoardImageUploadType,
   RemoveBoardImageType,

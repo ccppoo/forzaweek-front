@@ -5,7 +5,7 @@ import type { ToolConstructable, ToolSettings } from '@editorjs/editorjs/types/t
 
 type BoardImageUploadType = {
   success: number;
-  file: {
+  file?: {
     url: string;
   };
 };

@@ -81,7 +81,7 @@ export default function Tagging(props: TaggingIntf) {
     return (
       <FlexBox sx={{ flexDirection: 'column', paddingTop: 3 }}>
         <FlexBox sx={{ paddingBottom: 1 }}>
-          <Typography variant="subtitle1">Propose tags that could describe</Typography>
+          <Typography variant="subtitle1">Add tags that could describe</Typography>
         </FlexBox>
         <FlexBox sx={{ flexDirection: 'column' }}>
           <TagCommentFormProvider

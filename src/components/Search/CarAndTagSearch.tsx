@@ -44,7 +44,7 @@ export default function CarAndTagSearch(props: CarAndTagSearchIterface) {
 
   // console.log(`tagIDstagIDstagIDs :${JSON.stringify(tagIDs)}`);
   const carSelected = useLiveQuery<CarFH5FullType | undefined>(
-    async () => (!!carID ? getCarFH5FullType(carID) : undefined),
+    async () => (!!carID ? await getCarFH5FullType(carID) : undefined),
     [carID],
   );
 
@@ -66,12 +66,14 @@ export default function CarAndTagSearch(props: CarAndTagSearchIterface) {
         >
           <Typography sx={{ width: '20%', flexShrink: 0 }}>Car</Typography>
           <FlexBox sx={{ columnGap: 1 }}>
-            <Typography
-              sx={{ color: BASE_CAR_NAME ? 'text.main' : 'text.first' }}
-              fontWeight={BASE_CAR_NAME ? 400 : 200}
-            >
-              {BASE_CAR_MANUFACTURER_NAME}
-            </Typography>
+            {BASE_CAR_MANUFACTURER_NAME && (
+              <Typography
+                sx={{ color: BASE_CAR_NAME ? 'text.main' : 'text.first' }}
+                fontWeight={BASE_CAR_NAME ? 400 : 200}
+              >
+                {BASE_CAR_MANUFACTURER_NAME}
+              </Typography>
+            )}
             <Typography
               sx={{ color: BASE_CAR_NAME ? 'text.main' : 'text.first' }}
               fontWeight={BASE_CAR_NAME ? 500 : 300}
