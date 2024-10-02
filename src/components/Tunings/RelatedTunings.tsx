@@ -15,7 +15,7 @@ import useCarAndTagFilter from '@/store/carAndTagFilter';
 
 import TuningBriefCell from './TuningBriefCell';
 
-function TuningsShowMore({ carID }: { carID: string }) {
+function TuningsShowMore({ carFH5ID }: { carFH5ID: string }) {
   const {
     actions: {
       car: { setCar },
@@ -26,7 +26,7 @@ function TuningsShowMore({ carID }: { carID: string }) {
   const goto = (relativePath: string) => navigate(relativePath);
 
   const goSearchTunings = async () => {
-    setCar(carID);
+    setCar(carFH5ID);
     goto('/FH5/tuning');
   };
   const onClick = async () => {
@@ -43,13 +43,13 @@ function TuningsShowMore({ carID }: { carID: string }) {
 }
 
 interface RelatedTuningsIntf {
-  carID?: string;
+  carFH5ID?: string;
   trackID?: string;
 }
 
 export default function RelatedTunings(props: RelatedTuningsIntf) {
   // 관련 튜닝 -> 태그, 차, 트랙 : 태그로 변경, PI
-  const { carID, trackID } = props;
+  const { carFH5ID, trackID } = props;
 
   const TUNING_CLASSES = ['D', 'C', 'B', 'A', 'S1', 'S2', 'X'];
   const TUNING_NUM = {
@@ -93,9 +93,9 @@ export default function RelatedTunings(props: RelatedTuningsIntf) {
   // console.log(`tuningSearchRange : ${JSON.stringify(tuningSearchRange)}`);
 
   const { data } = useQuery({
-    queryKey: ['tuning-search', carID, page, itemLimit],
+    queryKey: ['tuning-search', carFH5ID, page, itemLimit],
     queryFn: SearchTunings,
-    enabled: !!carID,
+    enabled: !!carFH5ID,
   });
 
   if (data) {
@@ -137,12 +137,12 @@ export default function RelatedTunings(props: RelatedTuningsIntf) {
           <Grid container spacing={2}>
             {data.map((tuning) => {
               return (
-                <TuningBriefCell tuning={tuning} key={`tuning-${carID}-${tuning.share_code}`} />
+                <TuningBriefCell tuning={tuning} key={`tuning-${carFH5ID}-${tuning.shareCode}`} />
               );
             })}
           </Grid>
         </FlexBox>
-        <TuningsShowMore carID={carID!} />
+        <TuningsShowMore carFH5ID={carFH5ID!} />
       </FlexBox>
     );
   }
