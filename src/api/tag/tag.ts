@@ -3,33 +3,16 @@ import axios from 'axios';
 import type { TagItem, TagItemReadOnly } from '@/FormData/tag/tag';
 import { UploadImage } from '@/api/data/image';
 import type { API_NAME } from '@/api/types';
+import type { Tag } from '@/schema/tag';
 
 import { API_HOST } from '../index';
+import { BASE_PATH_TAG, JSONContentType } from './config';
 
 export async function AddNewTag({ tag }: { tag: TagItem }) {
-  const { value: name_en } = tag.name.filter((i18n) => i18n.lang == 'en')[0];
-
-  const image_url = tag.imageURL!;
-  let image_http_url: string | undefined = undefined;
-  if (image_url && image_url.startsWith('blob')) {
-    image_http_url = await UploadImage({ folder: 'tagkind', fileBlobURL: image_url });
-  } else {
-    image_http_url = image_url;
-  }
-
-  const data = {
-    ...tag,
-    name_en: name_en.trim(),
-    imageURL: image_http_url,
-  };
-
-  console.log(`처리된 data : ${JSON.stringify(data)}`);
-  const path_ = `tag/tag`;
-
-  const url = `${API_HOST}/${path_}/create`;
-  const resp = await axios.post(url, data, {
+  const url = `${BASE_PATH_TAG}`;
+  const resp = await axios.post(url, tag, {
     headers: {
-      'Content-Type': 'application/json',
+      ...JSONContentType,
     },
   });
 }
@@ -93,6 +76,18 @@ export async function GetTagByID({
   const path_ = `tag/tag`;
 
   const url = `${API_HOST}/${path_}/${tagID}`;
+
+  const resp = await axios.get(url, {});
+
+  return resp.data;
+}
+
+type TagID = string;
+
+export async function GetTagByID2({ queryKey }: { queryKey: [API_NAME, TagID] }): Promise<Tag> {
+  const [_, tagID] = queryKey;
+
+  const url = `${BASE_PATH_TAG}/${tagID}`;
 
   const resp = await axios.get(url, {});
 

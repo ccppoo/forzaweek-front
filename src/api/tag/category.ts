@@ -1,86 +1,59 @@
 import axios from 'axios';
 
-import { TagKind } from '@/FormData/tag';
-import { TagCategory, TagCategoryReadOnly } from '@/FormData/tag/tag';
-import { UploadImage } from '@/api/data/image';
 import type { API_NAME } from '@/api/types';
+import { TagCategory } from '@/schema/tag/types';
 
-import { API_HOST } from '../index';
-
-export async function AddNewTagKind({ tagKind }: { tagKind: TagCategory }) {
-  const { value: name_en } = tagKind.name.filter((i18n) => i18n.lang == 'en')[0];
-
-  const image_url = tagKind.imageURL!;
-  let image_http_url: string | undefined = undefined;
-  if (image_url && image_url.startsWith('blob')) {
-    image_http_url = await UploadImage({ folder: 'tagkind', fileBlobURL: image_url });
-  } else {
-    image_http_url = image_url;
-  }
-
-  const data = {
-    ...tagKind,
-    name_en: name_en.trim(),
-    imageURL: image_http_url,
-  };
-
-  console.log(`처리된 data : ${JSON.stringify(data)}`);
-
-  const path_ = `tagkind`;
-  const url = `${API_HOST}/${path_}`;
-  const resp = await axios.post(url, data, {
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  });
-}
-
-export async function EditTagKind({ tagKind }: { tagKind: TagCategory }) {
-  const NAME_EN = tagKind.name.filter((i18n) => i18n.lang == 'en')[0].value;
-
-  const { id: docID } = tagKind;
-
-  const image_url = tagKind.imageURL!;
-  let image_http_url: string | undefined = undefined;
-  if (image_url && image_url.startsWith('blob')) {
-    image_http_url = await UploadImage({ folder: 'tagkind', fileBlobURL: image_url });
-  } else {
-    image_http_url = image_url;
-  }
-
-  const data = {
-    ...tagKind,
-    name_en: NAME_EN,
-    imageURL: image_http_url,
-  };
-  console.log(`data : ${JSON.stringify(data)}`);
-
-  const path_ = `tagkind/edit/${docID}`;
-  const url = `${API_HOST}/${path_}`;
-  const resp = await axios.post(url, data, {
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  });
-  console.log(`resp.data : ${JSON.stringify(resp.data)}`);
-
-  // return resp.data;
-}
+import { BASE_PATH_TAG_CATEGORY } from './config';
 
 // TODO: pagination
-export async function GetAllTagCategory({
+export async function GetTagCategory({
   queryKey,
 }: {
   queryKey: [API_NAME, string?];
-}): Promise<TagCategoryReadOnly[]> {
-  const [_, tagKind] = queryKey;
+}): Promise<TagCategory[]> {
+  const [_, categoryType] = queryKey;
 
-  const path_ = `tagkind`;
-
-  // const url = `${API_HOST}/${path_}${!!tagKind ? `?kind=${tagKind}` : ''}`;
-  const url = `${API_HOST}/${path_}`;
+  const url = `${BASE_PATH_TAG_CATEGORY}`;
 
   const resp = await axios.get(url, {});
+
+  return resp.data;
+}
+
+type TagCategoryID = string;
+
+export async function GetTagCategoryByID({
+  queryKey,
+}: {
+  queryKey: [API_NAME, TagCategoryID];
+}): Promise<TagCategory> {
+  const [_, tagCategoryID] = queryKey;
+
+  const url = `${BASE_PATH_TAG_CATEGORY}/${tagCategoryID}`;
+
+  const resp = await axios.get(url, {});
+
+  return resp.data;
+}
+
+export async function AddNewTagCategory({ tagCategory }: { tagCategory: TagCategory }) {
+  const url = `${BASE_PATH_TAG_CATEGORY}`;
+
+  const resp = await axios.post(url, tagCategory, {
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
+}
+
+export async function GetDefaultTagCategory({
+  queryKey,
+}: {
+  queryKey: [API_NAME];
+}): Promise<TagCategory> {
+  const url = `${BASE_PATH_TAG_CATEGORY}/general`;
+
+  const resp = await axios.get<TagCategory>(url, {});
 
   return resp.data;
 }
