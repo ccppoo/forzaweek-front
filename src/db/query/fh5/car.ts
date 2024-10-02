@@ -1,3 +1,4 @@
+import { MANUFACTURER_ORDER } from '@/config/FH5/sort';
 import { db } from '@/db/index';
 import type { CarFH5, CarFH5Image } from '@/db/model/fh5';
 import { Car } from '@/db/model/real';
@@ -45,14 +46,24 @@ export async function getCarFH5(carFH5ID: string | undefined): Promise<CarFH5Typ
   // return carResult as CarFH5FullType;
 }
 
+export async function getCarFH5Images(carFH5ID: string): Promise<CarFH5Image | undefined> {
+  const carFH5Image = await db.carFH5Image.get(carFH5ID);
+
+  return carFH5Image;
+}
+
 export async function getCarFH5FullType(carFH5ID: string): Promise<CarFH5FullType | undefined> {
   /**
    * 차 정보 -> nation, manufacture ID말고 싹 다
    */
-  let carResult = {};
+  // let carResult = {};
   // console.log(11111111111);
+  if (!carFH5ID) console.log(`carFH5ID : ${carFH5ID}`);
   const carFH5 = await db.carFH5.get(carFH5ID);
-  if (!carFH5) return undefined;
+  if (!carFH5) {
+    console.log(`1111111111111`);
+    return undefined;
+  }
 
   // PI: number;
   // meta: FH5_Meta;
@@ -60,12 +71,17 @@ export async function getCarFH5FullType(carFH5ID: string): Promise<CarFH5FullTyp
 
   // carResult = { ...carFH5 };
   // console.log(22222222222);
-  const { baseCar: _, ...carFH5res } = carFH5;
-  const baseCar = await getCarRealFull(carFH5.baseCar);
+  const { baseCar: baseCarID, ...carFH5res } = carFH5;
+  // console.log(`baseCarID  :${baseCarID}`);
+  // if (!baseCarID) console.log(`baseCarID : ${baseCarID}`);
+  const baseCar = await getCarRealFull(baseCarID);
   // const baseCar = await db.car.get(carFH5.baseCar);
-  if (!baseCar) return undefined;
+  if (!baseCar) {
+    console.log(`2222222222`);
+    return undefined;
+  }
   // const {name, ...baseCarInfo} = baseCar
-  carResult = { ...carFH5res, baseCar: baseCar };
+  // carResult = { ...carFH5res, baseCar: baseCar };
 
   // manufacturer: string;
   // productionYear: number;
@@ -73,11 +89,20 @@ export async function getCarFH5FullType(carFH5ID: string): Promise<CarFH5FullTyp
   // bodyStyle: string[];
   // name: i18nArrayMap;
   // door: number;
+  // if (!carFH5ID) console.log(`carFH5ID222 : ${carFH5ID}`);
   const carFH5_image = await db.carFH5Image.get(carFH5ID);
-  const _images = carFH5_image?.imageURLs || [];
+  if (!carFH5_image) return undefined;
+  const _images = carFH5_image?.imageURLs;
   // imageURLs: string[];
-  carResult = { ...carResult, imageURLs: _images } as CarFH5FullInput;
-  return carResult as CarFH5FullType;
+  // console.log(`_images : ${JSON.stringify(_images)}`);
+  // carResult = { ...carResult, imageURLs: _images } as CarFH5FullInput;
+  const carResult = {
+    ...carFH5res,
+    baseCar: baseCar,
+    imageURLs: _images,
+  } as CarFH5FullType;
+  // console.log(`carResult : ${JSON.stringify(carResult)}`);
+  return carResult;
 }
 
 // getCarFH5_By_baseCarID
@@ -95,6 +120,11 @@ export async function getCarFH5s_By_baseCarID(
   // getCarFH5
   const carFH5s = await Promise.all(carFH5PKs.map((carFH5PK) => getCarFH5FullType(carFH5PK)));
   return removeUndefined(carFH5s);
+}
+
+async function getCarFH5_IDs_By_baseCarIDs(realCarIDs: string[]): Promise<string[]> {
+  const carFH5PKs = await db.carFH5.where('baseCar').anyOf(realCarIDs).primaryKeys();
+  return carFH5PKs;
 }
 
 export async function searchCarByName({ query }: { query: string }): Promise<CarFH5FullType[]> {
@@ -147,13 +177,139 @@ export async function getCarBaseFromCarFH5ID(carFH5ID: string): Promise<CarFullT
   await db.car.get(carFH5.baseCar);
 }
 
-interface GetCarDataIntf {
+interface GetCarFH5_FH5_Traits {
   division: string[];
-  productionYear: string[];
-  manufacturer: string[];
   boost: string[];
-  country: string[];
   rarity: string[];
+}
+
+interface GetCarFH5_RealCar_Traits {
+  manufacturer: string[];
+  country: string[];
+}
+
+interface GetCarDataIntf extends GetCarFH5_FH5_Traits, GetCarFH5_RealCar_Traits {
+  productionYear: string[];
+}
+
+async function filterByCountryManufacturer({
+  country,
+  manufacturer,
+}: GetCarFH5_RealCar_Traits): Promise<string[]> {
+  /**
+   *
+   * @returns Manufacturer IDs
+   */
+
+  if (manufacturer.length && country.length) {
+    const manufactures = (await db.manufacturer.bulkGet(manufacturer)).filter((x) => !!x);
+    return manufactures
+      .filter(({ origin }) => origin && country.includes(origin))
+      .map(({ id }) => id);
+  }
+
+  if (manufacturer.length) {
+    return manufacturer;
+  }
+
+  if (country.length) {
+    const a = await db.manufacturer.where('origin').anyOf(country).primaryKeys();
+    console.log(`a  :${a}`);
+    return a;
+    // return await db.manufacturer.where('origin').anyOf(country).primaryKeys();
+  }
+
+  return await db.manufacturer.offset(0).primaryKeys();
+}
+
+async function filterByFH5Traits({
+  division,
+  boost,
+  rarity,
+}: GetCarFH5_FH5_Traits): Promise<string[]> {
+  /**
+   *
+   * @returns 필터링 된 CarFH5 ID Array 반환
+   */
+
+  if (!(division.length || boost.length || rarity.length)) {
+    return await db.carFH5.offset(0).primaryKeys();
+  }
+
+  const divisionFiltered: string[] | undefined =
+    division.length > 0
+      ? await db.carFH5.where('meta.division').anyOf(division).primaryKeys()
+      : undefined;
+  const boostFiltered: string[] | undefined =
+    boost.length > 0
+      ? await db.carFH5.where('meta.boost').anyOfIgnoreCase(boost).primaryKeys()
+      : undefined;
+  const rarityFiltered: string[] | undefined =
+    rarity.length > 0
+      ? await db.carFH5.where('meta.rarity').anyOf(rarity).primaryKeys()
+      : undefined;
+
+  const carFH5IDs = [divisionFiltered, boostFiltered, rarityFiltered]
+    .filter((x) => x != undefined)
+    .toSorted((a, b) => a.length - b.length);
+
+  if (carFH5IDs.length == 1) {
+    return carFH5IDs[0];
+  }
+
+  const filteredCarFH5IDs = carFH5IDs[0].filter((carFH5ID) =>
+    carFH5IDs.map((_carFH5IDs) => _carFH5IDs.includes(carFH5ID)).every((x) => !!x),
+  );
+  return filteredCarFH5IDs;
+}
+
+function filterDownIDs(prev: string[], newIDs: string[]): string[] {
+  return prev.filter((prevID) => newIDs.includes(prevID));
+}
+
+type BaseCar = {
+  manufacturer: string;
+  baseCar: string;
+};
+
+type CarFH5TypeTemp = {
+  id: string;
+} & BaseCar;
+
+async function getCarFH5Type(carFH5ID: string): Promise<CarFH5TypeTemp | undefined> {
+  const carFH5 = await db.carFH5.get(carFH5ID);
+  if (!carFH5) return undefined;
+  const baseCar = (await db.car.get(carFH5.baseCar))!;
+  return {
+    id: carFH5ID,
+    baseCar: baseCar.id!,
+    manufacturer: baseCar.manufacturer!,
+  };
+}
+
+export async function groupByManufacturer(carFH5IDs: string[]) {
+  // NOTE: CarFH5 순서보다 일단 제조사 순서에 따라 정렬 후 필요한 개수만큼 반환한다.
+  /**
+   * 1. CarFH5 ID string[] 받는다
+   * 2. Manufacturer ID를 찾고, Manufacturer ID가 Key + string[] ID 인 오브젝트에 넣는다.
+   * 3. Manufacturer ID 순서가 저장된 거에 따라 fetch할 개수만큼 계속 빼온다.
+   * 4.
+   */
+  const carFH5s = (await db.carFH5.bulkGet(carFH5IDs)).filter((x) => !!x);
+  const manuCars = await Promise.all(
+    carFH5s.map(async ({ id, baseCar }) => {
+      const car = (await db.car.get(baseCar))!;
+      return [car.manufacturer, id];
+    }),
+  );
+  const manu_carFH5 = manuCars.reduce(
+    (prev, [manu, carFH5ID]) => {
+      !!prev[manu] ? (prev[manu] = [carFH5ID, ...prev[manu]]) : (prev[manu] = [carFH5ID]);
+      return prev;
+    },
+    {} as { [key: string]: string[] },
+  );
+  return manu_carFH5;
 }
 
 // NOTE: 이거는 여러 조건 속에서 차 검색하고 결과 반환하는 것
@@ -164,11 +320,10 @@ export async function searchCarByFilter({
   boost,
   country,
   rarity,
-  // }: GetCarDataIntf) {
-}: GetCarDataIntf): Promise<CarFH5FullType[]> {
-  const man = manufacturer.length > 0;
-  const con = country.length > 0;
-  // console.log(`productionYear ;${productionYear}`);
+}: GetCarDataIntf): Promise<string[]> {
+  /**
+   * @returns 필터링 된 자동차 ID Array 반환
+   */
 
   const _productionYears = productionYear
     .map((pyear) => {
@@ -176,124 +331,74 @@ export async function searchCarByFilter({
       return [...range(startYear, startYear + 10)];
     })
     .flatMap((x) => x);
-  const years = _productionYears.length > 0;
-  const div = division.length > 0;
-  const boo = boost.length > 0;
-  const rar = rarity.length > 0;
 
-  const anySearchCondition = man || con || years || div || boo || rar;
+  const cond1 = country.length || manufacturer.length; // 제조사
+  const cond2 = _productionYears.length; // base car
+  const cond3 = division.length || boost.length || rarity.length; // car FH5
 
-  if (!anySearchCondition) {
-    // 검색 조건이  없는 경우
-    const first10 = await db.carFH5.offset(0).limit(10).primaryKeys();
-    const carFH5s = await Promise.all(first10.map((carFH5ID) => getCarFH5FullType(carFH5ID)));
-    return removeUndefined(carFH5s);
-  }
+  if (cond1) {
+    const manuIDs = await filterByCountryManufacturer({ country, manufacturer });
+    console.log(`manuIDs : ${JSON.stringify(manuIDs)}`);
 
-  // 1. 실제 특성만으로 분류
-
-  let manu_query: any = db.manufacturer;
-  let carManus: string[] = []; // manu IDs
-  if (con && !man) {
-    carManus = await db.manufacturer.where('origin').anyOf(country).primaryKeys();
-    if (man) {
-      carManus = carManus.filter((manuID) => manufacturer.includes(manuID));
+    if (!cond2 && !cond3) {
+      const baseCarIDs = await db.car.where('manufacturer').anyOf(manuIDs).primaryKeys();
+      const carFH5IDs = await db.carFH5.where('baseCar').anyOf(baseCarIDs).primaryKeys();
+      return carFH5IDs;
     }
-  } else if (!con && man) {
-    carManus = manufacturer;
+    if (cond2 && !cond3) {
+      const baseCarIDs: string[] = await db.car
+        .where('productionYear')
+        .anyOf(_productionYears)
+        .and((car) => manuIDs.includes(car.manufacturer))
+        .primaryKeys();
+      const carFH5IDs = await db.carFH5.where('baseCar').anyOf(baseCarIDs).primaryKeys();
+      return carFH5IDs;
+    }
+    if (!cond2 && cond3) {
+      const _carFH5IDs = await filterByFH5Traits({ division, boost, rarity });
+
+      const baseCarIDs = await db.car.where('manufacturer').anyOf(manuIDs).primaryKeys();
+
+      const carFH5IDs = await db.carFH5
+        .where('baseCar')
+        .anyOf(baseCarIDs)
+        .and((carFH5) => _carFH5IDs.includes(carFH5.id))
+        .primaryKeys();
+      return carFH5IDs;
+    }
+    if (cond2 && cond3) {
+      const baseCarIDs: string[] = await db.car
+        .where('productionYear')
+        .anyOf(_productionYears)
+        .and((car) => manuIDs.includes(car.manufacturer))
+        .primaryKeys();
+      const carFH5IDs = await db.carFH5.where('baseCar').anyOf(baseCarIDs).primaryKeys();
+      const _carFH5IDs = await filterByFH5Traits({ division, boost, rarity });
+      return carFH5IDs.filter((carFH5ID) => _carFH5IDs.includes(carFH5ID));
+    }
   }
 
-  let carReals: string[] = [];
-  if (years && (man || con)) {
-    carReals = await db.car
+  if (!cond1 && cond2) {
+    const baseCarIDs: string[] = await db.car
       .where('productionYear')
       .anyOf(_productionYears)
-      .filter((carReal) => carManus.includes(carReal.manufacturer))
       .primaryKeys();
-  }
-  if (years && !(man || con)) {
-    carReals = await db.car.where('productionYear').anyOf(_productionYears).primaryKeys();
-  }
-
-  // 2. 게임 특성만으로 분류
-
-  let PK_carFH5: string[] = [];
-
-  let carFH5_query: any = db.carFH5;
-
-  if (div) {
-    // db.carFH5.where('meta.division').anyOf(division).and((carFH5)=>!!carFH5.meta.boost).pr
-    carFH5_query = carFH5_query.where('meta.division').anyOf(division);
-  }
-  if (boo) {
-    if (div) {
-      carFH5_query = carFH5_query.and((carFH5: CarFH5) =>
-        boost.includes(carFH5.meta.boost.toUpperCase()),
-      );
-    } else {
-      carFH5_query = carFH5_query.where('meta.boost').anyOfIgnoreCase(boost);
+    if (!cond3) {
+      const carFH5IDs = await db.carFH5.where('baseCar').anyOf(baseCarIDs).primaryKeys();
+      return carFH5IDs;
+    }
+    if (cond3) {
+      const carFH5IDs = await db.carFH5.where('baseCar').anyOf(baseCarIDs).primaryKeys();
+      const _carFH5IDs = await filterByFH5Traits({ division, boost, rarity });
+      return carFH5IDs.filter((carFH5ID) => _carFH5IDs.includes(carFH5ID));
     }
   }
-  if (rar) {
-    if (div || boo) {
-      carFH5_query = carFH5_query.and((carFH5: CarFH5) => rarity.includes(carFH5.meta.rarity));
-    } else {
-      carFH5_query = carFH5_query.where('meta.rarity').anyOf(rarity);
-    }
-  }
-  if (div || boo || rar) {
-    PK_carFH5 = await carFH5_query.primaryKeys();
+  if (!cond1 && !cond2 && cond3) {
+    return await filterByFH5Traits({ division, boost, rarity });
   }
 
-  // 3. 최종 분류
-  // carManus;
-  // carReals; // 이게 있으면 carManus를 거르고 이걸 최종적으로 사용함
-  // PK_carFH5; //
+  // !cond1 && !cond2 && !cond3
 
-  if (carReals.length > 0) {
-    if (PK_carFH5.length > 0) {
-      const carFH5IDs = await db.carFH5.where('baseCar').anyOf(carReals).primaryKeys();
-      const carFH5s = await Promise.all(carFH5IDs.map((carFH5ID) => getCarFH5FullType(carFH5ID)));
-      return removeUndefined(carFH5s);
-    }
-    const carFH5s = await Promise.all(
-      carReals.map((carRealID) => getCarFH5s_By_baseCarID(carRealID)),
-    );
-    const _carFH5s = carFH5s.flatMap((x) => x);
-    return removeUndefined(_carFH5s);
-  }
-
-  if (carManus.length > 0) {
-    if (PK_carFH5.length > 0) {
-      let carFH5s = await db.carFH5.bulkGet(PK_carFH5);
-      carFH5s = removeUndefined(carFH5s);
-      // const baseCars = carFH5s.map((carFH5)=>carFH5?.baseCar )
-      const carIDsMatchingManu = await db.car.where('manufacturer').anyOf(carManus).primaryKeys();
-      const carFH5sFilteredID = carFH5s
-        .filter((carFH5) => carFH5 && carIDsMatchingManu.includes(carFH5?.baseCar))
-        .map((carFH5) => carFH5!!.id);
-      return removeUndefined(
-        await Promise.all(carFH5sFilteredID.map((carFH5ID) => getCarFH5FullType(carFH5ID))),
-      );
-    }
-    const carIDsMatchingManu = await db.car.where('manufacturer').anyOf(carManus).primaryKeys();
-    // console.log(`carIDsMatchingManu : ${JSON.stringify(carIDsMatchingManu)}`);
-    const _carFH5s = await Promise.all(
-      carIDsMatchingManu.map((carID) => getCarFH5s_By_baseCarID(carID)),
-    );
-    const _carFH5s2 = _carFH5s.flatMap((x) => x);
-
-    return removeUndefined(_carFH5s2);
-  }
-
-  if (PK_carFH5.length > 0) {
-    return removeUndefined(
-      await Promise.all(PK_carFH5.map((carFH5ID) => getCarFH5FullType(carFH5ID))),
-    );
-  }
-  if (anySearchCondition) {
-    return [];
-  }
-  // 검색 조건에 일치하는게 아무것도 없는 경우
-  return [];
+  const first30 = await db.carFH5.offset(0).limit(30).primaryKeys();
+  return first30;
 }
