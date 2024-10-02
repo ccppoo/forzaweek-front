@@ -1,0 +1,1 @@
+export { GetVotesDecalImages } from './decalImage';
