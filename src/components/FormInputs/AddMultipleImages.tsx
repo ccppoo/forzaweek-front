@@ -56,6 +56,7 @@ export default function AddMultipleImages<T extends MultipleImagesDependentCreat
 
   const [imagePreviewIdx, setImagePreviewIdx] = useState<number>(0);
 
+  // WARNING: 업로드된 사진이 1개씩 빠르게 연속으로 업로드할 경우 이전의 작업이 무시됨
   const handleUploadClick = async (e: ChangeEvent<HTMLInputElement>) => {
     if (!id_token) return; // NOTE: if not logged in, alert pop up
 
