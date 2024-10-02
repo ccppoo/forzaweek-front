@@ -3,6 +3,7 @@ import { ScrollRestoration, useNavigate } from 'react-router-dom';
 import Container from '@mui/material/Container';
 import IconButton from '@mui/material/IconButton';
 import Paper from '@mui/material/Paper';
+import Skeleton from '@mui/material/Skeleton';
 import Typography from '@mui/material/Typography';
 
 import { useLiveQuery } from 'dexie-react-hooks';
@@ -12,29 +13,9 @@ import { CarFilterAndSelect } from '@/components/Search';
 import { CarAndTagSearch } from '@/components/Search';
 import { Image } from '@/components/styled';
 import { FlexBox, FullSizeCenteredFlexBox } from '@/components/styled';
+import { groupByManufacturer } from '@/db/query/fh5/car';
 import { getManufacturerById } from '@/db/query/real/manufacturer';
 import useCarSearchFilters, { CarSearchOption } from '@/store/carSearchFilters';
-
-// const sortedManufacutererSet = (manufacturerers: ManufacturerType[]): ManufacturerType[] => {
-//   const IDset: string[] = [...new Set(manufacturerers.map((manufacturerer) => manufacturerer.id))];
-
-//   const _mans = IDset.map((id) => {
-//     let _man = undefined;
-//     for (const man of manufacturerers) {
-//       if (man.id == id) {
-//         _man = man;
-//         break;
-//       }
-//     }
-//     if (_man) {
-//       return _man;
-//     }
-//   });
-//   const _mans2 = _mans
-//     .filter((x) => x != undefined)
-//     .sort((a, b) => (a.name_en.toLowerCase() > b.name_en.toLowerCase() ? 1 : -1));
-//   return _mans2;
-// };
 
 function ManufacturerHead({ manufacturerID }: { manufacturerID: string }) {
   const man = useLiveQuery(() => getManufacturerById(manufacturerID), [manufacturerID]);
@@ -63,25 +44,39 @@ function ManufacturerHead({ manufacturerID }: { manufacturerID: string }) {
   );
 }
 
+function CarListing({ carFH5IDs }: { carFH5IDs: string[] }) {
+  // searchResults -> CarFH5 ID
+
+  // const carManu: { [key: string]: string[] } | undefined = useLiveQuery(
+  //   async () => await groupByManufacturer(carFH5IDs),
+  //   [...carFH5IDs],
+  // );
+
+  return (
+    <FlexBox
+      sx={{
+        width: '100%',
+        justifyContent: 'space-evenly',
+        paddingBottom: 4,
+        alignItems: 'center',
+        // flexDirection: 'column',
+        rowGap: 2,
+        flexWrap: 'wrap',
+      }}
+    >
+      {carFH5IDs.map((carFH5ID) => {
+        return <CarPreviewCard carFH5ID={carFH5ID} key={`car-preview-card-${carFH5ID}`} />;
+      })}
+    </FlexBox>
+  );
+}
+
 export default function Cars() {
   const navigate = useNavigate();
   const searchScope = 'cars';
   const [_, searchResults, isSearchOptionEmpty] = useCarSearchFilters(searchScope);
   const totalCarString = (num: number) => `Total ${num} cars`;
   const TOTAL_CARS = 843;
-
-  // const searchResultManufacturers = sortedManufacutererSet(
-  //   searchResults.map((carinfo) => carinfo.baseCar.manufacturer.id!!),
-  // );
-
-  // searchResults.map((a) => console.log(`searchResult : ${a}`));
-  const searchResultManufacturers = [
-    ...new Set(
-      searchResults.map((carinfo) => {
-        return carinfo.baseCar.manufacturer.id!!;
-      }),
-    ),
-  ];
 
   // console.log(
   //   `searchResultManufacturers : ${searchResultManufacturers.length} ${JSON.stringify(
@@ -108,48 +103,11 @@ export default function Cars() {
           </Typography>
         </FlexBox>
         {/* search result cars */}
-        <FlexBox
-          sx={{
-            width: '100%',
-            // justifyContent: 'space-around',
-            paddingBottom: 4,
-            alignItems: 'center',
-            flexDirection: 'column',
-            rowGap: 1,
-          }}
-        >
-          {searchResultManufacturers.map((manID) => {
-            return (
-              <FlexBox
-                sx={{ flexDirection: 'column', width: '100%', paddingTop: 2 }}
-                key={`search-manufacturer-${manID}`}
-              >
-                <ManufacturerHead manufacturerID={manID} />
-
-                <FlexBox
-                  sx={{
-                    width: '100%',
-                    justifyContent: 'space-between',
-                    // alignItems: 'center',
-                    flexWrap: 'wrap',
-                    rowGap: 1.5,
-                  }}
-                >
-                  {searchResults
-                    .filter((carinfo) => carinfo.baseCar.manufacturer.id == manID)
-                    .map((carinfo) => {
-                      return (
-                        <CarPreviewCard
-                          carInfo={carinfo}
-                          key={`car-preview-card-${carinfo.id}-${carinfo.baseCar.name.en[0]}`}
-                        />
-                      );
-                    })}
-                </FlexBox>
-              </FlexBox>
-            );
-          })}
-        </FlexBox>
+        {searchResults.length ? (
+          <CarListing carFH5IDs={searchResults} />
+        ) : (
+          <Skeleton variant="rectangular" width={210} height={60} />
+        )}
       </FlexBox>
     </Container>
   );

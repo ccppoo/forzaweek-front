@@ -88,11 +88,11 @@ export default function CarDetail() {
             </FlexBox>
 
             {/* 데칼 사진들 */}
-            <RelatedDecals carID={carinfo.id!!} />
+            <RelatedDecals carFH5ID={carinfo.id!} />
             {/* TODO: 관련 튜닝 */}
-            <RelatedTunings carID={carinfo.id} />
+            <RelatedTunings carFH5ID={carinfo.id} />
             {/* TODO: 관련 영상 */}
-            <RelatedVideos />
+            {/* <RelatedVideos /> */}
             {/* TODO: 관련 사진/움짤 */}
           </FlexBox>
         </FullSizeCenteredFlexBox>
