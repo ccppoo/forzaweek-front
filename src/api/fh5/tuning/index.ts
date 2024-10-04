@@ -26,8 +26,8 @@ export async function EditTuning({ tuning }: { tuning: TuningEditSchema }) {
   };
   console.log(`data : ${JSON.stringify(data)}`);
 
-  const path_ = `tuning/edit/${docID}`;
-  const url = `${API_HOST}/${path_}`;
+  // const path_ = `tuning/edit/${docID}`;
+  const url = `${BASE_PATH_FH5_TUNING}/edit/${docID}`;
   const resp = await axios.post(url, data, {
     headers: {
       'Content-Type': 'application/json',
@@ -47,9 +47,7 @@ export async function GetAllTuning({
 }): Promise<TuningSchemaType[]> {
   const [_] = queryKey;
 
-  const path_ = `tuning`;
-
-  const url = `${API_HOST}/${path_}`;
+  const url = `${BASE_PATH_FH5_TUNING}`;
 
   const resp = await axios.get(url, {});
 
@@ -76,7 +74,7 @@ export async function SearchTunings({
   // if(queryParams) queryParams=`${queryParams}&`
 
   // TODO: query param -> 튜닝 검색 조건
-  const url = `${API_HOST}/${path_}?${queryParams}`;
+  const url = `${BASE_PATH_FH5_TUNING}?${queryParams}`;
 
   const resp = await axios.get(url, {});
 
@@ -93,7 +91,7 @@ export async function GetTuning({
   const path_ = `FH5/tuning`;
 
   //
-  const url = `${API_HOST}/${path_}/${carID}/${tuningID}`;
+  const url = `${BASE_PATH_FH5_TUNING}/${carID}/${tuningID}`;
 
   const resp = await axios.get(url, {});
 

@@ -28,6 +28,21 @@ export async function Callback({
   return resp.data;
 }
 
+export async function RequestOAuthToken({
+  queryKey,
+}: {
+  queryKey: [API_NAME, string];
+}): Promise<AuthTokenType> {
+  const [_, code] = queryKey;
+  const path = 'auth/oauth/xbox/callback';
+  const url = `${API_HOST}/${path}`;
+
+  const data = { code: code };
+  const resp = await axios.post(url, data, { withCredentials: true });
+
+  return resp.data;
+}
+
 export async function TokenRefresh({ refreshToken }: { refreshToken: string }) {
   // 로그인하고 백엔드로부터 받아서 직접 관리해야함
 

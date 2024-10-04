@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useFormContext } from 'react-hook-form';
 import type { FieldPath, PathValue } from 'react-hook-form';
+import type { FieldValues, Path, UseFormSetValue } from 'react-hook-form';
 
 import { Box, Button, Paper, Typography } from '@mui/material';
 
@@ -67,6 +68,51 @@ export default function SelectCar<T extends CarDependentCreation>(props: SelectC
         setCarID={(carID: string | undefined) => setValue(formPath, carID as FormDataType)}
       />
       {!!selectedCarID && <SelectedCarPreview carID={selectedCarID} />}
+    </FlexBox>
+  );
+}
+
+export function FieldArraySelectCar<T extends FieldValues>({
+  setValue,
+  formPath,
+}: {
+  setValue: UseFormSetValue<T>;
+  formPath: FieldPath<T>;
+}) {
+  // const { selectScope } = props;
+
+  // const { setValue, getValues, watch } = useFormContext<T>();
+
+  type FormDataType = PathValue<T, FieldPath<T>>;
+  // const formPath = 'car' as FieldPath<T>;
+  // const selectedCarID = watch(formPath);
+
+  // console.log(`selectedCarID : ${selectedCarID}`);
+  // const {onChange} = register(formPath)
+  const [carID, _setCarID] = useState<string | undefined>();
+
+  const setCarID = (carID: string | undefined) => {
+    _setCarID(carID);
+    console.log(`carID : ${carID}`);
+    setValue(formPath, carID as PathValue<T, Path<T>>);
+  };
+  return (
+    <FlexBox
+      sx={{
+        alignItems: 'center',
+        width: '100%',
+        height: '100%',
+        columnGap: 2,
+        flexDirection: 'column',
+      }}
+    >
+      <AutocompleteCarSearchBarSelect
+        carID={carID}
+        setCarID={(carID: string | undefined) => {
+          setCarID(carID);
+        }}
+      />
+      {!!carID && <SelectedCarPreview carID={carID} />}
     </FlexBox>
   );
 }

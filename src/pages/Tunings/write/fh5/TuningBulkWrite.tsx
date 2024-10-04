@@ -6,6 +6,7 @@ import type {
   UseFieldArrayRemove,
   UseFieldArrayUpdate,
   UseFormRegister,
+  UseFormSetValue,
   UseFormWatch,
 } from 'react-hook-form';
 
@@ -14,8 +15,9 @@ import HighlightOffOutlinedIcon from '@mui/icons-material/HighlightOffOutlined';
 import { Box, Button, ButtonBase, Container, IconButton, Paper, Typography } from '@mui/material';
 
 import type { TuningEditSchema } from '@/FormData/tuning';
+import { BulkUploadTuning } from '@/api/fh5/tuning/upload';
 // import AddTags from '@/components/FormInputs/AddTags';
-import SelectCar from '@/components/FormInputs/CarSelect2';
+import { FieldArraySelectCar } from '@/components/FormInputs/CarSelect2';
 // import CreatorUsernameInput from '@/components/FormInputs/CreatorUsername';
 import { FieldArrayCreatorUsernameInput } from '@/components/FormInputs/CreatorUsername';
 // import ShareCodeInput from '@/components/FormInputs/ShareCode';
@@ -44,6 +46,8 @@ import DetailedTuningTabs from './detailedTuning';
 import MajorParts from './majorPart';
 // import TuningMajorPartsDrivingSystem from './majorPart/SimpleDrivingSystem';
 import { FieldArrayTuningMajorPartsDrivingSystem } from './majorPart/SimpleDrivingSystem';
+import { FieldArrayTuningMajorPartsSuspension } from './majorPart/Suspension';
+import { FieldArrayTuningMajorPartsTire } from './majorPart/Tire';
 import TuningPerformance from './performance';
 import TuningPI from './pi';
 import SimpleTuningPI, { FieldArraySimpleTuningPI } from './pi/SimpleTuningPI';
@@ -110,8 +114,8 @@ const tuningDefault: TuningInput = {
   // drivingSystem: 'AWD',
   tuningMajorParts: {
     drivingSystem: 'AWD',
-    suspension: undefined,
-    tire: undefined,
+    suspension: 'normal',
+    tire: 'normal',
   },
   detailedTuning: undefined,
 };
@@ -121,11 +125,21 @@ interface TuningWriteIntf {
   update: UseFieldArrayUpdate<TuningBulkWriteType>;
   remove: UseFieldArrayRemove;
   register: UseFormRegister<TuningBulkWriteType>;
+  setValue: UseFormSetValue<TuningBulkWriteType>;
   watch: UseFormWatch<TuningBulkWriteType>;
   index: number;
   value: TuningWriteInput;
 }
-function TuningWrite({ update, index, value, control, register, watch, remove }: TuningWriteIntf) {
+function TuningWrite({
+  update,
+  index,
+  value,
+  control,
+  setValue,
+  register,
+  watch,
+  remove,
+}: TuningWriteIntf) {
   const selectScope = 'tuning write';
 
   const methods = useForm<TuningWriteInput>({
@@ -149,7 +163,7 @@ function TuningWrite({ update, index, value, control, register, watch, remove }:
         >
           <FlexBox sx={{ width: '100%' }}>
             <FlexBox sx={{ minWidth: 450, width: '40%' }}>
-              <SelectCar selectScope={selectScope} />
+              <FieldArraySelectCar setValue={setValue} formPath={`tunings.${index}.car`} />
             </FlexBox>
             <FlexBox
               sx={{
@@ -213,6 +227,24 @@ function TuningWrite({ update, index, value, control, register, watch, remove }:
                     watch={watch}
                   />
                 </FlexBox>
+                <FlexBox sx={{ flexDirection: 'column' }}>
+                  <Typography>Suspension</Typography>
+
+                  <FieldArrayTuningMajorPartsSuspension
+                    register={register}
+                    formPath={`tunings.${index}.tuningMajorParts.suspension`}
+                    watch={watch}
+                  />
+                </FlexBox>
+                <FlexBox sx={{ flexDirection: 'column' }}>
+                  <Typography>Tire</Typography>
+
+                  <FieldArrayTuningMajorPartsTire
+                    register={register}
+                    formPath={`tunings.${index}.tuningMajorParts.tire`}
+                    watch={watch}
+                  />
+                </FlexBox>
               </FlexBox>
             </FlexBox>
           </FlexBox>
@@ -248,6 +280,7 @@ export default function TuningBulkWrite() {
   const submit = async (data: TuningBulkWriteInput) => {
     console.log(`data : ${JSON.stringify(data)}`);
 
+    await BulkUploadTuning({ tunings: data as TuningBulkWriteType });
     // if (isEditMode) {
     //   // await EditDecal({ decal: data, authToken: id_token! });
     //   return;
@@ -290,6 +323,7 @@ export default function TuningBulkWrite() {
                     control={methods.control}
                     update={update}
                     remove={remove}
+                    setValue={methods.setValue}
                     watch={methods.watch}
                     register={methods.register}
                     index={idx}

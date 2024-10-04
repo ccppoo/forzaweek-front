@@ -18,13 +18,13 @@ import type { TuningEditSchema, TuningSchemaType } from '@/FormData/tuning';
 import { FlexBox, FullSizeCenteredFlexBox } from '@/components/styled';
 import { Image } from '@/components/styled';
 
-export default function ShareCode(data: SharingCreationReq) {
-  const { share_code } = data;
+export default function ShareCode({ shareCode }: { shareCode: string }) {
+  // const { share_code } = data;
 
   const share_code3 = [
-    share_code.substring(0, 3),
-    share_code.substring(3, 6),
-    share_code.substring(6, 9),
+    shareCode.substring(0, 3),
+    shareCode.substring(3, 6),
+    shareCode.substring(6, 9),
   ];
 
   return (

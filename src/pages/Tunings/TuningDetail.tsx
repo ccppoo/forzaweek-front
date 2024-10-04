@@ -14,10 +14,11 @@ import Grid from '@mui/material/Unstable_Grid2';
 import { useQuery } from '@tanstack/react-query';
 
 import * as image from '@/image';
-import { GetTuning, SearchTunings } from '@/api/data/tuning';
+import { GetTuning } from '@/api/fh5/tuning/get';
+// import { GetTuning, SearchTunings } from '@/api/data/tuning';
 import { BriefCarInfo } from '@/components/Car';
 import Comments from '@/components/Comment';
-import SharingCreationCreator from '@/components/Post/Creator';
+// import SharingCreationCreator from '@/components/Post/Creator';
 import ShareCode from '@/components/Post/ShareCode';
 import Tags from '@/components/Post/Tags';
 // import Tags from '@/components/Tag/Tags';
@@ -26,6 +27,17 @@ import { RadarChartAndPerformance, TuningInfo } from '@/components/Tunings';
 import { RelatedVideos } from '@/components/Videos';
 import { FlexBox, FullSizeCenteredFlexBox } from '@/components/styled';
 import { Image } from '@/components/styled';
+
+function SharingCreationCreator({ gamerTag }: { gamerTag: string }) {
+  // const { creator } = data;
+
+  return (
+    <FlexBox sx={{ alignItems: 'center', columnGap: 1 }}>
+      {/* <Avatar {...stringAvatar(creator)} sx={{ width: 35, height: 35 }} /> */}
+      <Typography variant="h5">{gamerTag}</Typography>
+    </FlexBox>
+  );
+}
 
 export default function TuningDetail() {
   // const navigate = useNavigate();
@@ -55,20 +67,23 @@ export default function TuningDetail() {
             component={Paper}
           >
             {/* 튜닝 태그, 게시자, 공유 코드 */}
-            <SharingCreationCreator creator={data.creator} share_code={data.share_code} />
-            <ShareCode creator={data.creator} share_code={data.share_code} />
-            <Tags tags={data.tags} />
+            <FlexBox sx={{ alignItems: 'center', columnGap: 1 }}>
+              <Typography variant="h5">{data.name}</Typography>
+            </FlexBox>
+            <SharingCreationCreator gamerTag={data.gamerTag!} />
+            <ShareCode shareCode={data.shareCode!} />
+            {/* <Tags tags={data.tags} /> */}
             {/* 튜닝에 사용된 차 간단 정보 */}
-            <BriefCarInfo />
+            {/* <BriefCarInfo /> */}
             {/* 튜닝 레이더 차트랑 성능 표 */}
-            <RadarChartAndPerformance tuning={data} />
+            {/* <RadarChartAndPerformance tuning={data} /> */}
             <Divider flexItem variant="fullWidth" />
             {/* 댓글 */}
             <Comments.VotableComments subject_to={tuningID!} />
             {/* 관련 영상 */}
             <RelatedVideos />
             {/* 관련 다른 튜닝들 */}
-            <RelatedTunings carID={carID} />
+            {/* <RelatedTunings carID={carID} /> */}
           </FlexBox>
         </FullSizeCenteredFlexBox>
       </Container>

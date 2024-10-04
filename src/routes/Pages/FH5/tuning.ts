@@ -15,7 +15,7 @@ export const routesFH5Tuning: RoutesFH5Tuning = {
   [FH5_Tuning.TuningDetail]: {
     component: asyncComponentLoader(() => import('@/pages/Tunings/TuningDetail')),
     path: ':carID/:tuningID',
-    devUrl: '/FH5/tuning/6684cbca6b755b09a74f84fc/66a1bd93c0c2a9311e907246',
+    devUrl: '/FH5/tuning/6684cbca6b755b09a74f84fc/66ff9660a29e44d99544dc55',
     title: 'tuning detail',
     icon: HomeIcon,
   },
